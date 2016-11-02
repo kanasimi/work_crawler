@@ -16,15 +16,17 @@ Download qq comics.
 
 ### Installation
 First, go to [nodejs.org](https://nodejs.org/), download the runtime environment and install the node.js package.
+請先安裝 node.js。
 
 Then, install the CeJS library:
+接著安裝 CeJS library:
 ``` sh
 $ npm install cejs
 ```
 
 ### Running
 ``` sh
-$ node qq_comic.js 漫画作品名称
+$ node qq_comic.js "漫画作品名称"
 ```
 
 ## 聲明

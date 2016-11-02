@@ -9,28 +9,39 @@
 
 'use strict';
 
-// ----------------------------------------------------------------------------
-// Load CeJS library. For node.js loading.
-// Copy/modified from "/_for include/node.loader.js".
-'../../lib/JS'
-// 載入泛用（非特殊目的使用）之功能。
-.split('|').some(function(path) {
-	if (path.charAt(0) === '#') {
-		// path is a comment
-		return;
+try {
+	// Load CeJS library.
+	require('cejs');
+
+} catch (e) {
+	// ----------------------------------------------------------------------------
+	// Load CeJS library. For node.js loading.
+	// Copy/modified from "/_for include/node.loader.js".
+	'D:\\USB\\cgi-bin\\lib\\JS'
+	// 載入泛用（非特殊目的使用）之功能。
+	.split('|').some(function(path) {
+		if (path.charAt(0) === '#') {
+			// path is a comment
+			return;
+		}
+		try {
+			// accessSync() throws if any accessibility checks fail, and does
+			// nothing otherwise.
+			require('fs').accessSync(path);
+			var loader = '/_for include/node.loader.js';
+			require(path + (path.indexOf('/') !== -1 ? loader
+			//
+			: loader.replace(/\//g, '\\')));
+			return true;
+		} catch (e) {
+		}
+	});
+
+	if (typeof CeL !== 'function') {
+		// No CeJS library.
+		throw '請先安裝 CeJS library:\nnpm install cejs';
 	}
-	try {
-		// accessSync() throws if any accessibility checks fail, and does
-		// nothing otherwise.
-		require('fs').accessSync(path);
-		var loader = '/_for include/node.loader.js';
-		require(path + (path.indexOf('/') !== -1 ? loader
-		//
-		: loader.replace(/\//g, '\\')));
-		return true;
-	} catch (e) {
-	}
-});
+}
 
 // ----------------------------------------------------------------------------
 // Load module.
