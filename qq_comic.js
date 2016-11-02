@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下载腾讯漫画的工具。 Download qq comics.
+ * 批量下載腾讯漫画的工具。 Download qq comics.
  * 
  * @see https://github.com/abcfy2/getComic
  * 
@@ -68,7 +68,9 @@ main_directory = process.mainModule.filename.match(/[^\\\/]+$/)[0].replace(
 		/\.js$/i, ''),
 //
 work_id = CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id)
-		|| process.argv[2];
+		|| process.argv[2],
+//
+MESSAGE_RE_DOWNLOAD = '\n下載出錯，請確認無誤後重新執行以接續下載。';
 
 if (!work_id) {
 	CeL.log('Usage:\nnode ' + main_directory + ' "work title / work id"\nnode '
@@ -135,7 +137,8 @@ function get_work(work_title, callback) {
 	}
 
 	CeL.get_URL(base_URL + 'Comic/searchList/search/'
-			+ encodeURIComponent(work_title), function(XMLHttp) {
+	// e.g., 找不到"隔离带 2"，須找"隔离带"。
+	+ encodeURIComponent(work_title.replace(/\s+\d+$/, '')), function(XMLHttp) {
 		var html = XMLHttp.responseText, matched, PATTERN_work_id =
 		//
 		/\/comicInfo\/id\/(\d+)(?:" title="([^"]+)")?/g,
@@ -200,6 +203,7 @@ function get_work_data(work_id, callback) {
 			}
 		};
 
+		process.title = '下載' + work_data.title;
 		work_data.directory_name = CeL.to_file_name(work_data.id + ' '
 				+ work_data.title);
 		work_data.directory = main_directory + work_data.directory_name + '/';
@@ -208,7 +212,7 @@ function get_work_data(work_id, callback) {
 
 		matched = main_directory + 'cache/';
 		CeL.fs_mkdir(matched);
-		CeL.fs_write(matched + work_id + '.htm', html);
+		CeL.fs_write(matched + work_data.directory_name + '.htm', html);
 
 		matched = CeL.get_JSON(work_data.data_file);
 		if (matched) {
@@ -219,7 +223,7 @@ function get_work_data(work_id, callback) {
 				} else if (typeof work_data[key] !== 'object'
 						&& work_data[key] !== matched[key]) {
 					// 對比兩者。
-					CeL.log(key + ': ' + matched[key] + '→' + work_data[key]);
+					CeL.log(key + ': ' + matched[key] + '\n→' + work_data[key]);
 				}
 			}
 			matched = matched.last_download.chapter;
@@ -309,8 +313,7 @@ function get_chapter_data(work_data, chapter, callback) {
 		var html = XMLHttp.responseText;
 		if (!html) {
 			throw 'Failed to get chapter data of ' + work_data.directory
-					+ chapter;
-			// 若是下載出錯，重新執行即可接續下載。
+					+ chapter + MESSAGE_RE_DOWNLOAD;
 		}
 		var data = html.match(/\sDATA\s*=\s*'([^']{9,})'/);
 		if (!data || !(data = JSON.parse(decode(data[1].substring(1))))
@@ -377,11 +380,11 @@ function get_images(picture_data, file_path, callback) {
 	}
 	CeL.get_URL(picture_data.url, function(XMLHttp) {
 		var contents = XMLHttp.responseText;
-		if (contents) {
+		// 80: 應改成最小容許圖案大小。
+		if (contents && contents.length > 80) {
 			CeL.fs_write(file_path, contents);
 		} else {
-			throw 'Failed to get ' + picture_data.url + '\nto ' + file_path;
-			// 若是下載出錯，重新執行即可接續下載。
+			throw 'Failed to get ' + picture_data.url + '\n→ ' + file_path + MESSAGE_RE_DOWNLOAD;
 		}
 		callback();
 	}, 'binary');
