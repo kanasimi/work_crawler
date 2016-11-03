@@ -17,14 +17,14 @@ Download qq comics.
 
 ## 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 批量下載腾讯漫画。
-* 展示程式撰寫當時，腾讯漫画之網站資料結構。
+* 展示程式撰寫當時，[腾讯漫画](http://ac.qq.com/)之網站資料結構。
 非常歡迎提供使用意見與改善建議。
 
 ## Node.js usage
 
 ### Installation
 First, go to [nodejs.org](https://nodejs.org/), download the runtime environment and install the node.js package.
-請先安裝 node.js。
+請先安裝 [nodejs.org](https://nodejs.org/)。
 
 Then, install the CeJS library:
 接著安裝 CeJS library:

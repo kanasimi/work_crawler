@@ -70,7 +70,7 @@ main_directory = process.mainModule.filename.match(/[^\\\/]+$/)[0].replace(
 work_id = CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id)
 		|| process.argv[2],
 //
-MESSAGE_RE_DOWNLOAD = '\n下載出錯，請確認無誤後重新執行以接續下載。';
+MESSAGE_RE_DOWNLOAD = '\n下載出錯了，請確認排除錯誤或不再持續後，重新執行以接續下載。';
 
 if (!work_id) {
 	CeL.log('Usage:\nnode ' + main_directory + ' "work title / work id"\nnode '
@@ -222,8 +222,9 @@ function get_work_data(work_id, callback) {
 					work_data[key] = matched[key];
 				} else if (typeof work_data[key] !== 'object'
 						&& work_data[key] !== matched[key]) {
+					CeL.log(key + ': ' + matched[key]
 					// 對比兩者。
-					CeL.log(key + ': ' + matched[key] + '\n→' + work_data[key]);
+					+ '\n→' + work_data[key]);
 				}
 			}
 			matched = matched.last_download.chapter;
@@ -384,7 +385,14 @@ function get_images(picture_data, file_path, callback) {
 		if (contents && contents.length > 80) {
 			CeL.fs_write(file_path, contents);
 		} else {
-			throw 'Failed to get ' + picture_data.url + '\n→ ' + file_path + MESSAGE_RE_DOWNLOAD;
+			CeL.err('Failed to get ' + picture_data.url + '\n→ ' + file_path);
+			if (picture_data.error_count > 4) {
+				throw MESSAGE_RE_DOWNLOAD;
+			}
+			picture_data.error_count = (picture_data.error_count | 0) + 1;
+			CeL.log('Retry ' + picture_data.error_count + '...');
+			get_images(picture_data, file_path, callback);
+			return;
 		}
 		callback();
 	}, 'binary');
