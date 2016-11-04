@@ -70,7 +70,7 @@ main_directory = process.mainModule.filename.match(/[^\\\/]+$/)[0].replace(
 work_id = CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id)
 		|| process.argv[2],
 //
-MESSAGE_RE_DOWNLOAD = '\n下載出錯了，請確認排除錯誤或不再持續後，重新執行以接續下載。';
+MESSAGE_RE_DOWNLOAD = '下載出錯了，請確認排除錯誤或不再持續後，重新執行以接續下載。';
 
 if (!work_id) {
 	CeL.log('Usage:\nnode ' + main_directory + ' "work title / work id"\nnode '
@@ -176,13 +176,23 @@ function get_label(html) {
 	return CeL.HTML_to_Unicode(html.replace(/<[^<>]+>/g, ''));
 }
 
-function get_work_data(work_id, callback) {
+function get_work_data(work_id, callback, error_count) {
 	CeL.get_URL(base_URL + 'Comic/comicInfo/id/' + (work_id |= 0), function(
 			XMLHttp) {
 		// console.log(XMLHttp);
-		var html = XMLHttp.responseText,
-		//
-		matched, PATTERN_chapter_id = /\/cid\/(\d+)/g,
+		var html = XMLHttp.responseText;
+		if (!html) {
+			CeL.err('Failed to get work data of ' + work_id);
+			if (error_count > 4) {
+				throw MESSAGE_RE_DOWNLOAD;
+			}
+			error_count = (error_count | 0) + 1;
+			CeL.log('Retry ' + error_count + '...');
+			get_work_data(work_id, callback, error_count);
+			return;
+		}
+
+		var matched, PATTERN_chapter_id = /\/cid\/(\d+)/g,
 		// work_data={id,title,author,authors,chapters,last_update,last_download:{date,chapter}}
 		work_data = {
 			id : work_id,
@@ -310,48 +320,65 @@ function get_chapter_data(work_data, chapter, callback) {
 			+ work_data.chapters + ': ' + url);
 	process.title = chapter + ' @ ' + work_data.title;
 
-	CeL.get_URL(url, function(XMLHttp) {
-		var html = XMLHttp.responseText;
-		if (!html) {
-			throw 'Failed to get chapter data of ' + work_data.directory
-					+ chapter + MESSAGE_RE_DOWNLOAD;
-		}
-		var data = html.match(/\sDATA\s*=\s*'([^']{9,})'/);
-		if (!data || !(data = JSON.parse(decode(data[1].substring(1))))
-		//
-		|| !data.picture || !(left = data.picture.length) >= 1) {
-			CeL.debug(work_data.directory_name + ' #' + chapter + '/'
-					+ work_data.chapters + ': No picture get.');
-			// 模擬已經下載完最後一張圖。
-			left = 1;
-			check_if_done();
-			return;
-		}
-		var chapter_label = chapter.pad(4) + (data.chapter.cTitle ? ' '
-		//
-		+ CeL.to_file_name(
-		//
-		CeL.HTML_to_Unicode(data.chapter.cTitle)) : ''),
-		//
-		chapter_directory = work_data.directory + chapter_label + '/';
-		CeL.fs_mkdir(chapter_directory);
-		CeL.fs_write(chapter_directory + work_data.directory_name + '-'
-				+ chapter_label + '.htm', html);
-		CeL.log(chapter + '/' + work_data.chapters
-		//
-		+ ' [' + chapter_label + '] ' + left + ' pictures.');
-		// console.log(data.picture);
-		data.picture.forEach(function(picture_data, index) {
-			// http://stackoverflow.com/questions/245840/rename-files-in-sub-directories
-			// for /r %x in (*.jfif) do ren "%x" *.jpg
-			get_images(picture_data, chapter_directory + work_data.id + '-'
-					+ chapter + '-' + (index + 1).pad(3) + '.jpg',
-					check_if_done);
+	function get_data() {
+		process.stdout.write('Get data of chapter ' + chapter + '...\r');
+		CeL.get_URL(url, function(XMLHttp) {
+			var html = XMLHttp.responseText;
+			if (!html) {
+				CeL.err('Failed to get chapter data of ' + work_data.directory
+						+ chapter);
+				if (get_data.error_count > 4) {
+					throw MESSAGE_RE_DOWNLOAD;
+				}
+				get_data.error_count = (get_data.error_count | 0) + 1;
+				CeL.log('Retry ' + get_data.error_count + '...');
+				get_data();
+				return;
+			}
+
+			var data = html.match(/\sDATA\s*=\s*'([^']{9,})'/);
+			if (!data || !(data = JSON.parse(decode(data[1].substring(1))))
+			//
+			|| !data.picture || !(left = data.picture.length) >= 1) {
+				CeL.debug(work_data.directory_name + ' #' + chapter + '/'
+						+ work_data.chapters + ': No picture get.');
+				// 模擬已經下載完最後一張圖。
+				left = 1;
+				check_if_done();
+				return;
+			}
+			var chapter_label = chapter.pad(4) + (data.chapter.cTitle ? ' '
+			//
+			+ CeL.to_file_name(
+			//
+			CeL.HTML_to_Unicode(data.chapter.cTitle)) : ''),
+			//
+			chapter_directory = work_data.directory + chapter_label + '/';
+			CeL.fs_mkdir(chapter_directory);
+			CeL.fs_write(chapter_directory + work_data.directory_name + '-'
+					+ chapter_label + '.htm', html);
+			CeL.log(chapter + '/' + work_data.chapters
+			//
+			+ ' [' + chapter_label + '] ' + left + ' pictures.');
+			// console.log(data.picture);
+			data.picture.forEach(function(picture_data, index) {
+				// http://stackoverflow.com/questions/245840/rename-files-in-sub-directories
+				// for /r %x in (*.jfif) do ren "%x" *.jpg
+				get_images(picture_data, chapter_directory + work_data.id + '-'
+						+ chapter + '-' + (index + 1).pad(3) + '.jpg',
+						check_if_done);
+			});
+		}, null, null, {
+			timeout : 30 * 1000
 		});
-	});
+	}
+	get_data();
 
 	function check_if_done() {
-		if (--left > 0) {
+		--left;
+		process.stdout.write(left + ' left...\r');
+		if (left > 0) {
+			// 還有尚未取得的檔案
 			return;
 		}
 		// assert: left===0
@@ -383,6 +410,7 @@ function get_images(picture_data, file_path, callback) {
 		var contents = XMLHttp.responseText;
 		// 80: 應改成最小容許圖案大小。
 		if (contents && contents.length > 80) {
+			picture_data.OK = true;
 			CeL.fs_write(file_path, contents);
 		} else {
 			CeL.err('Failed to get ' + picture_data.url + '\n→ ' + file_path);
@@ -395,5 +423,7 @@ function get_images(picture_data, file_path, callback) {
 			return;
 		}
 		callback();
-	}, 'binary');
+	}, 'binary', null, {
+		timeout : 20 * 1000
+	});
 }
