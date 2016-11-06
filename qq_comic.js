@@ -1,6 +1,8 @@
 ﻿/**
  * 批量下載腾讯漫画的工具。 Download qq comics.
  * 
+ * TODO: http://www.chuiyao.com/
+ * 
  * @see https://github.com/abcfy2/getComic
  * 
  * @since 2016/10/30 21:40:6
@@ -84,36 +86,45 @@ CeL.get_URL.default_user_agent = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 
 // prepare directory
 CeL.fs_mkdir(main_directory += '/');
 
-if (work_id.startsWith('l=')) {
-	// e.g.,
-	// node qq_comic.js l=qq.txt
-	// @see http://ac.qq.com/Rank/comicRank
-	var next_index = 0, work_count = 0,
-	//
-	work_list = CeL.fs_read(work_id.slice(2)).toString().trim().split('\n');
-	function get_next_work() {
-		if (next_index === work_list.length) {
-			CeL.log('All ' + work_list.length + ' works done.');
-			return;
-		}
-		var work_title = work_list[next_index++].trim();
-		if (work_title && !work_title.startsWith('#')) {
-			work_count++;
-			CeL.log('Download ' + work_count
-					+ (work_count === next_index ? '' : '/' + next_index) + '/'
-					+ work_list.length + ': ' + work_title);
-			get_work(work_title, get_next_work);
-		} else {
-			get_next_work();
-		}
-	}
-	get_next_work();
+start_operation();
 
-} else {
-	// e.g.,
-	// node qq_comic.js 12345
-	// node qq_comic.js ABC
-	get_work(work_id);
+// ----------------------------------------------------------------------------
+
+function start_operation() {
+
+	if (work_id.startsWith('l=')) {
+		// e.g.,
+		// node qq_comic.js l=qq.txt
+		// @see http://ac.qq.com/Rank/comicRank
+		var next_index = 0, work_count = 0,
+		//
+		work_list = (CeL.fs_read(work_id.slice('l='.length)) || '').toString()
+				.replace(/\/\*[\s\S]*?\*\//g, '').trim().split('\n');
+		function get_next_work() {
+			if (next_index === work_list.length) {
+				CeL.log('All ' + work_list.length + ' works done.');
+				return;
+			}
+			var work_title = work_list[next_index++].trim();
+			if (work_title && !work_title.startsWith('#')) {
+				work_count++;
+				CeL.log('Download ' + work_count
+						+ (work_count === next_index ? '' : '/' + next_index)
+						+ '/' + work_list.length + ': ' + work_title);
+				get_work(work_title, get_next_work);
+			} else {
+				get_next_work();
+			}
+		}
+		get_next_work();
+
+	} else {
+		// e.g.,
+		// node qq_comic.js 12345
+		// node qq_comic.js ABC
+		get_work(work_id);
+	}
+
 }
 
 // ----------------------------------------------------------------------------
@@ -131,7 +142,8 @@ function get_work(work_title, callback) {
 	// 檢查看看之前是否有取得過。
 	search_result = CeL.get_JSON(search_result_file) || CeL.null_Object();
 	if (search_result[work_title = work_title.trim()]) {
-		CeL.log('Find cache: ' + work_title + '→' + search_result[work_title]);
+		CeL.log('Find cache: ' + work_title + '→'
+				+ JSON.stringify(search_result[work_title]));
 		get_work_data(search_result[work_title], callback);
 		return;
 	}
@@ -148,7 +160,9 @@ function get_work(work_title, callback) {
 			ids[matched[1]] = matched[2] || true;
 		}
 		var id_list = Object.keys(ids);
-		if (id_list.length !== 1) {
+		if (id_list.length === 1) {
+			id_list = id_list[0];
+		} else {
 			CeL.err('[' + work_title + ']: Get ' + id_list.length + ' works: '
 			//
 			+ JSON.stringify(ids));
@@ -161,8 +175,6 @@ function get_work(work_title, callback) {
 			})) {
 				return;
 			}
-		} else {
-			id_list = id_list[0];
 		}
 		// 已確認僅找到唯一id。
 		search_result[work_title] = id_list | 0;
@@ -192,12 +204,14 @@ function get_work_data(work_id, callback, error_count) {
 			return;
 		}
 
-		var matched, PATTERN_chapter_id = /\/cid\/(\d+)/g,
-		// work_data={id,title,author,authors,chapters,last_update,last_download:{date,chapter}}
+		var matched,
+		// work_data={id,title,author,authors,chapter_count,last_update,last_download:{date,chapter}}
 		work_data = {
-			id : work_id,
+			// 必要屬性：須配合網站平台更改
 			title : get_label(html.between(
 					'<h2 class="works-intro-title ui-left">', '</h2>')),
+
+			// 選擇性屬性：須配合網站平台更改
 			author : CeL.HTML_to_Unicode(html.between('"works-author-name"',
 					'>').between(' title="', '"')),
 			authors :
@@ -207,6 +221,9 @@ function get_work_data(work_id, callback, error_count) {
 					'"'),
 			last_update : get_label(html.between(
 					'<span class="ui-pl10 ui-text-gray6">', '</span>')),
+
+			// 自動添加之作業用屬性：
+			id : work_id,
 			last_download : {
 				date : (new Date).toISOString(),
 				chapter : 1
@@ -234,7 +251,7 @@ function get_work_data(work_id, callback, error_count) {
 						&& work_data[key] !== matched[key]) {
 					CeL.log(key + ': ' + matched[key]
 					// 對比兩者。
-					+ '\n→' + work_data[key]);
+					+ '\n→ ' + work_data[key]);
 				}
 			}
 			matched = matched.last_download.chapter;
@@ -244,18 +261,20 @@ function get_work_data(work_id, callback, error_count) {
 			}
 		}
 
-		// reset
-		work_data.chapters = 0;
+		// reset chapter_count. 此處 chapter (章節) 指的為平台所給的id編號，並非"回"、"話"！且可能會跳號！
+		work_data.chapter_count = 0;
+		// [ , chapter_id ]
+		var PATTERN_chapter_id = /\/cid\/(\d{1,4})/g;
 		while (matched = PATTERN_chapter_id.exec(html)) {
 			// 取最大者。
-			if (work_data.chapters < (matched = +matched[1])) {
-				work_data.chapters = matched;
+			if (work_data.chapter_count < (matched = +matched[1])) {
+				work_data.chapter_count = matched;
 			}
 		}
-		if (work_data.chapters >= 1) {
+		if (work_data.chapter_count >= 1) {
 			CeL.log(work_data.id + ' ' + work_data.title + ': '
 			//
-			+ work_data.chapters + ' chapters.'
+			+ work_data.chapter_count + ' chapters.'
 			//
 			+ (work_data.last_download.chapter > 1 ? ' 自章節編號第 '
 			//
@@ -275,11 +294,12 @@ function get_work_data(work_id, callback, error_count) {
 
 function get_chapter_data(work_data, chapter, callback) {
 
+	// decode chapter data
 	// modify from
 	// http://ac.gtimg.com/media/js/ac.page.chapter.view_v2.3.5.js?v=20160826
-	// usage:
-	// JSON.parse(decode(DATA.substring(1)));
 	function decode(c) {
+		c = c.substring(1);
+
 		var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", a = "", b, d, h, f, g, e = 0;
 		for (c = c.replace(/[^A-Za-z0-9\+\/\=]/g, ""); e < c.length;) {
 			b = _keyStr.indexOf(c.charAt(e++));
@@ -311,13 +331,14 @@ function get_chapter_data(work_data, chapter, callback) {
 				b += 3;
 			}
 		}
-		return a;
+
+		return JSON.parse(a);
 	}
 
 	var url = base_URL + 'ComicView/index/id/' + work_data.id + '/cid/'
-			+ chapter, left;
+			+ chapter, left, image_list, waiting;
 	CeL.debug(work_data.id + ' ' + work_data.title + ' #' + chapter + '/'
-			+ work_data.chapters + ': ' + url);
+			+ work_data.chapter_count + ': ' + url);
 	process.title = chapter + ' @ ' + work_data.title;
 
 	function get_data() {
@@ -336,38 +357,49 @@ function get_chapter_data(work_data, chapter, callback) {
 				return;
 			}
 
-			var data = html.match(/\sDATA\s*=\s*'([^']{9,})'/);
-			if (!data || !(data = JSON.parse(decode(data[1].substring(1))))
+			var chapter_data = html.match(/\sDATA\s*=\s*'([^']{9,})'/);
+			if (!chapter_data || !(chapter_data = decode(chapter_data[1]))
 			//
-			|| !data.picture || !(left = data.picture.length) >= 1) {
+			|| !chapter_data.picture
+					|| !(left = chapter_data.picture.length) >= 1) {
 				CeL.debug(work_data.directory_name + ' #' + chapter + '/'
-						+ work_data.chapters + ': No picture get.');
+						+ work_data.chapter_count + ': No image get.');
 				// 模擬已經下載完最後一張圖。
 				left = 1;
 				check_if_done();
 				return;
 			}
-			var chapter_label = chapter.pad(4) + (data.chapter.cTitle ? ' '
-			//
-			+ CeL.to_file_name(
-			//
-			CeL.HTML_to_Unicode(data.chapter.cTitle)) : ''),
+			// console.log(chapter_data);
+
+			var chapter_label = chapter.pad(4)
+					+ (chapter_data.chapter.cTitle ? ' '
+					//
+					+ CeL.to_file_name(
+					//
+					CeL.HTML_to_Unicode(chapter_data.chapter.cTitle)) : ''),
 			//
 			chapter_directory = work_data.directory + chapter_label + '/';
 			CeL.fs_mkdir(chapter_directory);
 			CeL.fs_write(chapter_directory + work_data.directory_name + '-'
 					+ chapter_label + '.htm', html);
-			CeL.log(chapter + '/' + work_data.chapters
+			CeL.log(chapter + '/' + work_data.chapter_count
 			//
-			+ ' [' + chapter_label + '] ' + left + ' pictures.');
-			// console.log(data.picture);
-			data.picture.forEach(function(picture_data, index) {
+			+ ' [' + chapter_label + '] ' + left + ' images.');
+
+			image_list = chapter_data.picture;
+			// console.log(image_list);
+			// TODO: 當某 chapter 檔案過多，將一次 request 過多 connects 而造成問題。
+			image_list.forEach(function(image_data, index) {
 				// http://stackoverflow.com/questions/245840/rename-files-in-sub-directories
 				// for /r %x in (*.jfif) do ren "%x" *.jpg
-				get_images(picture_data, chapter_directory + work_data.id + '-'
-						+ chapter + '-' + (index + 1).pad(3) + '.jpg',
-						check_if_done);
+
+				// file_path
+				image_data.file = chapter_directory + work_data.id + '-'
+						+ chapter + '-' + (index + 1).pad(3) + '.jpg';
+				get_images(image_data, check_if_done);
 			});
+			// 已派發完工作，開始等待。
+			waiting = true;
 		}, null, null, {
 			timeout : 30 * 1000
 		});
@@ -377,8 +409,18 @@ function get_chapter_data(work_data, chapter, callback) {
 	function check_if_done() {
 		--left;
 		process.stdout.write(left + ' left...\r');
+		// 須注意若是最後一張圖get_images()直接 return 了，此時尚未設定 waiting，因此此處不可以 waiting 判斷！
 		if (left > 0) {
-			// 還有尚未取得的檔案
+			// 還有尚未取得的檔案。
+			if (waiting && left < 2) {
+				CeL.debug('Waiting for: '
+				//
+				+ image_list.filter(function(image_data) {
+					return !image_data.OK;
+				}).map(function(image_data) {
+					return image_data.url + '\n→ ' + image_data.file;
+				}));
+			}
 			return;
 		}
 		// assert: left===0
@@ -387,7 +429,7 @@ function get_chapter_data(work_data, chapter, callback) {
 		work_data.last_download.chapter = chapter;
 		// 紀錄已下載完之chapter
 		CeL.fs_write(work_data.data_file, work_data);
-		if (++chapter > work_data.chapters) {
+		if (++chapter > work_data.chapter_count) {
 			CeL.log(work_data.directory_name + ' done.');
 			if (typeof callback === 'function') {
 				callback(work_data);
@@ -400,29 +442,37 @@ function get_chapter_data(work_data, chapter, callback) {
 
 var node_fs = require('fs');
 
-function get_images(picture_data, file_path, callback) {
-	// console.log(picture_data);
-	if (node_fs.existsSync(file_path)) {
+function get_images(image_data, callback) {
+	// console.log(image_data);
+	if (node_fs.existsSync(image_data.file)) {
+		image_data.OK = true;
 		callback();
 		return;
 	}
-	CeL.get_URL(picture_data.url, function(XMLHttp) {
+
+	CeL.get_URL(image_data.url, function(XMLHttp) {
 		var contents = XMLHttp.responseText;
 		// 80: 應改成最小容許圖案大小。
-		if (contents && contents.length > 80) {
-			picture_data.OK = true;
-			CeL.fs_write(file_path, contents);
-		} else {
-			CeL.err('Failed to get ' + picture_data.url + '\n→ ' + file_path);
-			if (picture_data.error_count > 4) {
-				throw MESSAGE_RE_DOWNLOAD;
-			}
-			picture_data.error_count = (picture_data.error_count | 0) + 1;
-			CeL.log('Retry ' + picture_data.error_count + '...');
-			get_images(picture_data, file_path, callback);
+		if (contents && contents.length > 80
+		// http://stackoverflow.com/questions/4585527/detect-eof-for-jpg-images
+		&& contents[contents.length - 2] === 255
+		// When you get to FFD9 you're at the end of the stream.
+		&& contents[contents.length - 1] === 217) {
+			image_data.OK = true;
+			CeL.fs_write(image_data.file, contents);
+			callback();
 			return;
 		}
-		callback();
+
+		CeL.err('Failed to get ' + image_data.url + '\n→ ' + image_data.file);
+		if (image_data.error_count > 4) {
+			throw MESSAGE_RE_DOWNLOAD;
+		}
+
+		image_data.error_count = (image_data.error_count | 0) + 1;
+		CeL.log('Retry ' + image_data.error_count + '...');
+		get_images(image_data, callback);
+
 	}, 'binary', null, {
 		timeout : 20 * 1000
 	});
