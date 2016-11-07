@@ -86,6 +86,9 @@ CeL.get_URL.default_user_agent = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 
 // prepare directory
 CeL.fs_mkdir(main_directory += '/');
 
+require('http').globalAgent.keepAlive = true;
+// CeL.set_debug(3);
+
 start_operation();
 
 // ----------------------------------------------------------------------------
@@ -95,18 +98,18 @@ function start_operation() {
 	if (work_id.startsWith('l=')) {
 		// e.g.,
 		// node qq_comic.js l=qq.txt
-		// @see http://ac.qq.com/Rank/comicRank
+		// @see http://ac.qq.com/Rank/comicRank/type/pgv
 		var next_index = 0, work_count = 0,
 		//
 		work_list = (CeL.fs_read(work_id.slice('l='.length)) || '').toString()
-				.replace(/\/\*[\s\S]*?\*\//g, '').trim().split('\n');
+				.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(?:^|\n)#[^\n]*/g, '').trim().split('\n');
 		function get_next_work() {
 			if (next_index === work_list.length) {
 				CeL.log('All ' + work_list.length + ' works done.');
 				return;
 			}
 			var work_title = work_list[next_index++].trim();
-			if (work_title && !work_title.startsWith('#')) {
+			if (work_title) {
 				work_count++;
 				CeL.log('Download ' + work_count
 						+ (work_count === next_index ? '' : '/' + next_index)
@@ -173,6 +176,9 @@ function get_work(work_title, callback) {
 				}
 				id_list = id;
 			})) {
+				// failed
+				CeL.warn('未找到與[' + work_title + ']相符者。');
+				callback && callback();
 				return;
 			}
 		}
@@ -219,6 +225,9 @@ function get_work_data(work_id, callback, error_count) {
 			get_label(html.between('<p class="bear-p-xone">', '</p>')),
 			description : html.between('<meta name="Description" content="',
 					'"'),
+			// e.g., "连载中"
+			status : html.between('<label class="works-intro-status">',
+					'</label>').trim(),
 			last_update : get_label(html.between(
 					'<span class="ui-pl10 ui-text-gray6">', '</span>')),
 
@@ -240,6 +249,10 @@ function get_work_data(work_id, callback, error_count) {
 		matched = main_directory + 'cache/';
 		CeL.fs_mkdir(matched);
 		CeL.fs_write(matched + work_data.directory_name + '.htm', html);
+
+		if (work_data.status === '已完结') {
+			CeL.fs_write(work_data.directory + 'finished.txt', work_data.status);
+		}
 
 		matched = CeL.get_JSON(work_data.data_file);
 		if (matched) {
@@ -276,6 +289,8 @@ function get_work_data(work_id, callback, error_count) {
 			//
 			+ work_data.chapter_count + ' chapters.'
 			//
+			+ (work_data.status ? ' ' + work_data.status : '')
+			//
 			+ (work_data.last_download.chapter > 1 ? ' 自章節編號第 '
 			//
 			+ work_data.last_download.chapter + ' 接續下載。' : ''));
@@ -286,7 +301,8 @@ function get_work_data(work_id, callback, error_count) {
 					callback);
 			return;
 		}
-		CeL.err(work_data.title + ': Can not get chapter counts!');
+		CeL.err((work_data.title || work_id) + ': Can not get chapter count!');
+		callback && callback();
 	});
 }
 
@@ -378,13 +394,15 @@ function get_chapter_data(work_data, chapter, callback) {
 					//
 					CeL.HTML_to_Unicode(chapter_data.chapter.cTitle)) : ''),
 			//
-			chapter_directory = work_data.directory + chapter_label + '/';
+			chapter_directory = work_data.directory + chapter_label + '/',
+			// 例如需要收費的章節
+			limited = !chapter_data.chapter.canRead;
 			CeL.fs_mkdir(chapter_directory);
 			CeL.fs_write(chapter_directory + work_data.directory_name + '-'
 					+ chapter_label + '.htm', html);
 			CeL.log(chapter + '/' + work_data.chapter_count
 			//
-			+ ' [' + chapter_label + '] ' + left + ' images.');
+			+ ' [' + chapter_label + '] ' + left + ' images.' + (limited ? ' (limited)' : ''));
 
 			image_list = chapter_data.picture;
 			// console.log(image_list);
@@ -398,7 +416,7 @@ function get_chapter_data(work_data, chapter, callback) {
 						+ chapter + '-' + (index + 1).pad(3) + '.jpg';
 				get_images(image_data, check_if_done);
 			});
-			// 已派發完工作，開始等待。
+			CeL.debug(chapter_label + ': 已派發完工作，開始等待。', 6, 'get_chapter_data');
 			waiting = true;
 		}, null, null, {
 			timeout : 30 * 1000
@@ -413,7 +431,7 @@ function get_chapter_data(work_data, chapter, callback) {
 		if (left > 0) {
 			// 還有尚未取得的檔案。
 			if (waiting && left < 2) {
-				CeL.debug('Waiting for: '
+				CeL.debug('Waiting for:\n'
 				//
 				+ image_list.filter(function(image_data) {
 					return !image_data.OK;
@@ -446,7 +464,7 @@ function get_images(image_data, callback) {
 	// console.log(image_data);
 	if (node_fs.existsSync(image_data.file)) {
 		image_data.OK = true;
-		callback();
+		callback && callback();
 		return;
 	}
 
@@ -460,13 +478,15 @@ function get_images(image_data, callback) {
 		&& contents[contents.length - 1] === 217) {
 			image_data.OK = true;
 			CeL.fs_write(image_data.file, contents);
-			callback();
+			callback && callback();
 			return;
 		}
 
 		CeL.err('Failed to get ' + image_data.url + '\n→ ' + image_data.file);
 		if (image_data.error_count > 4) {
-			throw MESSAGE_RE_DOWNLOAD;
+			// throw MESSAGE_RE_DOWNLOAD;
+			CeL.log(MESSAGE_RE_DOWNLOAD);
+			process.exit(1);
 		}
 
 		image_data.error_count = (image_data.error_count | 0) + 1;
