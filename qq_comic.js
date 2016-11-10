@@ -72,7 +72,9 @@ main_directory = process.mainModule.filename.match(/[^\\\/]+$/)[0].replace(
 work_id = CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id)
 		|| process.argv[2],
 //
-MESSAGE_RE_DOWNLOAD = '下載出錯了，請確認排除錯誤或不再持續後，重新執行以接續下載。';
+MESSAGE_RE_DOWNLOAD = '下載出錯了，請確認排除錯誤或不再持續後，重新執行以接續下載。',
+// check End Of Image
+check_EOI = true;
 
 if (!work_id) {
 	CeL.log('Usage:\nnode ' + main_directory + ' "work title / work id"\nnode '
@@ -102,7 +104,8 @@ function start_operation() {
 		var next_index = 0, work_count = 0,
 		//
 		work_list = (CeL.fs_read(work_id.slice('l='.length)) || '').toString()
-				.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(?:^|\n)#[^\n]*/g, '').trim().split('\n');
+				.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(?:^|\n)#[^\n]*/g,
+						'').trim().split('\n');
 		function get_next_work() {
 			if (next_index === work_list.length) {
 				CeL.log('All ' + work_list.length + ' works done.');
@@ -251,7 +254,9 @@ function get_work_data(work_id, callback, error_count) {
 		CeL.fs_write(matched + work_data.directory_name + '.htm', html);
 
 		if (work_data.status === '已完结') {
-			CeL.fs_write(work_data.directory + 'finished.txt', work_data.status);
+			CeL
+					.fs_write(work_data.directory + 'finished.txt',
+							work_data.status);
 		}
 
 		matched = CeL.get_JSON(work_data.data_file);
@@ -351,8 +356,9 @@ function get_chapter_data(work_data, chapter, callback) {
 		return JSON.parse(a);
 	}
 
-	var url = base_URL + 'ComicView/index/id/' + work_data.id + '/cid/'
-			+ chapter, left, image_list, waiting;
+	var left, image_list, waiting, chapter_label,
+	//
+	url = base_URL + 'ComicView/index/id/' + work_data.id + '/cid/' + chapter;
 	CeL.debug(work_data.id + ' ' + work_data.title + ' #' + chapter + '/'
 			+ work_data.chapter_count + ': ' + url);
 	process.title = chapter + ' @ ' + work_data.title;
@@ -387,14 +393,12 @@ function get_chapter_data(work_data, chapter, callback) {
 			}
 			// console.log(chapter_data);
 
-			var chapter_label = chapter.pad(4)
-					+ (chapter_data.chapter.cTitle ? ' '
-					//
-					+ CeL.to_file_name(
-					//
-					CeL.HTML_to_Unicode(chapter_data.chapter.cTitle)) : ''),
+			chapter_label = chapter.pad(4) + (chapter_data.chapter.cTitle ? ' '
 			//
-			chapter_directory = work_data.directory + chapter_label + '/',
+			+ CeL.to_file_name(
+			//
+			CeL.HTML_to_Unicode(chapter_data.chapter.cTitle)) : '');
+			var chapter_directory = work_data.directory + chapter_label + '/',
 			// 例如需要收費的章節
 			limited = !chapter_data.chapter.canRead;
 			CeL.fs_mkdir(chapter_directory);
@@ -402,7 +406,8 @@ function get_chapter_data(work_data, chapter, callback) {
 					+ chapter_label + '.htm', html);
 			CeL.log(chapter + '/' + work_data.chapter_count
 			//
-			+ ' [' + chapter_label + '] ' + left + ' images.' + (limited ? ' (limited)' : ''));
+			+ ' [' + chapter_label + '] ' + left + ' images.'
+					+ (limited ? ' (limited)' : ''));
 
 			image_list = chapter_data.picture;
 			// console.log(image_list);
@@ -416,7 +421,7 @@ function get_chapter_data(work_data, chapter, callback) {
 						+ chapter + '-' + (index + 1).pad(3) + '.jpg';
 				get_images(image_data, check_if_done);
 			});
-			CeL.debug(chapter_label + ': 已派發完工作，開始等待。', 6, 'get_chapter_data');
+			CeL.debug(chapter_label + ': 已派發完工作，開始等待。', 3, 'get_data');
 			waiting = true;
 		}, null, null, {
 			timeout : 30 * 1000
@@ -427,6 +432,7 @@ function get_chapter_data(work_data, chapter, callback) {
 	function check_if_done() {
 		--left;
 		process.stdout.write(left + ' left...\r');
+		CeL.debug(chapter_label + ': ' + left + ' left', 3, 'check_if_done');
 		// 須注意若是最後一張圖get_images()直接 return 了，此時尚未設定 waiting，因此此處不可以 waiting 判斷！
 		if (left > 0) {
 			// 還有尚未取得的檔案。
@@ -469,13 +475,17 @@ function get_images(image_data, callback) {
 	}
 
 	CeL.get_URL(image_data.url, function(XMLHttp) {
-		var contents = XMLHttp.responseText;
+		var contents = XMLHttp.responseText, has_EOI;
 		// 80: 應改成最小容許圖案大小。
-		if (contents && contents.length > 80
+		if (contents && contents.length > 80 &&
 		// http://stackoverflow.com/questions/4585527/detect-eof-for-jpg-images
-		&& contents[contents.length - 2] === 255
+		((has_EOI = contents[contents.length - 2] === 255
 		// When you get to FFD9 you're at the end of the stream.
-		&& contents[contents.length - 1] === 217) {
+		&& contents[contents.length - 1] === 217) || !check_EOI)) {
+			if (!has_EOI) {
+				CeL.warn('Do not has EOI: ' + image_data.file + '\n ←'
+						+ image_data.url);
+			}
 			image_data.OK = true;
 			CeL.fs_write(image_data.file, contents);
 			callback && callback();
