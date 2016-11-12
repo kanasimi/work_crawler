@@ -483,7 +483,7 @@ function get_images(image_data, callback) {
 		// When you get to FFD9 you're at the end of the stream.
 		&& contents[contents.length - 1] === 217) || !check_EOI)) {
 			if (!has_EOI) {
-				CeL.warn('Do not has EOI: ' + image_data.file + '\n ←'
+				CeL.warn('Do not has EOI: ' + image_data.file + '\n← '
 						+ image_data.url);
 			}
 			image_data.OK = true;
@@ -492,6 +492,9 @@ function get_images(image_data, callback) {
 			return;
 		}
 
+		CeL.err((has_EOI === false ? 'Do not has EOI: ' : 'Failed to get ')
+		//
+		+ image_data.url + '\n→ ' + image_data.file);
 		CeL.err('Failed to get ' + image_data.url + '\n→ ' + image_data.file);
 		if (image_data.error_count > 4) {
 			// throw MESSAGE_RE_DOWNLOAD;
