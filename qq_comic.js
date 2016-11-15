@@ -91,7 +91,29 @@ CeL.fs_mkdir(main_directory += '/');
 require('http').globalAgent.keepAlive = true;
 // CeL.set_debug(3);
 
-start_operation();
+if (work_id === 'free') {
+	// 今日限免 free today
+	// e.g., node qq_comic free
+	CeL.get_URL(base_URL + 'VIP', function(XMLHttp) {
+		var html = XMLHttp.responseText, matched, PATTERN_work_name =
+		//
+		/class="in-works-name" title="([^"]+)">/g,
+		//
+		free_file = main_directory + 'free.json', free = CeL.get_JSON(free_file) || CeL.null_Object();
+		work_id = [];
+		while (matched = PATTERN_work_name.exec(html)) {
+			work_id.push(matched[1]);
+			free[matched[1]] = (new Date).toISOString();
+		}
+		CeL.log('今日限免: ' + work_id);
+		// write cache
+		CeL.fs_write(free_file, free);
+		get_work_list(work_id);
+	});
+
+} else {
+	start_operation();
+}
 
 // ----------------------------------------------------------------------------
 
@@ -101,29 +123,10 @@ function start_operation() {
 		// e.g.,
 		// node qq_comic.js l=qq.txt
 		// @see http://ac.qq.com/Rank/comicRank/type/pgv
-		var next_index = 0, work_count = 0,
-		//
-		work_list = (CeL.fs_read(work_id.slice('l='.length)) || '').toString()
-				.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(?:^|\n)#[^\n]*/g,
-						'').trim().split('\n');
-		function get_next_work() {
-			if (next_index === work_list.length) {
-				CeL.log('All ' + work_list.length + ' works done.');
-				return;
-			}
-			var work_title = work_list[next_index++].trim();
-			if (work_title) {
-				work_count++;
-				CeL.log('Download ' + work_count
-						+ (work_count === next_index ? '' : '/' + next_index)
-						+ '/' + work_list.length + ': ' + work_title);
-				get_work(work_title, get_next_work);
-			} else {
-				get_next_work();
-			}
-		}
-		get_next_work();
-
+		var work_list = (CeL.fs_read(work_id.slice('l='.length)) || '')
+				.toString().replace(/\/\*[\s\S]*?\*\//g, '').replace(
+						/(?:^|\n)#[^\n]*/g, '').trim().split('\n');
+		get_work_list(work_list);
 	} else {
 		// e.g.,
 		// node qq_comic.js 12345
@@ -131,6 +134,28 @@ function start_operation() {
 		get_work(work_id);
 	}
 
+}
+
+function get_work_list(work_list) {
+	var next_index = 0, work_count = 0;
+
+	function get_next_work() {
+		if (next_index === work_list.length) {
+			CeL.log('All ' + work_list.length + ' works done.');
+			return;
+		}
+		var work_title = work_list[next_index++].trim();
+		if (work_title) {
+			work_count++;
+			CeL.log('Download ' + work_count
+					+ (work_count === next_index ? '' : '/' + next_index) + '/'
+					+ work_list.length + ': ' + work_title);
+			get_work(work_title, get_next_work);
+		} else {
+			get_next_work();
+		}
+	}
+	get_next_work();
 }
 
 // ----------------------------------------------------------------------------
