@@ -99,7 +99,9 @@ if (work_id === 'free') {
 		//
 		/class="in-works-name" title="([^"]+)">/g,
 		//
-		free_file = main_directory + 'free.json', free = CeL.get_JSON(free_file) || CeL.null_Object();
+		free_file = main_directory + 'free.json',
+		//
+		free = CeL.get_JSON(free_file) || CeL.null_Object();
 		work_id = [];
 		while (matched = PATTERN_work_name.exec(html)) {
 			work_id.push(matched[1]);
@@ -532,6 +534,6 @@ function get_images(image_data, callback) {
 		get_images(image_data, callback);
 
 	}, 'binary', null, {
-		timeout : 20 * 1000
+		timeout : 30 * 1000
 	});
 }
