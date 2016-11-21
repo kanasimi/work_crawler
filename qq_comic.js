@@ -3,6 +3,19 @@
  * 
  * TODO: http://www.chuiyao.com/
  * 
+ * <code>
+
+流程:
+
+# 取得伺服器列表
+# 解析設定檔，判別所要下載的作品列表。 start_operation(), get_work_list()
+# 解析 作品名稱 → 作品id get_work()
+# 取得作品的章節資料 get_work_data()
+# 取得每一個章節的各個影像內容資料 get_chapter_data()
+# 取得各個章節的每一個影像內容 get_images()
+
+ * </code>
+ * 
  * @see https://github.com/abcfy2/getComic
  * 
  * @since 2016/10/30 21:40:6
@@ -72,9 +85,9 @@ main_directory = process.mainModule.filename.match(/[^\\\/]+$/)[0].replace(
 work_id = CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id)
 		|| process.argv[2],
 //
-MESSAGE_RE_DOWNLOAD = '下載出錯了，請確認排除錯誤或不再持續後，重新執行以接續下載。',
-// check End Of Image
-check_EOI = true;
+MESSAGE_RE_DOWNLOAD = '下載出錯了，例如服務器暫時斷線、檔案闕失。請確認排除錯誤或不再持續後，重新執行以接續下載。',
+// allow .jpg without EOI mark.
+allow_EOI_error = true;
 
 if (!work_id) {
 	CeL.log('Usage:\nnode ' + main_directory + ' "work title / work id"\nnode '
@@ -467,7 +480,7 @@ function get_chapter_data(work_data, chapter, callback) {
 				CeL.debug('Waiting for:\n'
 				//
 				+ image_list.filter(function(image_data) {
-					return !image_data.OK;
+					return !image_data.done;
 				}).map(function(image_data) {
 					return image_data.url + '\n→ ' + image_data.file;
 				}));
@@ -496,29 +509,42 @@ var node_fs = require('fs');
 function get_images(image_data, callback) {
 	// console.log(image_data);
 	if (node_fs.existsSync(image_data.file)) {
-		image_data.OK = true;
+		image_data.done = true;
 		callback && callback();
 		return;
+	}
+
+	if (!image_data.file_length) {
+		image_data.file_length = [];
 	}
 
 	CeL.get_URL(image_data.url, function(XMLHttp) {
 		var contents = XMLHttp.responseText, has_EOI;
 		// 80: 應改成最小容許圖案大小。
 		if (contents && contents.length > 80 &&
+		// check End Of Image of .jpeg
 		// http://stackoverflow.com/questions/4585527/detect-eof-for-jpg-images
 		((has_EOI = contents[contents.length - 2] === 255
 		// When you get to FFD9 you're at the end of the stream.
-		&& contents[contents.length - 1] === 217) || !check_EOI)) {
-			if (!has_EOI) {
+		&& contents[contents.length - 1] === 217)
+		// 若是每次都得到相同的檔案長度，那就當作來源檔案本來就有問題。
+		|| allow_EOI_error && image_data.file_length.uniq().length === 1)) {
+			if (has_EOI === false) {
 				CeL.warn('Do not has EOI: ' + image_data.file + '\n← '
 						+ image_data.url);
+				image_data.file
+				// 加上有錯誤檔案之註記。
+				= image_data.file.replace(/([^.]*)$/, 'bad.$1');
 			}
-			image_data.OK = true;
+			image_data.done = true;
 			CeL.fs_write(image_data.file, contents);
 			callback && callback();
 			return;
 		}
 
+		if (has_EOI === false) {
+			image_data.file_length.push(contents.length);
+		}
 		CeL.err((has_EOI === false ? 'Do not has EOI: ' : 'Failed to get ')
 		//
 		+ image_data.url + '\n→ ' + image_data.file);
