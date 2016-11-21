@@ -87,7 +87,9 @@ work_id = CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id)
 //
 MESSAGE_RE_DOWNLOAD = '下載出錯了，例如服務器暫時斷線、檔案闕失。請確認排除錯誤或不再持續後，重新執行以接續下載。',
 // allow .jpg without EOI mark.
-allow_EOI_error = true;
+allow_EOI_error = true,
+// e.g., '2-1.jpg' → '2-1 bad.jpg'
+EOI_error_postfix = ' bad';
 
 if (!work_id) {
 	CeL.log('Usage:\nnode ' + main_directory + ' "work title / work id"\nnode '
@@ -521,30 +523,34 @@ function get_images(image_data, callback) {
 	CeL.get_URL(image_data.url, function(XMLHttp) {
 		var contents = XMLHttp.responseText, has_EOI;
 		// 80: 應改成最小容許圖案大小。
-		if (contents && contents.length > 80 &&
-		// check End Of Image of .jpeg
-		// http://stackoverflow.com/questions/4585527/detect-eof-for-jpg-images
-		((has_EOI = contents[contents.length - 2] === 255
-		// When you get to FFD9 you're at the end of the stream.
-		&& contents[contents.length - 1] === 217)
-		// 若是每次都得到相同的檔案長度，那就當作來源檔案本來就有問題。
-		|| allow_EOI_error && image_data.file_length.uniq().length === 1)) {
-			if (has_EOI === false) {
-				CeL.warn('Do not has EOI: ' + image_data.file + '\n← '
-						+ image_data.url);
-				image_data.file
-				// 加上有錯誤檔案之註記。
-				= image_data.file.replace(/([^.]*)$/, 'bad.$1');
+		if (contents && contents.length > 80) {
+			image_data.file_length.push(contents.length);
+			// check End Of Image of .jpeg
+			// http://stackoverflow.com/questions/4585527/detect-eof-for-jpg-images
+			has_EOI = contents[contents.length - 2] === 255
+			// When you get to FFD9 you're at the end of the stream.
+			&& contents[contents.length - 1] === 217;
+
+			if (has_EOI || allow_EOI_error && image_data.file_length.length > 3
+			// 若是每次都得到相同的檔案長度，那就當作來源檔案本來就有問題。
+			&& image_data.file_length.cardinal_1()) {
+				// 過了。
+				if (has_EOI === false) {
+					CeL.warn('Do not has EOI: ' + image_data.file + '\n← '
+							+ image_data.url);
+					// 加上有錯誤檔案之註記。
+					image_data.file = image_data.file.replace(/\.([^.]*)$/,
+							EOI_error_postfix + '$1');
+				}
+
+				CeL.fs_write(image_data.file, contents);
+				image_data.done = true;
+				callback && callback();
+				return;
 			}
-			image_data.done = true;
-			CeL.fs_write(image_data.file, contents);
-			callback && callback();
-			return;
 		}
 
-		if (has_EOI === false) {
-			image_data.file_length.push(contents.length);
-		}
+		// 有錯誤。
 		CeL.err((has_EOI === false ? 'Do not has EOI: ' : 'Failed to get ')
 		//
 		+ image_data.url + '\n→ ' + image_data.file);
