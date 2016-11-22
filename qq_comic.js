@@ -84,12 +84,16 @@ main_directory = process.mainModule.filename.match(/[^\\\/]+$/)[0].replace(
 //
 work_id = CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id)
 		|| process.argv[2],
+// 同一檔案錯誤超過此數量則跳出。
+MAX_ERROR = 4,
 //
 MESSAGE_RE_DOWNLOAD = '下載出錯了，例如服務器暫時斷線、檔案闕失。請確認排除錯誤或不再持續後，重新執行以接續下載。',
 // allow .jpg without EOI mark.
 allow_EOI_error = true,
 // e.g., '2-1.jpg' → '2-1 bad.jpg'
-EOI_error_postfix = ' bad';
+EOI_error_postfix = ' bad',
+//
+MAX_EOI_ERROR = Math.min(3, MAX_ERROR);
 
 if (!work_id) {
 	CeL.log('Usage:\nnode ' + main_directory + ' "work title / work id"\nnode '
@@ -531,7 +535,9 @@ function get_images(image_data, callback) {
 			// When you get to FFD9 you're at the end of the stream.
 			&& contents[contents.length - 1] === 217;
 
-			if (has_EOI || allow_EOI_error && image_data.file_length.length > 3
+			if (has_EOI || allow_EOI_error
+			//
+			&& image_data.file_length.length > MAX_EOI_ERROR
 			// 若是每次都得到相同的檔案長度，那就當作來源檔案本來就有問題。
 			&& image_data.file_length.cardinal_1()) {
 				// 過了。
@@ -555,7 +561,7 @@ function get_images(image_data, callback) {
 		//
 		+ image_data.url + '\n→ ' + image_data.file);
 		CeL.err('Failed to get ' + image_data.url + '\n→ ' + image_data.file);
-		if (image_data.error_count > 4) {
+		if (image_data.error_count > MAX_ERROR) {
 			// throw MESSAGE_RE_DOWNLOAD;
 			CeL.log(MESSAGE_RE_DOWNLOAD);
 			process.exit(1);
