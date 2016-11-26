@@ -202,7 +202,10 @@ function get_work(work_title, callback) {
 
 	CeL.get_URL(base_URL + 'Comic/searchList/search/'
 	// e.g., 找不到"隔离带 2"，須找"隔离带"。
-	+ encodeURIComponent(work_title.replace(/\s+\d+$/, '')), function(XMLHttp) {
+	+ encodeURIComponent(work_title.replace(/\s+\d+$/, '')
+	// e.g., "Zero -零之镇魂曲-" → "Zero-零之镇魂曲-"
+	// e.g., "七公主 第三季" → "七公主第三季"
+	.replace(/ /g, '')), function(XMLHttp) {
 		var html = XMLHttp.responseText, matched, PATTERN_work_id =
 		//
 		/\/comicInfo\/id\/(\d+)(?:" title="([^"]+)")?/g,
@@ -545,7 +548,7 @@ function get_images(image_data, callback) {
 					CeL.warn('Do not has EOI: ' + image_data.file + '\n← '
 							+ image_data.url);
 					// 加上有錯誤檔案之註記。
-					image_data.file = image_data.file.replace(/\.([^.]*)$/,
+					image_data.file = image_data.file.replace(/(\.[^.]*)$/,
 							EOI_error_postfix + '$1');
 				}
 
