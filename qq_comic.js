@@ -11,6 +11,7 @@ require('./comic loder.js');
 var qq_comic = new CeL.comic.site({
 	base_URL : 'http://ac.qq.com/',
 
+	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
 		return this.base_URL + 'Comic/searchList/search/'
 		// e.g., 找不到"隔离带 2"，須找"隔离带"。
@@ -26,18 +27,17 @@ var qq_comic = new CeL.comic.site({
 		//
 		/\/comicInfo\/id\/(\d+)(?:" title="([^"]+)")?/g;
 		while (matched = PATTERN_work_id.exec(html)) {
-			id_list.push(matched[1] |= 0);
-			id_data[matched[1]] = matched[2] || true;
+			if (!id_list.includes(matched[1] |= 0)) {
+				id_list.push(matched[1]);
+				id_data[matched[1]] = matched[2] || '';
+			}
 		}
 		return [ id_list, id_data ];
 	},
-	id_of_search_result : function(cached_data) {
-		return cached_data;
-	},
-	title_of_search_result : function(data) {
-		return data;
-	},
+	// id_of_search_result : function(cached_data) { return cached_data; },
+	// title_of_search_result : function(data) { return data; },
 
+	// 取得作品的章節資料 get_work_data()
 	work_URL : function(work_id) {
 		return this.base_URL + 'Comic/comicInfo/id/' + (work_id | 0);
 	},
@@ -49,6 +49,9 @@ var qq_comic = new CeL.comic.site({
 					'<h2 class="works-intro-title ui-left">', '</h2>')),
 
 			// 選擇性屬性：須配合網站平台更改。
+			// e.g., "连载中"
+			status : html.between('<label class="works-intro-status">',
+					'</label>').trim(),
 			author : CeL.HTML_to_Unicode(html.between('"works-author-name"',
 					'>').between(' title="', '"')),
 			authors :
@@ -56,9 +59,6 @@ var qq_comic = new CeL.comic.site({
 			get_label(html.between('<p class="bear-p-xone">', '</p>')),
 			description : html.between('<meta name="Description" content="',
 					'"'),
-			// e.g., "连载中"
-			status : html.between('<label class="works-intro-status">',
-					'</label>').trim(),
 			last_update : get_label(html.between(
 					'<span class="ui-pl10 ui-text-gray6">', '</span>'))
 		};
@@ -75,6 +75,7 @@ var qq_comic = new CeL.comic.site({
 		}
 	},
 
+	// 取得每一個章節的各個影像內容資料 get_chapter_data()
 	chapter_URL : function(work_data, chapter) {
 		return this.base_URL + 'ComicView/index/id/' + work_data.id + '/cid/'
 				+ chapter;
@@ -132,8 +133,8 @@ var qq_comic = new CeL.comic.site({
 		}
 
 		// 設定必要的屬性。
-		chapter_data.image_count = chapter_data.picture.length;
 		chapter_data.title = chapter_data.chapter.cTitle;
+		// chapter_data.image_count = chapter_data.picture.length;
 		chapter_data.image_list = chapter_data.picture;
 
 		chapter_data.limited = !chapter_data.chapter.canRead;
