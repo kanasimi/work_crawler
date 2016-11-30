@@ -11,9 +11,30 @@ require('./comic loder.js');
 var PATTERN_chapter_data = /<li><a title="([^"]+)" href="((\d{0,4})[^"]*)"><span>(.+?)<\/span><\/a><\/li>/g,
 //
 manhuatai = new CeL.comic.site({
+	// recheck:從頭檢測所有作品之所有章節。
+	// recheck : true,
+	// one_by_one : true,
 	base_URL : 'http://www.manhuatai.com/',
 
+	// 取得伺服器列表。
+	// http://server.taomanhua.com:82/mhpic.asp?callback=1&_=1478324001349
+	// JSON.parse("{'o':[['mhpic.taomanhua.com','线路1',0],['58.218.199.16','线路2',0],['59.45.79.108','线路3',0]]}".replace(/'/g,'"')).o
+	server_URL : 'http://server.taomanhua.com:82/mhpic.asp',
+	parse_server_list : function(html) {
+		return JSON.parse(('{"o":'
+		//
+		+ html.between('"', '"') + '}').replace(/'/g, '"')).o
+		//
+		.map(function(server_data) {
+			return server_data[0];
+		});
+	},
+	image_path_to_url : function(path) {
+		;
+	},
+
 	// 解析 作品名稱 → 作品id get_work()
+	// use_server_cache : true,
 	search_URL : function(work_title) {
 		return this.base_URL + 'getjson.shtml?q='
 		// e.g., 找不到"隔离带 2"，須找"隔离带"。
@@ -30,7 +51,7 @@ manhuatai = new CeL.comic.site({
 	id_of_search_result : 'cartoon_id',
 	title_of_search_result : 'cartoon_name',
 
-	// 取得作品的章節資料 get_work_data()
+	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
 		return this.base_URL + work_id + '/';
 	},
@@ -73,7 +94,7 @@ manhuatai = new CeL.comic.site({
 		}
 	},
 
-	// 取得每一個章節的各個影像內容資料 get_chapter_data()
+	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	chapter_URL : function(work_data, chapter) {
 		return this.work_URL(work_data.id)
 				+ work_data.chapter_list[chapter - 1].url;
@@ -116,14 +137,8 @@ manhuatai = new CeL.comic.site({
 		//
 		.map(function(i, index) {
 			return {
-				url : 'http://' + (chapter_data.totalimg > 0
+				url : '/comic/' + chapter_data.imgpath
 				//
-				&& host_list[host_list.length * Math.random() | 0]
-				//
-				|| 'mhpic.' + chapter_data.domain)
-				//
-				+ '/comic/' + chapter_data.imgpath
-
 				+ (index + 1 + chapter_data.startimg - 1) + '.jpg'
 			}
 		});
@@ -136,28 +151,4 @@ manhuatai = new CeL.comic.site({
 
 // CeL.set_debug(3);
 
-var host_file = manhuatai.main_directory + 'servers.json', host_list = CeL
-		.get_JSON(host_file);
-
-// host_list = null;
-if (host_list) {
-	// use cache of host list
-	manhuatai.start(work_id);
-
-} else {
-	// 取得伺服器列表
-	// http://server.taomanhua.com:82/mhpic.asp?callback=1&_=1478324001349
-	// JSON.parse("{'o':[['mhpic.taomanhua.com','线路1',0],['58.218.199.16','线路2',0],['59.45.79.108','线路3',0]]}".replace(/'/g,'"')).o
-	CeL.get_URL('http://server.taomanhua.com:82/mhpic.asp', function(XMLHttp) {
-		var html = XMLHttp.responseText;
-		host_list = JSON.parse(("{'o':" + html.between('"', '"') + '}')
-				.replace(/'/g, '"')).o.map(function(host_data) {
-			return host_data[0];
-		}).filter(function(host) {
-			return host;
-		}).uniq();
-		CeL.log('Get ' + host_list.length + ' servers: ' + host_list);
-		CeL.fs_write(host_file, JSON.stringify(host_list));
-		manhuatai.start(work_id);
-	});
-}
+manhuatai.start(work_id);

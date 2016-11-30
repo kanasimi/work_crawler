@@ -9,6 +9,9 @@ require('./comic loder.js');
 // ----------------------------------------------------------------------------
 
 var qq_comic = new CeL.comic.site({
+	// recheck:從頭檢測所有作品之所有章節。
+	// recheck : true,
+	// one_by_one : true,
 	base_URL : 'http://ac.qq.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -37,7 +40,7 @@ var qq_comic = new CeL.comic.site({
 	// id_of_search_result : function(cached_data) { return cached_data; },
 	// title_of_search_result : function(data) { return data; },
 
-	// 取得作品的章節資料 get_work_data()
+	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
 		return this.base_URL + 'Comic/comicInfo/id/' + (work_id | 0);
 	},
@@ -75,7 +78,7 @@ var qq_comic = new CeL.comic.site({
 		}
 	},
 
-	// 取得每一個章節的各個影像內容資料 get_chapter_data()
+	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	chapter_URL : function(work_data, chapter) {
 		return this.base_URL + 'ComicView/index/id/' + work_data.id + '/cid/'
 				+ chapter;

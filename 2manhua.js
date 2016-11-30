@@ -9,8 +9,31 @@ require('./comic loder.js');
 // ----------------------------------------------------------------------------
 
 var _2manhua = new CeL.comic.site({
-	base_URL : 'http://www.2manhua.com/',
+	// recheck:從頭檢測所有作品之所有章節。
+	// recheck : true,
 	// one_by_one : true,
+	base_URL : 'http://www.2manhua.com/',
+
+	// 取得伺服器列表。
+	// use_server_cache : true,
+	server_URL : function() {
+		// http://www.2manhua.com/templates/default/scripts/configs.js?v=1.0.3
+		return this.base_URL + 'templates/default/scripts/configs.js';
+	},
+	parse_server_list : function(html) {
+		return Object.values(JSON.parse(('{"o":'
+		//
+		+ html.replace(/^[^{]+/, '').replace(/[^}]+$/, '') + '}')
+		//
+		.replace(/'/g, '"')).o.host)
+		//
+		.map(function(server_data) {
+			return server_data[0];
+		});
+	},
+	image_path_to_url : function(path) {
+		;
+	},
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
@@ -29,7 +52,7 @@ var _2manhua = new CeL.comic.site({
 	},
 	title_of_search_result : 't',
 
-	// 取得作品的章節資料 get_work_data()
+	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
 		// e.g., http://www.2manhua.com/comic/25652.html
 		return this.base_URL + 'comic/' + work_id + '.html';
@@ -86,7 +109,7 @@ var _2manhua = new CeL.comic.site({
 		work_data.chapter_count = work_data.chapter_list.length;
 	},
 
-	// 取得每一個章節的各個影像內容資料 get_chapter_data()
+	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	chapter_URL : function(work_data, chapter) {
 		return this.base_URL + work_data.chapter_list[chapter - 1].url;
 	},
@@ -106,19 +129,11 @@ var _2manhua = new CeL.comic.site({
 		// 設定必要的屬性。
 		chapter_data.title = get_label(html.between('<h2>', '</h2>'));
 		chapter_data.image_count = chapter_data.fc;
-		chapter_data.image_list = chapter_data.fs.map(function(url, index) {
-			if (url.startsWith('/')) {
-				url = 'http://' + (chapter_data.image_count > 0
-				//
-				&& host_list[host_list.length * Math.random() | 0]
-				//
-				|| this.base_URL) + url;
-			}
+		chapter_data.image_list = chapter_data.fs.map(function(url) {
 			return {
 				url : url
 			}
 		});
-		// console.log(JSON.stringify(chapter_data));
 
 		return chapter_data;
 	}
@@ -128,29 +143,4 @@ var _2manhua = new CeL.comic.site({
 
 // CeL.set_debug(3);
 
-// e.g., 
-var host_file = _2manhua.main_directory + 'servers.json', host_list = CeL
-		.get_JSON(host_file);
-
-// host_list = null;
-if (host_list) {
-	// use cache of host list
-	_2manhua.start(work_id);
-
-} else {
-	// 取得伺服器列表
-	// http://www.2manhua.com/templates/default/scripts/configs.js?v=1.0.3
-	CeL.get_URL(_2manhua.base_URL + 'templates/default/scripts/configs.js', function(XMLHttp) {
-		var html = XMLHttp.responseText;
-		host_list = Object.values(JSON.parse(("{'o':" + html.replace(/^[^{]+/, '').replace(/[^}]+$/, '') + '}')
-				.replace(/'/g, '"')).o.host).map(function(host_data) {
-			return host_data[0];
-		}).filter(function(host) {
-			return host;
-		}).uniq();
-		CeL.log('Get ' + host_list.length + ' servers: ' + host_list);
-		CeL.fs_write(host_file, JSON.stringify(host_list));
-		_2manhua.start(work_id);
-	});
-}
-
+_2manhua.start(work_id);
