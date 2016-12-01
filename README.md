@@ -1,6 +1,6 @@
 ﻿# Comic downloader
 批量下載各大漫畫網站的工具，如[腾讯漫画](http://ac.qq.com/)、[漫画台](http://www.manhuatai.com/)、[爱漫画](http://www.2manhua.com/)。
-Download qq comics.
+Download comics.
 
 ## 工作流程
 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名 <code>qq_comic</code>），每套漫畫一個目錄。

@@ -37,6 +37,32 @@ var qq_comic = new CeL.comic.site({
 		}
 		return [ id_list, id_data ];
 	},
+	convert_id : {
+		// 今日限免 free today
+		// e.g., node qq_comic free
+		free : function(callback) {
+			var _this = this;
+			// http://ac.qq.com/VIP
+			CeL.get_URL(this.base_URL + 'VIP', function(XMLHttp) {
+				var html = XMLHttp.responseText, matched, PATTERN_work_name =
+				//
+				/class="in-works-name" title="([^"]+)">/g,
+				//
+				free_file = _this.main_directory + 'free.json',
+				//
+				free = CeL.get_JSON(free_file) || CeL.null_Object();
+				var id_list = [];
+				while (matched = PATTERN_work_name.exec(html)) {
+					id_list.push(matched[1]);
+					free[matched[1]] = (new Date).toISOString();
+				}
+				CeL.log('今日限免: ' + id_list);
+				// write cache
+				CeL.fs_write(free_file, free);
+				callback(id_list);
+			});
+		}
+	},
 	// id_of_search_result : function(cached_data) { return cached_data; },
 	// title_of_search_result : function(data) { return data; },
 
@@ -150,28 +176,4 @@ var qq_comic = new CeL.comic.site({
 
 // CeL.set_debug(3);
 
-if (work_id === 'free') {
-	// 今日限免 free today
-	// e.g., node qq_comic free
-	CeL.get_URL(qq_comic.base_URL + 'VIP', function(XMLHttp) {
-		var html = XMLHttp.responseText, matched, PATTERN_work_name =
-		//
-		/class="in-works-name" title="([^"]+)">/g,
-		//
-		free_file = qq_comic.main_directory + 'free.json',
-		//
-		free = CeL.get_JSON(free_file) || CeL.null_Object();
-		work_id = [];
-		while (matched = PATTERN_work_name.exec(html)) {
-			work_id.push(matched[1]);
-			free[matched[1]] = (new Date).toISOString();
-		}
-		CeL.log('今日限免: ' + work_id);
-		// write cache
-		CeL.fs_write(free_file, free);
-		qq_comic.get_work_list(work_id);
-	});
-
-} else {
-	qq_comic.start(work_id);
-}
+qq_comic.start(work_id);
