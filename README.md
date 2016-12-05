@@ -1,9 +1,9 @@
 ﻿# Comic downloader
-批量下載各大漫畫網站的工具，如[腾讯漫画](http://ac.qq.com/)、[漫画台](http://www.manhuatai.com/)、[爱漫画](http://www.2manhua.com/)。
+批量下載各大漫畫網站的工具，如[腾讯漫画](http://ac.qq.com/)、[漫画台](http://www.manhuatai.com/)、[爱漫画](http://www.2manhua.com/)、[热漫吧](http://www.remanba.com/)、[三七阅读](http://www.37yue.com/)。
 Download comics.
 
 ## 工作流程
-本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名 <code>qq_comic</code>），每套漫畫一個目錄。
+本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 <code>manhuatai</code>），每套漫畫一個目錄。
 ![folder](https://lh3.googleusercontent.com/4ifQgcp8_tZoNW_Ml1V_XijWh1jMRbGcwlnLPs0CP_1AXOYfW4G-PFl3XZh7L7LPFMfrd92KeGxEXejjP7TYMXTP_g869gkeEo4RNC_fTBUxvf0jK3z2jZO6D_Fx6d5M65gLFksVGK5il4JjdOwgPpNuNMbpl92SmdGet0_npHDDZ7qDXCiThF9_BPCFznQpnZHXajfgtmCH25dJ03392dNC6XlI92E4N8m-P89YrTXqwD2IxVtgAfpA6FW0dce78ZEgso93bJLQoBQfUewzt7oG1NMg2LVigXN-5xJTtvJKawNxJsEVck8P450HoEVKZCGWb4auj8-RCp5NwLcQeshRIBbwaZUzru2LVPaY31q8TUCdRd-WjOgqVxQpHussYMf_7xU41Kek_bHjmKWZJUh6KQXo7hb-cMSfdACK_6_zcC51Kpgi2JgdvopJ9oTJM5fe5Ej_05W34z2RS1TvHdJANT7iPexiL1-HZxyW7Z-CK61Ngfkav5J8hwLa7oFhAewqSi8e-XayBkX5jhyvXj7V_VnEliXvq4Zmt2hKmIBaXcGSPoLr45pX6G8a5r8dxt0LYa0h5y5tjEQs_ztOG8hboTGKZBMsC2XWPf_FtoXDYEFe=w589-h386-no)
 
 ![folder inside work](https://lh3.googleusercontent.com/-kdAGIZkpWKnbx_Z1r5CIdhC_qEsc8RCxLqA9TUUtnPjx3FqT-j2vuY49Bjoz4kB-CvBo-ojDnhl7dbipRMTjuUc2cGzjPnWJxo7jbr5JD4X_mHdAz-t1gYABm6ng3Q87WF61JLkBFg5etrQPjVjiR83VUNlky8xbhBMfVEXoZKbc1LMptWyLyi_6ype_Tl3r5nd4oywpLc5qJ5cYS72BqXNFr0wtFwSlmETNzmlhGKPFjGjNUqkGFkrf7DeQJ7l_qSIBfj4oLPWb50IBwn5ECVU1wyGNgALzIAL1DIm4Hvyop2uEinZ2DPcyjv_i2Lkuwa21Mk4x6T_dU0V7gpy3MrE4pMI-9EznCuwMRrFba0VE3pGj8MSaW5z8snZLH9hYm6gh5cCMNfPOQhc1IPQh4ZP8qWDgEbeItVSuo1D9b4l1-2VhaXMNTzVcJ-MLcDLNDFM_Cxfpu5IOHwIlOlOMrr6nXeRdWHJkG5S7hunMFg30wh8gEl74zGmDMRGDlQiYgZYM7otHbaSSsSB8EGU8ZmBtf6xc4R5h3Q5cJ5u62Ozq5SNMGhnEqjvEbUvCSj__CMRDGKedAm6Ach0xgaPPEGfnhtq8am6mPPhWEK-aSBdh2ql=w225-h343-no)
@@ -34,7 +34,7 @@ $ npm install cejs
 
 ### Execution
 ``` sh
-$ node qq_comic.js "漫画作品名称"
+$ node 工具檔名.js "漫画作品名称"
 ```
 
 ## 聲明

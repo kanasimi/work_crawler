@@ -21,26 +21,19 @@ var _2manhua = new CeL.comic.site({
 		return this.base_URL + 'templates/default/scripts/configs.js';
 	},
 	parse_server_list : function(html) {
-		return Object.values(JSON.parse(('{"o":'
+		return Object.values(JSON.parse(
 		//
-		+ html.replace(/^[^{]+/, '').replace(/[^}]+$/, '') + '}')
+		html.replace(/^[^{]+/, '').replace(/[^}]+$/, '')
 		//
-		.replace(/'/g, '"')).o.host)
+		.replace(/'/g, '"')).host)
 		//
 		.map(function(server_data) {
 			return server_data[0];
 		});
 	},
-	image_path_to_url : function(path) {
-		;
-	},
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : function(work_title) {
-		return this.base_URL + 'handler/suggest?cb=_&key='
-		// e.g., 找不到"隔离带 2"，須找"隔离带"。
-		+ encodeURIComponent(work_title.replace(/\s+\d+$/, ''));
-	},
+	search_URL : 'handler/suggest?cb=_&key=',
 	parse_search_result : function(html) {
 		// e.g.,
 		// _([{"id":"25652","t":"我的双修道侣","u":"/comic/25652.html","cid":"/comic/25652/0200","ct":"201、放弃","s":"0"},{"id":"27907","t":"我的双修道侣（我的天劫女友）","u":"/comic/27907.html","cid":"/comic/27907/03","ct":"200、败家子","s":"0"}])
@@ -70,8 +63,8 @@ var _2manhua = new CeL.comic.site({
 					'"/>'),
 			description : get_label(html.between('"intro-all"', '</div>')
 					.between('>'))
-		}, PATTERN = /<strong>([^<>]+?)<\/strong>(.+?)<\/span>/g;
-		while (matched = PATTERN.exec(data)) {
+		}, PATTERN_work_data = /<strong>([^<>]+?)<\/strong>(.+?)<\/span>/g;
+		while (matched = PATTERN_work_data.exec(data)) {
 			work_data[matched[1]] = get_label(matched[2]).replace(/：$/, '');
 		}
 		return work_data;
@@ -86,7 +79,7 @@ var _2manhua = new CeL.comic.site({
 		 */
 		PATTERN_chapter =
 		// [all,href,title,inner]
-		/<li><a href="([^"<>]+)" title="([^"<>]+)"[^<>]+>(.+?)<\/a><\/li>/g;
+		/<li><a href="([^"<>]+)" title="([^"<>]+)"[^<>]*>(.+?)<\/a><\/li>/g;
 		while (matched = PATTERN_chapter.exec(html)) {
 			matched[2] = matched[2].trim();
 			if (matched[3] = matched[3].between('<i>', '</i>')) {
@@ -97,16 +90,18 @@ var _2manhua = new CeL.comic.site({
 				title : matched[2]
 			});
 		}
+		work_data.chapter_count = work_data.chapter_list.length;
 		work_data.chapter_list.sort(function(chapter_data_1, chapter_data_2) {
 			var matched_1 = chapter_data_1.url.match(/(\d+)\.htm/),
-			//
+			// 依照.url排序。
 			matched_2 = chapter_data_2.url.match(/(\d+)\.htm/);
 			if (matched_1 && matched_2) {
 				return matched_1[1] - matched_2[1];
 			}
 			return chapter_data_1.url < chapter_data_2.url ? -1 : 1;
+			// 依照.title排序。
+			return chapter_data_1.title < chapter_data_2.title ? -1 : 1;
 		});
-		work_data.chapter_count = work_data.chapter_list.length;
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()

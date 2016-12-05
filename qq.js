@@ -8,7 +8,7 @@ require('./comic loder.js');
 
 // ----------------------------------------------------------------------------
 
-var qq_comic = new CeL.comic.site({
+var qq = new CeL.comic.site({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 	// one_by_one : true,
@@ -39,7 +39,7 @@ var qq_comic = new CeL.comic.site({
 	},
 	convert_id : {
 		// 今日限免 free today
-		// e.g., node qq_comic free
+		// e.g., node qq free
 		free : function(callback) {
 			var _this = this;
 			// http://ac.qq.com/VIP
@@ -176,4 +176,4 @@ var qq_comic = new CeL.comic.site({
 
 // CeL.set_debug(3);
 
-qq_comic.start(work_id);
+qq.start(work_id);

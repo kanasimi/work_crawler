@@ -21,25 +21,18 @@ manhuatai = new CeL.comic.site({
 	// JSON.parse("{'o':[['mhpic.taomanhua.com','线路1',0],['58.218.199.16','线路2',0],['59.45.79.108','线路3',0]]}".replace(/'/g,'"')).o
 	server_URL : 'http://server.taomanhua.com:82/mhpic.asp',
 	parse_server_list : function(html) {
-		return JSON.parse(('{"o":'
+		return JSON.parse(
 		//
-		+ html.between('"', '"') + '}').replace(/'/g, '"')).o
+		html.between('"', '"').replace(/'/g, '"'))
 		//
 		.map(function(server_data) {
 			return server_data[0];
 		});
 	},
-	image_path_to_url : function(path) {
-		;
-	},
 
 	// 解析 作品名稱 → 作品id get_work()
 	// use_server_cache : true,
-	search_URL : function(work_title) {
-		return this.base_URL + 'getjson.shtml?q='
-		// e.g., 找不到"隔离带 2"，須找"隔离带"。
-		+ encodeURIComponent(work_title.replace(/\s+\d+$/, ''));
-	},
+	search_URL : 'getjson.shtml?q=',
 	parse_search_result : function(html) {
 		// e.g.,
 		// [{"cartoon_id":"doupocangqiong","cartoon_name":"斗破苍穹","cartoon_status_id":"连载","latest_cartoon_topic_name":"第177话
@@ -88,7 +81,7 @@ manhuatai = new CeL.comic.site({
 			});
 		}
 		work_data.chapter_count = work_data.chapter_list.length;
-		if (work_data.chapter_count >= 1) {
+		if (work_data.chapter_count > 1) {
 			// 轉成由舊至新之順序。
 			work_data.chapter_list = work_data.chapter_list.reverse();
 		}
