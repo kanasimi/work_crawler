@@ -75,9 +75,7 @@ var remanba = new CeL.comic.site({
 		return this.base_URL + 'comic/' + work_id + '/';
 	},
 	parse_work_data : function(html, get_label) {
-		var matched, data = html.between('<ul class="movieinfo">', '</ul>'),
-		//
-		work_data = {
+		var matched, work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : html.between(
 					'<meta property="og:novel:book_name"content="', '"/>'),
@@ -88,7 +86,10 @@ var remanba = new CeL.comic.site({
 					'"/>'),
 			description : get_label(html.between(
 					'</p><p class="movieintro"id="comic_intro_l">', '<div '))
-		}, PATTERN_work_data = /<li[^<>]*>([^:]+):(.+?)<\/li>/g;
+
+		}, data = html.between('<ul class="movieinfo">', '</ul>'),
+		//
+		PATTERN_work_data = /<li[^<>]*>([^:]+):(.+?)<\/li>/g;
 		while (matched = PATTERN_work_data.exec(data)) {
 			work_data[matched[1]] = get_label(matched[2]);
 		}

@@ -51,9 +51,7 @@ var _2manhua = new CeL.comic.site({
 		return this.base_URL + 'comic/' + work_id + '.html';
 	},
 	parse_work_data : function(html, get_label) {
-		var matched, data = html.between('book-detail', 'intro-act'),
-		//
-		work_data = {
+		var matched, work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : html.between('<h1>', '</h1>'),
 
@@ -63,7 +61,10 @@ var _2manhua = new CeL.comic.site({
 					'"/>'),
 			description : get_label(html.between('"intro-all"', '</div>')
 					.between('>'))
-		}, PATTERN_work_data = /<strong>([^<>]+?)<\/strong>(.+?)<\/span>/g;
+
+		}, data = html.between('book-detail', 'intro-act'),
+		//
+		PATTERN_work_data = /<strong>([^<>]+?)<\/strong>(.+?)<\/span>/g;
 		while (matched = PATTERN_work_data.exec(data)) {
 			work_data[matched[1]] = get_label(matched[2]).replace(/：$/, '');
 		}

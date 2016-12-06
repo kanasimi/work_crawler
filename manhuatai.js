@@ -49,7 +49,6 @@ manhuatai = new CeL.comic.site({
 		return this.base_URL + work_id + '/';
 	},
 	parse_work_data : function(html, get_label) {
-
 		// work_data={id,title,author,authors,chapters,last_update,last_download:{date,chapter}}
 		return {
 			// 必要屬性：須配合網站平台更改。
