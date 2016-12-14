@@ -66,7 +66,7 @@ var _2manhua = new CeL.comic.site({
 		//
 		PATTERN_work_data = /<strong>([^<>]+?)<\/strong>(.+?)<\/span>/g;
 		while (matched = PATTERN_work_data.exec(data)) {
-			work_data[matched[1]] = get_label(matched[2]).replace(/：$/, '');
+			work_data[matched[1].replace(/[:：\s]+$/, '')] = get_label(matched[2]);
 		}
 		return work_data;
 	},
