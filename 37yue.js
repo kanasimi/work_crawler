@@ -21,8 +21,8 @@ var _37yue = new CeL.comic.site({
 	work_URL : function(work_id) {
 		return this.base_URL + 'manhua/' + work_id + '/';
 	},
-	parse_work_data : function(html, get_label) {
-		var matched, work_data = {
+	parse_work_data : function(html, get_label, exact_work_data) {
+		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between('<h1 class="title">', '</h1>')),
 
@@ -30,12 +30,10 @@ var _37yue = new CeL.comic.site({
 			description : get_label(html.between('<div class="summary">')
 					.between('<div class="bd">', '</div>'))
 
-		}, data = html.between('<div class="info">', '</div>'),
-		//
-		PATTERN_work_data = /<dt>([^<>]+)<\/dt>[\s\n]*<dd>([^<>]+)<\/dd>/g;
-		while (matched = PATTERN_work_data.exec(data)) {
-			work_data[matched[1].replace(/[:：]$/, '')] = get_label(matched[2]);
-		}
+		};
+		exact_work_data(work_data,
+				html.between('<div class="info">', '</div>'),
+				/<dt>([^<>]+)<\/dt>[\s\n]*<dd>([^<>]+)<\/dd>/g);
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {

@@ -11,12 +11,14 @@ require('./comic loder.js');
 var PATTERN_chapter_data = /<li><a title="([^"]+)" href="((\d{0,4})[^"]*)"><span>(.+?)<\/span><\/a><\/li>/g,
 //
 manhuatai = new CeL.comic.site({
+	// recheck:從頭檢測所有作品之所有章節。
+	// recheck : true,
+
 	// allow .jpg without EOI mark.
 	allow_EOI_error : true,
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	skip_error : true,
-	// recheck:從頭檢測所有作品之所有章節。
-	// recheck : true,
+
 	// one_by_one : true,
 	base_URL : 'http://www.manhuatai.com/',
 

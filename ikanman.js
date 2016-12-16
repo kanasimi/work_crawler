@@ -53,8 +53,8 @@ var ikanman = new CeL.comic.site({
 	work_URL : function(work_id) {
 		return this.base_URL + 'comic/' + work_id + '/';
 	},
-	parse_work_data : function(html, get_label) {
-		var matched, work_data = {
+	parse_work_data : function(html, get_label, exact_work_data) {
+		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between('<h1>', '</h1>')),
 
@@ -65,14 +65,10 @@ var ikanman = new CeL.comic.site({
 					'</h1>')),
 			description : get_label(html.between('intro-all', '</div>')
 					.between('>'))
-
-		}, data = html.between('detail-list', '</ul>'),
+		}, data = html.between('detail-list', '</ul>');
+		exact_work_data(work_data, data,
 		// e.g., "<strong>漫画别名：</strong>暂无</span>"
-		PATTERN_work_data = /<strong[^<>]*>([^<>]+)<\/strong>(.+?)<\/span>/g;
-		while (matched = PATTERN_work_data.exec(data)) {
-			matched[1] = get_label(matched[1]).replace(/\s*[:：]$/, '');
-			work_data[matched[1]] = get_label(matched[2]);
-		}
+		/<strong[^<>]*>([^<>]+)<\/strong>(.+?)<\/span>/g);
 		if (data = get_label(data.between('<li class="status">', '</li>'))) {
 			CeL.log(data);
 		}

@@ -11,6 +11,10 @@ require('./comic loder.js');
 var _2manhua = new CeL.comic.site({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
+
+	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
+	skip_error : true,
+
 	// one_by_one : true,
 	base_URL : 'http://www.2manhua.com/',
 
@@ -50,8 +54,8 @@ var _2manhua = new CeL.comic.site({
 		// e.g., http://www.2manhua.com/comic/25652.html
 		return this.base_URL + 'comic/' + work_id + '.html';
 	},
-	parse_work_data : function(html, get_label) {
-		var matched, work_data = {
+	parse_work_data : function(html, get_label, exact_work_data) {
+		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : html.between('<h1>', '</h1>'),
 
@@ -61,13 +65,9 @@ var _2manhua = new CeL.comic.site({
 					'"/>'),
 			description : get_label(html.between('"intro-all"', '</div>')
 					.between('>'))
-
-		}, data = html.between('book-detail', 'intro-act'),
-		//
-		PATTERN_work_data = /<strong>([^<>]+?)<\/strong>(.+?)<\/span>/g;
-		while (matched = PATTERN_work_data.exec(data)) {
-			work_data[matched[1].replace(/[:：\s]+$/, '')] = get_label(matched[2]);
-		}
+		};
+		exact_work_data(work_data, html.between('book-detail', 'intro-act'),
+				/<strong>([^<>]+?)<\/strong>(.+?)<\/span>/g);
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {
