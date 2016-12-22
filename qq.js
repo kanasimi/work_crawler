@@ -14,6 +14,11 @@ var qq = new CeL.comic.site({
 	// one_by_one : true,
 	base_URL : 'http://ac.qq.com/',
 
+	// allow .jpg without EOI mark.
+	allow_EOI_error : true,
+	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
+	skip_error : true,
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
 		return this.base_URL + 'Comic/searchList/search/'
