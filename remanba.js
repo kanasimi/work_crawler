@@ -16,6 +16,11 @@ var remanba = new CeL.comic.site({
 	// http://www.reman8.com/
 	base_URL : 'http://www.remanba.com/',
 
+	// allow .jpg without EOI mark.
+	// allow_EOI_error : true,
+	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
+	// skip_error : true,
+
 	// 取得伺服器列表。
 	// use_server_cache : true,
 	server_URL : function() {
