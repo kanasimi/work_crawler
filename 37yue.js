@@ -29,7 +29,6 @@ var _37yue = new CeL.comic.site({
 			// 選擇性屬性：須配合網站平台更改。
 			description : get_label(html.between('<div class="summary">')
 					.between('<div class="bd">', '</div>'))
-
 		};
 		exact_work_data(work_data,
 				html.between('<div class="info">', '</div>'),

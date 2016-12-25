@@ -1,5 +1,5 @@
-﻿# Comic downloader
-批量下載各大漫畫網站的工具，如[腾讯漫画](http://ac.qq.com/)、[爱看漫画](http://www.ikanman.com/)、[漫画台](http://www.manhuatai.com/)、[爱漫画](http://www.2manhua.com/)、[热漫吧](http://www.remanba.com/)、[三七阅读](http://www.37yue.com/)。
+﻿# 漫画下载工具 Comic downloader
+命令行界面批量下載各大漫畫網站的工具，如[腾讯漫画](http://ac.qq.com/)、[爱看漫画](http://www.ikanman.com/)、[漫画台](http://www.manhuatai.com/)、[爱漫画](http://www.2manhua.com/)、[热漫吧](http://www.remanba.com/)、[三七阅读](http://www.37yue.com/)。
 Download comics.
 
 ## 工作流程
@@ -31,6 +31,8 @@ Then, install the CeJS library:
 ``` sh
 $ npm install cejs
 ```
+（鑒於更新頻繁，有些功能可能最新版本才具備；建議直接到 GitHub 下載最新版本壓縮檔，解開後配置。）
+
 再設定好 comic loder.js
 
 ### Execution
