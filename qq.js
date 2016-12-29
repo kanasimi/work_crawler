@@ -62,6 +62,9 @@ var qq = new CeL.comic.site({
 					free[matched[1]] = (new Date).toISOString();
 				}
 				CeL.log('今日限免: ' + id_list);
+				if (id_list.length !== 2) {
+					CeL.warn('今日限免作品數在 2017 CE 應該是2');
+				}
 				// write cache
 				CeL.fs_write(free_file, free);
 				callback(id_list);

@@ -25,7 +25,7 @@ manhuatai = new CeL.comic.site({
 	// 取得伺服器列表。
 	// http://server.taomanhua.com:82/mhpic.asp?callback=1&_=1478324001349
 	// JSON.parse("{'o':[['mhpic.taomanhua.com','线路1',0],['58.218.199.16','线路2',0],['59.45.79.108','线路3',0]]}".replace(/'/g,'"')).o
-	// 2016/12/25 9:40:33 漫画台 change server list format
+	// 2016/12/25 9:40:33 漫画台 server list file format changed
 	// {"status":0,"msg":"ok","data":[{"domain":"mhpic.taomanhua.com","name":"线路1","status":"0"},{"domain":"59.45.79.93","name":"线路2","status":"0"},{"domain":"58.218.199.16","name":"线路3","status":"0"},{"domain":"59.45.79.108","name":"线路4","status":"0"}]}
 	server_URL : 'http://server.taomanhua.com:82/mhpic.asp',
 	parse_server_list : function(html) {

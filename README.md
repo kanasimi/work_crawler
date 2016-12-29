@@ -1,5 +1,5 @@
 ﻿# 漫画下载工具 Comic downloader
-命令行界面批量下載各大漫畫網站的工具，如[腾讯漫画](http://ac.qq.com/)、[爱看漫画](http://www.ikanman.com/)、[漫画台](http://www.manhuatai.com/)、[爱漫画](http://www.2manhua.com/)、[热漫吧](http://www.remanba.com/)、[三七阅读](http://www.37yue.com/)。
+批量下載各大漫畫網站的工具，如[腾讯漫画](http://ac.qq.com/)、[爱看漫画](http://www.ikanman.com/)、[漫画台](http://www.manhuatai.com/)、[爱漫画](http://www.2manhua.com/)、[热漫吧](http://www.remanba.com/)、[三七阅读](http://www.37yue.com/)。命令行界面。
 Download comics.
 
 ## 工作流程
@@ -18,6 +18,7 @@ Download comics.
 ## 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 批量下載各漫畫網站。
 * 展示程式撰寫當時，各漫畫網站之網站資料結構。
+* 提供離線瀏覽漫畫功能。
 非常歡迎提供使用意見與改善建議。
 
 ## Node.js usage

@@ -15,6 +15,11 @@ var ikanman = new CeL.comic.site({
 
 	base_URL : 'http://www.ikanman.com/',
 
+	// allow .jpg without EOI mark.
+	allow_EOI_error : true,
+	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
+	skip_error : true,
+
 	// 取得伺服器列表。
 	use_server_cache : true,
 	server_URL : function() {
@@ -82,19 +87,26 @@ var ikanman = new CeL.comic.site({
 		</code>
 		 */
 		PATTERN_chapter =
-		// [all,href,title,inner]
-		/<li><a href="([^"<>]+)" title="([^"<>]+)"[^<>]*>(.+?)<\/a><\/li>/g,
-		//
-		data = html.between('chapter-list', '</ul>');
+		// [:]: incase href="javascript:;"
+		// [ all, href, title, inner ]
+		/<li><a href="([^"<>:]+)" title="([^"<>]+)"[^<>]*>(.+?)<\/a><\/li>/g,
+		// @see http://www.ikanman.com/comic/8928/
+		data = html.between('chapter-list', '<script ');
 		while (matched = PATTERN_chapter.exec(data)) {
 			matched[2] = matched[2].trim();
 			if (matched[3] = matched[3].between('<i>', '</i>')) {
 				matched[2] = matched[2] + ' ' + matched[3];
 			}
-			chapter_list.push({
+			var chapter_data = {
 				url : matched[1],
 				title : matched[2]
-			});
+			};
+			if (matched = matched[1].match(/(\d+)\.html$/)) {
+				chapter_data.id = +matched[1];
+			} else {
+				chapter_list.some_without_id = chapter_data;
+			}
+			chapter_list.push(chapter_data);
 		}
 		if (chapter_list.length === 0
 		// e.g., <div class="book-btn"><a href="/comic/8772/86612.html"
@@ -115,17 +127,31 @@ var ikanman = new CeL.comic.site({
 			}
 			chapter_list = work_data.chapter_list;
 		} else {
-			work_data.chapter_list = chapter_list;
 			if (chapter_list.length > 1) {
 				// 轉成由舊至新之順序。
-				chapter_list = chapter_list.reverse();
+				if (chapter_list.some_without_id) {
+					CeL.warn('有些篇章之URL檔名非數字: '
+							+ JSON.stringify(chapter_list.some_without_id));
+					chapter_list = chapter_list.reverse();
+				} else {
+					chapter_list = chapter_list.sort(function(a, b) {
+						// 排序以.html檔案檔名(序號)為準。
+						// assert: 後來的檔名，序號會比較大。
+						// @see http://www.ikanman.com/comic/8928/
+						return a.id < b.id ? -1 : 1;
+					});
+				}
 			}
+			// console.log(chapter_list.slice(0, 20));
+			// console.log(chapter_list.slice(-20));
+			work_data.chapter_list = chapter_list;
 		}
 		work_data.chapter_count = chapter_list.length;
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	_pre_chapter_URL : function(work_data, chapter, callback) {
+		// console.log(chapter_data);
 		var chapter_data = work_data.chapter_list[chapter - 1],
 		// e.g., "/comic/8772/86612.html"
 		chapter_id = +chapter_data.url.match(/^\/comic\/\d+\/(\d+)\.html$/)[1];
@@ -145,6 +171,7 @@ var ikanman = new CeL.comic.site({
 		}, null, null, this.get_URL_options);
 	},
 	chapter_URL : function(work_data, chapter) {
+		// console.log(work_data.chapter_list);
 		return this.base_URL + work_data.chapter_list[chapter - 1].url;
 	},
 	parse_chapter_data : function(html, work_data, get_label) {
@@ -196,4 +223,4 @@ function(contents) {
 			+ ';global.decryptDES=decryptDES;';
 	eval(contents);
 	ikanman.start(work_id);
-}, 'ikanman/decoder.js');
+}, ikanman.main_directory + 'decoder.js');
