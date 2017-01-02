@@ -16,9 +16,10 @@ Download comics.
 若是下載出錯，重新執行即可接續下載。
 
 ## 公開目的
-* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 批量下載各漫畫網站。
+* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [comic module](https://github.com/kanasimi/CeJS/blob/master/application/net/comic.js) 批量下載各漫畫網站。
 * 展示程式撰寫當時，各漫畫網站之網站資料結構。
 * 提供離線瀏覽漫畫功能。
+
 非常歡迎提供使用意見與改善建議。
 
 ## Node.js usage

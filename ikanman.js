@@ -157,6 +157,7 @@ var ikanman = new CeL.comic.site({
 		chapter_id = +chapter_data.url.match(/^\/comic\/\d+\/(\d+)\.html$/)[1];
 		CeL.get_URL(this.base_URL + 'support/chapter.ashx?bid=' + work_data.id
 				+ '&cid=' + chapter_id, function(XMLHttp) {
+			// console.log(XMLHttp.responseText);
 			chapter_data.sibling = JSON.parse(XMLHttp.responseText);
 			if (chapter_data.sibling.n > 0
 					&& work_data.chapter_count === chapter) {
