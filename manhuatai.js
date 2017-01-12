@@ -102,18 +102,25 @@ manhuatai = new CeL.comic.site({
 		// modify from
 		// http://www.manhuatai.com/static/comicread.js?20161105124102
 		function decode(mh_info) {
-			mh_info = mh_info
-			// key:"property" → "key":"property"
-			.replace(/([a-z]+):((?:\d{1,20}|"(?:[^\\"]+|\\.)*")[,}])/ig,
-					'"$1":$2')
-			// fix for JSON
-			.replace(/\\'/g, "'");
-			try {
-				mh_info = JSON.parse(mh_info);
-			} catch (e) {
-				CeL.err(url + '\n' + JSON.stringify(mh_info));
-				throw e;
+			if (false) {
+				// 遇到如
+				// http://www.manhuatai.com/doupocangqiong/185h.html
+				// 還是會出問題。
+				mh_info = mh_info
+				// key:"property" → "key":"property"
+				.replace(/([a-z]+):((?:\d{1,20}|"(?:[^\\"]+|\\.)*")[,}])/ig,
+						'"$1":$2')
+				// fix for JSON
+				.replace(/\\'/g, "'");
+				try {
+					mh_info = JSON.parse(mh_info);
+				} catch (e) {
+					CeL.err(JSON.stringify(mh_info));
+					CeL.err(mh_info);
+					throw e;
+				}
 			}
+			eval('mh_info=' + mh_info);
 			mh_info.imgpath = mh_info.imgpath.replace(/./g, function(a) {
 				return String.fromCharCode(a.charCodeAt(0) - mh_info.pageid
 						% 10)

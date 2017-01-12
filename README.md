@@ -18,7 +18,7 @@ Download comics.
 ## 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [comic module](https://github.com/kanasimi/CeJS/blob/master/application/net/comic.js) 批量下載各漫畫網站。
 * 展示程式撰寫當時，各漫畫網站之網站資料結構。
-* 提供離線瀏覽漫畫功能。
+* 提供離線瀏覽漫畫功能，增加對閱讀權的掌控能力，預防數十年後找不到記憶中閱覽過的作品。
 
 非常歡迎提供使用意見與改善建議。
 

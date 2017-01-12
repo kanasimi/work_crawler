@@ -41,7 +41,8 @@ var _2manhua = new CeL.comic.site({
 	parse_search_result : function(html) {
 		// e.g.,
 		// _([{"id":"28015","t":"民工勇者","u":"/comic/28015/","cid":"/comic/28015/0208","ct":"207话","s":"0"},{"id":"28093","t":"无敌勇者王(民工勇者)","u":"/comic/28093/","cid":"/comic/28093/02","ct":"199话","s":"0"}])
-		var id_data = html ? JSON.parse(html.between('(').replace(/\)[^)]*$/, '')) : [];
+		var id_data = html ? JSON.parse(html.between('(').replace(/\)[^)]*$/,
+				'')) : [];
 		return [ id_data, id_data ];
 	},
 	id_of_search_result : function(cached_data) {
