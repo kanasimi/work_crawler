@@ -89,8 +89,8 @@ var qq = new CeL.comic.site({
 			// e.g., "连载中"
 			status : html.between('<label class="works-intro-status">',
 					'</label>').trim(),
-			author : CeL.HTML_to_Unicode(html.between('"works-author-name"',
-					'>').between(' title="', '"')),
+			author : get_label(html.between('"works-author-name"', '>')
+					.between(' title="', '"')),
 			authors :
 			//
 			get_label(html.between('<p class="bear-p-xone">', '</p>')),
