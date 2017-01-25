@@ -1,7 +1,5 @@
 ﻿/**
  * 批量下載アルファポリス - 電網浮遊都市 - 小説的工具。 Download AlphaPolis novels.
- * 
- * TODO: to ebook
  */
 
 'use strict';
@@ -10,7 +8,7 @@ require('./comic loder.js');
 
 // ----------------------------------------------------------------------------
 
-CeL.run('data.character');
+CeL.run([ 'application.storage.EPUB', 'data.character' ]);
 
 var charset = 'EUC-JP', node_fs = require('fs');
 CeL.character.load(charset);
@@ -42,7 +40,7 @@ var AlphaPolis = new CeL.comic.site({
 				'</a>'), text;
 		while ((text = get_next_between()) !== undefined) {
 			id_list.push(+text.between(' href="/content/cover/', '/"'));
-			id_data.push(text.between('>'));
+			id_data.push(text.between('>').trim());
 		}
 		return [ id_list, id_data ];
 	},
@@ -84,6 +82,25 @@ var AlphaPolis = new CeL.comic.site({
 			});
 		}
 		work_data.chapter_count = work_data.chapter_list.length;
+
+		work_data.ebook = new CeL.EPUB(work_data.directory
+				+ work_data.directory_name, {
+			identifier : work_data.id,
+			title : work_data.title,
+			language : 'ja-JP'
+		});
+		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
+		work_data.ebook.set({
+			creator : work_data.author,
+			// 出版時間 the publication date of the EPUB Publication.
+			date : CeL.EPUB.date_to_String(work_data.last_update.to_Date({
+				zone : 9
+			})),
+			subject : work_data.status,
+			description : work_data.description,
+			publisher : 'アルファポリス (' + this.base_URL + ')',
+			source : work_data.url
+		});
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
@@ -93,15 +110,31 @@ var AlphaPolis = new CeL.comic.site({
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		chapter = get_label(html.between(
 				'<div class="total_content_block_count">', '/'));
-		var text = (html.between('<div class="text', '</div>').between('>')
-				.replace(/\r/g, '').replace(/<br \/>\n/g, '\n').trim() + '\n')
-				.replace(/\n/g, '\r\n');
-		node_fs.writeFileSync(work_data.directory
+		var text = html.between('<div class="text', '</div>').between('>');
+		text = text.replace(/\r/g, '')
+		// .replace(/<br \/>\n/g, '\n')
+		.trim() + '\n';
+		// text = text.replace(/\n/g, '\r\n')
+
+		var title = get_label(html.between('<div class="chapter_title">',
+				'</div>')),
 		//
-		+ work_data.directory_name + ' ' + chapter.pad(3) + ' '
+		sub_title = get_label(html.between('<h2>', '</h2>'));
+		work_data.ebook.add(chapter.pad(3) + ' ' + title + ' - ' + sub_title
+				+ '.xhtml',
 		//
-		+ get_label(html.between('<div class="chapter_title">', '</div>'))
-				+ '.txt', text);
+		'<?xml version="1.0" encoding="UTF-8"?>' + '<!DOCTYPE html>'
+		//
+		+ '<html xmlns="http://www.w3.org/1999/xhtml">' + '<head></head><body>'
+		// + '<div style="float:right">' + chapter + '</div>'
+		+ '<h2>' + title + '</h2>'
+		//
+		+ '<h3>' + sub_title + '</h3>'
+		//
+		+ '<div class="text">' + text + '</div></body></html>');
+	},
+	finish_up : function(work_data) {
+		work_data && work_data.ebook.flush();
 	}
 });
 

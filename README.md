@@ -1,5 +1,5 @@
-﻿# 漫画下载工具 Comic downloader
-批量下載各大漫畫網站的工具，如[腾讯漫画](http://ac.qq.com/)、[爱看漫画](http://www.ikanman.com/)、[漫画台](http://www.manhuatai.com/)、[爱漫画](http://www.2manhua.com/)、[热漫吧](http://www.remanba.com/)、[三七阅读](http://www.37yue.com/)。命令行界面。
+﻿# 小說漫畫下载工具 online novel, comic downloader
+批量下載各大小說、漫畫網站的工具，如[アルファポリス](http://www.alphapolis.co.jp/)、[腾讯漫画](http://ac.qq.com/)、[爱看漫画](http://www.ikanman.com/)、[漫画台](http://www.manhuatai.com/)、[爱漫画](http://www.2manhua.com/)、[热漫吧](http://www.remanba.com/)、[三七阅读](http://www.37yue.com/)。命令行界面。
 Download comics.
 
 ## 工作流程
@@ -43,5 +43,5 @@ $ node 工具檔名.js "漫画作品名称"
 ```
 
 ## 聲明
-* 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
+* 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
 * 各漫畫網站往往不時更改結構，同時造成本工具無法作動；因此若是有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
