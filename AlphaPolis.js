@@ -40,7 +40,7 @@ var AlphaPolis = new CeL.comic.site({
 				'</a>'), text;
 		while ((text = get_next_between()) !== undefined) {
 			id_list.push(+text.between(' href="/content/cover/', '/"'));
-			id_data.push(text.between('>').trim());
+			id_data.push(text.between('>'));
 		}
 		return [ id_list, id_data ];
 	},
