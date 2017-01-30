@@ -1,9 +1,5 @@
 ﻿/**
- * 批量下載アルファポリス - 電網浮遊都市 - 小説的工具。 Download AlphaPolis novels.
- * 
- * TODO: http://yomou.syosetu.com/rank/list/type/total_total/
- * 
- * @see 小説投稿サイト https://matome.naver.jp/odai/2139450042041120001
+ * 批量下載カクヨム小説的工具。 Download kakuyomu novels.
  */
 
 'use strict';
@@ -18,9 +14,6 @@ CeL.run([ 'application.storage.EPUB'
 // .to_file_name()
 , 'application.net' ]);
 
-var charset = 'EUC-JP';
-CeL.character.load(charset);
-
 var AlphaPolis = new CeL.comic.site({
 	// 重新取得每個章節內容chapter_page。
 	// 警告: reget_chapter=false僅適用於小說之類不取得圖片的情形，
@@ -30,8 +23,7 @@ var AlphaPolis = new CeL.comic.site({
 	recheck : true,
 
 	// one_by_one : true,
-	base_URL : 'http://www.alphapolis.co.jp/',
-	charset : charset,
+	base_URL : 'https://kakuyomu.jp/',
 
 	// allow .jpg without EOI mark.
 	// allow_EOI_error : true,
@@ -39,21 +31,16 @@ var AlphaPolis = new CeL.comic.site({
 	// skip_error : true,
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : function(work_title) {
-		return [ this.base_URL + 'top/search/', {
-			// 2: 小説
-			'data[tab]' : 2,
-			'data[refer]' : work_title
-		} ];
-	},
-	parse_search_result : function(html) {
+	search_URL : 'search?order=popular&q=',
+	parse_search_result : function(html, get_label) {
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
-		id_list = [], get_next_between = html.all_between('<h3 class="title">',
-				'</a>'), text;
-		while ((text = get_next_between()) !== undefined) {
-			id_list.push(+text.between(' href="/content/cover/', '/"'));
-			id_data.push(text.between('>'));
+		id_list = [], matched, PATTERN =
+		//
+		/<a href="\/works\/(\d+)" [^<>]*itemprop="name">(.+?)<\/a>/g;
+		while (matched = PATTERN.exec(html)) {
+			id_list.push(matched[1]);
+			id_data.push(get_label(matched[2]));
 		}
 		return [ id_list, id_data ];
 	},
@@ -63,52 +50,83 @@ var AlphaPolis = new CeL.comic.site({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return this.base_URL + 'content/cover/' + (work_id | 0);
+		return 'works/' + work_id;
 	},
 	parse_work_data : function(html, get_label) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
-			title : html.between('"og:title" content="', '"'),
+			title : get_label(html.between('<h1 id="workTitle">', '</h1>')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			// e.g., "连载中"
-			status : get_label(
-					html.between('<div class="category novel_content">',
-							'</div>'))
-			// .split(/[\s\n]+/).sort().join(',')
-			.replace(/[\s\n]+/g, ','),
-			author : get_label(html.between('<div class="author">', '</a>')),
-			last_update : get_label(html.between('<th>更新日時</th>', '</td>')),
-			site_name : 'アルファポリス'
+			// e.g., "连载中", 連載中
+			status : [],
+			author : get_label(html.between(
+					'<span id="workAuthor-activityName">', '</span>')),
+			last_update : get_label(html.between(
+					'<p class="widget-toc-date"><time datetime="', '"')),
+			catchphrase : get_label(
+			//
+			html.between('<p id="catchphrase"', '</p>').between('>')
+			// [[Quotation mark]]
+			// The Unicode standard introduced a separate character
+			// U+2015 ― HORIZONTAL BAR to be used as a quotation dash.
+			.replace('<span id="catchphrase-authorDash"></span>', '―')).trim()
+					.replace(/\s+/g, ' '),
+			description : html.between('work-introduction">', '</p>').trim()
 
 		}, PATTERN = /<meta property="og:([^"]+)" content="([^"]+)"/g, matched;
 
 		while (matched = PATTERN.exec(html)) {
-			work_data[matched[1]] = get_label(matched[2]);
+			// 避免覆寫
+			if (!work_data[matched[1]]) {
+				work_data[matched[1]] = get_label(matched[2]);
+			}
 		}
+
+		PATTERN = /<dt>(.+?)<\/dt>[^<>]*<dd>(.+?)<\/dd>/g;
+		var text = html.between('<dl class="widget-credit">', '</dl>');
+		while (matched = PATTERN.exec(text)) {
+			work_data[get_label(matched[1])] = get_label(matched[2]);
+		}
+
+		var get_next_between = html.between(
+				'<p class="widget-toc-workStatus">', '</p>').all_between(
+				'<span>', '</span>');
+
+		while ((text = get_next_between()) !== undefined) {
+			work_data.status.push(get_label(text));
+		}
+		if (work_data.種類) {
+			work_data.status.push(work_data.種類);
+		}
+		work_data.status = work_data.status.join(',');
+		work_data.site_name = work_data.site_name.between(null, ' ');
 
 		if (work_data.image
 		// ignore site default image
-		&& work_data.image.endsWith('\/ogp.png')) {
+		&& work_data.image.includes('common\/ogimage.png')) {
 			delete work_data.image;
 		}
 
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {
-		html = html.between('<div class="toc cover_body">',
-				'<div class="each_other_title">');
+		html = html.between('<div class="widget-toc-main">', '</div>');
 		work_data.chapter_list = [];
 		var get_next_between = html.all_between('<li', '</li>'), text;
 		while ((text = get_next_between()) !== undefined) {
+			if (text.includes(' widget-toc-level')) {
+				// is main title
+				continue;
+			}
 			work_data.chapter_list.push({
 				url : text.between('<a href="', '"'),
-				date : text.between('<span class="open_date">', '</span>')
+				date : new Date(text.between(
 				//
-				.to_Date({
-					zone : 9
-				}),
-				title : text.between('<span class="title">', '</span>')
+				'datePublished" datetime="', '"')),
+				title : text.between(
+						'<span class="widget-toc-episode-titleLabel">',
+						'</span>')
 			});
 		}
 		work_data.chapter_count = work_data.chapter_list.length;
@@ -124,9 +142,7 @@ var AlphaPolis = new CeL.comic.site({
 		work_data.ebook.set({
 			creator : work_data.author,
 			// 出版時間 the publication date of the EPUB Publication.
-			date : CeL.EPUB.date_to_String(work_data.last_update.to_Date({
-				zone : 9
-			})),
+			date : CeL.EPUB.date_to_String(work_data.last_update),
 			subject : work_data.status,
 			description : work_data.description,
 			publisher : work_data.site_name + ' (' + this.base_URL + ')',
@@ -143,46 +159,27 @@ var AlphaPolis = new CeL.comic.site({
 		return work_data.chapter_list[chapter - 1].url;
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
-		var text = get_label(html.between(
-				'<div class="total_content_block_count">', '/')) | 0;
-		if (chapter !== text) {
-			throw 'Different chapter: ' + chapter + ' vs. ' + text;
-		}
-
-		text = html.between('<div class="text', '<a class="bookmark ')
-		//
-		.between('>', {
-			tail : '</div>'
-		});
+		// <div class="widget-episodeBody js-episode-body" ...>
+		var text = html.between('episodeBody', '</div>').between('>');
 		text = text.replace(/\r/g, '')
 		// .replace(/<br \/>\n/g, '\n')
 		.trim() + '\n';
 		// text = text.replace(/\n/g, '\r\n');
 
-		// include images
-		var links = [];
-		text = text.replace(/ (src|href)="([^"]+)"/g, function(all, name, url) {
-			var matched = url.match(/^([\s\S]*\/)([^\/]+)$/);
-			if (!matched) {
-				return all;
-			}
-			var href = work_data.ebook.directory.media + matched[2];
-			links.push({
-				url : url,
-				href : href
-			});
-			return matched ? ' title="' + url + '" ' + name + '="' + href + '"'
-					: all;
-		});
-		if (links.length > 0) {
-			// console.log(links.unique());
-			work_data.ebook.add(links.unique());
-		}
+		// TODO: include images
 
-		var title = get_label(html.between('<div class="chapter_title">',
-				'</div>')),
+		var title = [],
 		//
-		sub_title = get_label(html.between('<h2>', '</h2>'));
+		sub_title = get_label(html.between('<p class="widget-episodeTitle">',
+				'</p>'));
+
+		html.between('<p id="globalHeader-closeButton"', '</ul>')
+		//
+		.replace(/<li><span title="([^"]+)">/g, function(all, t) {
+			title.push(get_label(t));
+			return all;
+		});
+		title = title.join(' - ');
 
 		var file_title = chapter.pad(3) + ' ' + title + ' - ' + sub_title,
 		//
