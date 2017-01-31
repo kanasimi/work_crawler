@@ -150,6 +150,8 @@ var AlphaPolis = new CeL.comic.site({
 		});
 
 		if (work_data.image) {
+			// 這時可能尚未建立 work_data.directory。
+			library_namespace.create_directory(work_data.directory);
 			work_data.ebook.set_cover(work_data.image);
 		}
 	},

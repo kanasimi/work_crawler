@@ -1,7 +1,7 @@
 ﻿/**
  * 批量下載アルファポリス - 電網浮遊都市 - 小説的工具。 Download AlphaPolis novels.
  * 
- * TODO: http://yomou.syosetu.com/rank/list/type/total_total/
+ * TODO: http://yomou.syosetu.com/rank/list/type/total_total/ https://syosetu.org/?mode=rank_total
  * 
  * @see 小説投稿サイト https://matome.naver.jp/odai/2139450042041120001
  */
@@ -134,6 +134,8 @@ var AlphaPolis = new CeL.comic.site({
 		});
 
 		if (work_data.image) {
+			// 這時可能尚未建立 work_data.directory。
+			CeL.create_directory(work_data.directory);
 			work_data.ebook.set_cover(work_data.image);
 		}
 	},
