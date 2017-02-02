@@ -25,11 +25,6 @@ var AlphaPolis = new CeL.comic.site({
 	// one_by_one : true,
 	base_URL : 'https://kakuyomu.jp/',
 
-	// allow .jpg without EOI mark.
-	// allow_EOI_error : true,
-	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
-	// skip_error : true,
-
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search?order=popular&q=',
 	parse_search_result : function(html, get_label) {
@@ -44,9 +39,6 @@ var AlphaPolis = new CeL.comic.site({
 		}
 		return [ id_list, id_data ];
 	},
-	// id_of_search_result : function(cached_data) { return cached_data;
-	// },
-	// title_of_search_result : function(data) { return data; },
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
@@ -58,7 +50,7 @@ var AlphaPolis = new CeL.comic.site({
 			title : get_label(html.between('<h1 id="workTitle">', '</h1>')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			// e.g., "连载中", 連載中
+			// e.g., 连载中, 連載中
 			status : [],
 			author : get_label(html.between(
 					'<span id="workAuthor-activityName">', '</span>')),
@@ -150,8 +142,6 @@ var AlphaPolis = new CeL.comic.site({
 		});
 
 		if (work_data.image) {
-			// 這時可能尚未建立 work_data.directory。
-			library_namespace.create_directory(work_data.directory);
 			work_data.ebook.set_cover(work_data.image);
 		}
 	},
@@ -163,35 +153,30 @@ var AlphaPolis = new CeL.comic.site({
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		// <div class="widget-episodeBody js-episode-body" ...>
 		var text = html.between('episodeBody', '</div>').between('>');
-		text = text.replace(/\r/g, '')
-		// .replace(/<br \/>\n/g, '\n')
-		.trim() + '\n';
-		// text = text.replace(/\n/g, '\r\n');
 
-		// TODO: include images
-
-		var title = [],
+		var part_title = [],
 		//
-		sub_title = get_label(html.between('<p class="widget-episodeTitle">',
-				'</p>'));
+		chapter_title = get_label(html.between(
+				'<p class="widget-episodeTitle">', '</p>'));
 
 		html.between('<p id="globalHeader-closeButton"', '</ul>')
 		//
 		.replace(/<li><span title="([^"]+)">/g, function(all, t) {
-			title.push(get_label(t));
+			part_title.push(get_label(t));
 			return all;
 		});
-		title = title.join(' - ');
+		part_title = part_title.join(' - ');
 
-		var file_title = chapter.pad(3) + ' ' + title + ' - ' + sub_title,
+		var file_title = chapter.pad(3) + ' '
+				+ (part_title ? part_title + ' - ' : '') + chapter_title,
 		//
 		item = work_data.ebook.add({
 			title : file_title,
 			file : CeL.to_file_name(file_title + '.xhtml'),
 			date : work_data.chapter_list[chapter - 1].date
 		}, {
-			title : title,
-			sub_title : sub_title,
+			title : part_title,
+			sub_title : chapter_title,
 			text : text
 		});
 	},

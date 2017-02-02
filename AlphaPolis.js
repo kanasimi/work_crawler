@@ -1,7 +1,8 @@
 ﻿/**
  * 批量下載アルファポリス - 電網浮遊都市 - 小説的工具。 Download AlphaPolis novels.
  * 
- * TODO: http://yomou.syosetu.com/rank/list/type/total_total/ https://syosetu.org/?mode=rank_total
+ * TODO: http://yomou.syosetu.com/rank/list/type/total_total/
+ * https://syosetu.org/?mode=rank_total
  * 
  * @see 小説投稿サイト https://matome.naver.jp/odai/2139450042041120001
  */
@@ -33,11 +34,6 @@ var AlphaPolis = new CeL.comic.site({
 	base_URL : 'http://www.alphapolis.co.jp/',
 	charset : charset,
 
-	// allow .jpg without EOI mark.
-	// allow_EOI_error : true,
-	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
-	// skip_error : true,
-
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
 		return [ this.base_URL + 'top/search/', {
@@ -57,13 +53,10 @@ var AlphaPolis = new CeL.comic.site({
 		}
 		return [ id_list, id_data ];
 	},
-	// id_of_search_result : function(cached_data) { return cached_data;
-	// },
-	// title_of_search_result : function(data) { return data; },
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return this.base_URL + 'content/cover/' + (work_id | 0);
+		return 'content/cover/' + (work_id | 0);
 	},
 	parse_work_data : function(html, get_label) {
 		var work_data = {
@@ -71,7 +64,7 @@ var AlphaPolis = new CeL.comic.site({
 			title : html.between('"og:title" content="', '"'),
 
 			// 選擇性屬性：須配合網站平台更改。
-			// e.g., "连载中"
+			// e.g., 连载中, 連載中
 			status : get_label(
 					html.between('<div class="category novel_content">',
 							'</div>'))
@@ -134,8 +127,6 @@ var AlphaPolis = new CeL.comic.site({
 		});
 
 		if (work_data.image) {
-			// 這時可能尚未建立 work_data.directory。
-			CeL.create_directory(work_data.directory);
 			work_data.ebook.set_cover(work_data.image);
 		}
 	},
@@ -156,10 +147,6 @@ var AlphaPolis = new CeL.comic.site({
 		.between('>', {
 			tail : '</div>'
 		});
-		text = text.replace(/\r/g, '')
-		// .replace(/<br \/>\n/g, '\n')
-		.trim() + '\n';
-		// text = text.replace(/\n/g, '\r\n');
 
 		// include images
 		var links = [];
@@ -181,20 +168,21 @@ var AlphaPolis = new CeL.comic.site({
 			work_data.ebook.add(links.unique());
 		}
 
-		var title = get_label(html.between('<div class="chapter_title">',
+		var part_title = get_label(html.between('<div class="chapter_title">',
 				'</div>')),
 		//
-		sub_title = get_label(html.between('<h2>', '</h2>'));
+		chapter_title = get_label(html.between('<h2>', '</h2>'));
 
-		var file_title = chapter.pad(3) + ' ' + title + ' - ' + sub_title,
+		var file_title = chapter.pad(3) + ' '
+				+ (part_title ? part_title + ' - ' : '') + chapter_title,
 		//
 		item = work_data.ebook.add({
 			title : file_title,
 			file : CeL.to_file_name(file_title + '.xhtml'),
 			date : work_data.chapter_list[chapter - 1].date
 		}, {
-			title : title,
-			sub_title : sub_title,
+			title : part_title,
+			sub_title : chapter_title,
 			text : text
 		});
 	},
