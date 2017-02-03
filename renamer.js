@@ -23,7 +23,7 @@ var target_directory = process.argv[3] || 'H:\\f\\_',
 // reget > 1: reget ALL menu list.
 reget = true,
 //
-category_name = work_id === 'h' || /成年|Hcomic|noACG_H/i.test(work_id) ? 'Hcomic'
+category_name = /^H$/i.test(work_id) || /成年|Hcomic|noACG_H/i.test(work_id) ? 'Hcomic'
 		: 'comic',
 //
 categories = {

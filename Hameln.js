@@ -10,7 +10,9 @@ require('./comic loder.js');
 
 CeL.run([ 'application.storage.EPUB'
 // .to_file_name()
-, 'application.net' ]);
+, 'application.net',
+// CeL.detect_HTML_language()
+, 'application.locale' ]);
 
 var Hameln = new CeL.comic.site({
 	// 重新取得每個章節內容chapter_page。
@@ -59,24 +61,33 @@ var Hameln = new CeL.comic.site({
 
 			// 選擇性屬性：須配合網站平台更改。
 			// e.g., 连载中, 連載中
-			status : work_data.タグ.split(/\s+/),
+			status : work_data.状態.split(','),
 			author : work_data.作者,
 			last_update : work_data.最新投稿,
 			description : work_data.あらすじ,
 			site_name : 'ハーメルン'
 		}, work_data);
 
+		if (work_data.タグ) {
+			work_data.status.append(work_data.タグ.split(/\s+/));
+		}
 		if (work_data.警告タグ) {
-			work_data.status.push(work_data.警告タグ);
+			work_data.status.append(work_data.警告タグ.split(/\s+/));
 		}
 		work_data.status = work_data.status.join(',');
 
 		return work_data;
 	},
+		// 對於章節列表與作品資訊分列不同頁面(URL)的情況，應該另外指定.chapter_list_URL。
 	chapter_list_URL : function(work_id) {
 		return 'https://novel.syosetu.org/' + work_id + '/';
 	},
 	get_chapter_count : function(work_data, html) {
+		// TODO: 對於單話，可能無目次。
+		// e.g., https://novel.syosetu.org/106514/
+
+		// e.g., 'ja-JP'
+		var language = CeL.detect_HTML_language(html);
 		html = html.between('<table width=100%>', '</div>');
 		work_data.chapter_list = [];
 		var part_title,
@@ -118,7 +129,7 @@ var Hameln = new CeL.comic.site({
 			// start_over : true,
 			identifier : work_data.id,
 			title : work_data.title,
-			language : 'ja-JP'
+			language : language
 		});
 		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
 		work_data.ebook.set({
@@ -144,18 +155,30 @@ var Hameln = new CeL.comic.site({
 				+ work_data.chapter_list[chapter - 1].url;
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
-		var text = html
+		// 檢測所取得內容的章節編號是否相符。
+		var text = get_label(html.between(
+				'<div style="text-align:right;font-size:80%">', '/')) | 0;
+		if (chapter !== text) {
+			throw new Error('Different chapter: Should be ' + chapter
+					+ ', get ' + text + ' inside contents.');
+		}
+
+		text = html
 		//
 		.between('<div class="ss">', '<span id="analytics_end">')
 		// remove </div>
 		.between(null, {
 			tail : '</div>'
 		})
-		// remove chapter count (e.g., 1 / 1)
+		// remove chapter title
 		.replace(/<p><span style="font-size:120%">.+?<\/p>/, '')
+		// remove chapter count (e.g., 1 / 1)
+		.replace(
+		//
+		/<div style="text-align:right;font-size:80%">[\d\s\/]+?<\/div>/, '')
 		// e.g., id="text" → id="text"
 		.replace(/ (id)=([a-z]+)/g, ' $1="$2"')
-		// remove chapter title
+		// remove chapter title @ contents
 		.replace(
 				/[\s\n]+<span style="font-size:120%">(?:.+?)<\/span><BR><BR>/g,
 				'');

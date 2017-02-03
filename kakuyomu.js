@@ -12,7 +12,9 @@ CeL.run([ 'application.storage.EPUB'
 // CeL.character.load()
 , 'data.character'
 // .to_file_name()
-, 'application.net' ]);
+, 'application.net',
+// CeL.detect_HTML_language()
+, 'application.locale' ]);
 
 var AlphaPolis = new CeL.comic.site({
 	// 重新取得每個章節內容chapter_page。
@@ -103,6 +105,8 @@ var AlphaPolis = new CeL.comic.site({
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {
+		// e.g., 'ja-JP'
+		var language = CeL.detect_HTML_language(html);
 		html = html.between('<div class="widget-toc-main">', '</div>');
 		work_data.chapter_list = [];
 		var get_next_between = html.all_between('<li', '</li>'), text;
@@ -128,7 +132,7 @@ var AlphaPolis = new CeL.comic.site({
 			// start_over : true,
 			identifier : work_data.id,
 			title : work_data.title,
-			language : 'ja-JP'
+			language : language
 		});
 		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
 		work_data.ebook.set({

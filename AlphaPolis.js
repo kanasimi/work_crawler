@@ -17,7 +17,9 @@ CeL.run([ 'application.storage.EPUB'
 // CeL.character.load()
 , 'data.character'
 // .to_file_name()
-, 'application.net' ]);
+, 'application.net',
+// CeL.detect_HTML_language()
+, 'application.locale' ]);
 
 var charset = 'EUC-JP';
 CeL.character.load(charset);
@@ -89,6 +91,8 @@ var AlphaPolis = new CeL.comic.site({
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {
+		// e.g., 'ja-JP'
+		var language = CeL.detect_HTML_language(html);
 		html = html.between('<div class="toc cover_body">',
 				'<div class="each_other_title">');
 		work_data.chapter_list = [];
@@ -111,7 +115,7 @@ var AlphaPolis = new CeL.comic.site({
 			// start_over : true,
 			identifier : work_data.id,
 			title : work_data.title,
-			language : 'ja-JP'
+			language : language
 		});
 		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
 		work_data.ebook.set({
@@ -136,10 +140,12 @@ var AlphaPolis = new CeL.comic.site({
 		return work_data.chapter_list[chapter - 1].url;
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
+		// 檢測所取得內容的章節編號是否相符。
 		var text = get_label(html.between(
 				'<div class="total_content_block_count">', '/')) | 0;
 		if (chapter !== text) {
-			throw 'Different chapter: ' + chapter + ' vs. ' + text;
+			throw new Error('Different chapter: Should be ' + chapter
+					+ ', get ' + text + ' inside contents.');
 		}
 
 		text = html.between('<div class="text', '<a class="bookmark ')
