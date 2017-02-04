@@ -113,18 +113,22 @@ var AlphaPolis = new CeL.comic.site({
 		work_data.ebook = new CeL.EPUB(work_data.directory
 				+ work_data.directory_name, {
 			// start_over : true,
+			// 小説ID
 			identifier : work_data.id,
 			title : work_data.title,
 			language : language
 		});
 		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
 		work_data.ebook.set({
+			// 作者
 			creator : work_data.author,
 			// 出版時間 the publication date of the EPUB Publication.
 			date : CeL.EPUB.date_to_String(work_data.last_update.to_Date({
 				zone : 9
 			})),
+			// ジャンル, タグ
 			subject : work_data.status,
+			// あらすじ
 			description : work_data.description,
 			publisher : work_data.site_name + ' (' + this.base_URL + ')',
 			source : work_data.url

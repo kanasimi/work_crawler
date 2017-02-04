@@ -16,7 +16,7 @@ CeL.run([ 'application.storage.EPUB'
 // CeL.detect_HTML_language()
 , 'application.locale' ]);
 
-var AlphaPolis = new CeL.comic.site({
+var kakuyomu = new CeL.comic.site({
 	// 重新取得每個章節內容chapter_page。
 	// 警告: reget_chapter=false僅適用於小說之類不取得圖片的情形，
 	// 因為若有圖片（parse_chapter_data()會回傳chapter_data.image_list），將把chapter_page寫入僅能從chapter_URL取得名稱的於目錄中。
@@ -130,16 +130,20 @@ var AlphaPolis = new CeL.comic.site({
 		work_data.ebook = new CeL.EPUB(work_data.directory
 				+ work_data.directory_name, {
 			// start_over : true,
+			// 小説ID
 			identifier : work_data.id,
 			title : work_data.title,
 			language : language
 		});
 		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
 		work_data.ebook.set({
+			// 作者
 			creator : work_data.author,
 			// 出版時間 the publication date of the EPUB Publication.
 			date : CeL.EPUB.date_to_String(work_data.last_update),
+			// ジャンル, タグ
 			subject : work_data.status,
+			// あらすじ
 			description : work_data.description,
 			publisher : work_data.site_name + ' (' + this.base_URL + ')',
 			source : work_data.url
@@ -193,4 +197,4 @@ var AlphaPolis = new CeL.comic.site({
 
 // CeL.set_debug(3);
 
-AlphaPolis.start(work_id);
+kakuyomu.start(work_id);

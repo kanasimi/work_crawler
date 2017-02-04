@@ -76,9 +76,17 @@ var Hameln = new CeL.comic.site({
 		}
 		work_data.status = work_data.status.join(',');
 
+		// https://syosetu.org/?mode=ss_view_all&nid=18606
+		CeL.get_URL(this.base_URL + '?mode=ss_view_all&nid=' + work_data.id,
+		// save 一括表示
+		null, null, null, {
+			write_to : work_data.directory + this.cache_directory_name
+					+ work_data.directory_name + '.full_text.htm'
+		});
+
 		return work_data;
 	},
-		// 對於章節列表與作品資訊分列不同頁面(URL)的情況，應該另外指定.chapter_list_URL。
+	// 對於章節列表與作品資訊分列不同頁面(URL)的情況，應該另外指定.chapter_list_URL。
 	chapter_list_URL : function(work_id) {
 		return 'https://novel.syosetu.org/' + work_id + '/';
 	},
@@ -127,18 +135,22 @@ var Hameln = new CeL.comic.site({
 		work_data.ebook = new CeL.EPUB(work_data.directory
 				+ work_data.directory_name, {
 			// start_over : true,
+			// 小説ID
 			identifier : work_data.id,
 			title : work_data.title,
 			language : language
 		});
 		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
 		work_data.ebook.set({
+			// 作者
 			creator : work_data.author,
 			// 出版時間 the publication date of the EPUB Publication.
 			date : CeL.EPUB.date_to_String(work_data.last_update.to_Date({
 				zone : 9
 			})),
+			// ジャンル, タグ
 			subject : work_data.status,
+			// あらすじ
 			description : work_data.description,
 			publisher : work_data.site_name + ' (' + this.base_URL + ')',
 			source : work_data.url
