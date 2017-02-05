@@ -15,12 +15,9 @@ CeL.run([ 'application.storage.EPUB'
 , 'application.locale' ]);
 
 var Hameln = new CeL.comic.site({
-	// 重新取得每個章節內容chapter_page。
-	// 警告: reget_chapter=false僅適用於小說之類不取得圖片的情形，
-	// 因為若有圖片（parse_chapter_data()會回傳chapter_data.image_list），將把chapter_page寫入僅能從chapter_URL取得名稱的於目錄中。
-	reget_chapter : false,
 	// recheck:從頭檢測所有作品之所有章節。
-	recheck : true,
+	// 'changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。
+	recheck : 'changed',
 
 	// one_by_one : true,
 	base_URL : 'https://syosetu.org/',
@@ -76,14 +73,6 @@ var Hameln = new CeL.comic.site({
 		}
 		work_data.status = work_data.status.join(',');
 
-		// https://syosetu.org/?mode=ss_view_all&nid=18606
-		CeL.get_URL(this.base_URL + '?mode=ss_view_all&nid=' + work_data.id,
-		// save 一括表示
-		null, null, null, {
-			write_to : work_data.directory + this.cache_directory_name
-					+ work_data.directory_name + '.full_text.htm'
-		});
-
 		return work_data;
 	},
 	// 對於章節列表與作品資訊分列不同頁面(URL)的情況，應該另外指定.chapter_list_URL。
@@ -91,6 +80,13 @@ var Hameln = new CeL.comic.site({
 		return 'https://novel.syosetu.org/' + work_id + '/';
 	},
 	get_chapter_count : function(work_data, html) {
+		CeL.get_URL(this.base_URL + '?mode=ss_view_all&nid=' + work_data.id,
+		// save full text 一括表示
+		null, null, null, {
+			write_to : this.main_directory + this.cache_directory_name
+					+ work_data.directory_name + '.full_text.htm'
+		});
+
 		// TODO: 對於單話，可能無目次。
 		// e.g., https://novel.syosetu.org/106514/
 
@@ -199,13 +195,14 @@ var Hameln = new CeL.comic.site({
 		//
 		part_title = chapter_data.part_title,
 		//
-		chapter_title = chapter_data.title;
-
-		var file_title = chapter.pad(3) + ' '
+		chapter_title = chapter_data.title,
+		//
+		file_title = chapter.pad(3) + ' '
 				+ (part_title ? part_title + ' - ' : '') + chapter_title,
 		//
 		item = work_data.ebook.add({
 			title : file_title,
+			internalize_media : true,
 			file : CeL.to_file_name(file_title + '.xhtml'),
 			date : work_data.chapter_list[chapter - 1].date
 		}, {
@@ -215,7 +212,17 @@ var Hameln = new CeL.comic.site({
 		});
 	},
 	finish_up : function(work_data) {
-		work_data && work_data.ebook.pack(this.main_directory);
+		if (work_data) {
+			work_data.ebook.pack([ this.main_directory,
+			//
+			'(一般小説) [' + work_data.author + '] ' + work_data.title
+			//
+			+ ' [' + work_data.site_name + ' '
+			//
+			+ work_data.last_update.to_Date({
+				zone : 9
+			}).format('%Y%2m%2d') + '].' + work_data.id + '.epub' ], true);
+		}
 	}
 });
 

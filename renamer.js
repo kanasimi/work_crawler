@@ -21,7 +21,7 @@ CeL.get_URL.default_user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3
 var target_directory = process.argv[3] || 'H:\\f\\_',
 // reget === true: reget till no more new menu files.
 // reget > 1: reget ALL menu list.
-reget = true,
+reget = 2,
 //
 category_name = /^H$/i.test(work_id) || /成年|Hcomic|noACG_H/i.test(work_id) ? 'Hcomic'
 		: 'comic',

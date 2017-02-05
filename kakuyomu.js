@@ -17,12 +17,9 @@ CeL.run([ 'application.storage.EPUB'
 , 'application.locale' ]);
 
 var kakuyomu = new CeL.comic.site({
-	// 重新取得每個章節內容chapter_page。
-	// 警告: reget_chapter=false僅適用於小說之類不取得圖片的情形，
-	// 因為若有圖片（parse_chapter_data()會回傳chapter_data.image_list），將把chapter_page寫入僅能從chapter_URL取得名稱的於目錄中。
-	reget_chapter : false,
 	// recheck:從頭檢測所有作品之所有章節。
-	recheck : true,
+	// 'changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。
+	recheck : 'changed',
 
 	// one_by_one : true,
 	base_URL : 'https://kakuyomu.jp/',
@@ -180,6 +177,7 @@ var kakuyomu = new CeL.comic.site({
 		//
 		item = work_data.ebook.add({
 			title : file_title,
+			internalize_media : true,
 			file : CeL.to_file_name(file_title + '.xhtml'),
 			date : work_data.chapter_list[chapter - 1].date
 		}, {
@@ -189,7 +187,17 @@ var kakuyomu = new CeL.comic.site({
 		});
 	},
 	finish_up : function(work_data) {
-		work_data && work_data.ebook.pack(this.main_directory);
+		if (work_data) {
+			work_data.ebook.pack([ this.main_directory,
+			//
+			'(一般小説) [' + work_data.author + '] ' + work_data.title
+			//
+			+ ' [' + work_data.site_name + ' '
+			//
+			+ new Date(work_data.last_update)
+			//
+			.format('%Y%2m%2d') + '].' + work_data.id + '.epub' ], true);
+		}
 	}
 });
 
