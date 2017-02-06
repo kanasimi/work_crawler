@@ -90,7 +90,9 @@ var kakuyomu = new CeL.comic.site({
 		if (work_data.種類) {
 			work_data.status.push(work_data.種類);
 		}
-		work_data.status = work_data.status.join(',');
+		work_data.status = work_data.status.filter(function(item) {
+			return !!item;
+		}).join(',');
 		work_data.site_name = work_data.site_name.between(null, ' ');
 
 		if (work_data.image
@@ -134,11 +136,11 @@ var kakuyomu = new CeL.comic.site({
 		});
 		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
 		work_data.ebook.set({
-			// 作者
+			// 作者名
 			creator : work_data.author,
 			// 出版時間 the publication date of the EPUB Publication.
 			date : CeL.EPUB.date_to_String(work_data.last_update),
-			// ジャンル, タグ
+			// ジャンル, タグ, キーワード
 			subject : work_data.status,
 			// あらすじ
 			description : work_data.description,
@@ -196,7 +198,8 @@ var kakuyomu = new CeL.comic.site({
 			//
 			+ new Date(work_data.last_update)
 			//
-			.format('%Y%2m%2d') + '].' + work_data.id + '.epub' ], true);
+			.format('%Y%2m%2d') + '].' + work_data.id + '.epub' ],
+					this.remove_ebook_directory);
 		}
 	}
 });

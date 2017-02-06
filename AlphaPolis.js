@@ -1,9 +1,6 @@
 ﻿/**
  * 批量下載アルファポリス - 電網浮遊都市 - 小説的工具。 Download AlphaPolis novels.
  * 
- * TODO: http://yomou.syosetu.com/rank/list/type/total_total/
- * https://syosetu.org/?mode=rank_total
- * 
  * @see 小説投稿サイト https://matome.naver.jp/odai/2139450042041120001
  */
 
@@ -117,13 +114,13 @@ var AlphaPolis = new CeL.comic.site({
 		});
 		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
 		work_data.ebook.set({
-			// 作者
+			// 作者名
 			creator : work_data.author,
 			// 出版時間 the publication date of the EPUB Publication.
 			date : CeL.EPUB.date_to_String(work_data.last_update.to_Date({
 				zone : 9
 			})),
-			// ジャンル, タグ
+			// ジャンル, タグ, キーワード
 			subject : work_data.status,
 			// あらすじ
 			description : work_data.description,
@@ -185,7 +182,8 @@ var AlphaPolis = new CeL.comic.site({
 			//
 			+ work_data.last_update.to_Date({
 				zone : 9
-			}).format('%Y%2m%2d') + '].' + work_data.id + '.epub' ], true);
+			}).format('%Y%2m%2d') + '].' + work_data.id + '.epub' ],
+					this.remove_ebook_directory);
 		}
 	}
 });
