@@ -189,18 +189,7 @@ var kakuyomu = new CeL.comic.site({
 		});
 	},
 	finish_up : function(work_data) {
-		if (work_data) {
-			work_data.ebook.pack([ this.main_directory,
-			//
-			'(一般小説) [' + work_data.author + '] ' + work_data.title
-			//
-			+ ' [' + work_data.site_name + ' '
-			//
-			+ new Date(work_data.last_update)
-			//
-			.format('%Y%2m%2d') + '].' + work_data.id + '.epub' ],
-					this.remove_ebook_directory);
-		}
+		this.pack_ebook(work_data);
 	}
 });
 

@@ -167,6 +167,40 @@ var syosetu = new CeL.comic.site({
 			tail : '</div>'
 		});
 
+		var get_next_between = text.all_between('<a ', '</a>'), _text,
+		//
+		links = [];
+
+		while ((_text = get_next_between()) !== undefined) {
+			var matched = _text.match(/(?:^| )href="([^"<>]+)"/);
+			// @see http://ncode.syosetu.com/n8611bv/49/
+			// e.g., <a href="http://11578.mitemin.net/i00000/"
+			if (matched && matched[1].includes('mitemin.net')) {
+				// 下載mitemin.net的圖片
+				links.push(matched[1]);
+			}
+		}
+
+		links.forEach(function(url) {
+			work_data.ebook.downloading[url] = url;
+			CeL.get_URL(url, function(XMLHttp) {
+				delete work_data.ebook.downloading[url];
+				if (!XMLHttp || !XMLHttp.responseText) {
+					return;
+				}
+				var matched = XMLHttp.responseText
+						.match(/<a href="([^"<>]+)" target="_blank">/);
+				if (matched) {
+					// 因為.add()會自動添加.downloading並在事後檢查.on_all_downloaded，因此這邊不用再檢查。
+					work_data.ebook.add({
+						url : matched[1]
+					});
+				} else {
+					CeL.err('No image got: ' + url);
+				}
+			});
+		});
+
 		var part_title = get_label(html.between('<p class="chapter_title">',
 				'</p>')),
 		//
@@ -188,18 +222,7 @@ var syosetu = new CeL.comic.site({
 		});
 	},
 	finish_up : function(work_data) {
-		if (work_data) {
-			work_data.ebook.pack([ this.main_directory,
-			//
-			'(一般小説) [' + work_data.author + '] ' + work_data.title
-			//
-			+ ' [' + work_data.site_name + ' '
-			//
-			+ work_data.last_update.to_Date({
-				zone : 9
-			}).format('%Y%2m%2d') + '].' + work_data.id + '.epub' ],
-					this.remove_ebook_directory);
-		}
+		this.pack_ebook(work_data);
 	}
 });
 
