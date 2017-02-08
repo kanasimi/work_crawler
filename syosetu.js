@@ -102,14 +102,14 @@ var syosetu = new CeL.comic.site({
 
 			var chapter_data = {
 				url : matched[1].replace(/^\.\//, ''),
-				date : [ text.match(/>\s*(2\d{3}年[^"<>]+?)</)[1]
+				date : [ text.match(/>\s*(2\d{3}[年\/][^"<>]+?)</)[1]
 				//
 				.to_Date({
 					zone : 9
 				}) ],
 				title : matched[2]
 			};
-			if (matched = text.match(/ title="(2\d{3}年[^"<>]+?)改稿"/)) {
+			if (matched = text.match(/ title="(2\d{3}[年\/][^"<>]+?)改稿"/)) {
 				chapter_data.date.push(matched[1].to_Date({
 					zone : 9
 				}) || matched[1]);
