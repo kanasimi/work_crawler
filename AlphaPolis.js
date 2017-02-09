@@ -22,6 +22,9 @@ var charset = 'EUC-JP';
 CeL.character.load(charset);
 
 var AlphaPolis = new CeL.comic.site({
+	// auto_create_ebook, automatic create ebook
+	// MUST includes CeL.application.locale!
+	need_create_ebook : true,
 	// recheck:從頭檢測所有作品之所有章節。
 	// 'changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。
 	recheck : 'changed',
@@ -85,53 +88,21 @@ var AlphaPolis = new CeL.comic.site({
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {
-		// e.g., 'ja-JP'
-		var language = CeL.detect_HTML_language(html);
-		html = html.between('<div class="toc cover_body">',
-				'<div class="each_other_title">');
 		work_data.chapter_list = [];
-		var get_next_between = html.all_between('<li', '</li>'), text;
+		var text, get_next_between = html.between(
+				'<div class="toc cover_body">',
+				'<div class="each_other_title">').all_between('<li', '</li>');
 		while ((text = get_next_between()) !== undefined) {
 			work_data.chapter_list.push({
 				url : text.between('<a href="', '"'),
 				date : text.between('<span class="open_date">', '</span>')
-				//
-				.to_Date({
-					zone : 9
-				}),
+						.to_Date({
+							zone : work_data.time_zone
+						}),
 				title : text.between('<span class="title">', '</span>')
 			});
 		}
 		work_data.chapter_count = work_data.chapter_list.length;
-
-		work_data.ebook = new CeL.EPUB(work_data.directory
-				+ work_data.directory_name, {
-			// start_over : true,
-			// 小説ID
-			identifier : work_data.id,
-			title : work_data.title,
-			language : language
-		});
-		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
-		work_data.ebook.set({
-			// 作者名
-			creator : work_data.author,
-			// 出版時間 the publication date of the EPUB Publication.
-			date : CeL.EPUB.date_to_String(work_data.last_update.to_Date({
-				zone : 9
-			})),
-			// ジャンル, タグ, キーワード
-			subject : work_data.status,
-			// あらすじ
-			description : work_data.description,
-			publisher : work_data.site_name + ' (' + this.base_URL + ')',
-			source : work_data.url
-		});
-
-		if (work_data.image) {
-			work_data.ebook.set_cover(work_data.image);
-		}
-
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
@@ -161,7 +132,7 @@ var AlphaPolis = new CeL.comic.site({
 		var file_title = chapter.pad(3) + ' '
 				+ (part_title ? part_title + ' - ' : '') + chapter_title,
 		//
-		item = work_data.ebook.add({
+		item = work_data[this.KEY_EBOOK].add({
 			title : file_title,
 			internalize_media : true,
 			file : CeL.to_file_name(file_title + '.xhtml'),
@@ -171,9 +142,6 @@ var AlphaPolis = new CeL.comic.site({
 			sub_title : chapter_title,
 			text : text
 		});
-	},
-	finish_up : function(work_data) {
-		this.pack_ebook(work_data);
 	}
 });
 

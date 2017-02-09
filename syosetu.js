@@ -15,6 +15,9 @@ CeL.run([ 'application.storage.EPUB'
 , 'application.locale' ]);
 
 var syosetu = new CeL.comic.site({
+	// auto_create_ebook, automatic create ebook
+	// MUST includes CeL.application.locale!
+	need_create_ebook : true,
 	// recheck:從頭檢測所有作品之所有章節。
 	// 'changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。
 	recheck : 'changed',
@@ -24,7 +27,7 @@ var syosetu = new CeL.comic.site({
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'http://yomou.syosetu.com/search.php?order=hyoka&word=',
-	parse_search_result : function(html) {
+	parse_search_result : function(html, get_label) {
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
 		id_list = [], get_next_between = html.all_between(
@@ -33,7 +36,7 @@ var syosetu = new CeL.comic.site({
 			id_list.push(
 			//
 			text.between(' href="http://ncode.syosetu.com/', '/"'));
-			id_data.push(text.between('/">'));
+			id_data.push(get_label(text.between('/">')));
 		}
 		return [ id_list, id_data ];
 	},
@@ -57,7 +60,7 @@ var syosetu = new CeL.comic.site({
 
 		work_data = Object.assign({
 			// 必要屬性：須配合網站平台更改。
-			title : html.between('dc:title="', '"'),
+			title : get_label(html.between('dc:title="', '"')),
 
 			// 選擇性屬性：須配合網站平台更改。
 			// e.g., 连载中, 連載中
@@ -84,14 +87,10 @@ var syosetu = new CeL.comic.site({
 	},
 	get_chapter_count : function(work_data, html) {
 		// TODO: 對於單話，可能無目次。
-
-		// e.g., 'ja-JP'
-		var language = CeL.detect_HTML_language(html);
-		html = html.between('<div class="index_box">',
-				'<div id="deqwas-collection-k">');
 		work_data.chapter_list = [];
-		var get_next_between = html.all_between('<dl class="novel_sublist2">',
-				'</dl>'), text;
+		var text, get_next_between = html.between('<div class="index_box">',
+				'<div id="deqwas-collection-k">').all_between(
+				'<dl class="novel_sublist2">', '</dl>');
 		while ((text = get_next_between()) !== undefined) {
 			// [ , href, inner ]
 			var matched = text
@@ -102,50 +101,20 @@ var syosetu = new CeL.comic.site({
 
 			var chapter_data = {
 				url : matched[1].replace(/^\.\//, ''),
-				date : [ text.match(/>\s*(2\d{3}[年\/][^"<>]+?)</)[1]
-				//
-				.to_Date({
-					zone : 9
+				date : [ text.match(/>\s*(2\d{3}[年\/][^"<>]+?)</)[1].to_Date({
+					zone : work_data.time_zone
 				}) ],
 				title : matched[2]
 			};
 			if (matched = text.match(/ title="(2\d{3}[年\/][^"<>]+?)改稿"/)) {
 				chapter_data.date.push(matched[1].to_Date({
-					zone : 9
+					zone : work_data.time_zone
 				}) || matched[1]);
 			}
 			work_data.chapter_list.push(chapter_data);
 			// console.log(chapter_data);
 		}
 		work_data.chapter_count = work_data.chapter_list.length;
-
-		work_data.ebook = new CeL.EPUB(work_data.directory
-				+ work_data.directory_name, {
-			// start_over : true,
-			// 小説ID
-			identifier : work_data.id,
-			title : work_data.title,
-			language : language
-		});
-		// http://www.idpf.org/epub/31/spec/epub-packages.html#sec-opf-dcmes-optional
-		work_data.ebook.set({
-			// 作者名
-			creator : work_data.author,
-			// 出版時間 the publication date of the EPUB Publication.
-			date : CeL.EPUB.date_to_String(work_data.last_update.to_Date({
-				zone : 9
-			})),
-			// ジャンル, タグ, キーワード
-			subject : work_data.status,
-			// あらすじ
-			description : work_data.description,
-			publisher : work_data.site_name + ' (' + this.base_URL + ')',
-			source : work_data.url
-		});
-
-		if (work_data.image) {
-			work_data.ebook.set_cover(work_data.image);
-		}
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
@@ -181,10 +150,12 @@ var syosetu = new CeL.comic.site({
 			}
 		}
 
+		var ebook = work_data[this.KEY_EBOOK];
 		links.forEach(function(url) {
-			work_data.ebook.downloading[url] = url;
+			// 登記有url正處理中，須等待。
+			ebook.downloading[url] = url;
 			CeL.get_URL(url, function(XMLHttp) {
-				delete work_data.ebook.downloading[url];
+				delete ebook.downloading[url];
 				if (!XMLHttp || !XMLHttp.responseText) {
 					return;
 				}
@@ -192,7 +163,7 @@ var syosetu = new CeL.comic.site({
 						.match(/<a href="([^"<>]+)" target="_blank">/);
 				if (matched) {
 					// 因為.add()會自動添加.downloading並在事後檢查.on_all_downloaded，因此這邊不用再檢查。
-					work_data.ebook.add({
+					ebook.add({
 						url : matched[1]
 					});
 				} else {
@@ -210,7 +181,7 @@ var syosetu = new CeL.comic.site({
 		var file_title = chapter.pad(3) + ' '
 				+ (part_title ? part_title + ' - ' : '') + chapter_title,
 		//
-		item = work_data.ebook.add({
+		item = work_data[KEY_EBOOK].add({
 			title : file_title,
 			internalize_media : true,
 			file : CeL.to_file_name(file_title + '.xhtml'),
@@ -220,9 +191,6 @@ var syosetu = new CeL.comic.site({
 			sub_title : chapter_title,
 			text : text
 		});
-	},
-	finish_up : function(work_data) {
-		this.pack_ebook(work_data);
 	}
 });
 
