@@ -134,12 +134,7 @@ var kakuyomu = new CeL.comic.site({
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		// <div class="widget-episodeBody js-episode-body" ...>
-		var text = html.between('episodeBody', '</div>').between('>');
-
-		var part_title = [],
-		//
-		chapter_title = get_label(html.between(
-				'<p class="widget-episodeTitle">', '</p>'));
+		var part_title = [];
 
 		html.between('<p id="globalHeader-closeButton"', '</ul>')
 		//
@@ -147,20 +142,13 @@ var kakuyomu = new CeL.comic.site({
 			part_title.push(get_label(t));
 			return all;
 		});
-		part_title = part_title.join(' - ');
 
-		var file_title = chapter.pad(3) + ' '
-				+ (part_title ? part_title + ' - ' : '') + chapter_title,
-		//
-		item = work_data[this.KEY_EBOOK].add({
-			title : file_title,
-			internalize_media : true,
-			file : CeL.to_file_name(file_title + '.xhtml'),
-			date : work_data.chapter_list[chapter - 1].date
-		}, {
+		this.add_ebook_chapter(work_data, chapter, {
 			title : part_title,
-			sub_title : chapter_title,
-			text : text
+			sub_title : html
+			//
+			.between('<p class="widget-episodeTitle">', '</p>'),
+			text : html.between('episodeBody', '</div>').between('>')
 		});
 	}
 });

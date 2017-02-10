@@ -163,23 +163,11 @@ var Hameln = new CeL.comic.site({
 				/[\s\n]+<span style="font-size:120%">(?:.+?)<\/span><BR><BR>/g,
 				'');
 
-		var chapter_data = work_data.chapter_list[chapter - 1],
-		//
-		part_title = chapter_data.part_title,
-		//
-		chapter_title = chapter_data.title,
-		//
-		file_title = chapter.pad(3) + ' '
-				+ (part_title ? part_title + ' - ' : '') + chapter_title,
-		//
-		item = work_data[this.KEY_EBOOK].add({
-			title : file_title,
-			internalize_media : true,
-			file : CeL.to_file_name(file_title + '.xhtml'),
-			date : work_data.chapter_list[chapter - 1].date
-		}, {
-			title : part_title,
-			sub_title : chapter_title,
+		var chapter_data = work_data.chapter_list[chapter - 1];
+
+		this.add_ebook_chapter(work_data, chapter, {
+			title : chapter_data.part_title,
+			sub_title : chapter_data.title,
 			text : text
 		});
 	}

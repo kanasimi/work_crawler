@@ -138,19 +138,18 @@ var syosetu = new CeL.comic.site({
 
 		var get_next_between = text.all_between('<a ', '</a>'), _text,
 		//
-		links = [];
+		links = [], ebook = work_data[this.KEY_EBOOK];
 
 		while ((_text = get_next_between()) !== undefined) {
 			var matched = _text.match(/(?:^| )href="([^"<>]+)"/);
 			// @see http://ncode.syosetu.com/n8611bv/49/
 			// e.g., <a href="http://11578.mitemin.net/i00000/"
-			if (matched && matched[1].includes('mitemin.net')) {
+			if (matched && matched[1].includes('.mitemin.net')) {
 				// 下載mitemin.net的圖片
 				links.push(matched[1]);
 			}
 		}
 
-		var ebook = work_data[this.KEY_EBOOK];
 		links.forEach(function(url) {
 			// 登記有url正處理中，須等待。
 			ebook.downloading[url] = url;
@@ -172,23 +171,9 @@ var syosetu = new CeL.comic.site({
 			});
 		});
 
-		var part_title = get_label(html.between('<p class="chapter_title">',
-				'</p>')),
-		//
-		chapter_title = get_label(html.between('<p class="novel_subtitle">',
-				'</p>'));
-
-		var file_title = chapter.pad(3) + ' '
-				+ (part_title ? part_title + ' - ' : '') + chapter_title,
-		//
-		item = work_data[KEY_EBOOK].add({
-			title : file_title,
-			internalize_media : true,
-			file : CeL.to_file_name(file_title + '.xhtml'),
-			date : work_data.chapter_list[chapter - 1].date
-		}, {
-			title : part_title,
-			sub_title : chapter_title,
+		this.add_ebook_chapter(work_data, chapter, {
+			title : html.between('<p class="chapter_title">', '</p>'),
+			sub_title : html.between('<p class="novel_subtitle">', '</p>'),
 			text : text
 		});
 	}

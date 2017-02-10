@@ -118,29 +118,13 @@ var AlphaPolis = new CeL.comic.site({
 					+ ', get ' + text + ' inside contents.');
 		}
 
-		text = html.between('<div class="text', '<a class="bookmark ')
-		//
-		.between('>', {
-			tail : '</div>'
-		});
-
-		var part_title = get_label(html.between('<div class="chapter_title">',
-				'</div>')),
-		//
-		chapter_title = get_label(html.between('<h2>', '</h2>'));
-
-		var file_title = chapter.pad(3) + ' '
-				+ (part_title ? part_title + ' - ' : '') + chapter_title,
-		//
-		item = work_data[this.KEY_EBOOK].add({
-			title : file_title,
-			internalize_media : true,
-			file : CeL.to_file_name(file_title + '.xhtml'),
-			date : work_data.chapter_list[chapter - 1].date
-		}, {
-			title : part_title,
-			sub_title : chapter_title,
-			text : text
+		this.add_ebook_chapter(work_data, chapter, {
+			title : html.between('<div class="chapter_title">', '</div>'),
+			sub_title : html.between('<h2>', '</h2>'),
+			text : html.between('<div class="text', '<a class="bookmark ')
+					.between('>', {
+						tail : '</div>'
+					})
 		});
 	}
 });
