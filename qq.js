@@ -57,16 +57,19 @@ var qq = new CeL.comic.site({
 				//
 				free = CeL.get_JSON(free_file) || CeL.null_Object();
 				var id_list = [];
+				_this.free_title = CeL.null_Object();
 				while (matched = PATTERN_work_name.exec(html)) {
-					id_list.push(matched[1]);
-					free[matched[1]] = (new Date).toISOString();
+					matched = matched[1];
+					id_list.push(matched);
+					free[matched] = (new Date).toISOString();
+					_this.free_title[matched] = true;
 				}
 				CeL.log('今日限免: ' + id_list);
 				if (id_list.length !== 2) {
-					CeL.warn('今日限免作品數在 2017 CE 應該是2');
+					CeL.warn('今日限免作品數在 2017 CE 應該是2，但本次取得' + id_list.length);
 				}
 				// write cache
-				CeL.fs_write(free_file, free);
+				CeL.write_file(free_file, free);
 				callback(id_list);
 			});
 		}
@@ -79,11 +82,12 @@ var qq = new CeL.comic.site({
 		return this.base_URL + 'Comic/comicInfo/id/' + (work_id | 0);
 	},
 	parse_work_data : function(html, get_label) {
+		var title = get_label(html.between(
+				'<h2 class="works-intro-title ui-left">', '</h2>')),
 		// work_data={id,title,author,authors,chapter_count,last_update,last_download:{date,chapter}}
-		return {
+		work_data = {
 			// 必要屬性：須配合網站平台更改。
-			title : get_label(html.between(
-					'<h2 class="works-intro-title ui-left">', '</h2>')),
+			title : title,
 
 			// 選擇性屬性：須配合網站平台更改。
 			// e.g., "连载中"
@@ -99,6 +103,19 @@ var qq = new CeL.comic.site({
 			last_update : get_label(html.between(
 					'<span class="ui-pl10 ui-text-gray6">', '</span>'))
 		};
+
+		if (title in this.free_title) {
+			var base = this.main_directory + 'free' + CeL.env.path_separator,
+			// 今日限免作品移至特殊目錄下。
+			id = html.between('<div class="works-cover ui-left">', '</a>')
+					.between('/ComicView/index/id/', '/cid/');
+			CeL.create_directory(base);
+			work_data.directory = base + CeL.to_file_name(
+			// 允許自訂作品目錄，但須自行escape並添加path_separator。
+			id + ' ' + title + '.' + (new Date).format('%Y%2m%2d'))
+					+ CeL.env.path_separator;
+		}
+		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {
 		var matched,
