@@ -23,10 +23,11 @@ var syosetu = new CeL.comic.site({
 	recheck : 'changed',
 
 	// one_by_one : true,
-	base_URL : 'http://syosetu.com/',
+	base_URL : 'http://yomou.syosetu.com/',
+	novel_base_URL : 'http://ncode.syosetu.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'http://yomou.syosetu.com/search.php?order=hyoka&word=',
+	search_URL : 'search.php?order=hyoka&word=',
 	parse_search_result : function(html, get_label) {
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
@@ -34,15 +35,15 @@ var syosetu = new CeL.comic.site({
 		html.each_between('<div class="novel_h">', '</a>', function(text) {
 			id_list.push(
 			//
-			text.between(' href="http://ncode.syosetu.com/', '/"'));
+			text.between(' href="' + this.novel_base_URL, '/"'));
 			id_data.push(get_label(text.between('/">')));
-		});
+		}, this);
 		return [ id_list, id_data ];
 	},
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return 'http://ncode.syosetu.com/novelview/infotop/ncode/' + work_id
+		return this.novel_base_URL + 'novelview/infotop/ncode/' + work_id
 				+ '/';
 	},
 	parse_work_data : function(html, get_label) {
@@ -80,7 +81,7 @@ var syosetu = new CeL.comic.site({
 	},
 	// 對於章節列表與作品資訊分列不同頁面(URL)的情況，應該另外指定.chapter_list_URL。
 	chapter_list_URL : function(work_id) {
-		return 'http://ncode.syosetu.com/' + work_id + '/';
+		return this.novel_base_URL + work_id + '/';
 	},
 	get_chapter_count : function(work_data, html) {
 		// TODO: 對於單話，可能無目次。
