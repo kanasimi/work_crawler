@@ -83,13 +83,11 @@ var kakuyomu = new CeL.comic.site({
 			work_data[get_label(matched[1])] = get_label(matched[2]);
 		}
 
-		var get_next_between = html.between(
-				'<p class="widget-toc-workStatus">', '</p>').all_between(
-				'<span>', '</span>');
-
-		while ((text = get_next_between()) !== undefined) {
+		html.between('<p class="widget-toc-workStatus">', '</p>')
+		//
+		.each_between('<span>', '</span>', function(text) {
 			work_data.status.push(get_label(text));
-		}
+		});
 		if (work_data.種類) {
 			work_data.status.push(work_data.種類);
 		}
@@ -108,12 +106,12 @@ var kakuyomu = new CeL.comic.site({
 	},
 	get_chapter_count : function(work_data, html) {
 		work_data.chapter_list = [];
-		var get_next_between = html.between('<div class="widget-toc-main">',
-				'</div>').all_between('<li', '</li>'), text;
-		while ((text = get_next_between()) !== undefined) {
+		html.between('<div class="widget-toc-main">', '</div>')
+		//
+		.each_between('<li', '</li>', function(text) {
 			if (text.includes(' widget-toc-level')) {
 				// is main title
-				continue;
+				return;
 			}
 			work_data.chapter_list.push({
 				url : text.between('<a href="', '"'),
@@ -121,10 +119,10 @@ var kakuyomu = new CeL.comic.site({
 				//
 				'datePublished" datetime="', '"')),
 				title : text.between(
-						'<span class="widget-toc-episode-titleLabel">',
-						'</span>')
+				//
+				'<span class="widget-toc-episode-titleLabel">', '</span>')
 			});
-		}
+		});
 		work_data.chapter_count = work_data.chapter_list.length;
 	},
 

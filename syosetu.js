@@ -30,14 +30,13 @@ var syosetu = new CeL.comic.site({
 	parse_search_result : function(html, get_label) {
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
-		id_list = [], get_next_between = html.all_between(
-				'<div class="novel_h">', '</a>'), text;
-		while ((text = get_next_between()) !== undefined) {
+		id_list = [];
+		html.each_between('<div class="novel_h">', '</a>', function(text) {
 			id_list.push(
 			//
 			text.between(' href="http://ncode.syosetu.com/', '/"'));
 			id_data.push(get_label(text.between('/">')));
-		}
+		});
 		return [ id_list, id_data ];
 	},
 
@@ -47,16 +46,14 @@ var syosetu = new CeL.comic.site({
 				+ '/';
 	},
 	parse_work_data : function(html, get_label) {
-		var work_data = CeL.null_Object(), text, get_next_between
+		var work_data = CeL.null_Object();
+		html.between('<table', '<div id="ad_s_box">')
 		//
-		= html.between('<table', '<div id="ad_s_box">').all_between('<tr>',
-				'</tr>');
-
-		while ((text = get_next_between()) !== undefined) {
+		.each_between('<tr>', '</tr>', function(text) {
 			work_data[get_label(text.between('<th', '</th>').between('>'))]
 			//
 			= get_label(text.between('<td', '</td>').between('>'));
-		}
+		});
 
 		work_data = Object.assign({
 			// 必要屬性：須配合網站平台更改。
@@ -88,13 +85,14 @@ var syosetu = new CeL.comic.site({
 	get_chapter_count : function(work_data, html) {
 		// TODO: 對於單話，可能無目次。
 		work_data.chapter_list = [];
-		var text, get_next_between = html.between('<div class="index_box">',
-				'<div id="deqwas-collection-k">').all_between(
-				'<dl class="novel_sublist2">', '</dl>');
-		while ((text = get_next_between()) !== undefined) {
+		html.between('<div class="index_box">',
+				'<div id="deqwas-collection-k">')
+		//
+		.each_between('<dl class="novel_sublist2">', '</dl>', function(text) {
 			// [ , href, inner ]
-			var matched = text
-					.match(/ href="\/[^\/]+\/([^ "<>]+)[^<>]*>(.+?)<\/a>/);
+			var matched = text.match(
+			//		
+			/ href="\/[^\/]+\/([^ "<>]+)[^<>]*>(.+?)<\/a>/);
 			if (!matched) {
 				throw text;
 			}
@@ -113,7 +111,7 @@ var syosetu = new CeL.comic.site({
 			}
 			work_data.chapter_list.push(chapter_data);
 			// console.log(chapter_data);
-		}
+		});
 		work_data.chapter_count = work_data.chapter_list.length;
 	},
 
@@ -136,19 +134,17 @@ var syosetu = new CeL.comic.site({
 			tail : '</div>'
 		});
 
-		var get_next_between = text.all_between('<a ', '</a>'), _text,
-		//
-		links = [], ebook = work_data[this.KEY_EBOOK];
+		var links = [], ebook = work_data[this.KEY_EBOOK];
 
-		while ((_text = get_next_between()) !== undefined) {
-			var matched = _text.match(/(?:^| )href="([^"<>]+)"/);
+		text.each_between('<a ', '</a>', function(text) {
+			var matched = text.match(/(?:^| )href="([^"<>]+)"/);
 			// @see http://ncode.syosetu.com/n8611bv/49/
 			// e.g., <a href="http://11578.mitemin.net/i00000/"
 			if (matched && matched[1].includes('.mitemin.net')) {
 				// 下載mitemin.net的圖片
 				links.push(matched[1]);
 			}
-		}
+		});
 
 		links.forEach(function(url) {
 			// 登記有url正處理中，須等待。

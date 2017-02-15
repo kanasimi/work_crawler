@@ -30,14 +30,15 @@ var Hameln = new CeL.comic.site({
 	parse_search_result : function(html) {
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
-		id_list = [], get_next_between = html.all_between(
-				'<div class="float hide blo_title_base">', '</a>'), text;
-		while ((text = get_next_between()) !== undefined) {
+		id_list = [];
+		html.each_between('<div class="float hide blo_title_base">', '</a>',
+		//
+		function(text) {
 			id_list.push(
 			//
 			text.between(' href="//novel.syosetu.org/', '/"') | 0);
 			id_data.push(text.between('<b>', '</b>'));
-		}
+		});
 		return [ id_list, id_data ];
 	},
 
@@ -96,12 +97,13 @@ var Hameln = new CeL.comic.site({
 		// e.g., https://novel.syosetu.org/106514/
 
 		work_data.chapter_list = [];
-		var part_title, text, get_next_between = html.between(
-				'<table width=100%>', '</div>').all_between('<tr', '</tr>');
-		while ((text = get_next_between()) !== undefined) {
+		var part_title;
+		html.between('<table width=100%>', '</div>')
+		//
+		.each_between('<tr', '</tr>', function(text) {
 			if (text.includes('<td colspan=2><strong>')) {
 				part_title = text.between('<strong>', '</strong>');
-				continue;
+				return;
 			}
 
 			// [ , href, inner ]
@@ -125,7 +127,7 @@ var Hameln = new CeL.comic.site({
 			}
 			work_data.chapter_list.push(chapter_data);
 			// console.log(chapter_data);
-		}
+		});
 		work_data.chapter_count = work_data.chapter_list.length;
 	},
 

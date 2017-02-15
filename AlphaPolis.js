@@ -44,12 +44,11 @@ var AlphaPolis = new CeL.comic.site({
 	parse_search_result : function(html) {
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
-		id_list = [], get_next_between = html.all_between('<h3 class="title">',
-				'</a>'), text;
-		while ((text = get_next_between()) !== undefined) {
+		id_list = [];
+		html.each_between('<h3 class="title">', '</a>', function(text) {
 			id_list.push(+text.between(' href="/content/cover/', '/"'));
 			id_data.push(text.between('>'));
-		}
+		});
 		return [ id_list, id_data ];
 	},
 
@@ -89,19 +88,20 @@ var AlphaPolis = new CeL.comic.site({
 	},
 	get_chapter_count : function(work_data, html) {
 		work_data.chapter_list = [];
-		var text, get_next_between = html.between(
-				'<div class="toc cover_body">',
-				'<div class="each_other_title">').all_between('<li', '</li>');
-		while ((text = get_next_between()) !== undefined) {
+		html.between('<div class="toc cover_body">',
+				'<div class="each_other_title">')
+		//
+		.each_between('<li', '</li>', function(text) {
 			work_data.chapter_list.push({
 				url : text.between('<a href="', '"'),
 				date : text.between('<span class="open_date">', '</span>')
-						.to_Date({
-							zone : work_data.time_zone
-						}),
+				//
+				.to_Date({
+					zone : work_data.time_zone
+				}),
 				title : text.between('<span class="title">', '</span>')
 			});
-		}
+		});
 		work_data.chapter_count = work_data.chapter_list.length;
 	},
 
