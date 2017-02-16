@@ -6,6 +6,17 @@
 
 ## Completed tools 已完成網站工具
 已撰寫完的工具包括:
+* [アルファポリス](http://www.alphapolis.co.jp/) : AlphaPolis.js
+* [カクヨム](https://kakuyomu.jp/) : kakuyomu.js
+* [ハーメルン](https://syosetu.org/) : Hameln.js
+* [小説家になろう](http://syosetu.com/) / 小説を読もう！ yomou.js , ノクターンノベルズ noc.js
+* [腾讯漫画](http://ac.qq.com/) : qq.js
+* [爱看漫画](http://www.ikanman.com/) : ikanman.js
+* [漫画台](http://www.manhuatai.com/) : manhuatai.js
+* [爱漫画](http://www.2manhua.com/) : 2manhua.js
+* [热漫吧](http://www.remanba.com/) : remanba.js (自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/2/10 未復原。)
+* [三七阅读](http://www.37yue.com/) : 37yue.js
+<!--
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [アルファポリス](http://www.alphapolis.co.jp/) | AlphaPolis.js | |
@@ -18,6 +29,7 @@
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | |
 | [热漫吧](http://www.remanba.com/) | remanba.js | (自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/2/10 未復原。) |
 | [三七阅读](http://www.37yue.com/) | 37yue.js | |
+-->
 
 ## Workflow 工作流程
 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 <code>manhuatai</code>），每套漫畫一個目錄。
