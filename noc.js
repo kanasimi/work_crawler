@@ -33,9 +33,7 @@ var syosetu = new CeL.comic.site({
 		// {Array}id_list = [id,id,...]
 		id_list = [];
 		html.each_between('<div class="novel_h">', '</a>', function(text) {
-			id_list.push(
-			//
-			text.between(' href="' + this.novel_base_URL, '/"'));
+			id_list.push(text.between(' href="' + this.novel_base_URL, '/"'));
 			id_data.push(get_label(text.between('/">')));
 		}, this);
 		return [ id_list, id_data ];
@@ -43,8 +41,9 @@ var syosetu = new CeL.comic.site({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return this.novel_base_URL + 'novelview/infotop/ncode/' + work_id
-				+ '/';
+		return this.novel_base_URL
+		//
+		+ 'novelview/infotop/ncode/' + work_id + '/';
 	},
 	parse_work_data : function(html, get_label) {
 		var work_data = CeL.null_Object();
@@ -65,8 +64,8 @@ var syosetu = new CeL.comic.site({
 			// <span id="noveltype">完結済</span>全1部
 			// <span id="noveltype_notend">連載中</span>全1部
 			status : [ html.between('<span id="noveltype', '<').between('>') ]
-					.append(work_data.ジャンル ? work_data.ジャンル.split(/\s+/) : '').append(
-							work_data.キーワード.split(/\s+/)),
+					.append(work_data.ジャンル ? work_data.ジャンル.split(/\s+/) : '')
+					.append(work_data.キーワード.split(/\s+/)),
 			author : work_data.作者名,
 			last_update : work_data.最終話掲載日,
 			description : work_data.あらすじ,
@@ -86,13 +85,11 @@ var syosetu = new CeL.comic.site({
 	get_chapter_count : function(work_data, html) {
 		// TODO: 對於單話，可能無目次。
 		work_data.chapter_list = [];
-		html.between('<div class="index_box">',
-				'<div id="novel_footer">')
+		html.between('<div class="index_box">', '<div id="novel_footer">')
 		//
 		.each_between('<dl class="novel_sublist2">', '</dl>', function(text) {
-			// [ , href, inner ]
 			var matched = text.match(
-			//		
+			// [ , href, inner ]
 			/ href="\/[^\/]+\/([^ "<>]+)[^<>]*>(.+?)<\/a>/);
 			if (!matched) {
 				throw text;

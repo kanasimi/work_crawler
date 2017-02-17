@@ -2,6 +2,9 @@
  * 批量下載アルファポリス - 電網浮遊都市 - 小説的工具。 Download AlphaPolis novels.
  * 
  * @see 小説投稿サイト https://matome.naver.jp/odai/2139450042041120001
+ *      http://www.akatsuki-novels.com/novels/ranking_total
+ *      http://www.mai-net.net/bbs/sst/sst.php?act=list&cate=all&page=1
+ *      https://github.com/whiteleaf7/narou
  */
 
 'use strict';
