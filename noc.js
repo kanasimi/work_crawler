@@ -67,7 +67,7 @@ var syosetu = new CeL.comic.site({
 					.append(work_data.ジャンル ? work_data.ジャンル.split(/\s+/) : '')
 					.append(work_data.キーワード.split(/\s+/)),
 			author : work_data.作者名,
-			last_update : work_data.最終話掲載日,
+			last_update : work_data.最終話掲載日 || work_data.掲載日,
 			description : work_data.あらすじ,
 			site_name : 'ノクターンノベルズ'
 		}, work_data);
@@ -97,6 +97,7 @@ var syosetu = new CeL.comic.site({
 
 			var chapter_data = {
 				url : matched[1].replace(/^\.\//, ''),
+				// 掲載日
 				date : [ text.match(/>\s*(2\d{3}[年\/][^"<>]+?)</)[1].to_Date({
 					zone : work_data.time_zone
 				}) ],
@@ -110,27 +111,57 @@ var syosetu = new CeL.comic.site({
 			work_data.chapter_list.push(chapter_data);
 			// console.log(chapter_data);
 		});
+
+		if (work_data.chapter_list.length === 0
+				&& html.includes('<div id="novel_honbun"')) {
+			// 短編小説
+			work_data.chapter_list.push({
+				url : this.chapter_list_URL(work_data.id),
+				// 掲載日
+				date : [ work_data.last_update.to_Date({
+					zone : work_data.time_zone
+				}) ],
+				title : work_data.title
+			});
+		}
+
 		work_data.chapter_count = work_data.chapter_list.length;
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	chapter_URL : function(work_data, chapter) {
-		return this.chapter_list_URL(work_data.id)
-				+ work_data.chapter_list[chapter - 1].url;
+		var url = work_data.chapter_list[chapter - 1].url;
+		if (url.includes('://')) {
+			// e.g., 短編小説
+			return url;
+		}
+		return this.chapter_list_URL(work_data.id) + url;
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		// 檢測所取得內容的章節編號是否相符。
 		var text = get_label(html.between('<div id="novel_no">', '/')) | 0;
-		if (chapter !== text) {
+		if (chapter !== text
+				&& (!work_data.status.includes('短編') || text !== 0)) {
 			throw new Error('Different chapter: Should be ' + chapter
 					+ ', get ' + text + ' inside contents.');
 		}
 
-		text = html.between('<div id="novel_honbun"', '<div class="novel_bn">')
+		text = html.between('<div id="novel_color">',
+				'</div><!--novel_color-->');
+		var
+		/** {Number}未發現之index。 const: 基本上與程式碼設計合一，僅表示名義，不可更改。(=== -1) */
+		NOT_FOUND = ''.indexOf('_');
+		var index = text.indexOf('<div id="novel_p"');
+		if (index === NOT_FOUND
 		//
-		.between('>', {
-			tail : '</div>'
-		});
+		&& (index = text.indexOf('<div id="novel_honbun"')) === NOT_FOUND) {
+			throw new Error('text not found!');
+		}
+		text = text.slice(index);
+		text = text.between(null, {
+			// 後半段的"次の話"
+			tail : '<div class="novel_bn">'
+		}) || text;
 
 		var links = [], ebook = work_data[this.KEY_EBOOK];
 
@@ -165,9 +196,23 @@ var syosetu = new CeL.comic.site({
 			});
 		});
 
+		var series_title = get_label(
+		//
+		html.between('<p class="series_title">', '</p>'));
+		if (series_title) {
+			ebook.set([ {
+				meta : null,
+				name : "calibre:series",
+				content : series_title = get_label(series_title)
+			} ]);
+		}
 		this.add_ebook_chapter(work_data, chapter, {
-			title : html.between('<p class="chapter_title">', '</p>'),
-			sub_title : html.between('<p class="novel_subtitle">', '</p>'),
+			title : html.between('<p class="chapter_title">', '</p>')
+			// 短編小説
+			|| series_title,
+			sub_title : html.between('<p class="novel_subtitle">', '</p>')
+			// 短編小説
+			|| html.between('<p class="novel_title">', '</p>'),
 			text : text
 		});
 	}

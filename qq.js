@@ -61,6 +61,7 @@ var qq = new CeL.comic.site({
 				while (matched = PATTERN_work_name.exec(html)) {
 					matched = matched[1];
 					id_list.push(matched);
+					// TODO: should use UTF+8
 					free[matched] = (new Date).toISOString();
 					_this.free_title[matched] = true;
 				}
