@@ -8,13 +8,14 @@
 已撰寫完的各大工具網站包括:
 
 ### novels 小說
-web page → epub
+web pages → epub
 * [アルファポリス](http://www.alphapolis.co.jp/) : AlphaPolis.js
 * [カクヨム](https://kakuyomu.jp/) : kakuyomu.js
 * [ハーメルン](https://syosetu.org/) : Hameln.js
 * [小説家になろう](http://syosetu.com/) / 小説を読もう！ yomou.js , ノクターンノベルズ noc.js
 
 ### comics 漫畫
+web pages → folder
 * [腾讯漫画](http://ac.qq.com/) : qq.js
 * [爱看漫画](http://www.ikanman.com/) : ikanman.js
 * [漫画台](http://www.manhuatai.com/) : manhuatai.js

@@ -5,6 +5,7 @@
  *      http://www.akatsuki-novels.com/novels/ranking_total
  *      http://www.mai-net.net/bbs/sst/sst.php?act=list&cate=all&page=1
  *      https://github.com/whiteleaf7/narou
+ *      https://github.com/59naga/scrape-narou
  */
 
 'use strict';

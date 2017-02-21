@@ -21,7 +21,7 @@ var qq = new CeL.comic.site({
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
-		return this.base_URL + 'Comic/searchList/search/'
+		return 'Comic/searchList/search/'
 		// e.g., 找不到"隔离带 2"，須找"隔离带"。
 		+ encodeURIComponent(work_title.replace(/\s+\d+$/, '')
 		// e.g., "Zero -零之镇魂曲-" → "Zero-零之镇魂曲-"
@@ -80,7 +80,7 @@ var qq = new CeL.comic.site({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return this.base_URL + 'Comic/comicInfo/id/' + (work_id | 0);
+		return 'Comic/comicInfo/id/' + (work_id | 0);
 	},
 	parse_work_data : function(html, get_label) {
 		var title = get_label(html.between(
@@ -105,7 +105,7 @@ var qq = new CeL.comic.site({
 					'<span class="ui-pl10 ui-text-gray6">', '</span>'))
 		};
 
-		if (title in this.free_title) {
+		if (this.free_title && (title in this.free_title)) {
 			var base = this.main_directory + 'free' + CeL.env.path_separator,
 			// 今日限免作品移至特殊目錄下。
 			id = html.between('<div class="works-cover ui-left">', '</a>')
@@ -119,21 +119,25 @@ var qq = new CeL.comic.site({
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {
+		work_data.chapter_list = [];
 		var matched,
 		// [ , chapter_id ]
 		PATTERN_chapter_id = /\/cid\/(\d{1,4})/g;
+		html = html.between('<ol class="chapter-page-all works-chapter-list">',
+				'</ol>');
+		// 有些作品如"演平乱志"之類，章節並未按照編號排列。
 		while (matched = PATTERN_chapter_id.exec(html)) {
-			// 取最大者。
-			if (work_data.chapter_count < (matched = +matched[1])) {
-				work_data.chapter_count = matched;
-			}
+			work_data.chapter_list.push({
+				NO : matched[1]
+			});
 		}
+		work_data.chapter_count = work_data.chapter_list.length;
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	chapter_URL : function(work_data, chapter) {
-		return this.base_URL + 'ComicView/index/id/' + work_data.id + '/cid/'
-				+ chapter;
+		return 'ComicView/index/id/' + work_data.id + '/cid/'
+				+ work_data.chapter_list[chapter - 1].NO;
 	},
 	parse_chapter_data : function(html, work_data) {
 		// decode chapter data
