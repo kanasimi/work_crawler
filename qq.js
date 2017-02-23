@@ -43,28 +43,36 @@ var qq = new CeL.comic.site({
 		return [ id_list, id_data ];
 	},
 	convert_id : {
-		// 今日限免 free today
+		// 篩出今日限免 free today
 		// e.g., node qq free
 		free : function(callback) {
 			var _this = this;
-			// http://ac.qq.com/VIP
-			CeL.get_URL(this.base_URL + 'VIP', function(XMLHttp) {
-				var html = XMLHttp.responseText, matched, PATTERN_work_name =
+			this.free_title = CeL.null_Object();
+
+			function parse_html(XMLHttp) {
+				XMLHttp.responseText.each_between('mod-tag-zt-3', '</p>',
 				//
-				/class="in-works-name" title="([^"]+)">/g,
+				function(token) {
+					var title = token.between('title="', '"');
+					if (title) {
+						_this.free_title[title] = true;
+					}
+				});
+			}
+
+			function finish_free() {
+				var id_list = [],
 				//
 				free_file = _this.main_directory + 'free.json',
 				//
 				free = CeL.get_JSON(free_file) || CeL.null_Object();
-				var id_list = [];
-				_this.free_title = CeL.null_Object();
-				while (matched = PATTERN_work_name.exec(html)) {
-					matched = matched[1];
-					id_list.push(matched);
+
+				for ( var title in _this.free_title) {
+					id_list.push(title);
 					// TODO: should use UTF+8
-					free[matched] = (new Date).toISOString();
-					_this.free_title[matched] = true;
+					free[title] = (new Date).toISOString();
 				}
+
 				CeL.log('今日限免: ' + id_list);
 				if (id_list.length !== 2) {
 					CeL.warn('今日限免作品數在 2017 CE 應該是2，但本次取得' + id_list.length);
@@ -72,6 +80,15 @@ var qq = new CeL.comic.site({
 				// write cache
 				CeL.write_file(free_file, free);
 				callback(id_list);
+			}
+
+			// http://ac.qq.com/VIP
+			CeL.get_URL(this.base_URL + 'VIP', function(XMLHttp) {
+				parse_html(XMLHttp);
+				CeL.get_URL(_this.base_URL, function(XMLHttp) {
+					parse_html(XMLHttp);
+					finish_free();
+				});
 			});
 		}
 	},
