@@ -106,7 +106,6 @@ var AlphaPolis = new CeL.comic.site({
 				title : text.between('<span class="title">', '</span>')
 			});
 		});
-		work_data.chapter_count = work_data.chapter_list.length;
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()

@@ -92,7 +92,6 @@ var _2manhua = new CeL.comic.site({
 				title : matched[2]
 			});
 		}
-		work_data.chapter_count = work_data.chapter_list.length;
 		work_data.chapter_list.sort(function(chapter_data_1, chapter_data_2) {
 			var matched_1 = chapter_data_1.url.match(/(\d+)\.htm/),
 			// 依照.url排序。

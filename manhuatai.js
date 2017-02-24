@@ -85,7 +85,6 @@ manhuatai = new CeL.comic.site({
 				title : matched[4]
 			});
 		}
-		work_data.chapter_count = work_data.chapter_list.length;
 		if (work_data.chapter_count > 1) {
 			// 轉成由舊至新之順序。
 			work_data.chapter_list = work_data.chapter_list.reverse();

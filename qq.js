@@ -148,7 +148,6 @@ var qq = new CeL.comic.site({
 				NO : matched[1]
 			});
 		}
-		work_data.chapter_count = work_data.chapter_list.length;
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()

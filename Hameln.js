@@ -128,7 +128,6 @@ var Hameln = new CeL.comic.site({
 			work_data.chapter_list.push(chapter_data);
 			// console.log(chapter_data);
 		});
-		work_data.chapter_count = work_data.chapter_list.length;
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()

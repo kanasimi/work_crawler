@@ -146,7 +146,6 @@ var ikanman = new CeL.comic.site({
 			// console.log(chapter_list.slice(-20));
 			work_data.chapter_list = chapter_list;
 		}
-		work_data.chapter_count = chapter_list.length;
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()

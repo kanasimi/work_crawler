@@ -123,7 +123,6 @@ var kakuyomu = new CeL.comic.site({
 				'<span class="widget-toc-episode-titleLabel">', '</span>')
 			});
 		});
-		work_data.chapter_count = work_data.chapter_list.length;
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
