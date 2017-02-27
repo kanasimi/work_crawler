@@ -49,7 +49,7 @@ cache_data = CeL.get_JSON(cache_file),
 //
 PATTERN_latin_file_name = /^([\u0020-\u007F]+)\.[a-z]+$/,
 //
-PATTERN_full_latin = /^[\u0020-\u007F]+$/;
+PATTERN_full_latin_or_sign = /^[\u0020-\u007F’★☆♥♡]+$/;
 
 if (target_directory) {
 	if (!/[\\\/]$/.test(target_directory)) {
@@ -63,7 +63,7 @@ if (target_directory) {
 		} else {
 			target_files[fso_status.name] = path;
 		}
-	}, PATTERN_full_latin, 1);
+	}, PATTERN_full_latin_or_sign, 1);
 
 	if (CeL.is_empty_object(target_files)
 			&& CeL.is_empty_object(target_directories)) {
@@ -191,7 +191,7 @@ function get_file_list(id, callback) {
 
 			if (file_list.length !== 1) {
 				// CeL.warn(name + ': ' + JSON.stringify(file_list));
-			} else if (!PATTERN_full_latin.test(name)
+			} else if (!PATTERN_full_latin_or_sign.test(name)
 			//
 			&& (matched = file_list[0].match(PATTERN_latin_file_name))) {
 				// CeL.log(matched[1] + ': ' + name);

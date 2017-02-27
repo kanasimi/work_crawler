@@ -92,8 +92,11 @@ var AlphaPolis = new CeL.comic.site({
 	},
 	get_chapter_count : function(work_data, html) {
 		work_data.chapter_list = [];
-		html.between('<div class="toc cover_body">',
-				'<div class="each_other_title">')
+		html = html.between('<div class="toc cover_body">',
+		// 不能用'<div class="each_other_title">':
+		// 有些作品沒有"この作品を読んでいる人はこんな作品も読んでいます！"
+		// e.g., ちょっと魔王になって人類救ってくる
+		'<div class="ad section">')
 		//
 		.each_between('<li', '</li>', function(text) {
 			work_data.chapter_list.push({

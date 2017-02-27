@@ -86,13 +86,6 @@ var Hameln = new CeL.comic.site({
 		return 'https://novel.syosetu.org/' + work_id + '/';
 	},
 	get_chapter_count : function(work_data, html) {
-		CeL.get_URL(this.base_URL + '?mode=ss_view_all&nid=' + work_data.id,
-		// save full text 一括表示
-		null, null, null, {
-			write_to : this.main_directory + this.cache_directory_name
-					+ work_data.directory_name + '.full_text.htm'
-		});
-
 		// TODO: 對於單話，可能無目次。
 		// e.g., https://novel.syosetu.org/106514/
 
@@ -136,6 +129,24 @@ var Hameln = new CeL.comic.site({
 				+ work_data.chapter_list[chapter - 1].url;
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
+		// 儲存單一檔案之全篇文字。
+		if (!this.got_all) {
+			this.got_all = CeL.null_Object();
+		}
+		if (!this.got_all[work_data.id]) {
+			// 避免多章節時重複get。
+			// 不儲存在work_data，因為work_data會有cache，下次執行依然會保持舊的設定。
+			this.got_all[work_data.id] = work_data.title;
+			CeL.get_URL(this.base_URL
+			// 放在這，是為了確保章節有變化時才重新取得。
+			+ '?mode=ss_view_all&nid=' + work_data.id,
+			// save full text 一括表示
+			null, null, null, {
+				write_to : this.main_directory + this.cache_directory_name
+						+ work_data.directory_name + '.full_text.htm'
+			});
+		}
+
 		// 檢測所取得內容的章節編號是否相符。
 		var text = get_label(html.between(
 				'<div style="text-align:right;font-size:80%">', '/')) | 0;
