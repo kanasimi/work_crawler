@@ -18,7 +18,8 @@ require('./comic loder.js');
 
 CeL.get_URL.default_user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
 
-var target_directory = process.argv[3] || 'H:\\f\\_',
+// e.g., "node renamer.js C target_directory"
+var target_directory = process.argv[3] || '.',
 // reget === true: reget till no more new menu files.
 // reget > 1: reget ALL menu list.
 reget = 2,
