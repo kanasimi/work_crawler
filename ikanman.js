@@ -14,6 +14,7 @@ var ikanman = new CeL.comic.site({
 	// one_by_one : true,
 
 	base_URL : 'http://www.ikanman.com/',
+	script_base_URL : 'http://c.3qfm.com/scripts/',
 
 	// allow .jpg without EOI mark.
 	allow_EOI_error : true,
@@ -23,8 +24,10 @@ var ikanman = new CeL.comic.site({
 	// 取得伺服器列表。
 	use_server_cache : true,
 	server_URL : function() {
-		return 'http://c.3qfm.com/scripts/'
-				+ 'core_9D227AD5A911B7758A332C9CA35C640C.js';
+		return this.script_base_URL
+		// + 'core_9D227AD5A911B7758A332C9CA35C640C.js'
+		// 2017/3/11 20:6:35
+		+ 'core_33A91659E79CDC4A0F31ED884877F3EF.js';
 	},
 	parse_server_list : function(html) {
 		var server_list = [];
@@ -80,7 +83,7 @@ var ikanman = new CeL.comic.site({
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {
-		var chapter_list = [], matched,
+		var data, chapter_list = [], matched,
 		/**
 		 * e.g., <code>
 		<li><a href="/comic/17515/272218.html" title="第72话：一虎进击" class="status0" target="_blank"><span>第72话：一…<i>31p</i><em class="new"></em></span></a></li>
@@ -89,9 +92,16 @@ var ikanman = new CeL.comic.site({
 		PATTERN_chapter =
 		// [:]: incase href="javascript:;"
 		// [ all, href, title, inner ]
-		/<li><a href="([^"<>:]+)" title="([^"<>]+)"[^<>]*>(.+?)<\/a><\/li>/g,
-		// @see http://www.ikanman.com/comic/8928/
-		data = html.between('chapter-list', '<script ');
+		/<li><a href="([^"<>:]+)" title="([^"<>]+)"[^<>]*>(.+?)<\/a><\/li>/g;
+
+		// 有些尚使用舊模式。
+		// @see http://www.ikanman.com/comic/8004/
+		data = html.between('chapter-list', 'class="comment')
+		// 2017/3/3? ikanman 改版
+		|| LZString.decompressFromBase64(
+		//
+		html.between('id="__VIEWSTATE"', '>').between('value="', '"'));
+
 		while (matched = PATTERN_chapter.exec(data)) {
 			matched[2] = matched[2].trim();
 			if (matched[3] = matched[3].between('<i>', '</i>')) {
@@ -174,18 +184,30 @@ var ikanman = new CeL.comic.site({
 		// console.log(work_data.chapter_list);
 		return this.base_URL + work_data.chapter_list[chapter - 1].url;
 	},
-	parse_chapter_data : function(html, work_data, get_label) {
+	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		// decode chapter data
-		function decode(code) {
+		function decode_2016(code) {
 			code = eval(code);
 			eval(code.replace('eval', 'code='));
 			eval(code.replace(/^[^=]+/, 'code'));
 			return code;
 		}
 
-		var chapter_data = html.between('<script type="text/javascript">eval',
-				';</script>');
+		// 2017/3/3? ikanman 改版
+		// String.prototype.splic: used in chapter
+		function decode(code) {
+			code = eval(code);
+			eval(code.replace('var cInfo=', 'code='));
+			return code;
+		}
+
+		var chapter_data = html.between(
+		// window["eval"]
+		'<script type="text/javascript">window["\\x65\\x76\\x61\\x6c"]',
+				'</script>');
 		if (!chapter_data || !(chapter_data = decode(chapter_data))) {
+			CeL.warn(work_data.title + ' #' + chapter
+					+ ': No valid chapter data got!');
 			return;
 		}
 
@@ -211,16 +233,16 @@ var ikanman = new CeL.comic.site({
 
 // CeL.set_debug(3);
 
-var decryptDES;
-CeL.get_URL_cache(
-//
-'http://c.3qfm.com/scripts/config_F31AF4311D4D987EC68AD2E90224F946.js',
-//
+var LZString, decode_file = 'main_3A454149B2D2500411BC344B15DB58A4.js';
+CeL.get_URL_cache(ikanman.script_base_URL + decode_file,
+// 2017/3/3? ikanman 改版
 function(contents) {
-	contents = contents.between('\n', 'var pVars').replace(
-			'eval(function(n,t,i,r,u,f)',
-			'eval("decryptDES="+function(n,t,i,r,u,f)')
-			+ ';global.decryptDES=decryptDES;';
+	contents = contents.between('\nwindow["\\x65\\x76\\x61\\x6c"]', ';\n')
+	//
+	.replace(/window\[([^\[\]]+)\]/g, function($0, key) {
+		return eval(key);
+	});
+	contents = eval(contents).replace(/^var /, '');
 	eval(contents);
 	ikanman.start(work_id);
-}, ikanman.main_directory + 'decoder.js');
+}, ikanman.main_directory + decode_file);

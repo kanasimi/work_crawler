@@ -26,7 +26,8 @@ var qq = new CeL.comic.site({
 		+ encodeURIComponent(work_title.replace(/\s+\d+$/, '')
 		// e.g., "Zero -零之镇魂曲-" → "Zero-零之镇魂曲-"
 		// e.g., "七公主 第三季" → "七公主第三季"
-		.replace(/ /g, ''));
+		// e.g., "死神/境·界" → "死神境·界"
+		.replace(/[ \/]+/g, ''));
 	},
 	parse_search_result : function(html) {
 		var id_data = CeL.null_Object(),

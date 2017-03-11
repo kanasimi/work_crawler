@@ -107,7 +107,7 @@ var _2manhua = new CeL.comic.site({
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	chapter_URL : function(work_data, chapter) {
-		return this.base_URL + work_data.chapter_list[chapter - 1].url;
+		return work_data.chapter_list[chapter - 1].url;
 	},
 	parse_chapter_data : function(html, work_data, get_label) {
 		// decode chapter data

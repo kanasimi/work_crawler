@@ -49,8 +49,8 @@ cache_file = base_directory + 'data.json',
 cache_data = CeL.get_JSON(cache_file),
 //
 PATTERN_latin_file_name = /^([\u0020-\u007F]+)\.[a-z]+$/,
-//
-PATTERN_full_latin_or_sign = /^[\u0020-\u007F’★☆♥♡]+$/;
+// [[en:Numerals_in_Unicode#Roman_numerals]]
+PATTERN_full_latin_or_sign = /^[\u0020-\u007F’★☆♥♡Ⅰ-ↈ①-⑳⑴-⑽㈠-㈩]+$/;
 
 if (target_directory) {
 	if (!/[\\\/]$/.test(target_directory)) {
@@ -170,7 +170,7 @@ function get_file_list(id, callback) {
 			CeL.err(name + '\n' + html);
 		}
 		CeL.get_URL_cache(base_URL + '?page=view&tid=' + id + '&' + matched[0],
-		//
+		// 取得 .torrent 的檔案列表。
 		function(html, is_cache) {
 			var file_list = [], matched, PATTERN_file
 			//
@@ -179,6 +179,8 @@ function get_file_list(id, callback) {
 			if (!is_cache) {
 				_this.new_files++;
 			}
+			// 就算利用的是 cache，依然檢查檔案而不直接跳出。
+
 			// CeL.log(name + ': ' + html);
 			while (matched = PATTERN_file.exec(html)) {
 				file_list.push(CeL.HTML_to_Unicode(matched[1]));
