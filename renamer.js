@@ -50,7 +50,7 @@ cache_data = CeL.get_JSON(cache_file),
 //
 PATTERN_latin_file_name = /^([\u0020-\u007F]+)\.[a-z]+$/,
 // [[en:Numerals_in_Unicode#Roman_numerals]]
-PATTERN_full_latin_or_sign = /^[\u0020-\u007F’★☆♥♡Ⅰ-ↈ①-⑳⑴-⑽㈠-㈩]+$/;
+PATTERN_full_latin_or_sign = /^[\u0020-\u00FF’★☆♥♡Ⅰ-ↈ①-⑳⑴-⑽㈠-㈩]+$/;
 
 if (target_directory) {
 	if (!/[\\\/]$/.test(target_directory)) {
