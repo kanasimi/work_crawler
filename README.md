@@ -70,9 +70,12 @@ Then, install the CeJS library:
 ``` sh
 $ npm install cejs
 ```
-（鑒於更新頻繁，有些功能可能最新版本才具備；建議直接到 GitHub 下載最新版本壓縮檔，解開後配置。）
+鑒於更新頻繁，有些功能可能最新版本才具備；建議直接到 GitHub 下載最新版本壓縮檔，解開後配置。
 
-再設定好 comic loder.js
+Since the frequent updates of the code, some features may work at the latest version only; it's recommended download the latest version at GitHub, and then configure.
+See [CeJS](https://github.com/kanasimi/CeJS) for detail.
+
+最後設定好 comic loder.js
 
 ### Execution
 ``` sh
