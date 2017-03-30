@@ -79,51 +79,21 @@ if (target_directory) {
 
 get_menu_list();
 
-// 依照順序從 index 至 end_index 執行 for_each(index, run_next)。
-// data.code.thread
-function run_serial(for_each, end_index, index, callback, _this) {
-	var list;
-	if (Array.isArray(end_index)) {
-		list = end_index;
-		end_index = list.length - 1;
-	}
-	if (typeof index === 'function') {
-		// shift arguments.
-		_this = callback;
-		callback = index;
-		index = 0;
-	}
-	index |= 0;
-
-	function run_next() {
-		if (index > end_index) {
-			if (typeof callback === 'function') {
-				callback && callback(_this);
-			}
-			return;
-		}
-
-		CeL.debug(index + '/' + end_index, 1, 'run_serial');
-		for_each.call(_this, list ? list[index++] : index++, run_next);
-	}
-	run_next();
-}
-
 function get_menu_list(callback) {
-	run_serial(function(index, callback) {
+	CeL.run_serial(function(run_next, index) {
 		CeL.info('get_menu_list: menu ' + category_name + ' ' + index + '/'
 				+ last_count);
 		CeL.get_URL_cache(base_URL + '?cats=' + category_NO + '&offset='
 				+ index, function(html) {
-			for_menu_list(html, function(_this) {
+			for_menu_list(html, function() {
 				CeL.fs_write(cache_file, cache_data);
-				if (_this.new_files === 0) {
+				if (this.new_files === 0) {
 					CeL.info('No more new menu files.');
 				} else {
-					CeL.info(_this.new_files + ' new files.');
+					CeL.info(this.new_files + ' new files.');
 				}
-				if (_this.new_files > 0 || reget > 1) {
-					callback();
+				if (this.new_files > 0 || reget > 1) {
+					run_next();
 				}
 			});
 		}, {
@@ -145,7 +115,7 @@ function for_menu_list(html, callback) {
 	}
 	// console.log(id_list);
 
-	run_serial(get_file_list, id_list, callback, {
+	CeL.run_serial(get_file_list, id_list, callback, {
 		new_files : 0
 	});
 }
@@ -158,7 +128,7 @@ var PATTERN_has_jp = /[\u3041-\u30FF\u31F0-\u31FF\uFA30-\uFA6A第巻]/;
 /** node.js file system module */
 var node_fs = require('fs');
 
-function get_file_list(id, callback) {
+function get_file_list(callback, id) {
 	var _this = this;
 	// CeL.set_debug(6);
 	CeL.get_URL_cache(base_URL + '?page=view&tid=' + id, function(html) {
@@ -227,7 +197,7 @@ function get_file_list(id, callback) {
 				rename(matched[1].replace(/_/g, ' '));
 			}
 
-			callback && callback();
+			typeof callback === 'function' && callback();
 		}, base_directory + id + '.list.htm');
 	}, base_directory + id + '.htm');
 }
