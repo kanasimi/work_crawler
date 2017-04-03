@@ -62,20 +62,9 @@ web pages → folder
 ## Node.js usage
 
 ### Installation
-First, go to [nodejs.org](https://nodejs.org/), download the runtime environment and install the node.js package.
-請先安裝 [nodejs.org](https://nodejs.org/)。
-
-Then, install the CeJS library:
-接著安裝 CeJS library:
-``` sh
-$ npm install cejs
-```
-鑒於更新頻繁，有些功能可能最新版本才具備；建議直接到 GitHub 下載最新版本壓縮檔，解開後配置。
-
-Since the frequent updates of the code, some features may work at the latest version only; it's recommended download the latest version at GitHub, and then configure.
-See [CeJS](https://github.com/kanasimi/CeJS) for detail.
-
-最後設定好 comic loder.js
+1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
+2. Setup [_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt) if necessary.
+2. Setup [comic loder.js](https://github.com/kanasimi/comic/blob/master/comic%20loder.sample.js). 最後設定好 comic loder.js。
 
 ### Execution
 ``` sh
