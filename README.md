@@ -16,7 +16,7 @@ web pages → epub
 
 ### comics 漫畫
 web pages → folder
-* [腾讯漫画](http://ac.qq.com/) : qq.js
+* [腾讯漫画](http://ac.qq.com/) : qq.js (**本工具無法下載付費內容**)
 * [爱看漫画](http://www.ikanman.com/) : ikanman.js
 * [漫画台](http://www.manhuatai.com/) : manhuatai.js
 * [爱漫画](http://www.2manhua.com/) : 2manhua.js
@@ -40,10 +40,15 @@ web pages → folder
 ## Installation
 
 ### 懶人安裝法
-為了只想趕快試用的你～
+為了只想趕快試用的您～
 1. 先安裝 [node.js](https://nodejs.org/)
 2. 下載並解壓縮[本工具](https://github.com/kanasimi/comic/archive/master.zip)
-3. 現在起的操作都必須進到解壓縮後的目錄，在命令行界面下執行。先執行：<code>npm install cejs && move "comic loder.sample.js" "comic loder.js"</code> <!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
+3. 進到工具檔所在的目錄，執行：
+```
+npm install cejs && move "comic loder.sample.js" "comic loder.js"
+```
+<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
+4. 然後就能[開使試用](#execution)囉。不過 npm 安裝的可能不是最新版，有些新功能或許尚未加入，請見諒。
 
 ### Normal installation
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
@@ -51,6 +56,7 @@ web pages → folder
 2. Setup [comic loder.js](https://github.com/kanasimi/comic/blob/master/comic%20loder.sample.js). 最後設定好 comic loder.js。
 
 ## Execution
+所有操作都必須進到工具檔所在的目錄，在命令行界面下執行。
 1. 確認要下載的網站名與作品名。之後在命令行界面下，執行：
 ``` sh
 $ node 工具檔名.js "作品名"

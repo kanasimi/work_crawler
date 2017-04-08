@@ -234,6 +234,8 @@ var ikanman = new CeL.comic.site({
 // CeL.set_debug(3);
 
 var LZString, decode_file = 'main_3A454149B2D2500411BC344B15DB58A4.js';
+// 創建 main directory。
+CeL.create_directory(ikanman.main_directory);
 CeL.get_URL_cache(ikanman.script_base_URL + decode_file,
 // 2017/3/3? ikanman 改版
 function(contents) {

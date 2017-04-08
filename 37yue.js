@@ -55,7 +55,7 @@ var _37yue = new CeL.comic.site({
 		}
 		if (work_data.chapter_list.length > 1) {
 			// 轉成由舊至新之順序。
-			work_data.chapter_list = work_data.chapter_list.reverse();
+			work_data.chapter_list.reverse();
 		}
 	},
 
