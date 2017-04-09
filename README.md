@@ -8,7 +8,8 @@
 已撰寫完的各大工具網站包括:
 
 ### novels 小說
-web pages → epub (need with 7z)
+web pages → epub (**must install 7z command line version first**)
+
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [アルファポリス](http://www.alphapolis.co.jp/) | AlphaPolis.js | |
@@ -18,6 +19,7 @@ web pages → epub (need with 7z)
 
 ### comics 漫畫
 web pages → folder
+
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載付費內容** |
