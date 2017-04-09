@@ -8,7 +8,7 @@
 已撰寫完的各大工具網站包括:
 
 ### novels 小說
-web pages → epub
+web pages → epub (need with 7z)
 * [アルファポリス](http://www.alphapolis.co.jp/) : AlphaPolis.js
 * [カクヨム](https://kakuyomu.jp/) : kakuyomu.js
 * [ハーメルン](https://syosetu.org/) : Hameln.js
@@ -22,7 +22,7 @@ web pages → folder
 * [爱漫画](http://www.2manhua.com/) : 2manhua.js
 * [热漫吧](http://www.remanba.com/) : remanba.js (自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/2/10 未復原。)
 * [三七阅读](http://www.37yue.com/) : 37yue.js
-<!--
+
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [アルファポリス](http://www.alphapolis.co.jp/) | AlphaPolis.js | |
@@ -35,7 +35,7 @@ web pages → folder
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | |
 | [热漫吧](http://www.remanba.com/) | remanba.js | (自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/2/10 未復原。) |
 | [三七阅读](http://www.37yue.com/) | 37yue.js | |
--->
+
 
 ## Installation
 
@@ -43,12 +43,12 @@ web pages → folder
 為了只想趕快試用的您～
 1. 先安裝 [node.js](https://nodejs.org/)
 2. 下載並解壓縮[本工具](https://github.com/kanasimi/comic/archive/master.zip)
-3. 進到工具檔所在的目錄，執行：
-```
-npm install cejs && move "comic loder.sample.js" "comic loder.js"
-```
-<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
-4. 然後就能[開使試用](#execution)囉。不過 npm 安裝的可能不是最新版，有些新功能或許尚未加入，請見諒。
+3. 進到工具檔所在的目錄，執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
+ ``` cmd
+ > npm install cejs
+ > move "comic loder.sample.js" "comic loder.js"
+ ```
+4. 然後就能[開始試用](#execution)囉。不過 npm 安裝的可能不是最新版，有些新功能或許尚未加入，請見諒。
 
 ### Normal installation
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
@@ -58,15 +58,16 @@ npm install cejs && move "comic loder.sample.js" "comic loder.js"
 ## Execution
 所有操作都必須進到工具檔所在的目錄，在命令行界面下執行。
 1. 確認要下載的網站名與作品名。之後在命令行界面下，執行：
-``` sh
-$ node 工具檔名.js "作品名"
-```
-e.g., 
-``` sh
-$ node qq 狐妖小红娘
-$ node yomou 転生したらスライムだった件
-```
-2. 下載的檔案將放在 <code>comic loder.js</code> 所設定的目錄下。若採懶人安裝法，則預設放在解壓縮後的目錄下。
+ ``` sh
+ $ node 工具檔名.js "作品名"
+ ```
+ e.g., 
+ ``` sh
+ $ node qq 狐妖小红娘
+ $ node yomou 転生したらスライムだった件
+ ```
+ 若是下載出錯，**重新執行即可接續下載**。
+2. 下載的檔案將放在 <code>comic loder.js</code> 所設定的目錄下。若採懶人安裝法，則預設放在解壓縮後工具檔所在的目錄下。
 
 ## Workflow 工作流程
 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 <code>manhuatai</code>），每套漫畫一個目錄。
@@ -91,5 +92,5 @@ $ node yomou 転生したらスライムだった件
 非常歡迎提供使用意見與改善建議。
 
 ## Announce 聲明
-* 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
+* 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容版權屬原作者所有，請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
 * 各漫畫網站往往不時更改結構，同時造成本工具無法作動；因此若是有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
