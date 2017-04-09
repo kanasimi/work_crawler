@@ -5,7 +5,7 @@
 - [ja] ウェブ小説→epub、ウェブ漫画作品を一括ダウンロードツール。コマンドラインインターフェース。
 
 ## Completed tools 已完成網站工具
-已撰寫完的各大工具網站包括:
+已撰寫完的各大工具網站包括：
 
 ### novels 小說
 web pages → epub (**must install 7z command line version first**)
@@ -34,14 +34,14 @@ web pages → folder
 ## Installation
 
 ### 懶人安裝法
-為了只想趕快試用的您～
+為了只想趕快試用的您～（已經做過的可以跳過）
 1. 先安裝 [node.js](https://nodejs.org/)
 2. 下載並解壓縮[本工具](https://github.com/kanasimi/comic/archive/master.zip)
 3. 進到工具檔所在的目錄，執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
- ``` cmd
- > npm install cejs
- > move "comic loder.sample.js" "comic loder.js"
- ```
+  ``` cmd
+  > npm install cejs
+  > move "comic loder.sample.js" "comic loder.js"
+  ```
 4. 然後就能[開始試用](#execution)囉。不過 npm 安裝的可能不是最新版，有些新功能或許尚未加入，請見諒。
 
 ### Normal installation
@@ -52,15 +52,15 @@ web pages → folder
 ## Execution
 所有操作都必須進到工具檔所在的目錄，在命令行界面下執行。
 1. 確認要下載的網站名與作品名。之後在命令行界面下，執行：
- ``` sh
- $ node 工具檔名.js "作品名"
- ```
- e.g., 
- ``` sh
- $ node qq 狐妖小红娘
- $ node yomou 転生したらスライムだった件
- ```
- 若是下載出錯，**重新執行即可接續下載**。
+  ``` sh
+  $ node 工具檔名.js "作品名"
+  ```
+  e.g., 
+  ``` sh
+  $ node qq 狐妖小红娘
+  $ node yomou 転生したらスライムだった件
+  ```
+  若是下載出錯，**重新執行即可接續下載**。
 2. 下載的檔案將放在 <code>comic loder.js</code> 所設定的目錄下。若採懶人安裝法，則預設放在解壓縮後工具檔所在的目錄下。
 
 ## Workflow 工作流程
