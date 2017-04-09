@@ -46,7 +46,7 @@ var _37yue = new CeL.comic.site({
 		PATTERN_chapter =
 		// [all,href,title,inner]
 		/<li><a href="([^"<>]+)" title="([^"<>]+)"[^<>]*>(.+?)<\/a><\/li>/g;
-		html = html.between('list-chapter', '</ul>')
+		html = html.between('list-chapter', '</ul>');
 		while (matched = PATTERN_chapter.exec(html)) {
 			work_data.chapter_list.push({
 				url : matched[1],

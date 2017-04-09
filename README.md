@@ -27,44 +27,46 @@ web pages → folder
 | [爱看漫画](http://www.ikanman.com/) | ikanman.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | |
-| [热漫吧](http://www.remanba.com/) | remanba.js | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/2/10 未復原。 |
+| ~~[热漫吧](http://www.remanba.com/)~~ | ~~remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/2/10 未復原。 |
 | [三七阅读](http://www.37yue.com/) | 37yue.js | |
 
 
-## Installation
+## Installation 安裝
 
 ### 懶人安裝法
 為了只想趕快試用的您～（已經做過的可以跳過）
-1. 先安裝 [node.js](https://nodejs.org/)
+1. 先安裝 [Node.js](https://nodejs.org/)
 2. 下載並解壓縮[本工具](https://github.com/kanasimi/comic/archive/master.zip)
-3. 進到工具檔所在的目錄，執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
-  ``` cmd
-  > npm install cejs
-  > move "comic loder.sample.js" "comic loder.js"
-  ```
-4. 然後就能[開始試用](#execution)囉。不過 npm 安裝的可能不是最新版，有些新功能或許尚未加入，請見諒。
+3. 進到解壓縮後工具檔所在的目錄，執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
 
-### Normal installation
+   ``` cmd
+   > npm install cejs
+   > move "comic loder.sample.js" "comic loder.js"
+   ```
+
+4. 然後就能[開始試用](#execution-執行)囉。不過 npm 安裝的可能不是最新版，有些新功能或許尚未加入，請見諒。
+
+### Normal installation 一般正常安裝
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
 2. Setup [_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt) if necessary.
 2. Setup [comic loder.js](https://github.com/kanasimi/comic/blob/master/comic%20loder.sample.js). 最後設定好 comic loder.js。
 
-## Execution
+## Execution 執行
 所有操作都必須進到工具檔所在的目錄，在命令行界面下執行。
 1. 確認要下載的網站名與作品名。之後在命令行界面下，執行：
 
-  ``` sh
-  $ node 工具檔名.js "作品名"
-  ```
+   ``` sh
+   $ node 工具檔名.js "作品名"
+   ```
 
-  e.g.,
-  ``` sh
-  $ node qq 狐妖小红娘
-  $ node yomou 転生したらスライムだった件
-  ```
-  若是下載出錯，**重新執行即可接續下載**。
+   e.g.,
+   ``` sh
+   $ node qq 狐妖小红娘
+   $ node yomou 転生したらスライムだった件
+   ```
 
-2. 下載的檔案將放在 <code>comic loder.js</code> 所設定的目錄下。若採懶人安裝法，則預設放在解壓縮後工具檔所在的目錄下。
+2. 下載的檔案將放在 <code>comic loder.js</code> 所設定的目錄下。若採[懶人安裝法](#懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
+3. 若是下載出錯，**重新執行即可接續下載**。
 
 ## Workflow 工作流程
 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 <code>manhuatai</code>），每套漫畫一個目錄。
@@ -77,8 +79,6 @@ web pages → folder
 接續下載時，將從上次的進度（最後下載的章節）接著下載。
 
 ![接續下載](https://lh3.googleusercontent.com/LMpFtmfIIeH3bCbM2DuEX_AJ2r17X-_OGM8O6EitrLYLRzqxYn0tt6CbjZciL1Hav60vDEXAMFILWviPu-wFjqfpuO_srKNKbVUVr-5XJ7wBm0J6r730vYVZ4Iun1Ug5tm7iRBK24kWZKAJwD6Fpx_WagdQji81k6yVvmMO-_KHx-UwaUtox2Z9CLQvpHG63XqAcoTJdob3_gBCyen82HNlmmQLMLFrvjvFeywYrR2YsOkem_fypz5jvM1UM9BS8Bd0WzkjQ5SoE_SNgF_EhOuESbTu_pmLjZL0OoZX0eAUisfcGnLptk0ea8eM4KqU3oOQhG44emNxuH31gQMHQiXVd-7-X2H_VK2IhlosyPQuObveuGv6C0fjNJmoJdEFjPPlZVx25JuGJZe_PfRkdkoliNHcn5UMaqp8YiTF7wvGOktLnE2OBJXx7DuvUzjO2VY8aoebwdRjJI9ft-Co0zIe1AZUW0rcmrWROqFJNTHYNoLyVo_lmxgw_THlgv1GaY5BhKfKOXC_Zx-n6ye_xtQgO-wxSgDaCvBPuE7G8VMGdYyl-12LLa1IKROtqjfVePilpWRsWq5tO1SnCb1rn2ulDoF9cxlIo3yKMtpdWCCppM9ro=w745-h481-no)
-
-若是下載出錯，重新執行即可接續下載。
 
 ## Purpose 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [comic module](https://github.com/kanasimi/CeJS/blob/master/application/net/comic.js) 批量下載各漫畫網站。

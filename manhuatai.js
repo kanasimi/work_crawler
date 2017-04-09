@@ -27,12 +27,14 @@ manhuatai = new CeL.comic.site({
 	// JSON.parse("{'o':[['mhpic.taomanhua.com','线路1',0],['58.218.199.16','线路2',0],['59.45.79.108','线路3',0]]}".replace(/'/g,'"')).o
 	// 2016/12/25 9:40:33 漫画台 server list file format changed
 	// {"status":0,"msg":"ok","data":[{"domain":"mhpic.taomanhua.com","name":"线路1","status":"0"},{"domain":"59.45.79.93","name":"线路2","status":"0"},{"domain":"58.218.199.16","name":"线路3","status":"0"},{"domain":"59.45.79.108","name":"线路4","status":"0"}]}
-	server_URL : 'http://server.taomanhua.com:82/mhpic.asp',
+	// server_URL : 'http://server.taomanhua.com:82/mhpic.asp',
 	parse_server_list : function(html) {
 		return JSON.parse(html).data
-		//
+		// modify from n.getPicUrl @
+		// http://www.manhuatai.com/static/comicread.js?20170401181816
 		.map(function(server_data) {
-			return server_data.domain;
+			var server = server_data.domain;
+			return server.includes('mhpic') ? server : server + ':82';
 		});
 	},
 
@@ -98,27 +100,9 @@ manhuatai = new CeL.comic.site({
 	},
 	parse_chapter_data : function(html, work_data) {
 		// decode chapter data
-		// modify from
-		// http://www.manhuatai.com/static/comicread.js?20161105124102
+		// modify from n.getPicUrl @
+		// http://www.manhuatai.com/static/comicread.js?20170401181816
 		function decode(mh_info) {
-			if (false) {
-				// 遇到如
-				// http://www.manhuatai.com/doupocangqiong/185h.html
-				// 還是會出問題。
-				mh_info = mh_info
-				// key:"property" → "key":"property"
-				.replace(/([a-z]+):((?:\d{1,20}|"(?:[^\\"]+|\\.)*")[,}])/ig,
-						'"$1":$2')
-				// fix for JSON
-				.replace(/\\'/g, "'");
-				try {
-					mh_info = JSON.parse(mh_info);
-				} catch (e) {
-					CeL.err(JSON.stringify(mh_info));
-					CeL.err(mh_info);
-					throw e;
-				}
-			}
 			eval('mh_info=' + mh_info);
 			mh_info.imgpath = mh_info.imgpath.replace(/./g, function(a) {
 				return String.fromCharCode(a.charCodeAt(0) - mh_info.pageid
@@ -136,18 +120,33 @@ manhuatai = new CeL.comic.site({
 
 		// 設定必要的屬性。
 		chapter_data.title = chapter_data.pagename;
+		chapter_data.postfix = '.jpg' + (chapter_data.comic_size || '');
 		// chapter_data.image_count = chapter_data.totalimg;
 		chapter_data.image_list = new Array(chapter_data.totalimg).fill(null)
-		//
+		// modify from n.getPicUrl @
+		// http://www.manhuatai.com/static/comicread.js?20170401181816
 		.map(function(i, index) {
 			return {
 				url : '/comic/' + chapter_data.imgpath
 				//
-				+ (index + 1 + chapter_data.startimg - 1) + '.jpg'
+				+ (index + chapter_data.startimg) + chapter_data.postfix
 			}
 		});
 
 		return chapter_data;
+	},
+
+	pre_get_images : function(XMLHttp, work_data, chapter_data, callback) {
+		var html = XMLHttp.responseText;
+		if (!html) {
+			callback();
+		}
+		// modify from n.init @
+		// http://www.manhuatai.com/static/comicread.js?20170401181816
+		var server_URL = 'http://server.'
+				+ html.between('var mh_info=', '<\/script>').between(
+						'domain:"', '"') + ':82/mhpic.asp';
+		this.set_server_list(server_URL, callback);
 	}
 });
 
