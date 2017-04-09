@@ -15,7 +15,8 @@ web pages → epub (**must install 7z command line version first**)
 | [アルファポリス](http://www.alphapolis.co.jp/) | AlphaPolis.js | |
 | [カクヨム](https://kakuyomu.jp/) | kakuyomu.js | |
 | [ハーメルン](https://syosetu.org/) | Hameln.js | |
-| [小説家になろう](http://syosetu.com/) | 小説を読もう！ yomou.js , ノクターンノベルズ noc.js | |
+| [小説を読もう！](http://yomou.syosetu.com/) | yomou.js | [小説家になろう](http://syosetu.com/) |
+| [ノクターンノベルズ](http://noc.syosetu.com/) | noc.js | [小説家になろう](http://syosetu.com/)の[男性読者向けの18禁部門サイト](http://noc.syosetu.com/site/faq/) |
 
 ### comics 漫畫
 web pages → folder
