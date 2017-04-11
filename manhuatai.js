@@ -8,7 +8,9 @@ require('./comic loder.js');
 
 // ----------------------------------------------------------------------------
 
-var PATTERN_chapter_data = /<li><a title="([^"]+)" href="((\d{0,4})[^"]*)"><span>(.+?)<\/span><\/a><\/li>/g,
+var server_list_hash = CeL.null_Object(),
+//
+PATTERN_chapter_data = /<li><a title="([^"]+)" href="((\d{0,4})[^"]*)"><span>(.+?)<\/span><\/a><\/li>/g,
 //
 manhuatai = new CeL.comic.site({
 	// recheck:從頭檢測所有作品之所有章節。
@@ -141,12 +143,18 @@ manhuatai = new CeL.comic.site({
 		if (!html) {
 			callback();
 		}
+		var _this = this, use_domain = html.between('var mh_info=',
+				'<\/script>').between('domain:"', '"'),
+		//
+		server_URL = server_list_hash[use_domain]
 		// modify from n.init @
 		// http://www.manhuatai.com/static/comicread.js?20170401181816
-		var server_URL = 'http://server.'
-				+ html.between('var mh_info=', '<\/script>').between(
-						'domain:"', '"') + ':82/mhpic.asp';
-		this.set_server_list(server_URL, callback);
+		|| 'http://server.' + use_domain + ':82/mhpic.asp';
+		this.set_server_list(server_URL, function() {
+			// cache server list
+			server_list_hash[use_domain] = _this.server_list;
+			callback();
+		});
 	}
 });
 

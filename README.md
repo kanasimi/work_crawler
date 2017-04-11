@@ -8,7 +8,7 @@
 已撰寫完的各大工具網站包括：
 
 ### novels 小說
-web pages → epub (**must install 7z command line version first**)
+web pages → epub (**must install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command line version first**)
 
 | Site | Tool file | Note |
 | --- | --- | --- |
@@ -34,17 +34,17 @@ web pages → folder
 ## Installation 安裝
 
 ### 懶人安裝法
-為了只想趕快試用的您～（已經做過的可以跳過）
+為了只想趕快試用的您～（已經做過的步驟可以跳過）
 1. 先安裝 [Node.js](https://nodejs.org/)
-2. 下載並解壓縮[本工具](https://github.com/kanasimi/comic/archive/master.zip)
-3. 進到解壓縮後工具檔所在的目錄，執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
+2. 下載並解壓縮[本工具壓縮檔](https://github.com/kanasimi/comic/archive/master.zip)
+3. 進到解壓縮後工具檔所在的目錄，在命令行界面下執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
 
    ``` cmd
    > npm install cejs
    > move "comic loder.sample.js" "comic loder.js"
    ```
 
-4. 然後就能[開始試用](#execution-執行)囉。不過 npm 安裝的可能不是最新版，有些新功能或許尚未加入，請見諒。
+4. 然後就能[開始試用](#execution-執行)囉。不過 npm 安裝的可能不是最新版，有些新功能或許尚未加入，執行起來可能出錯，請見諒。因此最好還是下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置。
 
 ### Normal installation 一般正常安裝
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
@@ -61,6 +61,7 @@ web pages → folder
 
    e.g.,
    ``` sh
+   $ node qq free
    $ node qq 狐妖小红娘
    $ node yomou 転生したらスライムだった件
    ```
