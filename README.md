@@ -1,4 +1,4 @@
-﻿# Online novel / comic downloader 小說漫畫下載工具
+﻿# CeJS online novel / comic downloader 小說漫畫下載工具
 - [en] Download novels→epub and comics with command line interface.
 - [TW] 批量下載小說→epub、漫畫網站的工具。命令行界面。
 - [CN] 批量下载小说→epub、漫画网站的工具。命令行界面。
@@ -29,22 +29,24 @@ web pages → folder
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/2/10 未復原。 |
 | [三七阅读](http://www.37yue.com/) | 37yue.js | |
+| [网易漫画](https://manhua.163.com/) | 163.js | |
 
+一般約需2至4小時新增或更新一網站，以達初步可用狀態。
 
 ## Installation 安裝
 
-### 懶人安裝法
+### Node.js lazy installation 懶人安裝法
 為了只想趕快試用的您～（已經做過的步驟可以跳過）
 1. 先安裝 [Node.js](https://nodejs.org/)
 2. 下載並解壓縮[本工具壓縮檔](https://github.com/kanasimi/comic/archive/master.zip)
 3. 進到解壓縮後工具檔所在的目錄，在命令行界面下執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
 
    ``` cmd
-   > npm install cejs
-   > move "comic loder.sample.js" "comic loder.js"
+   PATH> npm install cejs
+   PATH> move "comic loder.sample.js" "comic loder.js"
    ```
 
-4. 然後就能[開始試用](#execution-執行)囉。不過 npm 安裝的可能不是最新版，有些新功能或許尚未加入，執行起來可能出錯，請見諒。因此最好還是下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置。
+4. 然後就能[開始試用](#execution-執行)囉。不過 npm 安裝的可能不是最新版，有些新功能尚未加入，因此執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置。
 
 ### Normal installation 一般正常安裝
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
@@ -61,7 +63,7 @@ web pages → folder
 
    e.g.,
    ``` sh
-   $ node qq free
+   $ echo "今日限免" && node qq free
    $ node qq 狐妖小红娘
    $ node yomou 転生したらスライムだった件
    ```
