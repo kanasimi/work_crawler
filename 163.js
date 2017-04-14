@@ -77,13 +77,13 @@ var NetEase = new CeL.comic.site({
 	get_chapter_count : function(work_data, html) {
 		var chapter_json = JSON.parse(html).catalog.sections;
 
-		CeL.fs_write(work_data.directory
-		//
-		+ chapter_json.bookId + '.json', html);
-
 		if (chapter_json.length < 1) {
 			throw 'sections.length = ' + chapter_json.length + ', not 1!';
 		}
+
+		CeL.fs_write(work_data.directory
+		//
+		+ chapter_json[0].bookId + '.json', html);
 
 		if (chapter_json.length === 1) {
 			// 正常情況:只有第一章。
