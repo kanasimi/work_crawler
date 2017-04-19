@@ -41,6 +41,12 @@ var Hameln = new CeL.comic.site({
 		});
 		return [ id_list, id_data ];
 	},
+	convert_id : {
+		r18 : function(callback) {
+			this.search_URL = '?mode=search_r18cs&word=';
+			callback();
+		}
+	},
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
@@ -195,4 +201,6 @@ var Hameln = new CeL.comic.site({
 
 // CeL.set_debug(3);
 
+// for 年齢確認: あなたは18歳以上ですか？
+Hameln.get_URL_options.agent.last_cookie = 'over18=off';
 Hameln.start(work_id);

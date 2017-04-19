@@ -119,6 +119,7 @@ var NetEase = new CeL.comic.site({
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		var chapter_data = html.between('window.DATA.fromJapan', '</script>')
 				.between(';').replace(/window\.PG_CONFIG/g, 'chapter_data')
+				// 改成 true 會下載 webp
 				.replace(/window\.IS_SUPPORT_WEBP/g, 'false');
 		eval(chapter_data);
 

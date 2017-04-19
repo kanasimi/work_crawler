@@ -24,7 +24,7 @@ web pages → folder
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載付費內容** |
-| [爱看漫画](http://www.ikanman.com/) | ikanman.js | |
+| [爱看漫](http://www.ikanman.com/) | ikanman.js | 看漫画 |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/2/10 未復原。 |
@@ -46,7 +46,9 @@ web pages → folder
    PATH> move "comic loder.sample.js" "comic loder.js"
    ```
 
-4. 然後就能[開始試用](#execution-執行)囉。不過 npm 安裝的可能不是最新版，有些新功能尚未加入，因此執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置。
+4. 然後就能[開始試用](#execution-執行)囉。
+
+* 不過 npm 安裝的可能不是最新版，尚未加入新功能。當採用新版下載工具與舊版CeJS程式庫時，執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置。
 
 ### Normal installation 一般正常安裝
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.

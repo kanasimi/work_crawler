@@ -137,7 +137,7 @@ function get_file_list(callback, id) {
 		//
 		matched = html.match(/showfiles=[^"]+/);
 		if (!matched) {
-			CeL.err(name + '\n' + html);
+			CeL.error(name + '\n' + html);
 		}
 		CeL.get_URL_cache(base_URL + '?page=view&tid=' + id + '&' + matched[0],
 		// 取得 .torrent 的檔案列表。
@@ -180,7 +180,7 @@ function get_file_list(callback, id) {
 							target_directory + CeL.to_file_name(name) + '.'
 									+ fso_name);
 					if (error) {
-						CeL.err(error);
+						CeL.error(error);
 					} else if (is_file) {
 						delete target_files[fso_name];
 					} else {
