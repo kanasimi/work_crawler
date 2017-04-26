@@ -4,7 +4,7 @@
 
 'use strict';
 
-require('./comic loder.js');
+require('./work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ CeL.run([ 'application.storage.EPUB'
 // CeL.detect_HTML_language()
 , 'application.locale' ]);
 
-var Hameln = new CeL.comic.site({
+var Hameln = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!
 	need_create_ebook : true,
@@ -161,8 +161,8 @@ var Hameln = new CeL.comic.site({
 
 		// 檢測所取得內容的章節編號是否相符。
 		var text = get_label(html.between(
-				'<div style="text-align:right;font-size:80%">', '/')) | 0;
-		if (chapter !== text) {
+				'<div style="text-align:right;font-size:80%">', '/'));
+		if (chapter != text) {
 			throw new Error('Different chapter: Should be ' + chapter
 					+ ', get ' + text + ' inside contents.');
 		}

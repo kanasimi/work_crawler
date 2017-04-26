@@ -10,7 +10,7 @@
 
 'use strict';
 
-require('./comic loder.js');
+require('./work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ CeL.run([ 'application.storage.EPUB'
 var charset = 'EUC-JP';
 CeL.character.load(charset);
 
-var AlphaPolis = new CeL.comic.site({
+var AlphaPolis = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!
 	need_create_ebook : true,
@@ -118,8 +118,8 @@ var AlphaPolis = new CeL.comic.site({
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		// 檢測所取得內容的章節編號是否相符。
 		var text = get_label(html.between(
-				'<div class="total_content_block_count">', '/')) | 0;
-		if (chapter !== text) {
+				'<div class="total_content_block_count">', '/'));
+		if (chapter != text) {
 			throw new Error('Different chapter: Should be ' + chapter
 					+ ', get ' + text + ' inside contents.');
 		}

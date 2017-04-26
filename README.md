@@ -38,12 +38,12 @@ web pages → folder
 ### Node.js lazy installation 懶人安裝法
 為了只想趕快試用的您～（已經做過的步驟可以跳過）
 1. 先安裝 [Node.js](https://nodejs.org/)
-2. 下載並解壓縮[本工具壓縮檔](https://github.com/kanasimi/comic/archive/master.zip)
+2. 下載並解壓縮[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)
 3. 進到解壓縮後工具檔所在的目錄，在命令行界面下執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
 
    ``` cmd
    PATH> npm install cejs
-   PATH> move "comic loder.sample.js" "comic loder.js"
+   PATH> move "work_crawler_loder.sample.js" "work_crawler_loder.js"
    ```
 
 4. 然後就能[開始試用](#execution-執行)囉。
@@ -53,7 +53,7 @@ web pages → folder
 ### Normal installation 一般正常安裝
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
 2. Setup [_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt) if necessary.
-2. Setup [comic loder.js](https://github.com/kanasimi/comic/blob/master/comic%20loder.sample.js). 最後設定好 comic loder.js。
+2. Setup [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.sample.js). 最後設定好 work_crawler_loder.js。
 
 ## Execution 執行
 所有操作都必須進到工具檔所在的目錄，在命令行界面下執行。
@@ -70,7 +70,7 @@ web pages → folder
    $ node yomou 転生したらスライムだった件
    ```
 
-2. 下載的檔案將放在 <code>comic loder.js</code> 所設定的目錄下。若採[懶人安裝法](#懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
+2. 下載的檔案將放在 <code>work_crawler_loder.js</code> 所設定的目錄下。若採[懶人安裝法](#懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
 3. 若是下載出錯，**重新執行即可接續下載**。
 
 ## Workflow 工作流程
@@ -86,7 +86,7 @@ web pages → folder
 ![接續下載](https://lh3.googleusercontent.com/LMpFtmfIIeH3bCbM2DuEX_AJ2r17X-_OGM8O6EitrLYLRzqxYn0tt6CbjZciL1Hav60vDEXAMFILWviPu-wFjqfpuO_srKNKbVUVr-5XJ7wBm0J6r730vYVZ4Iun1Ug5tm7iRBK24kWZKAJwD6Fpx_WagdQji81k6yVvmMO-_KHx-UwaUtox2Z9CLQvpHG63XqAcoTJdob3_gBCyen82HNlmmQLMLFrvjvFeywYrR2YsOkem_fypz5jvM1UM9BS8Bd0WzkjQ5SoE_SNgF_EhOuESbTu_pmLjZL0OoZX0eAUisfcGnLptk0ea8eM4KqU3oOQhG44emNxuH31gQMHQiXVd-7-X2H_VK2IhlosyPQuObveuGv6C0fjNJmoJdEFjPPlZVx25JuGJZe_PfRkdkoliNHcn5UMaqp8YiTF7wvGOktLnE2OBJXx7DuvUzjO2VY8aoebwdRjJI9ft-Co0zIe1AZUW0rcmrWROqFJNTHYNoLyVo_lmxgw_THlgv1GaY5BhKfKOXC_Zx-n6ye_xtQgO-wxSgDaCvBPuE7G8VMGdYyl-12LLa1IKROtqjfVePilpWRsWq5tO1SnCb1rn2ulDoF9cxlIo3yKMtpdWCCppM9ro=w745-h481-no)
 
 ## Purpose 公開目的
-* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [comic module](https://github.com/kanasimi/CeJS/blob/master/application/net/comic.js) 批量下載各漫畫網站。
+* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [work_crawler module](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各漫畫網站。
 * 展示程式撰寫當時，各漫畫網站之網站資料結構。
 * 提供離線瀏覽漫畫功能，以利個人化閱覽方式。
 * 增加對閱讀權的掌控能力，預防數十年後找不到記憶中閱覽過的作品。
@@ -96,3 +96,10 @@ web pages → folder
 ## Announce 聲明
 * 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容版權屬原作者所有，請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
 * 各漫畫網站往往不時更改結構，同時造成本工具無法作動；因此若是有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
+
+<!--
+TODO:
+one-click installation + auto-update
+GUI
+
+-->

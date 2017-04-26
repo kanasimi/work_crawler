@@ -1,5 +1,5 @@
 ﻿/**
- * 載入批量下載漫畫的主要功能。 Download comics.
+ * 載入批量下載線上作品（小說、漫畫）的主要功能。 Download novels / comics.
  */
 
 'use strict';
@@ -45,7 +45,7 @@ CeL.run([
 // Add color to console messages. 添加主控端報告的顏色。
 'interact.console',
 // 載入批量下載漫畫的主要功能。
-'application.net.comic' ]);
+'application.net.work_crawler' ]);
 
 // ----------------------------------------------------------------------------
 

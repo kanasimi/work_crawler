@@ -4,7 +4,7 @@
 
 'use strict';
 
-require('./comic loder.js');
+require('./work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ CeL.run([ 'application.storage.EPUB'
 // CeL.detect_HTML_language()
 , 'application.locale' ]);
 
-var kakuyomu = new CeL.comic.site({
+var kakuyomu = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!
 	need_create_ebook : true,

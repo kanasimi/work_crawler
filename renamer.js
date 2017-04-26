@@ -12,7 +12,7 @@
 
 global.need_work_id = false;
 
-require('./comic loder.js');
+require('./work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 

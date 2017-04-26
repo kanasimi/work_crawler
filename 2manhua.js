@@ -4,11 +4,11 @@
 
 'use strict';
 
-require('./comic loder.js');
+require('./work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var _2manhua = new CeL.comic.site({
+var _2manhua = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。

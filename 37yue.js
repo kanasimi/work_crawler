@@ -4,11 +4,11 @@
 
 'use strict';
 
-require('./comic loder.js');
+require('./work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var _37yue = new CeL.comic.site({
+var _37yue = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 	// one_by_one : true,

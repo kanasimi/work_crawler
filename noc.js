@@ -4,11 +4,11 @@
 
 'use strict';
 
-require('./comic loder.js');
+require('./work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-CeL.run('application.net.comic.yomou');
+CeL.run('application.net.work_crawler.yomou');
 
 // ----------------------------------------------------------------------------
 
