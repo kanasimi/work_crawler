@@ -70,8 +70,8 @@ var AlphaPolis = new CeL.work_crawler({
 			status : get_label(
 					html.between('<div class="category novel_content">',
 							'</div>'))
-			// .split(/[\s\n]+/).sort().join(',')
-			.replace(/[\s\n]+/g, ','),
+			//
+			.split(/[\s\n]+/),
 			author : get_label(html.between('<div class="author">', '</a>')),
 			last_update : get_label(html.between('<th>更新日時</th>', '</td>')),
 			site_name : 'アルファポリス'

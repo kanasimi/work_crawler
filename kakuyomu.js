@@ -91,9 +91,6 @@ var kakuyomu = new CeL.work_crawler({
 		if (work_data.種類) {
 			work_data.status.push(work_data.種類);
 		}
-		work_data.status = work_data.status.filter(function(item) {
-			return !!item;
-		}).join(',');
 		work_data.site_name = work_data.site_name.between(null, ' ');
 
 		if (work_data.image

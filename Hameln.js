@@ -87,9 +87,6 @@ var Hameln = new CeL.work_crawler({
 		if (work_data.警告タグ) {
 			work_data.status.append(work_data.警告タグ.split(/\s+/));
 		}
-		work_data.status = work_data.status.filter(function(item) {
-			return !!item;
-		}).join(',');
 
 		return work_data;
 	},
