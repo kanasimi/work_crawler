@@ -30,6 +30,7 @@ web pages → folder
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/2/10 未復原。 |
 | [三七阅读](http://www.37yue.com/) | 37yue.js | |
 | [网易漫画](https://manhua.163.com/) | 163.js | |
+| [733动漫网](http://www.733dm.net/) | 733dm.js | |
 
 一般約需2至4小時新增或更新一網站，以達初步可用狀態。
 

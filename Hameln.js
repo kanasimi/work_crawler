@@ -137,6 +137,8 @@ var Hameln = new CeL.work_crawler({
 		return this.chapter_list_URL(work_data.id)
 				+ work_data.chapter_list[chapter - 1].url;
 	},
+	// 檢測所取得內容的章節編號是否相符。
+	check_chapter_NO : [ '<div style="text-align:right;font-size:80%">', '/' ],
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		// 儲存單一檔案之全篇文字。
 		if (!this.got_all) {
@@ -156,15 +158,7 @@ var Hameln = new CeL.work_crawler({
 			});
 		}
 
-		// 檢測所取得內容的章節編號是否相符。
-		var text = get_label(html.between(
-				'<div style="text-align:right;font-size:80%">', '/'));
-		if (chapter != text) {
-			throw new Error('Different chapter: Should be ' + chapter
-					+ ', get ' + text + ' inside contents.');
-		}
-
-		text = html
+		var text = html
 		//
 		.between('<div class="ss">', '<span id="analytics_end">')
 		// remove </div>

@@ -78,7 +78,7 @@ var qq = new CeL.work_crawler({
 					CeL.log('今日限免: ' + id_list);
 				}
 				if (id_list.length !== 2) {
-					CeL.warn('今日限免作品數在 2017 CE 應該是2，但本次取得' + id_list.length);
+					CeL.warn('"今日限免"作品數在 2017 CE 應該是2，但本次取得' + id_list.length);
 				}
 				// write cache
 				CeL.write_file(free_file, free);

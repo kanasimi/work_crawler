@@ -69,9 +69,7 @@ var AlphaPolis = new CeL.work_crawler({
 			// e.g., 连载中, 連載中
 			status : get_label(
 					html.between('<div class="category novel_content">',
-							'</div>'))
-			//
-			.split(/[\s\n]+/),
+							'</div>')).split(/[\s\n]+/),
 			author : get_label(html.between('<div class="author">', '</a>')),
 			last_update : get_label(html.between('<th>更新日時</th>', '</td>')),
 			site_name : 'アルファポリス'
@@ -115,15 +113,9 @@ var AlphaPolis = new CeL.work_crawler({
 	chapter_URL : function(work_data, chapter) {
 		return work_data.chapter_list[chapter - 1].url;
 	},
+	// 檢測所取得內容的章節編號是否相符。
+	check_chapter_NO : [ '<div class="total_content_block_count">', '/' ],
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
-		// 檢測所取得內容的章節編號是否相符。
-		var text = get_label(html.between(
-				'<div class="total_content_block_count">', '/'));
-		if (chapter != text) {
-			throw new Error('Different chapter: Should be ' + chapter
-					+ ', get ' + text + ' inside contents.');
-		}
-
 		this.add_ebook_chapter(work_data, chapter, {
 			title : html.between('<div class="chapter_title">', '</div>'),
 			sub_title : html.between('<h2>', '</h2>'),
