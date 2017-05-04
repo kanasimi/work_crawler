@@ -117,14 +117,20 @@ var _733dm = new CeL.work_crawler({
 		if (!chapter_data || !(chapter_data = decode(chapter_data))) {
 			return;
 		}
+		// console.log(JSON.stringify(chapter_data));
+		// console.log(chapter_data.length);
+		// CeL.set_debug(6);
 
 		// 設定必要的屬性。
-		chapter_data.image_list = chapter_data.map(function(url) {
-			return {
-				// http://733dm.xxjcw.com.cn/
-				url : 'http://733dm.zgkouqiang.cn/' + url
-			};
-		});
+		chapter_data = {
+			image_list : chapter_data.map(function(url) {
+				return {
+					// http://733dm.xxjcw.com.cn/
+					url : 'http://733dm.zgkouqiang.cn/' + url
+				};
+			})
+		};
+		// console.log(JSON.stringify(chapter_data));
 
 		return chapter_data;
 	}
