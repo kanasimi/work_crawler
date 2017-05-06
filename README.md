@@ -43,8 +43,8 @@ web pages → folder
 3. 進到解壓縮後工具檔所在的目錄，在命令行界面下執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
 
    ``` cmd
-   PATH> npm install cejs
-   PATH> move "work_crawler_loder.sample.js" "work_crawler_loder.js"
+   PROMPT> npm install cejs
+   PROMPT> move "work_crawler_loder.sample.js" "work_crawler_loder.js"
    ```
 
 4. 然後就能[開始試用](#execution-執行)囉。
@@ -97,6 +97,9 @@ web pages → folder
 ## Announce 聲明
 * 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容版權屬原作者所有，請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
 * 各漫畫網站往往不時更改結構，同時造成本工具無法作動；因此若是有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
+
+## Uninstallation 移除
+要移除本工具，只需將解壓縮後工具檔所在的目錄整個刪除即可。此外圖片檔與紀錄檔的目錄需另外手動刪除。
 
 <!--
 TODO:
