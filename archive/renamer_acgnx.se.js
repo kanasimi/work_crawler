@@ -93,6 +93,9 @@ function check_reget(XMLHttp, options) {
 		return true;
 	}
 	var html = XMLHttp.responseText;
+	if (html.includes('<title>302 Found</title>')) {
+		return true;
+	}
 	if (html.includes('<body onLoad="javascript:jump()">')) {
 		var key = html.between("setCookie('", "'"), value = html.between(
 				"'cookie' : \"", '"');

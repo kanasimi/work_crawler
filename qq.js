@@ -21,6 +21,7 @@ var qq = new CeL.work_crawler({
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
+		// TODO: "阿衰 on line":544410
 		return 'Comic/searchList/search/'
 		// e.g., 找不到"隔离带 2"，須找"隔离带"。
 		+ encodeURIComponent(work_title.replace(/\s+\d+$/, '')
