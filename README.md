@@ -66,7 +66,7 @@ web pages → folder
 
    e.g.,
    ``` sh
-   $ echo "今日限免" && node qq free
+   $ echo 今日限免： && node qq free
    $ node qq 狐妖小红娘
    $ node yomou 転生したらスライムだった件
    ```
