@@ -39,7 +39,7 @@ web pages → folder
 ### Node.js lazy installation 懶人安裝法
 為了只想趕快試用的您～（已經做過的步驟可以跳過）
 1. 先安裝 [Node.js](https://nodejs.org/)
-2. 下載並解壓縮[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)
+2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮
 3. 進到解壓縮後工具檔所在的目錄，在命令行界面下執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
 
    ``` cmd
@@ -49,7 +49,7 @@ web pages → folder
 
 4. 然後就能[開始試用](#execution-執行)囉。
 
-* 不過 npm 安裝的可能不是最新版，尚未加入新功能。當採用新版下載工具與舊版CeJS程式庫時，執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置。
+* 不過 npm 安裝的可能不是最新版，尚未加入新功能。當採用新版下載工具與舊版CeJS程式庫時，執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行舊版的 npm install。
 
 ### Normal installation 一般正常安裝
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
