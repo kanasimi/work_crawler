@@ -132,10 +132,12 @@ function get_menu_list(callback) {
 							CeL.info(this.new_files + ' new files.');
 						}
 						if (!reget || this.new_files > 0 || reget > 1) {
+							// CeL.info('get_menu_list: get next.');
 							run_next();
 						}
 					});
 				}, {
+					reget : reget,
 					get_URL_options : get_URL_options,
 					file_name : base_directory + 'menu - ' + category_name
 							+ '.' + index + '.htm'

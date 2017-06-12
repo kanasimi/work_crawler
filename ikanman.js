@@ -22,7 +22,7 @@ var ikanman = new CeL.work_crawler({
 	skip_error : true,
 
 	// 取得伺服器列表。
-	use_server_cache : true,
+	// use_server_cache : true,
 	server_URL : function() {
 		return this.script_base_URL
 		// + 'core_9D227AD5A911B7758A332C9CA35C640C.js'
