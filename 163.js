@@ -117,15 +117,24 @@ var NetEase = new CeL.work_crawler({
 				+ work_data.chapter_list[chapter - 1].sectionId;
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
-		var chapter_data = html.between('window.DATA.fromJapan', '</script>')
-				.between(';').replace(/window\.PG_CONFIG/g, 'chapter_data')
-				// 改成 true 會下載 webp
-				.replace(/window\.IS_SUPPORT_WEBP/g, 'false');
+		var seedLength = html.between('window.DATA.seedLength = ', ';') | 0,
+		//
+		chapter_data = html.between('window.PG_CONFIG', '</script>');
+		chapter_data = 'chapter_data'
+		//
+		+ chapter_data.replace(/window\.PG_CONFIG/g, 'chapter_data')
+		// 改成 true 會下載 webp
+		.replace(/window\.IS_SUPPORT_WEBP/g, 'false');
+		// console.log(chapter_data);
 		eval(chapter_data);
 
 		// 設定必要的屬性。
 		chapter_data.title = chapter_data.section.fullTitle;
 		chapter_data.image_list = chapter_data.images;
+		// 2017/6/15 改版
+		chapter_data.images.forEach(function(image) {
+			image.url = image.url.slice(0, -seedLength);
+		});
 
 		chapter_data.limited = work_data.chapter_list[chapter - 1].needPay;
 

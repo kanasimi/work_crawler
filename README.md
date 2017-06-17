@@ -8,7 +8,7 @@
 已撰寫完的各大工具網站包括：
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command line version first. 請注意：小說之下載必須先安裝 7Zip。
 
-### Japanese light novels ライトノベル 日本輕小說
+### Japanese web fictions / light novels ライトノベル 日本輕小說 日本のオンライン小説
 web pages → epub
 
 | Site | Tool file | Note |
@@ -19,14 +19,15 @@ web pages → epub
 | [小説を読もう！](http://yomou.syosetu.com/) | yomou.js | [小説家になろう](http://syosetu.com/) |
 | [ノクターンノベルズ](http://noc.syosetu.com/) | noc.js | [小説家になろう](http://syosetu.com/)の[男性読者向けの18禁部門サイト](http://noc.syosetu.com/site/faq/) |
 
-### Chinese comics 中国内地漫画 中国のWeb漫画
+### Chinese web fictions / novels 中国内地小说 中国のオンライン小説
 web pages → epub
 
 | Site | Tool file | Note |
 | --- | --- | --- |
-| ~~[顶点小说](http://www.23us.com/)~~ | ~~23us.com.js~~ | 限制了取得頁面的數量和頻率，暫時放棄。 |
+| [顶点小说](http://www.23us.cc) | 23us.js | |
+| [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | 限制了取得頁面的數量和頻率，暫時放棄。 |
 
-### Chinese comics 中国内地漫画 中国のWeb漫画
+### Chinese webcomics 中国内地漫画 中国のウェブコミック
 web pages → folder
 
 | Site | Tool file | Note |
@@ -37,9 +38,8 @@ web pages → folder
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | |
 | [网易漫画](https://manhua.163.com/) | 163.js | |
 | [733动漫网](http://www.733dm.net/) | 733dm.js | |
-| ~~[热漫吧](http://www.remanba.com/)~~ | ~~remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/6/10 未復原。 |
-| ~~[三七阅读](http://www.37yue.com/)~~ | ~~37yue.js~~ | 自 2017/6/9 下午最後一次成功連接後，2017/6/10 9時起就持續 404。 |
-| ~~[顶点小说](http://www.23us.com/)~~ | ~~23us.com.js~~ | 限制了取得頁面的數量和頻率，暫時放棄。 |
+| ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/6/10 未復原。 |
+| ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404。 |
 
 一般約需2至4小時新增或更新一網站，以達初步可用狀態。
 
