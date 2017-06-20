@@ -24,8 +24,10 @@ web pages → epub
 
 | Site | Tool file | Note |
 | --- | --- | --- |
-| [顶点小说](http://www.23us.cc) | 23us.js | |
-| [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | 限制了取得頁面的數量和頻率，暫時放棄。 |
+| [恋上你看书网](http://www.630book.la/) | 630book.js | |
+| [八一中文网](http://www.81xsw.com/) | 81xsw.js | [PTCMS](https://www.ptcms.com/)系统 |
+| [顶点小说](http://www.23us.cc) | 23us.js | PTCMS |
+| [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
 
 ### Chinese webcomics 中国内地漫画 中国のウェブコミック
 web pages → folder
