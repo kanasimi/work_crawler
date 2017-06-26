@@ -8,8 +8,8 @@
 已撰寫完的各大工具網站包括：
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command line version first. 請注意：小說之下載必須先安裝 7Zip。
 
-### Japanese web fictions / light novels ライトノベル 日本輕小說 日本のオンライン小説
-web pages → epub
+### Japanese web fictions / Japanese light novels ライトノベル 日本輕小說 日本のオンライン小説
+[novel.ja-JP/](novel.ja-JP/)*.js, web pages → epub
 
 | Site | Tool file | Note |
 | --- | --- | --- |
@@ -20,7 +20,7 @@ web pages → epub
 | [ノクターンノベルズ](http://noc.syosetu.com/) | noc.js | [小説家になろう](http://syosetu.com/)の[男性読者向けの18禁部門サイト](http://noc.syosetu.com/site/faq/) |
 
 ### Chinese web fictions / novels 中国内地小说 中国のオンライン小説
-web pages → epub
+[novel.cmn-Hans-CN/](novel.cmn-Hans-CN/)*.js, web pages → epub
 
 | Site | Tool file | Note |
 | --- | --- | --- |
@@ -31,7 +31,7 @@ web pages → epub
 | [恋上你看书网](http://www.630book.la/) | 630book.js | |
 
 ### Chinese webcomics 中国内地漫画 中国のウェブコミック
-web pages → folder
+[comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, web pages → epub
 
 | Site | Tool file | Note |
 | --- | --- | --- |
@@ -83,7 +83,7 @@ web pages → folder
    $ node yomou 転生したらスライムだった件
    ```
 
-2. 下載的檔案將放在 <code>work_crawler_loder.js</code> 所設定的目錄下。若採[懶人安裝法](#懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
+2. 下載的檔案將放在 <code>work_crawler_loder.js</code> 所設定的目錄下。若採[懶人安裝法](#nodejs-lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
 3. 若是下載出錯，**重新執行即可接續下載**。
 
 ## Workflow 工作流程

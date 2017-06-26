@@ -4,7 +4,7 @@
 
 'use strict';
 
-require('./work_crawler_loder.js');
+require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
@@ -15,3 +15,9 @@ CeL.run('application.net.work_crawler.yomou');
 // CeL.set_debug(3);
 
 CeL.yomou().start(work_id);
+
+if (false) {
+	CeL.yomou().data_of(work_id, function(work_data) {
+		console.log(work_data);
+	});
+}

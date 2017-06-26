@@ -4,7 +4,7 @@
 
 'use strict';
 
-require('./work_crawler_loder.js');
+require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
