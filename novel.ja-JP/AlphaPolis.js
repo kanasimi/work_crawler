@@ -137,8 +137,11 @@ var AlphaPolis = new CeL.work_crawler({
 	chapter_URL : function(work_data, chapter) {
 		return work_data.chapter_list[chapter - 1].url;
 	},
+	// 2017/6/27 アルファポリスアプリの小説レンタルサービス開始
+	// https://www.alphapolis.co.jp/diary/view/12394/
+	// 有些作品不再依照順序排列。
 	// 檢測所取得內容的章節編號是否相符。
-	check_chapter_NO : [ '<div class="page-count">', '/' ],
+	_check_chapter_NO : [ '<div class="page-count">', '/' ],
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		this.add_ebook_chapter(work_data, chapter, {
 			title : html.between('<div class="chapter-title">', '</div>'),
