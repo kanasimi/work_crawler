@@ -139,7 +139,7 @@ var AlphaPolis = new CeL.work_crawler({
 	},
 	// 2017/6/27 アルファポリスアプリの小説レンタルサービス開始
 	// https://www.alphapolis.co.jp/diary/view/12394/
-	// 有些作品不再依照順序排列。
+	// 有些作品章節編號可能會被跳過。
 	// 檢測所取得內容的章節編號是否相符。
 	_check_chapter_NO : [ '<div class="page-count">', '/' ],
 	parse_chapter_data : function(html, work_data, get_label, chapter) {

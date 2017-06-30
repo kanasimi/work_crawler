@@ -20,7 +20,7 @@ var PTCMS = CeL.PTCMS({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return 'html/' + work_id.slice(0, -3) + '/' + work_id + '/';
+		return 'html/' + (work_id.slice(0, -3) || 0) + '/' + work_id + '/';
 	},
 	// 取得包含章節列表的文字範圍。
 	get_chapter_count_contents : function(html) {

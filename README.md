@@ -13,7 +13,7 @@
 
 | Site | Tool file | Note |
 | --- | --- | --- |
-| [アルファポリス](http://www.alphapolis.co.jp/) | AlphaPolis.js | |
+| [アルファポリス](http://www.alphapolis.co.jp/) | AlphaPolis.js | レンタルする話は取得できない |
 | [カクヨム](https://kakuyomu.jp/) | kakuyomu.js | |
 | [ハーメルン](https://syosetu.org/) | Hameln.js | |
 | [小説を読もう！](http://yomou.syosetu.com/) | yomou.js | [小説家になろう](http://syosetu.com/) |
@@ -25,7 +25,7 @@
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [八一中文网](http://www.81xsw.com/) | 81xsw.js | [PTCMS](https://www.ptcms.com/)系统 |
-| [顶点小说](http://www.23us.cc) | 23us.js | PTCMS |
+| [顶点小说](http://www.23us.cc) | 23us.js | PTCMS。自 2017/6/27 晚最後一次連接後，2017/6/28 上午 404，晚上回復。 |
 | [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
 | [八八读书网](http://www.88dushu.com/) | 88dushu.js | 88读书网，PTCMS? |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | |
