@@ -15,8 +15,6 @@ require('../work_crawler_loder.js');
 // ----------------------------------------------------------------------------
 
 CeL.run([ 'application.storage.EPUB'
-// CeL.character.load()
-, 'data.character'
 // .to_file_name()
 , 'application.net',
 // CeL.detect_HTML_language()

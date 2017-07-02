@@ -9,13 +9,8 @@ require('../work_crawler_loder.js');
 // ----------------------------------------------------------------------------
 
 CeL.run([
-// CeL.character.load()
-'data.character'
 // CeL.detect_HTML_language()
 , 'application.locale' ]);
-
-var charset = 'gb2312';
-CeL.character.load(charset);
 
 var _733dm = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
@@ -28,7 +23,7 @@ var _733dm = new CeL.work_crawler({
 
 	// one_by_one : true,
 	base_URL : 'http://www.733dm.net/',
-	charset : charset,
+	charset : 'gb2312',
 
 	// 取得伺服器列表。
 	// http://www.733dm.net/skin/2014mh/global.js
