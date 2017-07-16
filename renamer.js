@@ -27,6 +27,8 @@ CeL.get_URL.default_user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3
 
 // e.g., "node renamer.js C target_directory"
 var target_directory = process.argv[3] || '.',
+//
+default_pages_length = 200,
 // reget === true: reget till no more new menu files.
 // reget > 1: reget ALL menu list.
 reget = 2,
@@ -35,8 +37,8 @@ category_name = /^H$/i.test(work_id) || /成年|Hcomic|noACG_H/i.test(work_id) ?
 		: 'comic',
 //
 categories = {
-	Hcomic : [ 'cache_sukebei', 'https://sukebei.nyaa.si/', '1_4', 100 ],
-	comic : [ 'cache_nyaa', 'https://nyaa.si/', '3_3', 100 ]
+	Hcomic : [ 'cache_sukebei', 'https://sukebei.nyaa.si/', '1_4', default_pages_length ],
+	comic : [ 'cache_nyaa', 'https://nyaa.si/', '3_3', default_pages_length ]
 },
 //
 category_config = categories[category_name],
@@ -84,7 +86,7 @@ if (target_directory) {
 	}
 }
 
-// CeL.set_debug(6);
+// CeL.set_debug(2);
 get_menu_list();
 
 // -------------------------------------------------------------------------------------------------
@@ -217,16 +219,23 @@ function parse_file_list(html, is_cache) {
 		CeL.fs_remove(base_directory + this.id + '.html');
 		throw 'DDOS Protection';
 	}
-	html = html.between(' id="collapseFileList"', '</table>');
+
+	html = html.between('torrent-file-list', '</div>').between('>');
+	if (!html) {
+		throw 'It seems the shame was changed!';
+	}
 	if (!is_cache) {
 		this.new_files++;
 	}
 	// 就算利用的是 cache，依然檢查檔案而不直接跳出。
 
+	CeL.debug(name, 2, 'parse_file_list');
+	// console.log(html);
+
 	var folder_list = [];
 	html.each_between(
 	//
-	'<i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;<b>', '</b>',
+	'<i class="fa fa-folder"></i>', '</a>',
 	//
 	function(token) {
 		if (token = get_label(token)) {
@@ -234,17 +243,20 @@ function parse_file_list(html, is_cache) {
 		}
 	});
 
-	// CeL.log(name);
-	// CeL.log(name + ': ' + html);
-	// console.log(html);
 	var file_list = [];
-	html.each_between('<i class="glyphicon glyphicon-file"></i>&nbsp;',
+	html.each_between('<i class="fa fa-file"></i>',
 	//
-	'</td>', function(token) {
+	'</li>', function(token) {
 		if (token = get_label(token)) {
 			file_list.push(token);
 		}
 	});
+
+	if (file_list.length === 0 && folder_list.length === 0) {
+		// shame changed?
+		throw 'Nothing get on ' + name;
+	}
+
 	// console.log(file_list);
 	if (false) {
 		CeL.fs_write(base_directory + id + '.data.json', {
@@ -255,14 +267,14 @@ function parse_file_list(html, is_cache) {
 
 	function rename_process(fso_name) {
 		var matched;
-		// CeL.debug('[' + fso_name + '] ' + name, 0, 'rename_process');
+		CeL.debug('[' + fso_name + '] ' + name, 2, 'rename_process');
 		if (PATTERN_full_latin_or_sign.test(name) || !fso_name
 		//
 		|| !(matched = fso_name.match(PATTERN_latin_fso_name))) {
 			return;
 		}
 
-		// CeL.log(matched[1] + ': ' + name);
+		CeL.debug(matched[1] + ': ' + name, 3, 'rename_process');
 
 		function rename(fso_name, is_file) {
 			var fso_key = is_file ? target_files[fso_name]
