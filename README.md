@@ -1,19 +1,20 @@
-﻿# CeJS online novel / comic downloader 小說漫畫下載工具
-- [en] Download novels→epub and comics with command line interface.
-- [TW] 批量下載小說→epub、漫畫網站的工具。命令行界面。
-- [CN] 批量下载小说→epub、漫画网站的工具。命令行界面。
-- [ja] ウェブ小説→epub、ウェブ漫画作品を一括ダウンロードツール。コマンドラインインターフェース。
+﻿# CeJS online novels / comics downloader 小說漫畫下載工具
+- [en] Download novels → epub and comics with command line interface.
+- [TW] 批量下載小說 → epub、漫畫網站的工具。命令行界面。
+- [CN] 批量下载小说 → epub、漫画网站的工具。命令行界面。
+- [ja] ウェブ小説 → epub、ウェブ漫画作品を一括ダウンロードツール。コマンドラインインターフェース。
 
 ## Completed tools 已完成網站工具
-已撰寫完的各大工具網站包括：
-* For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command line version first. 請注意：小說之下載必須先安裝 7Zip。
+* For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command line version first. 請注意：小說之下載必須先安裝 7Zip，這樣才能製作 .epub 電子書。
+
+已撰寫完的各大小說漫畫網站工具包括：
 
 ### Japanese web fictions / Japanese light novels ライトノベル 日本輕小說 日本のオンライン小説
 [novel.ja-JP/](novel.ja-JP/)*.js, web pages → epub
 
 | Site | Tool file | Note |
 | --- | --- | --- |
-| [アルファポリス](http://www.alphapolis.co.jp/) | AlphaPolis.js | レンタルする話は取得できない |
+| [アルファポリス](http://www.alphapolis.co.jp/) | AlphaPolis.js | レンタルする話は取得できません |
 | [カクヨム](https://kakuyomu.jp/) | kakuyomu.js | |
 | [ハーメルン](https://syosetu.org/) | Hameln.js | |
 | [小説を読もう！](http://yomou.syosetu.com/) | yomou.js | [小説家になろう](http://syosetu.com/) |
@@ -35,11 +36,11 @@
 
 | Site | Tool file | Note |
 | --- | --- | --- |
-| [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載付費內容** |
+| [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** |
 | [爱看漫](http://www.ikanman.com/) | ikanman.js | 看漫画 |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | |
-| [网易漫画](https://manhua.163.com/) | 163.js | |
+| [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
 | [733动漫网](http://www.733dm.net/) | 733dm.js | |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/6/10 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404。 |
@@ -61,7 +62,7 @@
 
 4. 然後就能[開始試用](#execution-執行)囉。
 
-* 不過 npm 安裝的可能不是最新版，尚未加入新功能。當採用新版下載工具與舊版CeJS程式庫時，執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行舊版的 npm install。
+* 請注意：採用 npm 安裝的可能不是最新版，尚未加入最新功能。當採用新版下載工具與舊版CeJS程式庫時，執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行舊版的 npm install。
 
 ### Normal installation 一般正常安裝
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
@@ -80,6 +81,7 @@
    ``` sh
    $ echo 今日限免： && node qq free
    $ node qq 狐妖小红娘
+   $ node 23us 斗罗大陆Ⅲ龙王传说
    $ node yomou 転生したらスライムだった件
    ```
 
@@ -99,9 +101,9 @@
 ![接續下載](https://lh3.googleusercontent.com/LMpFtmfIIeH3bCbM2DuEX_AJ2r17X-_OGM8O6EitrLYLRzqxYn0tt6CbjZciL1Hav60vDEXAMFILWviPu-wFjqfpuO_srKNKbVUVr-5XJ7wBm0J6r730vYVZ4Iun1Ug5tm7iRBK24kWZKAJwD6Fpx_WagdQji81k6yVvmMO-_KHx-UwaUtox2Z9CLQvpHG63XqAcoTJdob3_gBCyen82HNlmmQLMLFrvjvFeywYrR2YsOkem_fypz5jvM1UM9BS8Bd0WzkjQ5SoE_SNgF_EhOuESbTu_pmLjZL0OoZX0eAUisfcGnLptk0ea8eM4KqU3oOQhG44emNxuH31gQMHQiXVd-7-X2H_VK2IhlosyPQuObveuGv6C0fjNJmoJdEFjPPlZVx25JuGJZe_PfRkdkoliNHcn5UMaqp8YiTF7wvGOktLnE2OBJXx7DuvUzjO2VY8aoebwdRjJI9ft-Co0zIe1AZUW0rcmrWROqFJNTHYNoLyVo_lmxgw_THlgv1GaY5BhKfKOXC_Zx-n6ye_xtQgO-wxSgDaCvBPuE7G8VMGdYyl-12LLa1IKROtqjfVePilpWRsWq5tO1SnCb1rn2ulDoF9cxlIo3yKMtpdWCCppM9ro=w745-h481-no)
 
 ## Purpose 公開目的
-* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [work_crawler module](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各漫畫網站。
-* 展示程式撰寫當時，各漫畫網站之網站資料結構。
-* 提供離線瀏覽漫畫功能，以利個人化閱覽方式。
+* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [work_crawler module](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
+* 展示程式撰寫當時，各線上小說漫畫網站之網站資料結構。
+* 提供離線瀏覽小說漫畫功能，以利個人化閱覽方式。
 * 增加對閱讀權的掌控能力，預防數十年後找不到記憶中閱覽過的作品。
 
 非常歡迎[提供使用意見與改善建議](https://github.com/kanasimi/work_crawler/issues/new)。
