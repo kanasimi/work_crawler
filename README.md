@@ -38,6 +38,7 @@
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** |
 | [爱看漫](http://www.ikanman.com/) | ikanman.js | 看漫画 |
+| [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
@@ -57,7 +58,6 @@
 
    ``` cmd
    PROMPT> npm install cejs
-   PROMPT> move "work_crawler_loder.sample.js" "work_crawler_loder.js"
    ```
 
 4. 然後就能[開始試用](#execution-執行)囉。
@@ -67,25 +67,27 @@
 ### Normal installation 一般正常安裝
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
 2. Setup [_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt) if necessary.
-2. Setup [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.sample.js). 最後設定好 work_crawler_loder.js。
+2. Setup [work_crawler_loder.config.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.config.js). 最後設定好 work_crawler_loder.config.js。例如指定 <code>global.data_directory</code>。
 
 ## Execution 執行
 所有操作都必須進到工具檔所在的目錄，在命令行界面下執行。
 1. 確認要下載的網站名與作品名。之後在命令行界面下，執行：
 
    ``` sh
-   $ node 工具檔名.js "作品名"
+   $ node 工具檔名.js "作品名" [option=true]
    ```
 
    e.g.,
    ``` sh
    $ echo 今日限免： && node qq free
-   $ node qq 狐妖小红娘
+   $ node qq.js 狐妖小红娘 skip_error=true
    $ node 23us 斗罗大陆Ⅲ龙王传说
+   $ node 2manhua 大主宰 recheck=true
+   $ node ikanman l=ikanman.txt recheck=true
    $ node yomou 転生したらスライムだった件
    ```
 
-2. 下載的檔案將放在 <code>work_crawler_loder.js</code> 所設定的目錄下。若採[懶人安裝法](#nodejs-lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
+2. 下載的檔案將放在 <code>global.data_directory</code> 所設定的目錄下。若採[懶人安裝法](#nodejs-lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
 3. 若是下載出錯，**重新執行即可接續下載**。
 
 ## Workflow 工作流程

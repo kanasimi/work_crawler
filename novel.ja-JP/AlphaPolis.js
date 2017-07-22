@@ -131,10 +131,6 @@ var AlphaPolis = new CeL.work_crawler({
 		});
 	},
 
-	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
-		return work_data.chapter_list[chapter - 1].url;
-	},
 	// 2017/6/27 アルファポリスアプリの小説レンタルサービス開始
 	// https://www.alphapolis.co.jp/diary/view/12394/
 	// 有些作品章節編號可能會被跳過。

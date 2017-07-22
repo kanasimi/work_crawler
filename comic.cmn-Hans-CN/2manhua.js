@@ -11,6 +11,7 @@ require('../work_crawler_loder.js');
 var _2manhua = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
+	// 本站常常無法取得圖片，因此得多重新檢查。
 	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
 	// recheck : true,
 	// 當無法取得chapter資料時，直接嘗試下一章節。在手動+監視下recheck時可併用此項。
@@ -62,7 +63,8 @@ var _2manhua = new CeL.work_crawler({
 	parse_work_data : function(html, get_label, exact_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
-			title : html.between('<h1>', '</h1>'),
+			title : html.between('og:novel:title" content="', '"')
+					|| html.between('<h1>', '</h1>'),
 
 			// 選擇性屬性：須配合網站平台更改。
 			// <meta property="og:novel:status" content="已完结"/>
@@ -71,13 +73,17 @@ var _2manhua = new CeL.work_crawler({
 			description : get_label(html.between('"intro-all"', '</div>')
 					.between('>'))
 		};
+		// 由 meta data 取得作品資訊。
+		exact_work_data(work_data, html);
 		exact_work_data(work_data, html.between('book-detail', 'intro-act'),
 				/<strong>([^<>]+?)<\/strong>(.+?)<\/span>/g);
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {
 		work_data.chapter_list = [];
-		var matched,
+		var matched, page,
+		// 2017/7/22
+		PATTERN_page = /<ul (?:style="display:block;")?>(.+?)<\/ul>/g,
 		/**
 		 * e.g., <code>
 		<li><a href="/comic/25652/072.html" title="72回 碧霞坠" class="status0" target="_blank"><span>72回<i>14p</i></span></a></li>
@@ -86,16 +92,24 @@ var _2manhua = new CeL.work_crawler({
 		PATTERN_chapter =
 		// [all,href,title,inner]
 		/<li><a href="([^"<>]+)" title="([^"<>]+)"[^<>]*>(.+?)<\/a><\/li>/g;
-		while (matched = PATTERN_chapter.exec(html)) {
-			matched[2] = matched[2].trim();
-			if (matched[3] = matched[3].between('<i>', '</i>')) {
-				matched[2] = matched[2] + ' ' + matched[3];
+		while (page = PATTERN_page.exec(html)) {
+			page = page[1];
+			var chapter_list = [];
+			while (matched = PATTERN_chapter.exec(page)) {
+				matched[2] = matched[2].trim();
+				if (matched[3] = matched[3].between('<i>', '</i>')) {
+					matched[2] = matched[2] + ' ' + matched[3];
+				}
+				chapter_list.push({
+					title : matched[2],
+					url : encodeURI(matched[1])
+				});
 			}
-			work_data.chapter_list.push({
-				url : matched[1],
-				title : matched[2]
-			});
+			work_data.chapter_list.append(chapter_list.reverse());
 		}
+
+		return;
+
 		work_data.chapter_list.sort(function(chapter_data_1, chapter_data_2) {
 			var matched_1 = chapter_data_1.url.match(/(\d+)\.htm/),
 			// 依照.url排序。
@@ -109,10 +123,6 @@ var _2manhua = new CeL.work_crawler({
 		});
 	},
 
-	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
-		return work_data.chapter_list[chapter - 1].url;
-	},
 	parse_chapter_data : function(html, work_data, get_label) {
 		// decode chapter data
 		function decode(code) {

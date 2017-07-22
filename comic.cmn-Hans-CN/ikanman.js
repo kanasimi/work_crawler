@@ -9,7 +9,8 @@ require('../work_crawler_loder.js');
 // ----------------------------------------------------------------------------
 
 var ikanman = new CeL.work_crawler({
-	// recheck:從頭檢測所有作品之所有章節。
+	// 本站常常無法取得圖片，因此得多重新檢查。
+	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
 	// recheck : true,
 	// one_by_one : true,
 
@@ -142,7 +143,7 @@ var ikanman = new CeL.work_crawler({
 				if (chapter_list.some_without_id) {
 					CeL.warn('有些篇章之URL檔名非數字: '
 							+ JSON.stringify(chapter_list.some_without_id));
-					chapter_list = chapter_list.reverse();
+					chapter_list.reverse();
 				} else {
 					chapter_list = chapter_list.sort(function(a, b) {
 						// 排序以.html檔案檔名(序號)為準。
@@ -179,10 +180,6 @@ var ikanman = new CeL.work_crawler({
 			}
 			callback();
 		}, null, null, this.get_URL_options);
-	},
-	chapter_URL : function(work_data, chapter) {
-		// console.log(work_data.chapter_list);
-		return this.base_URL + work_data.chapter_list[chapter - 1].url;
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		// decode chapter data

@@ -57,7 +57,7 @@ cache_file = base_directory + 'data.json',
 //
 cache_data = CeL.get_JSON(cache_file),
 // file / folder name
-PATTERN_latin_fso_name = /^([\u0020-\u007F]+)(\.[a-z]+)?$/,
+PATTERN_latin_fso_name = /^([\u0020-\u007F]+?)(\.[a-zA-Z]{2,9})?$/,
 // [[en:Numerals_in_Unicode#Roman_numerals]]
 PATTERN_full_latin_or_sign = /^[\u0020-\u00FF’★☆♥♡Ⅰ-ↈ①-⑳⑴-⑽㈠-㈩]+$/;
 
@@ -86,7 +86,7 @@ if (target_directory) {
 	}
 }
 
-// CeL.set_debug(2);
+// CeL.set_debug(3);
 get_menu_list();
 
 // -------------------------------------------------------------------------------------------------
@@ -247,7 +247,8 @@ function parse_file_list(html, is_cache) {
 	html.each_between('<i class="fa fa-file"></i>',
 	//
 	'</li>', function(token) {
-		if (token = get_label(token)) {
+		token = token.between(null, '<span class="file-size">') || token;
+		if (token = get_label(token).trim()) {
 			file_list.push(token);
 		}
 	});
@@ -274,8 +275,6 @@ function parse_file_list(html, is_cache) {
 			return;
 		}
 
-		CeL.debug(matched[1] + ': ' + name, 3, 'rename_process');
-
 		function rename(fso_name, is_file) {
 			var fso_key = is_file ? target_files[fso_name]
 					: target_directories[fso_name];
@@ -296,10 +295,12 @@ function parse_file_list(html, is_cache) {
 			}
 		}
 
+		CeL.debug(matched[0] + ': ' + name, 3, 'rename_process');
 		rename(matched[0], true);
 		rename(matched[0].replace(/ /g, '_'), true);
 		rename(matched[0].replace(/_/g, ' '), true);
 
+		CeL.debug(matched[1] + ': ' + name, 3, 'rename_process');
 		rename(matched[1]);
 		rename(matched[1].replace(/ /g, '_'));
 		rename(matched[1].replace(/_/g, ' '));

@@ -92,6 +92,10 @@ manhuatai = new CeL.work_crawler({
 		if (work_data.chapter_list.length > 1) {
 			// 轉成由舊至新之順序。
 			work_data.chapter_list.reverse();
+		} else {
+			// 可以嘗試用數字的方法一個一個try。
+			// e.g., http://www.manhuatai.com/faqishaonv/99.html
+			// http://www.kanman.com/27965/99.html
 		}
 	},
 

@@ -120,10 +120,6 @@ var kakuyomu = new CeL.work_crawler({
 		});
 	},
 
-	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
-		return work_data.chapter_list[chapter - 1].url;
-	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		// <div class="widget-episodeBody js-episode-body" ...>
 		var part_title = [];

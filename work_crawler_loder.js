@@ -4,18 +4,38 @@
 
 'use strict';
 
-
 // ----------------------------------------------------------------------------
-// 若有 CeJS library 則用之。
+
+// npm: 若有 CeJS module 則用之。
 global.use_cejs_mudule = true;
-// require('./_CeL.loader.nodejs.js');
+
+// default directory to place images '': the same as the .js running
+global.data_directory = '';
 
 try {
-	// Load CeJS library.
-	require('cejs');
-
+	// Load configuration.
+	require('./work_crawler_loder.config.js');
 } catch (e) {
-	// ----------------------------------------------------------------------------
+}
+
+// ----------------------------------------------------------------------------
+// Load CeJS library.
+
+try {
+	require('./_CeL.loader.nodejs.js');
+} catch (e) {
+}
+
+// @see _CeL.loader.nodejs.js
+
+if (typeof CeL !== 'function' && use_cejs_mudule) {
+	try {
+		require('cejs');
+	} catch (e) {
+	}
+}
+
+if (typeof CeL !== 'function') {
 	// Load CeJS library. For node.js loading.
 	// Copy/modified from "/_for include/node.loader.js".
 	'path/to/cejs'
@@ -66,13 +86,16 @@ global.work_id = CeL.env.arg_hash
 if (!work_id && process.mainModule
 		&& (typeof need_work_id === 'undefined' || need_work_id)) {
 	var main_script = process.mainModule.filename.match(/[^\\\/]+$/)[0];
-	CeL.log('Usage:\nnode ' + main_script + ' "work title / work id"\nnode '
-			+ main_script + ' "l=work list file"');
+	CeL.log('Usage:\nnode ' + main_script
+			+ ' "work title / work id" [option=true]\nnode ' + main_script
+			+ ' "l=work list file" [option=true]');
 	process.exit();
 }
 
-// default directory '': the same as the .js running
-global.data_directory = '';
+if (data_directory && !CeL.directory_exists(data_directory)) {
+	CeL.info('下載的檔案將放在工具檔所在的目錄下。');
+	data_directory = '';
+}
 
 // main_directory 必須以 path separator 作結。
 CeL.work_crawler.prototype.main_directory = data_directory

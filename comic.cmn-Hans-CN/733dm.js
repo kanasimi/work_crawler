@@ -93,10 +93,6 @@ var _733dm = new CeL.work_crawler({
 		}
 	},
 
-	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
-		return work_data.chapter_list[chapter - 1].url;
-	},
 	parse_chapter_data : function(html, work_data) {
 		function decode(packed) {
 			var photosr = [];
