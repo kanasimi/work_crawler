@@ -17,9 +17,12 @@ var PTCMS = CeL.PTCMS({
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'modules/article/search.php?'
+	baidu_cse : '7838902352036767286',
+
+	// 解析 作品名稱 → 作品id get_work()
+	_search_URL : 'modules/article/search.php?'
 			+ 'searchtype=articlename&searchkey=',
-	parse_search_result : function(html, get_label) {
+	_parse_search_result : function(html, get_label) {
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
 		id_list = [], get_next_between = html.find_between(

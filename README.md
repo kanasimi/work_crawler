@@ -62,9 +62,9 @@
 
 4. 然後就能[開始試用](#execution-執行)囉。
 
-* 請注意：採用 npm 安裝的可能不是最新版，尚未加入最新功能。當採用新版下載工具與舊版CeJS程式庫時，執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行舊版的 npm install。
+* 請注意：採用 <code>npm</code> 安裝的可能不是最新版，尚未加入最新功能。當採用新版下載工具與舊版CeJS程式庫時，執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行舊版的 npm install。
 
-### Normal installation 一般正常安裝
+### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
 2. Setup [_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt) if necessary.
 2. Setup [work_crawler_loder.config.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.config.js). 最後設定好 work_crawler_loder.config.js。例如指定 <code>global.data_directory</code>。

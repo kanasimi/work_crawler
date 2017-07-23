@@ -36,32 +36,13 @@ if (typeof CeL !== 'function' && use_cejs_mudule) {
 }
 
 if (typeof CeL !== 'function') {
-	// Load CeJS library. For node.js loading.
-	// Copy/modified from "/_for include/node.loader.js".
-	'path/to/cejs'
-	// 載入泛用（非特殊目的使用）之功能。
-	.split('|').some(function(path) {
-		if (path.charAt(0) === '#') {
-			// path is a comment
-			return;
-		}
-		try {
-			// accessSync() throws if any accessibility checks fail, and does
-			// nothing otherwise.
-			require('fs').accessSync(path);
-			var loader = '/_for include/node.loader.js';
-			require(path + (path.indexOf('/') !== -1 ? loader
-			//
-			: loader.replace(/\//g, '\\')));
-			return true;
-		} catch (e) {
-		}
-	});
-
-	if (typeof CeL !== 'function') {
-		// No CeJS library.
-		throw '請先安裝 CeJS library:\nnpm install cejs';
-	}
+	console.error('Failed to load CeJS library!\n');
+	console.info('請先安裝 CeJS library:\nnpm install cejs\n\n'
+	//
+	+ 'Or you may trying the latest version:\n'
+	//
+	+ 'See https://github.com/kanasimi/CeJS');
+	throw 'No CeJS library';
 }
 
 // ----------------------------------------------------------------------------
