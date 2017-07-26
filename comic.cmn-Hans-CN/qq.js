@@ -28,7 +28,9 @@ var qq = new CeL.work_crawler({
 		// e.g., "Zero -零之镇魂曲-" → "Zero-零之镇魂曲-"
 		// e.g., "七公主 第三季" → "七公主第三季"
 		// e.g., "死神/境·界" → "死神境·界"
-		.replace(/[ \/]+/g, ''));
+		.replace(/[ \/]+/g, '')
+		// "军阀老公：沈沈要上位" → "军阀老公"
+		.replace(/：.+$/g, ''));
 	},
 	parse_search_result : function(html) {
 		var id_data = CeL.null_Object(),

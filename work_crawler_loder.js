@@ -15,6 +15,12 @@ global.data_directory = '';
 try {
 	// Load configuration.
 	require('./work_crawler_loder.config.js');
+	try {
+		// 若是目標目錄無法存取，那就放在當前目錄下。
+		require('fs').accessSync(data_directory);
+	} catch (e) {
+		data_directory = '';
+	}
 } catch (e) {
 }
 

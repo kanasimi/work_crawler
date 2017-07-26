@@ -117,7 +117,9 @@ var _733dm = new CeL.work_crawler({
 			image_list : chapter_data.map(function(url) {
 				return {
 					// http://733dm.xxjcw.com.cn/
-					url : 'http://733dm.zgkouqiang.cn/' + url
+					// http://733dm.zgkouqiang.cn/
+					// 2017/7/24:
+					url : 'http://733.733dm.net/' + url
 				};
 			})
 		};

@@ -17,6 +17,7 @@ var PTCMS = CeL.PTCMS({
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
+	// 2017/7/24: 630book 這兩天(之前)開始採用百度搜索。
 	baidu_cse : '7838902352036767286',
 
 	// 解析 作品名稱 → 作品id get_work()

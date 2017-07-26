@@ -84,6 +84,7 @@
    $ node 23us 斗罗大陆Ⅲ龙王传说
    $ node 2manhua 大主宰 recheck=true
    $ node ikanman l=ikanman.txt recheck=true
+   $ echo "via id" && node 630book 267
    $ node yomou 転生したらスライムだった件
    ```
 
