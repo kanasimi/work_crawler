@@ -4,6 +4,10 @@
 - [CN] 批量下载小说 → epub、漫画网站的工具。命令行界面。
 - [ja] ウェブ小説 → epub、ウェブ漫画作品を一括ダウンロードツール。コマンドラインインターフェース。
 
+## Features 特點
+* 可自動下載小說封面以及章節中的插圖。
+* 可自行配置與設定。
+
 ## Completed tools 已完成網站工具
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command line version first. 請注意：小說之下載必須先安裝 7Zip，這樣才能製作 .epub 電子書。
 
@@ -30,6 +34,9 @@
 | [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
 | [八八读书网](http://www.88dushu.com/) | 88dushu.js | 88读书网，PTCMS? |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | |
+| [飘天文学](http://www.piaotian.com/) | piaotian.js | NOT PTCMS |
+
+* 中國大陸小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁子母或是打星號，或者數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
 ### Chinese webcomics 中国内地漫画 中国のウェブコミック
 [comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, web pages → epub
@@ -106,7 +113,7 @@
 ## Purpose 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [work_crawler module](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
 * 展示程式撰寫當時，各線上小說漫畫網站之網站資料結構。
-* 提供離線瀏覽小說漫畫功能，以利個人化閱覽方式。
+* 提供離線瀏覽小說漫畫功能，以利個人化閱覽方式。增進閱覽體驗、掌控閱覽環境。
 * 增加對閱讀權的掌控能力，預防數十年後找不到記憶中閱覽過的作品。
 
 非常歡迎[提供使用意見與改善建議](https://github.com/kanasimi/work_crawler/issues/new)。

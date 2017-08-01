@@ -95,7 +95,9 @@ var qq = new CeL.work_crawler({
 					parse_html(XMLHttp);
 					finish_free();
 				});
-			});
+			}, this.charset, null, Object.assign({
+				error_retry : this.MAX_ERROR
+			}, this.get_URL_options));
 		}
 	},
 	// id_of_search_result : function(cached_data) { return cached_data; },

@@ -22,7 +22,6 @@ var kakuyomu = new CeL.work_crawler({
 	// 'changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。
 	recheck : 'changed',
 
-	// one_by_one : true,
 	base_URL : 'https://kakuyomu.jp/',
 
 	// 解析 作品名稱 → 作品id get_work()

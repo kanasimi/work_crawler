@@ -30,6 +30,7 @@ var PTCMS = CeL.PTCMS({
 				'<td class="odd" align="center"><a href="/shu/', '</a>'), text;
 
 		while ((text = get_next_between()) !== undefined) {
+			// 從URL網址中解析出作品id。
 			var matched = text.between(null, '"').match(/([\d_]+)\.html$/);
 			id_list.push(matched[1]);
 			matched = text.between('>');

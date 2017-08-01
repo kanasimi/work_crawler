@@ -15,10 +15,10 @@ require('../work_crawler_loder.js');
 // ----------------------------------------------------------------------------
 
 CeL.run([ 'application.storage.EPUB'
-// .to_file_name()
-, 'application.net',
 // CeL.detect_HTML_language()
 , 'application.locale' ]);
+
+// ----------------------------------------------------------------------------
 
 var AlphaPolis = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
@@ -28,14 +28,13 @@ var AlphaPolis = new CeL.work_crawler({
 	// 'changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。
 	recheck : 'changed',
 
-	// one_by_one : true,
 	base_URL : 'https://www.alphapolis.co.jp/',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search?query=',
 	// till 20170619, use POST. 20170620 AlphaPolis 改版, use UTF-8.
 	search_URL_2016_to_20170619 : function(work_title) {
-		return [ this.base_URL + 'top/search/', {
+		return [ 'top/search/', {
 			// 2: 小説
 			'data[tab]' : 2,
 			'data[refer]' : work_title
