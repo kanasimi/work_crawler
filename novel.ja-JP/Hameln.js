@@ -192,5 +192,5 @@ var Hameln = new CeL.work_crawler({
 // CeL.set_debug(3);
 
 // for 年齢確認: あなたは18歳以上ですか？
-Hameln.get_URL_options.agent.last_cookie = 'over18=off';
+Hameln.get_URL_options.cookie = 'over18=off';
 Hameln.start(work_id);

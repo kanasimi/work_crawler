@@ -80,7 +80,8 @@ if (!work_id && process.mainModule
 }
 
 if (data_directory && !CeL.directory_exists(data_directory)) {
-	CeL.info('下載的檔案將放在工具檔所在的目錄下。');
+	CeL.warn('Warning: Can not access ' + data_directory
+			+ '!\n下載的檔案將放在工具檔所在的目錄下。');
 	data_directory = '';
 }
 

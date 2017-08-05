@@ -26,5 +26,5 @@ var syosetu = CeL.yomou({
 // CeL.set_debug(3);
 
 // for 年齢確認
-syosetu.get_URL_options.agent.last_cookie = 'over18=yes';
+syosetu.get_URL_options.cookie = 'over18=yes';
 syosetu.start(work_id);
