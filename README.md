@@ -30,7 +30,7 @@
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [八一中文网](http://www.81xsw.com/) | 81xsw.js | [PTCMS](https://www.ptcms.com/)系统 |
-| [顶点小说](http://www.23us.cc) | 23us.js | PTCMS。自 2017/6/27 晚最後一次連接後，2017/6/28 上午 404，晚上回復。 |
+| [顶点小说](http://www.23us.cc) | 23us.js | PTCMS |
 | [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
 | [八八读书网](http://www.88dushu.com/) | 88dushu.js | 88读书网，PTCMS? |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | |
@@ -44,14 +44,14 @@
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** |
-| [爱看漫](http://www.ikanman.com/) | ikanman.js | 看漫画 |
+| [爱看漫](http://www.ikanman.com/) | ikanman.js | 看漫画。自 2017/8/7 晚最後一次連接後，持續 404 至 2017/6/10 未復原。。 |
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
 | [733动漫网](http://www.733dm.net/) | 733dm.js | |
-| ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/6/10 未復原。 |
-| ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404。 |
+| ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/8/7 未復原。 |
+| ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/8/7 未復原。 |
 
 一般約需2至4小時新增或更新一網站，以達初步可用狀態。
 
@@ -109,6 +109,10 @@
 接續下載時，將從上次的進度（最後下載的章節）接著下載。
 
 ![接續下載](https://lh3.googleusercontent.com/LMpFtmfIIeH3bCbM2DuEX_AJ2r17X-_OGM8O6EitrLYLRzqxYn0tt6CbjZciL1Hav60vDEXAMFILWviPu-wFjqfpuO_srKNKbVUVr-5XJ7wBm0J6r730vYVZ4Iun1Ug5tm7iRBK24kWZKAJwD6Fpx_WagdQji81k6yVvmMO-_KHx-UwaUtox2Z9CLQvpHG63XqAcoTJdob3_gBCyen82HNlmmQLMLFrvjvFeywYrR2YsOkem_fypz5jvM1UM9BS8Bd0WzkjQ5SoE_SNgF_EhOuESbTu_pmLjZL0OoZX0eAUisfcGnLptk0ea8eM4KqU3oOQhG44emNxuH31gQMHQiXVd-7-X2H_VK2IhlosyPQuObveuGv6C0fjNJmoJdEFjPPlZVx25JuGJZe_PfRkdkoliNHcn5UMaqp8YiTF7wvGOktLnE2OBJXx7DuvUzjO2VY8aoebwdRjJI9ft-Co0zIe1AZUW0rcmrWROqFJNTHYNoLyVo_lmxgw_THlgv1GaY5BhKfKOXC_Zx-n6ye_xtQgO-wxSgDaCvBPuE7G8VMGdYyl-12LLa1IKROtqjfVePilpWRsWq5tO1SnCb1rn2ulDoF9cxlIo3yKMtpdWCCppM9ro=w745-h481-no)
+
+![小說 → epub list](https://lh3.googleusercontent.com/E1IHu14DmtTyB5FO090wrAQ2szVB3TxUIQAuQfqklRITRA-zE6r8aG22nSAFQvRpncooGCN_q9Lym1bsOaCSrFY9Yadvapzjkqbi9F4iQIBV_IgZUKMB5tURe9B_XtOikcQ4lTg4dBhZPnCI1w-cM9J4rdyg3jvXpej-vT3AZyFQJZUDBLOCEKmRCvt9va1XZslmkPTjegDD2XxZ_Eff6KGRVaLXUyOfqngT-EGwV2Wn82AN20bgmw3yVRjLWzzzKHTT3ZR46QWhHskR_3QcfWwOJZN8nLTmXZVXfuL3EbXKh5xEVUZnUc-HeOxUSp6QIEQlowCZu5jKW8d2YQtiP1xnmabDk4VpuNWVYRWHrgAdb8ahE-e7EPU0iuj40lTrUJ4rxOSp9G35AtYDFDy33GOOsxXvv1UO2KitCXp56vfdjyuOPZL0-vLdJIJ41aJ8RBhsaOlxhiWfLA9AqaNoUOWBojx-6CiSLFc6iisiSWk30r9x2rf-4eDYiB_UmvHlLpZCIIci3YAyREy2cqJ-QQSC76gphXoQh4RPW4ThAX_rAEmh4mfgojmTvgDJqdZCtC103CJASBcJYvt1ZpBDuLSfzdRZF64VaOynO6ln9trimMjTI6fc6zUIL-GR_7wtEsnVKwLthalI-0qMlEf0Og3MHs8D6wkkthrzmu5WyzZG6g=w1366-h738-no)
+
+![小說 → epub](https://lh3.googleusercontent.com/zXxohSbIAwXJuNdmq039hPVTPrFGf_DTUbhVzrIGNjr_9MT08ATuOsi6eMS1kTNlEt502dQeWNGCnRl8_kM6sWMrsTH8LINnKg7IiMxRj7wF4TR-Tpbt_fVVtHyI_lApDUUG_niDE4ZUphSRCTccLMiKAl3TW7qHqg6PsO4LxkntcF6VG3RPx7d2gb7mBSe-W9_06c3-Zaaq9npqpx8I2Yx5egYbwIT2T7Rsuw3WoeGN153SqrfJpeMQudvQeNbU7DREdqWT3g664Eqhfi73JI2YVPsyL5ntIlHuPTvGnOFCV5o1Qh2SlRMs0q2uVZs3PfkTc81ea0sO6eROnLGxJI3_2gRqVYlp8zkaPymo-t0mlcdcXj-dOuvke9o7ckqa-8-8JyTyzPWUZvZVdEVEI3FS-nv1aoDOs169xZnPuz1yYt0IoKS1LwObYYW6KMzTNAi-fCp7JNvtMzKZRy6aI9PbwDfEY0S178aaF_A6-p7udFtsb31Dy11j4BmT911wiYwPCNbRRJqWA0AaLJIcetC0jjY-BugWLqePsVZTgzNocwMIUe8xj54kZOy9aD4mckFXXkS9BHnwbr0096nQQ5GduKGQATSRvdSFfSu-ttOMZExz0DKcxyKimPiir7KZ-jzMUMbW9F3AS4mn2lKsTdRwhtieux10ojXq6Pdqap8VIA=w1366-h738-no)
 
 ## Purpose 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [work_crawler module](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。

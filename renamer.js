@@ -25,10 +25,13 @@ CeL.run(
 CeL.get_URL.default_user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 		+ Math.random();
 
+var torrent_directory = 'torrent' + CeL.env.path_separator,
 // e.g., "node renamer.js C target_directory"
-var target_directory = process.argv[3] || '.',
+target_directory = process.argv[3] || '.',
 //
-default_pages_length = 200,
+default_menu_page_length = 300,
+// start from menu NO. 1
+default_menu_page_starts = 1,
 // reget === true: reget till no more new menu files.
 // reget > 1: reget ALL menu list.
 reget = 2,
@@ -37,8 +40,9 @@ category_name = /^H$/i.test(work_id) || /成年|Hcomic|noACG_H/i.test(work_id) ?
 		: 'comic',
 //
 categories = {
-	Hcomic : [ 'cache_sukebei', 'https://sukebei.nyaa.si/', '1_4', default_pages_length ],
-	comic : [ 'cache_nyaa', 'https://nyaa.si/', '3_3', default_pages_length ]
+	Hcomic : [ 'cache_sukebei', 'https://sukebei.nyaa.si/', '1_4',
+			default_menu_page_length ],
+	comic : [ 'cache_nyaa', 'https://nyaa.si/', '3_3', default_menu_page_length ]
 },
 //
 category_config = categories[category_name],
@@ -116,6 +120,7 @@ function check_reget(XMLHttp, options) {
 }
 
 var get_URL_options = {
+	error_retry : 4,
 	check_reget : check_reget
 };
 
@@ -125,30 +130,29 @@ function get_menu_list(callback) {
 		CeL.info('get_menu_list: menu ' + category_name + ' ' + index + '/'
 				+ last_count);
 		CeL.get_URL_cache(base_URL + '?c=' + category_NO + '&p=' + index,
-				function(html, error, XMLHttp) {
-					for_menu_list(html, function() {
-						CeL.fs_write(cache_file, cache_data);
-						if (reget && this.new_files === 0) {
-							CeL.info('No more new menu files.');
-						} else {
-							CeL.info(this.new_files + ' new files.');
-						}
-						if (!reget || this.new_files > 0 || reget > 1) {
-							// CeL.info('get_menu_list: get next.');
-							run_next();
-						}
-					});
-				}, {
-					reget : reget,
-					get_URL_options : get_URL_options,
-					file_name : base_directory + 'menu - ' + category_name
-							+ '.' + index + '.htm'
-				});
+		//
+		function(html, error, XMLHttp) {
+			for_menu_list(html, function() {
+				CeL.fs_write(cache_file, cache_data);
+				if (reget && this.new_files === 0) {
+					CeL.info('No more new menu files.');
+				} else {
+					CeL.info(this.new_files + ' new files.');
+				}
+				if (!reget || this.new_files > 0 || reget > 1) {
+					// CeL.info('get_menu_list: get next.');
+					run_next();
+				}
+			});
+		}, {
+			reget : reget,
+			get_URL_options : get_URL_options,
+			file_name : base_directory + 'menu - ' + category_name + '.'
+					+ index + '.htm'
+		});
 	}
 
-	CeL.run_serial(for_menu_NO, last_count,
-	// start from NO. 1
-	1, callback);
+	CeL.run_serial(for_menu_NO, last_count, default_menu_page_starts, callback);
 }
 
 function for_menu_list(html, callback) {
@@ -187,6 +191,7 @@ function get_file_list(callback, id) {
 	CeL.get_URL_cache(base_URL + id,
 	//
 	parse_file_list.bind(this), {
+		// reget : true,
 		get_URL_options : get_URL_options,
 		file_name : base_directory + id.replace(/\//g, '-') + '.html'
 	});
@@ -201,11 +206,12 @@ function for_file_page(html) {
 		CeL.error(name + '\n' + html);
 	}
 	CeL.get_URL_cache(base_URL + '?page=view&tid=' + id + '&' + matched[0],
-			parse_file_list, {
-				get_URL_options : get_URL_options,
-				file_name : base_directory + id.replace(/\//g, '-')
-						+ '.list.htm'
-			});
+	//
+	parse_file_list, {
+		// reget : true,
+		get_URL_options : get_URL_options,
+		file_name : base_directory + id.replace(/\//g, '-') + '.list.htm'
+	});
 }
 
 function get_label(html) {
@@ -213,7 +219,28 @@ function get_label(html) {
 }
 
 // 取得 .torrent 的檔案列表。
-function parse_file_list(html, is_cache) {
+function parse_file_list(html, is_cache, got_torrent) {
+	if (torrent_directory && !got_torrent) {
+		var _this = this, matched = html.match(/ href="([^<>"']+\.torrent)"/);
+		if (matched) {
+			matched = matched[1].replace(/^[\\\/]/, '');
+			CeL.get_URL_cache(base_URL + matched,
+			//
+			function(_html, error, XMLHttp) {
+				if (error)
+					CeL.error(error);
+				parse_file_list.call(_this, html, is_cache, true);
+			}, {
+				reget : reget,
+				charset : 'binary',
+				get_URL_options : get_URL_options,
+				directory : base_directory + torrent_directory
+			});
+			// 等取得.torrent檔案再執行。
+			return;
+		}
+	}
+
 	var name = get_label(html.between('<h3 class="panel-title">', '</h3>'));
 	if (!name && html.includes('DDOS Protection')) {
 		CeL.fs_remove(base_directory + this.id + '.html');
@@ -222,6 +249,7 @@ function parse_file_list(html, is_cache) {
 
 	html = html.between('torrent-file-list', '</div>').between('>');
 	if (!html) {
+		// console.log(arguments[0]);
 		throw 'It seems the shame was changed!';
 	}
 	if (!is_cache) {

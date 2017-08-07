@@ -15,13 +15,20 @@ global.data_directory = '';
 try {
 	// Load configuration.
 	require('./work_crawler_loder.config.js');
+} catch (e) {
+}
+
+if (data_directory
+// && !CeL.directory_exists(data_directory)
+) {
 	try {
 		// 若是目標目錄無法存取，那就放在當前目錄下。
 		require('fs').accessSync(data_directory);
 	} catch (e) {
+		console.warn('Warning: Can not access [' + data_directory
+				+ ']!\n下載的檔案將放在工具檔所在的目錄下。');
 		data_directory = '';
 	}
-} catch (e) {
 }
 
 // ----------------------------------------------------------------------------
@@ -73,16 +80,17 @@ global.work_id = CeL.env.arg_hash
 if (!work_id && process.mainModule
 		&& (typeof need_work_id === 'undefined' || need_work_id)) {
 	var main_script = process.mainModule.filename.match(/[^\\\/]+$/)[0];
-	CeL.log('Usage:\nnode ' + main_script
-			+ ' "work title / work id" [option=true]\nnode ' + main_script
+	CeL.log('Usage:\n	node ' + main_script
+			+ ' "work title / work id" [option=true]\n	node ' + main_script
 			+ ' "l=work list file" [option=true]');
+	CeL.log('options:'
+	//
+	+ Object.keys(CeL.work_crawler.prototype.import_arg_hash)
+	//
+	.map(function(key) {
+		return '\n	' + key;
+	}).join(''));
 	process.exit();
-}
-
-if (data_directory && !CeL.directory_exists(data_directory)) {
-	CeL.warn('Warning: Can not access ' + data_directory
-			+ '!\n下載的檔案將放在工具檔所在的目錄下。');
-	data_directory = '';
 }
 
 // main_directory 必須以 path separator 作結。

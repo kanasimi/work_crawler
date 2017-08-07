@@ -93,9 +93,16 @@ manhuatai = new CeL.work_crawler({
 			// 轉成由舊至新之順序。
 			work_data.chapter_list.reverse();
 		} else {
-			// 可以嘗試用數字的方法一個一個try。
+			// 嘗試用數字的方法一個一個try。
 			// e.g., http://www.manhuatai.com/faqishaonv/99.html
 			// http://www.kanman.com/27965/99.html
+			work_data.trying = true;
+			// 檢查到第300章都還沒有內容就放棄。
+			for (var i = 0; i < 300; i++) {
+				work_data.chapter_list.push({
+					url : i + '.html'
+				});
+			}
 		}
 	},
 
@@ -104,7 +111,21 @@ manhuatai = new CeL.work_crawler({
 		return this.work_URL(work_data.id)
 				+ work_data.chapter_list[chapter - 1].url;
 	},
-	parse_chapter_data : function(html, work_data) {
+	parse_chapter_data : function(html, work_data, get_label, chapter) {
+		if (work_data.trying) {
+			var matched = html.match(/<a( [^<>]+)>下一章<\/a>/);
+			if (matched && (matched = matched[1].match(/ href="([^<>"]+)"/))) {
+				work_data.chapter_list.truncate(chapter);
+				if (/html?$/i.test(matched[1])) {
+					// CeL.info('parse_chapter_data: next: ' + matched[1]);
+					work_data.chapter_list.push({
+						url : matched[1]
+					});
+				}
+				work_data.chapter_count = work_data.chapter_list.length;
+			}
+		}
+
 		// decode chapter data
 		// modify from n.getPicUrl @
 		// http://www.manhuatai.com/static/comicread.js?20170401181816
