@@ -44,14 +44,14 @@
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** |
-| [爱看漫](http://www.ikanman.com/) | ikanman.js | 看漫画。自 2017/8/7 晚最後一次連接後，持續 404 至 2017/6/10 未復原。。 |
+| [爱看漫](http://www.ikanman.com/) | ikanman.js | 看漫画 |
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
 | [733动漫网](http://www.733dm.net/) | 733dm.js | |
-| ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/8/7 未復原。 |
-| ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/8/7 未復原。 |
+| ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/8/8 未復原。 |
+| ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/8/8 未復原。 |
 
 一般約需2至4小時新增或更新一網站，以達初步可用狀態。
 
