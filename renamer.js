@@ -25,11 +25,11 @@ CeL.run(
 CeL.get_URL.default_user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 		+ Math.random();
 
-var torrent_directory = 'torrent' + CeL.env.path_separator,
+var torrent_directory = 'torrent' + CeL.env.path_separator && false,
 // e.g., "node renamer.js C target_directory"
 target_directory = process.argv[3] || '.',
 //
-default_menu_page_length = 300,
+default_menu_page_length = 400,
 // start from menu NO. 1
 default_menu_page_starts = 1,
 // reget === true: reget till no more new menu files.

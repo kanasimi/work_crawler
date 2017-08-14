@@ -23,6 +23,7 @@ var PTCMS = CeL.PTCMS({
 	// 解析 作品名稱 → 作品id get_work()
 	_search_URL : 'modules/article/search.php?'
 			+ 'searchtype=articlename&searchkey=',
+	// TODO: http://www.630book.la/modules/article/search.php?q=
 	_parse_search_result : function(html, get_label) {
 		var id_data = [],
 		// {Array}id_list = [id,id,...]

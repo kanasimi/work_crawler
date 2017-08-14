@@ -147,9 +147,13 @@ piaotian = new CeL.work_crawler({
 		next_chapter = work_data.chapter_list[chapter];
 		// console.log(chapter + ': ' + next_url[1]);
 
-		if (next_url && next_chapter
+		if (next_chapter && next_url
+		//
+		&& (next_url = next_url[1].replace(/^\.\//,
+		// 去掉開頭的 "./"
+		this.chapter_URL(work_data, chapter).replace(/[^\/]+$/, '')))
 		// 有些在目錄上面的章節連結到了錯誤的頁面，只能靠下一頁來取得正確頁面。
-		&& (next_chapter.url !== (next_url = next_url[1]))
+		&& (next_chapter.url !== next_url)
 		// 許多網站會把最新章節的下一頁設成章節列表，因此必須排除章節列表的網址。
 		&& next_url !== 'index.html'
 		// 檢查正規化規範連結之後是否與本章節相同。
@@ -167,16 +171,23 @@ piaotian = new CeL.work_crawler({
 			});
 		}
 
+		var text = html.between('</H1>');
+		// e.g.,
+		// http://www.piaotian.com/html/3/3596/1808085.html
+		// http://www.piaotian.com/html/1/1251/576785.html
+		// http://www.piaotian.com/html/0/39/5757.html
+		text = text.between('\n<br>', '</div>')
+		// http://www.piaotian.com/html/7/7446/4807895.html
+		|| text.between('<div class="ad_content">', '<div class="bottomlink">')
+		//
+		.between('</div>', '</div>');
+
 		this.add_ebook_chapter(work_data, chapter, {
 			title : chapter_data.part,
 			sub_title : chapter_data.title
 					|| get_label(html.between('<H1>', '</H1>')),
-			// e.g., http://www.piaotian.com/html/3/3596/1808085.html
-			// http://www.piaotian.com/html/1/1251/576785.html
-			// http://www.piaotian.com/html/0/39/5757.html
-			text : html.between('</H1>').between('\n<br>', '</div>').replace(
-					/<script[^<>]*>[^<>]*<\/script>/g, '').replace(PATTERN_AD,
-					'')
+			text : text.replace(/<script[^<>]*>[^<>]*<\/script>/g, '').replace(
+					PATTERN_AD, '')
 		});
 	}
 });

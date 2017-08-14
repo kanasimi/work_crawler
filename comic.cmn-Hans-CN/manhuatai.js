@@ -98,7 +98,7 @@ manhuatai = new CeL.work_crawler({
 			// http://www.kanman.com/27965/99.html
 			work_data.trying = true;
 			// 檢查到第300章都還沒有內容就放棄。
-			for (var i = 0; i < 300; i++) {
+			for (var i = 1; i < 300; i++) {
 				work_data.chapter_list.push({
 					url : i + '.html'
 				});
@@ -130,6 +130,10 @@ manhuatai = new CeL.work_crawler({
 		// modify from n.getPicUrl @
 		// http://www.manhuatai.com/static/comicread.js?20170401181816
 		function decode(mh_info) {
+			// console.log(mh_info);
+			// http://www.manhuatai.com/static/comicread.js?20170809232416
+			mh_info = mh_info.replace(/;_czc\s*=/, ';var _czc=').replace(
+					/isMobile/g, 'false');
 			eval('mh_info=' + mh_info);
 			mh_info.imgpath = mh_info.imgpath.replace(/./g, function(a) {
 				return String.fromCharCode(a.charCodeAt(0) - mh_info.pageid
@@ -140,7 +144,7 @@ manhuatai = new CeL.work_crawler({
 			return mh_info;
 		}
 
-		var chapter_data = html.between(' mh_info=', ';</script>');
+		var chapter_data = html.between(' mh_info=', '</script>');
 		if (!chapter_data || !(chapter_data = decode(chapter_data))) {
 			return;
 		}
