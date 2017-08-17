@@ -43,7 +43,7 @@
 
 | Site | Tool file | Note |
 | --- | --- | --- |
-| [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** |
+| [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** 2017/8/15 起取消了今日限免 |
 | [爱看漫](http://www.ikanman.com/) | ikanman.js | 看漫画 |
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
