@@ -118,8 +118,9 @@ var _733dm = new CeL.work_crawler({
 				return {
 					// http://733dm.xxjcw.com.cn/
 					// http://733dm.zgkouqiang.cn/
-					// 2017/7/24:
-					url : 'http://733.733dm.net/' + url
+					// 2017/7/24: http://733.733dm.net/
+					// 2017/8/26@http://www.733dm.net/skin/2014mh/global.js?v=003:
+					url : 'http://lo.htfrzb.com/' + url
 				};
 			})
 		};

@@ -194,6 +194,7 @@ function check_fso(fso_name) {
 			CeL.warn('Empty directory: ' + directory_path);
 		return;
 	}
+	// TODO: 這會漏掉只有空目錄的情況。
 
 	var image_count = 0, exe_count = 0, _____padding_file_count = 0, size_array = [],
 	//
@@ -282,21 +283,7 @@ function classify(fso_name, fso_path, fso_status) {
 		if (!move_to_path) {
 			return;
 		}
-		move_to_path += fso_name;
-		while (CeL.fs_status(move_to_path)) {
-			move_to_path = move_to_path.replace(
-			// Get next index that can use.
-			/( )?(?:\((\d{1,3})\))?(\.[^.]*)?$/, function(all, prefix_space,
-					index, extension) {
-				if (index > 99) {
-					throw 'The index ' + index + ' is too big! '
-					//
-					+ move_to_path;
-				}
-				return (prefix_space || !index ? ' ' : '') + '('
-						+ ((index | 0) + 1) + ')' + (extension || '');
-			});
-		}
+		move_to_path = CeL.next_fso_NO_unused(move_to_path + fso_name);
 		CeL.info(CeL.display_align([ [ 'Move ' + catalog + ': ', fso_path ],
 				[ '→ ', move_to_path ] ]));
 		add_log('Move ' + catalog + ':	' + fso_path + '	→	' + move_to_path);
@@ -305,12 +292,12 @@ function classify(fso_name, fso_path, fso_status) {
 
 	var matched;
 
-	if (/[(（]一般コミック/.test(fso_name)) {
+	if (/[\[(（]一般(?:コミック|漫画)/.test(fso_name) || /[\[(]Manga/.test(fso_name)) {
 		move_to('comic');
 		return;
 	}
 
-	if (/[(（]一般小説/.test(fso_name)) {
+	if (/[(（]一般小説/.test(fso_name) || /[\[(]Novel/i.test(fso_name)) {
 		move_to('novel');
 		return;
 	}
@@ -332,7 +319,8 @@ function classify(fso_name, fso_path, fso_status) {
 		return;
 	}
 
-	if (/^週刊/.test(fso_name)) {
+	if (/^週刊|\[雑誌|[^\d]20[12]\d[年\-][01]\d月|[^\d]20[12]\d[.\-][01]\d[^\d]/
+			.test(fso_name)) {
 		move_to('comic_magazine');
 		return;
 	}
