@@ -21,7 +21,7 @@ CeL.run(
 
 // ----------------------------------------------------------------------------
 
-var
+var do_compress,
 // 下載完成、要處理的檔案/目錄所放置的目錄。
 target_directory = process.argv[2] || global.completed_directory || '.',
 // 檔案分類完後要放置的標的目錄。
@@ -77,7 +77,7 @@ if (!catalog_directory) {
 }
 
 catalog_directory = {
-	anime : [ 'a' ],
+	anime : [ 'anime,アニメ', 'a' ],
 	anime_sub : {
 		anime_music : '_music',
 		anime_OK : '_OK'
@@ -99,12 +99,14 @@ catalog_directory = {
 	// 一般小説
 	novel : [ 'n' ],
 	novel_sub : {
+		general_book : '_一般書籍',
 		erotic_novel : '_官能'
 	},
 	game : [ '_game,ゲーム,同人', 'g' ],
 	game_sub : {
 		doujin : '_DOUJIN,同人',
 		cosplay : '_cosplay,コスプレ',
+		game_CG : '_CG,画集',
 		game_music : '_music',
 		general_game : '_一般ゲーム'
 	},
@@ -173,7 +175,7 @@ function check_fso(fso_name) {
 	}
 
 	var directory_path = target_directory + fso_name, fso_status = CeL
-			.fs_status(directory_path);
+			.fso_status(directory_path);
 	if (!fso_status) {
 		CeL.error('Can not read file / directory: ' + directory_path);
 		return;
@@ -292,23 +294,40 @@ function classify(fso_name, fso_path, fso_status) {
 
 	var matched;
 
-	if (/[\[(（]一般(?:コミック|漫画)/.test(fso_name) || /[\[(]Manga/.test(fso_name)) {
+	if (/[\[(（]一般(?:コミック|漫画)/.test(fso_name)
+			|| /(?:^|[\[(]?)Manga[^a-z]/i.test(fso_name)) {
 		move_to('comic');
 		return;
 	}
 
-	if (/[(（]一般小説/.test(fso_name) || /[\[(]Novel/i.test(fso_name)) {
+	if (/[\[(（]一般小説/.test(fso_name)
+			|| /(?:^|[\[(]?)Novel[^a-z]/i.test(fso_name)) {
 		move_to('novel');
 		return;
 	}
 
-	if (/[(（]一般ゲーム/.test(fso_name)) {
+	if (/[\[(（]一般ゲーム/.test(fso_name)) {
 		move_to('general_game');
+		return;
+	}
+
+	if (/[\[(](?:18禁ゲーム|ACT|ADV|RPG|SLG)/i.test(fso_name)) {
+		move_to('game');
+		return;
+	}
+
+	if (/[\[(](?:ゲームCG|Game CG)/i.test(fso_name)) {
+		move_to('game_CG');
 		return;
 	}
 
 	if (/\((?:(?:一般)?画集)/.test(fso_name)) {
 		move_to('artbook');
+		return;
+	}
+
+	if (/[\[(（]一般書籍/.test(fso_name)) {
+		move_to('general_book');
 		return;
 	}
 
@@ -339,7 +358,13 @@ var
 /** node.js: run OS command */
 execSync = require('child_process').execSync;
 
-process_queue.forEach(compress_each_directory);
+if (process_queue.length > 0) {
+	if (do_compress)
+		process_queue.forEach(compress_each_directory);
+	else
+		CeL.info('因為未設定要壓縮 (do_compress)，有 ' + process_queue.length
+				+ '個檔案或資料夾沒有壓縮。');
+}
 
 function escape_filename(filename) {
 	return /^["']/.test(filename) ? filename : '"' + filename + '"';
