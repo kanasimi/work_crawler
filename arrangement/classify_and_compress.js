@@ -21,9 +21,10 @@ CeL.run(
 
 // ----------------------------------------------------------------------------
 
-var do_compress,
+var do_compress = true,
 // 下載完成、要處理的檔案/目錄所放置的目錄。
-target_directory = process.argv[2] || global.completed_directory || '.',
+target_directory = process.argv[2]
+		|| CeL.first_exist_fso(global.completed_directory) || '.',
 // 檔案分類完後要放置的標的目錄。
 catalog_directory = process.argv[3] || global.catalog_directory;
 
@@ -181,6 +182,7 @@ function check_fso(fso_name) {
 		return;
 	}
 	if (!fso_status.isDirectory()) {
+		// i.e. file
 		classify(fso_name, directory_path, fso_status);
 		return;
 	}
@@ -198,33 +200,64 @@ function check_fso(fso_name) {
 	}
 	// TODO: 這會漏掉只有空目錄的情況。
 
-	var image_count = 0, exe_count = 0, _____padding_file_count = 0, size_array = [],
+	var image_count = 0, exe_count = 0, _____padding_file_count = 0, non_zero_size_count = 0,
 	//
-	sub_files = [], sub_directories = [];
-	sub_fso.forEach(function(sub_fso_name) {
-		if (sub_fso_name.startsWith('_____padding_file_')) {
-			_____padding_file_count++;
-			return;
-		}
+	sub_files = [], sub_directories = [], sub_sub_files_count = 0,
+	// 最大的檔案size
+	biggest_file_size = 0;
 
+	function check_sub_file(sub_fso_name, sub_fso_status) {
+		sub_sub_files_count++;
+		if (sub_fso_status.size > 0) {
+			if (biggest_file_size < sub_fso_status.size)
+				biggest_file_size = sub_fso_status.size;
+			non_zero_size_count++;
+		}
 		// TODO: .bmp
 		if (/\.(?:jpg|jpeg|png|gif)$/i.test(sub_fso_name)) {
 			image_count++;
 		} else if (PATTERN_executable_file.test(sub_fso_name)) {
 			exe_count++;
 		}
+	}
+
+	// for 深入第2子層以下
+	// search path: directory/sub_fso_name
+	function search_sub_sub_folder_for_files(sub_fso_name, directory) {
+		var sub_fso_status = CeL.fso_status(directory + sub_fso_name);
+		if (!sub_fso_status) {
+			return;
+		}
+
+		if (sub_fso_status.isDirectory()) {
+			var sub_fso = CeL.read_directory(directory + sub_fso_name);
+			sub_fso.forEach(function(sub_sub_fso_name) {
+				search_sub_sub_folder_for_files(sub_sub_fso_name, directory
+						+ sub_fso_name + CeL.env.path_separator);
+			});
+		} else {
+			check_sub_file(sub_fso_name, sub_fso_status);
+		}
+	}
+
+	// for 第一子層
+	sub_fso.forEach(function(sub_fso_name) {
+		if (sub_fso_name.startsWith('_____padding_file_')) {
+			_____padding_file_count++;
+			return;
+		}
 
 		var sub_fso_status = CeL.fs_status(directory_path + sub_fso_name);
 		if (!sub_fso_status) {
 			return;
 		}
-		if (sub_fso_status.size > 0) {
-			size_array.push(sub_fso_status.size);
-		}
+
 		if (sub_fso_status.isDirectory()) {
 			sub_directories.push(sub_fso_name);
+			search_sub_sub_folder_for_files(sub_fso_name, directory_path);
 		} else {
 			sub_files.push(sub_fso_name);
+			check_sub_file(sub_fso_name, sub_fso_status);
 		}
 	});
 
@@ -237,25 +270,23 @@ function check_fso(fso_name) {
 	}
 
 	// 降序序列排序: 大→小
-	size_array.sort(CeL.descending);
-	// 最大的檔案size
-	var biggest_file_size = size_array[0];
+	// non_zero_size_array.sort(CeL.descending);
 
 	if (exe_count > 0
 			&& test_size_OK(1e9, 'game', '含有 ' + exe_count + ' 個可執行檔')) {
 		return;
 	}
 
-	if ((image_count > 20 ? image_count / sub_fso.length > .8
+	if ((image_count > 20 ? image_count / sub_sub_files_count > .8
 	//
-	: image_count > 2 && image_count > sub_fso.length - 2)
+	: image_count > 2 && image_count > sub_sub_files_count - 2)
 			// 壓縮大多只有圖片的目錄。
 			&& test_size_OK(1e7, 'image', '含有 ' + image_count + '/'
-					+ sub_fso.length + ' 個圖片')) {
+					+ sub_sub_files_count + ' 個圖片')) {
 		return;
 	}
 
-	if (size_array.length < 9 && !(biggest_file_size > 2e8)
+	if (non_zero_size_count < 9 && !(biggest_file_size > 2e8)
 			&& sub_directories.length < 9) {
 		if (sub_directories.some(function(sub_directory) {
 			sub_directory = directory_path + sub_directory;
@@ -268,7 +299,7 @@ function check_fso(fso_name) {
 		}
 	}
 
-	if (image_count > 9 && image_count / sub_fso.length > .5) {
+	if (image_count > 9 && image_count / sub_sub_files_count > .5) {
 		CeL.warn('需要手動檢查的目錄: ' + directory_path);
 		return;
 	}

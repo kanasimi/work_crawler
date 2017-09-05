@@ -30,7 +30,8 @@ CeL.get_URL.default_user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3
 
 var torrent_directory = 'torrent' + CeL.env.path_separator && false,
 // 下載完成、要處理的檔案/目錄所放置的目錄。 e.g., "node renamer.js C target_directory"
-target_directory = process.argv[3] || global.completed_directory || '.',
+target_directory = process.argv[3]
+		|| CeL.first_exist_fso(global.completed_directory) || '.',
 //
 default_menu_page_length = 400,
 // start from menu NO. 1
