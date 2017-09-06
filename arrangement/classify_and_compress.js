@@ -273,7 +273,8 @@ function check_fso(fso_name) {
 	// non_zero_size_array.sort(CeL.descending);
 
 	if (exe_count > 0
-			&& test_size_OK(1e9, 'game', '含有 ' + exe_count + ' 個可執行檔')) {
+			&& test_size_OK(1e9, 'game', '含有 ' + exe_count + '/'
+					+ sub_sub_files_count + ' 個可執行檔')) {
 		return;
 	}
 
@@ -369,7 +370,7 @@ function classify(fso_name, fso_path, fso_status) {
 		return;
 	}
 
-	if (/^週刊|\[雑誌|[^\d]20[12]\d[年\-][01]\d月|[^\d]20[12]\d[.\-][01]\d[^\d]/
+	if (/^週刊|\[雑誌|[^\d]20[12]\d[年\-][01]\d月|20[12]\d年\d{1,2}号|[^\d]20[12]\d[.\-][01]\d[^\d]/
 			.test(fso_name)) {
 		move_to('comic_magazine');
 		return;
