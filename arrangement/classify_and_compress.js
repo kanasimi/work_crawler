@@ -84,7 +84,7 @@ catalog_directory = {
 		anime_OK : '_OK'
 	},
 	// 一般コミック
-	comic : [ 'c' ],
+	comic : [ 'comic,一般コミック,画集', 'c' ],
 	comic_sub : {
 		shojo_manga : '_少女コミック',
 		artbook : '_イラスト,画集,Visual Book,Art Work,Artbook',
@@ -93,12 +93,12 @@ catalog_directory = {
 	adult : [ 'H', 'Hcomic' ],
 	adult_sub : {
 		adult_animation : '_Hanime,18禁アニメ',
-		adult : '_noACG_H,個人撮影,写真集,グラビア,援交',
+		adult : '_noACG_H,写真集,グラビア',
 		adult_comic : '成年コミック',
 	},
-	singer : [ 's' ],
+	singer : [ '_singer,アルバム,ボイス', 's' ],
 	// 一般小説
-	novel : [ 'n' ],
+	novel : [ '_book,novel,小説', 'n' ],
 	novel_sub : {
 		general_book : '_一般書籍',
 		erotic_novel : '_官能'
@@ -373,6 +373,11 @@ function classify(fso_name, fso_path, fso_status) {
 	if (/^週刊|\[雑誌|[^\d]20[12]\d[年\-][01]\d月|20[12]\d年\d{1,2}号|[^\d]20[12]\d[.\-][01]\d[^\d]/
 			.test(fso_name)) {
 		move_to('comic_magazine');
+		return;
+	}
+
+	if (/[\[(（]成年コミック/.test(fso_name)) {
+		move_to('adult_comic');
 		return;
 	}
 
