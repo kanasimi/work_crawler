@@ -407,6 +407,10 @@ function escape_filename(filename) {
 	return /^["']/.test(filename) ? filename : '"' + filename + '"';
 }
 
+// cache the path of p7z executable file
+var p7zip_path = CeL.executable_file_path('7z')
+		|| '%ProgramFiles%\\7-Zip\\7z.exe';
+
 function compress_each_directory(config, index) {
 	// config: [ directory_path, profile_name, message ]
 	var directory_path = config[0], profile_name = config[1], message = config[2],
@@ -436,7 +440,9 @@ function compress_each_directory(config, index) {
 
 	add_log('Compress ' + profile_name + ':	' + profile.archive);
 
-	var command = '"C:\\Program Files\\7-Zip\\7z.exe" a -t'
+	var command = '"'
+			+ p7zip_path
+			+ '" a -t'
 			+ profile.file_type
 			+ (profile.switches ? ' ' + profile.switches : '')
 			+ ' -- '

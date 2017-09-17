@@ -58,8 +58,8 @@
 ## Installation 安裝
 
 ### Node.js lazy installation 懶人安裝法
-為了只想趕快試用的您～（已經做過的步驟可以跳過）
-1. 先安裝 [Node.js](https://nodejs.org/)
+為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
+1. 先安裝 [Node.js](https://nodejs.org/)。下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。
 2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮
 3. 進到解壓縮後工具檔所在的目錄，在命令行界面下執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
 

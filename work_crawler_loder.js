@@ -14,7 +14,7 @@ global.data_directory = '';
 
 try {
 	// Load configuration.
-	require('./work_crawler_loder.config.js');
+	require('./work_crawler_loder.configuration.js');
 } catch (e) {
 }
 
