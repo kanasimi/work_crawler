@@ -36,7 +36,7 @@
 | [恋上你看书网](http://www.630book.la/) | 630book.js | |
 | [飘天文学](http://www.piaotian.com/) | piaotian.js | NOT PTCMS |
 
-* 中國大陸小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁子母或是打星號，或者數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
+* 中國大陸小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是打星號，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
 ### Chinese webcomics 中国内地漫画 中国のウェブコミック
 [comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, web pages → epub
@@ -69,7 +69,7 @@
 
 4. 然後就能[開始試用](#execution-執行)囉。
 
-* 請注意：採用 <code>npm</code> 安裝的可能不是最新版，尚未加入最新功能。當採用新版下載工具與舊版CeJS程式庫時，執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行舊版的 npm install。
+* 請注意：採用 <code>npm</code> 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 <code>npm install</code> 安裝舊版的程式庫。
 
 ### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.

@@ -214,7 +214,7 @@ function check_fso(fso_name) {
 			non_zero_size_count++;
 		}
 		// TODO: .bmp
-		if (/\.(?:jpg|jpeg|png|gif)$/i.test(sub_fso_name)) {
+		if (/\.(?:jpg|jpeg|png|gif|ico|icon)$/i.test(sub_fso_name)) {
 			image_count++;
 		} else if (PATTERN_executable_file.test(sub_fso_name)) {
 			exe_count++;
@@ -317,7 +317,14 @@ function classify(fso_name, fso_path, fso_status) {
 		if (!move_to_path) {
 			return;
 		}
-		move_to_path = CeL.next_fso_NO_unused(move_to_path + fso_name);
+		if (fso_path.replace(/[\\\/]+$/, '') === move_to_path
+				+ fso_name.replace(/[\\\/]+$/, '')
+		// || /\((\d{1,3})\)(\.[^.]*)?$/.test(fso_name)
+		) {
+			// Skip the same source and target. No need to move.
+			return;
+		}
+		move_to_path = CeL.next_fso_NO_unused(move_to_path + fso_name, true);
 		CeL.info(CeL.display_align([ [ 'Move ' + catalog + ': ', fso_path ],
 				[ '→ ', move_to_path ] ]));
 		add_log('Move ' + catalog + ':	' + fso_path + '	→	' + move_to_path);
@@ -363,7 +370,7 @@ function classify(fso_name, fso_path, fso_status) {
 		return;
 	}
 
-	if (/^\((?:C\d{1,2})\)/.test(fso_name)
+	if (/^\((?:C\d{1,2})\)/.test(fso_name) || fso_name.includes('同人誌')
 	// "(サンクリ2015 Winter) "
 	|| /^\((?:同人|COMIC1☆|こみトレ|例大祭|紅楼夢|ふたけっと|サンクリ)/.test(fso_name)) {
 		move_to('doujin');
@@ -389,7 +396,9 @@ function classify(fso_name, fso_path, fso_status) {
 CeL.info(CeL.env.script_name + ': ' + process_queue.length
 		+ ' directories to compress.');
 
-var
+// cache the path of p7z executable file
+var p7zip_path = CeL.executable_file_path('7z')
+		|| '%ProgramFiles%\\7-Zip\\7z.exe',
 // TODO: use application.OS.Windows.archive,
 // application.OS.execute instead
 /** node.js: run OS command */
@@ -406,10 +415,6 @@ if (process_queue.length > 0) {
 function escape_filename(filename) {
 	return /^["']/.test(filename) ? filename : '"' + filename + '"';
 }
-
-// cache the path of p7z executable file
-var p7zip_path = CeL.executable_file_path('7z')
-		|| '%ProgramFiles%\\7-Zip\\7z.exe';
 
 function compress_each_directory(config, index) {
 	// config: [ directory_path, profile_name, message ]
