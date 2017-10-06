@@ -87,54 +87,79 @@ ck101 = new CeL.work_crawler({
 		return 'thread-' + work_data.id + '-' + chapter + '-1.html';
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
-		var raw_data = JSON.parse(html.between(
+		//
+		function book_chapter_is_OK() {
+			if (book_chapter && (book_chapter = +book_chapter[1]) >= 1
+			// 差距不大時才可算數。
+			&& Math.abs(book_chapter - work_data.book_chapter_count) < 4) {
+				work_data.book_chapter_count = book_chapter;
+				return true;
+			}
+		}
+
+		var book_chapter, raw_data = JSON.parse(html.between(
 				'<script type="application/ld+json">', '</script>')),
 		//
-		mainEntity = raw_data["@graph"][0].mainEntity;
+		mainEntity = raw_data["@graph"][0].mainEntity,
+		// /<div id="(post_\d+)" class="plhin">/g
+		PATTERN = /<div id="(post_\d+)"/g,
+		//
+		matched, matched_list = [];
 
-		html = html.split('<div class="authorDetails">');
+		html = html.between('<!--postlist-->', '<!--postlist end-->');
 
-		for (var index = 1; index < html.length; index++) {
-			var text = html[index].between(' class="t_fsz">')
-					.between('<table ').between('>', '</table>').replace(
-							/<div class="adBox">[\s\S]*$/, '').replace(
-							/<\/?t[adhr][^<>]*>/g, '').trim();
-			// console.log('-'.repeat(80));
-			// console.log(text);
-			work_data.book_chapter_count++;
+		while (matched = PATTERN.exec(html)) {
+			matched_list.push([ matched.index, matched[1] ]);
+		}
+		matched_list.push([ html.length ]);
 
-			if (false) {
-				var rate = html[index].between('<div class="viewRate">');
-				if (rate) {
-					// TODO: 納入評分理由
-				}
+		for (var index = 0; index < matched_list.length - 1; index++) {
+			var text = html.slice(matched_list[index][0],
+					matched_list[index + 1][0]), part_title = null, date = text
+					.between(' class="postDateLine">', '</span>');
+			if (date) {
+				date = date.to_Date();
+				// date.replace(/發表於 *:?/, '').trim();
 			}
 
-			var part_title = null;
+			var rate = text.between('<table class="ratl">', '</table>');
+
+			text = text.between(' class="t_fsz">').between('<table ').between(
+					'>', '</table>').replace(/<div class="adBox">[\s\S]*$/, '')
+					.replace(/<\/?t[adhr][^<>]*>/g, '').trim();
 			text = text.replace(
 					/^<(strong|font|b)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>/,
 					function(all, $1, title) {
 						part_title = get_label(title);
 						return '';
 					});
+
+			if (rate) {
+				// 納入評分理由。
+				text += '<hr /><table>' + rate.replace(/\s*\n\s*/g, '')
+				// 去除頭像。
+				.replace(/<a [\s\S]+?>([\s\S]+?)<\/a>/g,
+				//
+				function(all, innerHTML) {
+					return innerHTML.includes('<img ') ? '' : innerHTML;
+				}) + '</table>';
+			}
+
+			// console.log('-'.repeat(80));
+			// console.log(text);
+			work_data.book_chapter_count++;
+
+			// 嘗試解析章節號碼。
 			if (part_title) {
-				// 嘗試解析章節號碼。
-				var book_chapter = CeL.from_Chinese_numeral(part_title);
+				book_chapter = CeL.from_Chinese_numeral(part_title);
 				book_chapter = book_chapter.match(/第 *(\d+)/)
 						|| book_chapter.match(/(\d+) *章/);
-				if (book_chapter && (book_chapter = +book_chapter[1]) >= 1
-				// 差距不大時才可算數。
-				&& Math.abs(book_chapter - work_data.book_chapter_count) < 3) {
-					work_data.book_chapter_count = book_chapter;
-				}
+				book_chapter_is_OK();
 			} else {
 				part_title = text.match(/^[^\n]*/)[0];
-				var book_chapter = CeL.from_Chinese_numeral(part_title).match(
+				book_chapter = CeL.from_Chinese_numeral(part_title).match(
 						/第([\d ]+)章/);
-				if (book_chapter && (book_chapter = +book_chapter[1]) >= 1
-				// 差距不大時才可算數。
-				&& Math.abs(book_chapter - work_data.book_chapter_count) < 3) {
-					work_data.book_chapter_count = book_chapter;
+				if (book_chapter_is_OK()) {
 					part_title = get_label(part_title);
 					text = text.replace(part_title, '');
 				} else {
@@ -142,18 +167,11 @@ ck101 = new CeL.work_crawler({
 				}
 			}
 
-			var date = html[index]
-			//
-			.between(' class="postDateLine">', '</span>');
-			if (date) {
-				date = date.to_Date();
-				// date.replace(/發表於 *:?/, '').trim();
-			}
-
 			this.add_ebook_chapter(work_data, work_data.book_chapter_count, {
 				title : part_title,
 				text : text,
-				url : this.full_URL(this.chapter_URL(work_data, chapter)),
+				url : this.full_URL(this.chapter_URL(work_data, chapter)) + '#'
+						+ matched_list[index][1],
 				date : date || new Date(mainEntity.dateModified)
 			});
 		}

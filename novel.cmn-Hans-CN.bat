@@ -6,4 +6,5 @@ REM cd/d D:\USB\cgi-bin\program\comic
 CD "%~n0"
 REM It's often too slow, so trying to execute parallelly.
 FORFILES /M *.js /C "cmd.exe /c IF @isdir==FALSE START node @file l=list.txt || PAUSE"
+node ck101.js l=ck101.txt
 CD ..

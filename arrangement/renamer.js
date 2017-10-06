@@ -251,10 +251,13 @@ function parse_file_list(html, is_cache, got_torrent) {
 		throw 'DDOS Protection';
 	}
 
-	html = html.between('torrent-file-list', '</div>').between('>');
-	if (!html) {
+	var file_list_html = html.between('torrent-file-list', '</div>').between(
+			'>');
+	if (!file_list_html) {
 		// console.log(arguments[0]);
-		throw 'It seems the shame was changed!';
+		CeL.error('parse_file_list: It seems the shame was changed!');
+		CeL.log(html);
+		return;
 	}
 	if (!is_cache) {
 		this.new_files++;
@@ -262,10 +265,10 @@ function parse_file_list(html, is_cache, got_torrent) {
 	// 就算利用的是 cache，依然檢查檔案而不直接跳出。
 
 	CeL.debug(name, 2, 'parse_file_list');
-	// console.log(html);
+	// console.log(file_list_html);
 
 	var folder_list = [];
-	html.each_between(
+	file_list_html.each_between(
 	//
 	'<i class="fa fa-folder"></i>', '</a>',
 	//
@@ -276,7 +279,7 @@ function parse_file_list(html, is_cache, got_torrent) {
 	});
 
 	var file_list = [];
-	html.each_between('<i class="fa fa-file"></i>',
+	file_list_html.each_between('<i class="fa fa-file"></i>',
 	//
 	'</li>', function(token) {
 		token = token.between(null, '<span class="file-size">') || token;
