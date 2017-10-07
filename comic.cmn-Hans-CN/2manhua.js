@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載爱漫画的工具。 Download 2manhua comics.
+ * 
+ * 爱漫画 by 漫画之家 http://www.manhuazj.com/
  */
 
 'use strict';

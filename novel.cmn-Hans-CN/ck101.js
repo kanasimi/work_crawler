@@ -1,6 +1,8 @@
 ﻿/**
  * 批量下載卡提諾論壇小說的工具。 Download Catino novels.
  * 
+ * TODO: https://ck101.com/forum.php?mod=viewthread&action=printable&tid=2737067
+ * 
  * @see http://jdev.tw/blog/4538/ck101-getstory-ebook-for-kindle
  *      https://ck101.com/thread-2642285-1-1.html
  */
@@ -12,6 +14,44 @@ require('../work_crawler_loder.js');
 // ----------------------------------------------------------------------------
 
 CeL.run([ 'application.storage.EPUB' ]);
+
+// 解析論壇討論串標題
+function parse_topic_title(title, work_data) {
+	function parse_genre(genre) {
+		genre = genre.replace(/[\[【(（<]([^\[【(（<\]】)）>]+)[\]】)）>]/g,
+		//
+		function(all, genre) {
+			if (/第.+部/.test(genre)) {
+				return all;
+			}
+			work_data.status.push(genre.trim());
+			return '';
+		}).trim();
+		return genre;
+	}
+
+	var matched = title.match(/^(.+)作者[:：︰]?(.+)$/);
+	if (!matched) {
+		if (work_data) {
+			throw 'parse_topic_title: 無法解析論壇討論串標題';
+		}
+		return;
+	}
+
+	work_data = work_data || CeL.null_Object();
+	work_data.status = [];
+	work_data.author = parse_genre(matched[2]);
+	if (/\s/.test(work_data.author)) {
+		CeL.warn('parse_topic_title: Invalid author? ' + work_data.author);
+	}
+	// check title. e.g., 小說名稱前有多個分類
+	work_data.title = parse_genre(matched[1])
+	// e.g., 誰主沉浮
+	.replace(/^《(.+?)》$/, '$1').trim();
+
+	// console.log(work_data);
+	return work_data;
+}
 
 var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=bb73d6800fca299b36665ebff4d01037&cx=partner-pub-1630767461540427:6206348626&q=',
 //
@@ -29,13 +69,17 @@ ck101 = new CeL.work_crawler({
 	search_URL : search_URL,
 	parse_search_result : function(data, get_label, work_title) {
 		data = JSON.parse(data);
+		// console.log(data);
 		var id_data;
 		if (data.results.some(function(result) {
 			var matched = result.url
-					.match(/\/thread-(\d{1,8})-\d{1,4}(?:-\d{1,2})?.html?$/);
+			// [ file name, tid ]
+			.match(/\/thread-(\d{1,8})-\d{1,4}(?:-\d{1,2})?.html?$/);
 			if (matched) {
-				var title = result.titleNoFormatting || result.title;
-				if (title.includes(work_title)) {
+				var work_data = parse_topic_title(
+				//
+				get_label(result.titleNoFormatting || result.title));
+				if (work_data.title.trim() === work_title.trim()) {
 					id_data = CeL.null_Object();
 					id_data[matched[1]] = work_title;
 					return true;
@@ -50,7 +94,7 @@ ck101 = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'thread-' + work_id + '-1-1.html';
 	},
-	parse_work_data : function(html) {
+	parse_work_data : function(html, get_label) {
 		var raw_data = JSON.parse(html.between(
 				'<script type="application/ld+json">', '</script>')),
 		//
@@ -58,7 +102,7 @@ ck101 = new CeL.work_crawler({
 		//
 		work_data = {
 			last_update : mainEntity.dateModified,
-			description : mainEntity.description,
+			description : get_label(mainEntity.description),
 			chapter_count : mainEntity.pageEnd,
 			book_chapter_count : 0,
 			site_name : '卡提諾論壇',
@@ -66,17 +110,7 @@ ck101 = new CeL.work_crawler({
 			raw : raw_data
 		};
 
-		var matched = mainEntity.name.match(/作者：(.+)/)[1].replace(
-				/(已完結|連載).*$/, '').replace(/[(（].*$/, '').trim();
-		if (matched) {
-			work_data.author = matched;
-		}
-
-		if (mainEntity.name.includes('已完結')) {
-			work_data.status = '已完結';
-		} else if (mainEntity.name.includes('連載中')) {
-			work_data.status = '連載中';
-		}
+		parse_topic_title(get_label(mainEntity.name), work_data);
 
 		return work_data;
 	},
@@ -106,7 +140,22 @@ ck101 = new CeL.work_crawler({
 		//
 		matched, matched_list = [];
 
-		html = html.between('<!--postlist-->', '<!--postlist end-->');
+		html = html.between('<!--postlist-->', '<!--postlist end-->')
+		// e.g., ' src="https://ck101.com/static/image/common/none.gif"'
+		.replace(/ src="[^"]+?\/(?:none|nophoto|back)\.[a-z]+"/g, '')
+		// e.g., https://ck101.com/thread-3277544-1-1.html
+		.replace(/<img ([^<>]+)>/g, function(all, attributes) {
+			if (/(?:^|\s)src=/.test(attributes)) {
+				return all;
+			}
+			return all.replace(/(?:^|\s)file=/, ' src=');
+		});
+
+		if (false) {
+			html = html.replace(/<i class="pstatus">/g,
+			// 刪除最後發帖者
+			'<i class="pstatus" style="display:none;">');
+		}
 
 		while (matched = PATTERN.exec(html)) {
 			matched_list.push([ matched.index, matched[1] ]);
@@ -152,13 +201,14 @@ ck101 = new CeL.work_crawler({
 			// 嘗試解析章節號碼。
 			if (part_title) {
 				book_chapter = CeL.from_Chinese_numeral(part_title);
-				book_chapter = book_chapter.match(/第 *(\d+)/)
-						|| book_chapter.match(/(\d+) *章/);
+				book_chapter = book_chapter.match(/(\d+) *章/)
+				// 先檢查"章"，預防有"第?卷 第?章"。
+				|| book_chapter.match(/第 *(\d+)/);
 				book_chapter_is_OK();
 			} else {
 				part_title = text.match(/^[^\n]*/)[0];
 				book_chapter = CeL.from_Chinese_numeral(part_title).match(
-						/第([\d ]+)章/);
+						/第 *([\d ]+) *章/);
 				if (book_chapter_is_OK()) {
 					part_title = get_label(part_title);
 					text = text.replace(part_title, '');
