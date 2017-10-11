@@ -100,6 +100,7 @@ catalog_directory = {
 	// 一般小説
 	novel : [ '_book,novel,小説', 'n' ],
 	novel_sub : {
+		// _book that not novel or ライトノベル or ファンタジ,一般書籍,ノンフィクション
 		general_book : '_一般書籍',
 		erotic_novel : '_官能'
 	},

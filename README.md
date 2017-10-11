@@ -8,7 +8,7 @@
 * 可自動下載小說封面以及章節中的插圖。
 * 可自行配置與設定。
 
-## Completed tools 已完成網站工具
+## Supported sites 已完成之網站工具
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command line version first. 請注意：小說之下載必須先安裝 7Zip，這樣才能製作 .epub 電子書。
 
 已撰寫完的各大小說漫畫網站工具包括：
@@ -37,7 +37,7 @@
 | [飘天文学](http://www.piaotian.com/) | piaotian.js | NOT PTCMS |
 | [卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180) | ck101.js | Discuz! X3 |
 
-* 中國大陸小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是打星號，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
+* 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是打星號，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
 ### Chinese webcomics 中国内地漫画 中国のウェブコミック
 [comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, web pages → epub
@@ -54,8 +54,6 @@
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/8/8 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/8/8 未復原。 |
 
-一般約需2至4小時新增或更新一網站，以達初步可用狀態。
-
 ## Installation 安裝
 
 ### Node.js lazy installation 懶人安裝法
@@ -70,7 +68,7 @@
 
 4. 然後就能[開始試用](#execution-執行)囉。
 
-* 請注意：採用 <code>npm</code> 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。建議下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 <code>npm install</code> 安裝舊版的程式庫。
+* 請注意：採用 <code>npm</code> 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。**建議採用下方一般正常安裝方法**，下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 <code>npm install</code> 安裝舊版的程式庫。
 
 ### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
@@ -87,7 +85,6 @@
 
    e.g.,
    ``` sh
-   $ echo 今日限免： && node qq free
    $ node qq.js 狐妖小红娘 skip_error=true
    $ node 23us 斗罗大陆Ⅲ龙王传说
    $ node 2manhua 大主宰 recheck=true
@@ -114,6 +111,10 @@
 ![小說 → epub list](https://lh3.googleusercontent.com/E1IHu14DmtTyB5FO090wrAQ2szVB3TxUIQAuQfqklRITRA-zE6r8aG22nSAFQvRpncooGCN_q9Lym1bsOaCSrFY9Yadvapzjkqbi9F4iQIBV_IgZUKMB5tURe9B_XtOikcQ4lTg4dBhZPnCI1w-cM9J4rdyg3jvXpej-vT3AZyFQJZUDBLOCEKmRCvt9va1XZslmkPTjegDD2XxZ_Eff6KGRVaLXUyOfqngT-EGwV2Wn82AN20bgmw3yVRjLWzzzKHTT3ZR46QWhHskR_3QcfWwOJZN8nLTmXZVXfuL3EbXKh5xEVUZnUc-HeOxUSp6QIEQlowCZu5jKW8d2YQtiP1xnmabDk4VpuNWVYRWHrgAdb8ahE-e7EPU0iuj40lTrUJ4rxOSp9G35AtYDFDy33GOOsxXvv1UO2KitCXp56vfdjyuOPZL0-vLdJIJ41aJ8RBhsaOlxhiWfLA9AqaNoUOWBojx-6CiSLFc6iisiSWk30r9x2rf-4eDYiB_UmvHlLpZCIIci3YAyREy2cqJ-QQSC76gphXoQh4RPW4ThAX_rAEmh4mfgojmTvgDJqdZCtC103CJASBcJYvt1ZpBDuLSfzdRZF64VaOynO6ln9trimMjTI6fc6zUIL-GR_7wtEsnVKwLthalI-0qMlEf0Og3MHs8D6wkkthrzmu5WyzZG6g=w1366-h738-no)
 
 ![小說 → epub](https://lh3.googleusercontent.com/zXxohSbIAwXJuNdmq039hPVTPrFGf_DTUbhVzrIGNjr_9MT08ATuOsi6eMS1kTNlEt502dQeWNGCnRl8_kM6sWMrsTH8LINnKg7IiMxRj7wF4TR-Tpbt_fVVtHyI_lApDUUG_niDE4ZUphSRCTccLMiKAl3TW7qHqg6PsO4LxkntcF6VG3RPx7d2gb7mBSe-W9_06c3-Zaaq9npqpx8I2Yx5egYbwIT2T7Rsuw3WoeGN153SqrfJpeMQudvQeNbU7DREdqWT3g664Eqhfi73JI2YVPsyL5ntIlHuPTvGnOFCV5o1Qh2SlRMs0q2uVZs3PfkTc81ea0sO6eROnLGxJI3_2gRqVYlp8zkaPymo-t0mlcdcXj-dOuvke9o7ckqa-8-8JyTyzPWUZvZVdEVEI3FS-nv1aoDOs169xZnPuz1yYt0IoKS1LwObYYW6KMzTNAi-fCp7JNvtMzKZRy6aI9PbwDfEY0S178aaF_A6-p7udFtsb31Dy11j4BmT911wiYwPCNbRRJqWA0AaLJIcetC0jjY-BugWLqePsVZTgzNocwMIUe8xj54kZOy9aD4mckFXXkS9BHnwbr0096nQQ5GduKGQATSRvdSFfSu-ttOMZExz0DKcxyKimPiir7KZ-jzMUMbW9F3AS4mn2lKsTdRwhtieux10ojXq6Pdqap8VIA=w1366-h738-no)
+
+## Note 附注
+* 一般約需2至4小時新增或更新一網站，以達初步可用狀態。
+* 小說部份採用單線程下載，以避免對網站造成過度的負荷。漫畫部分則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
 
 ## Purpose 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [work_crawler module](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。

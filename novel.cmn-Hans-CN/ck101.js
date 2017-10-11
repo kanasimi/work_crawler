@@ -26,11 +26,17 @@ function parse_topic_title(title, work_data) {
 			}
 			work_data.status.push(genre.trim());
 			return '';
+		})
+		// e.g., 淫術煉金士
+		.replace(/(?:18|十八)禁/g, function(genre) {
+			work_data.status.push(genre.trim());
+			return '';
 		}).trim();
+
 		return genre;
 	}
 
-	var matched = title.match(/^(.+)作者[:：︰]?(.+)$/);
+	var matched = title.match(/^(.+)作者 *[:：︰]?(.+)$/);
 	if (!matched) {
 		if (work_data) {
 			throw 'parse_topic_title: 無法解析論壇討論串標題';
@@ -143,6 +149,8 @@ ck101 = new CeL.work_crawler({
 		html = html.between('<!--postlist-->', '<!--postlist end-->')
 		// e.g., ' src="https://ck101.com/static/image/common/none.gif"'
 		.replace(/ src="[^"]+?\/(?:none|nophoto|back)\.[a-z]+"/g, '')
+		// e.g., https://ck101.com/thread-3397649-147-1.html#post_108084487
+		.replace(/<a href="[^"<>]*email-protection"[^<>]*>.*?<\/a>/g, '@')
 		// e.g., https://ck101.com/thread-3277544-1-1.html
 		.replace(/<img ([^<>]+)>/g, function(all, attributes) {
 			if (/(?:^|\s)src=/.test(attributes)) {
