@@ -80,7 +80,9 @@ if (!catalog_directory) {
 catalog_directory = {
 	anime : [ 'anime,アニメ', 'a' ],
 	anime_sub : {
+		anime_misc : '_misc',
 		anime_music : '_music',
+		// _OK,_completed,_finished
 		anime_OK : '_OK'
 	},
 	// 一般コミック
@@ -90,7 +92,7 @@ catalog_directory = {
 		artbook : '_イラスト,画集,Visual Book,Art Work,Artbook',
 		comic_magazine : '_雑誌'
 	},
-	adult : [ 'H', 'Hcomic' ],
+	adult : [ 'Hcomic,成年コミック,無修正', 'Hcomic', 'H' ],
 	adult_sub : {
 		adult_animation : '_Hanime,18禁アニメ',
 		adult : '_noACG_H,写真集,グラビア',
@@ -102,6 +104,7 @@ catalog_directory = {
 	novel_sub : {
 		// _book that not novel or ライトノベル or ファンタジ,一般書籍,ノンフィクション
 		general_book : '_一般書籍',
+		// _官能,官能小説,エロライトノベル,フランス書院,美少女文庫,ティアラ文庫
 		erotic_novel : '_官能'
 	},
 	game : [ '_game,ゲーム,同人', 'g' ],
@@ -112,7 +115,7 @@ catalog_directory = {
 		game_music : '_music',
 		general_game : '_一般ゲーム'
 	},
-	tool : [ 'Tools', 'tool', 't' ],
+	tool : [ 'Tools', 't' ],
 	root : append_path_separator(catalog_directory)
 };
 
@@ -334,39 +337,39 @@ function classify(fso_name, fso_path, fso_status) {
 
 	var matched;
 
-	if (/[\[(（]一般(?:コミック|漫画)/.test(fso_name)
+	if (/[\[(（【]一般(?:コミック|漫画)/.test(fso_name)
 			|| /(?:^|[\[(]?)Manga[^a-z]/i.test(fso_name)) {
 		move_to('comic');
 		return;
 	}
 
-	if (/[\[(（]一般小説/.test(fso_name)
+	if (/[\[(（【]一般小説/.test(fso_name)
 			|| /(?:^|[\[(]?)Novel[^a-z]/i.test(fso_name)) {
 		move_to('novel');
 		return;
 	}
 
-	if (/[\[(（]一般ゲーム/.test(fso_name)) {
+	if (/[\[(（【]一般ゲーム/.test(fso_name)) {
 		move_to('general_game');
 		return;
 	}
 
-	if (/[\[(](?:18禁ゲーム|ACT|ADV|RPG|SLG)/i.test(fso_name)) {
+	if (/[\[(（【](?:18禁ゲーム|ACT|ADV|RPG|SLG)/i.test(fso_name)) {
 		move_to('game');
 		return;
 	}
 
-	if (/[\[(](?:ゲームCG|Game CG)/i.test(fso_name)) {
+	if (/[\[(（【](?:ゲームCG|Game CG)/i.test(fso_name)) {
 		move_to('game_CG');
 		return;
 	}
 
-	if (/\((?:(?:一般)?画集)/.test(fso_name)) {
+	if (/[\[(（【](?:(?:一般)?画集)/.test(fso_name)) {
 		move_to('artbook');
 		return;
 	}
 
-	if (/[\[(（]一般書籍/.test(fso_name)) {
+	if (/[\[(（【]一般書籍/.test(fso_name)) {
 		move_to('general_book');
 		return;
 	}
@@ -384,7 +387,7 @@ function classify(fso_name, fso_path, fso_status) {
 		return;
 	}
 
-	if (/[\[(（]成年コミック/.test(fso_name)) {
+	if (/[\[(（【]成年コミック/.test(fso_name)) {
 		move_to('adult_comic');
 		return;
 	}

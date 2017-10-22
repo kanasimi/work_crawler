@@ -72,20 +72,24 @@ var Hameln = new CeL.work_crawler({
 			title : work_data.タイトル,
 
 			// 選擇性屬性：須配合網站平台更改。
-			// e.g., 连载中, 連載中
-			status : work_data.状態.split(','),
+			// e.g., 連載(連載中), 連載(完結)
+			status : work_data.話数.replace(/連載\(([^()]+)\)/, '$1').split(/\s+/),
 			author : work_data.作者,
 			last_update : work_data.最新投稿,
 			description : work_data.あらすじ,
 			site_name : 'ハーメルン'
 		}, work_data);
 
+		if (work_data.必須タグ) {
+			work_data.status.append(work_data.必須タグ.split(/\s+/));
+		}
 		if (work_data.タグ) {
 			work_data.status.append(work_data.タグ.split(/\s+/));
 		}
 		if (work_data.警告タグ) {
 			work_data.status.append(work_data.警告タグ.split(/\s+/));
 		}
+		work_data.status = work_data.status.unique();
 
 		return work_data;
 	},

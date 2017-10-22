@@ -18,7 +18,7 @@ CeL.run([ 'application.storage.EPUB' ]);
 // 解析論壇討論串標題
 function parse_topic_title(title, work_data) {
 	function parse_genre(genre) {
-		genre = genre.replace(/[\[【(（<]([^\[【(（<\]】)）>]+)[\]】)）>]/g,
+		genre = genre.replace(/[\[【(（<「]([^\[【(（<「\]】)）>」]+?)[\]】)）>」]/g,
 		//
 		function(all, genre) {
 			if (/第.+部/.test(genre)) {
@@ -36,9 +36,9 @@ function parse_topic_title(title, work_data) {
 		return genre;
 	}
 
-	var matched = title.match(/^(.+)作者 *[:：︰]?(.+)$/);
+	var matched = title.match(/^(.+)作者 *[:：︰]?(.+)$/), need_check = !!work_data;
 	if (!matched) {
-		if (work_data) {
+		if (need_check) {
 			throw 'parse_topic_title: 無法解析論壇討論串標題';
 		}
 		return;
@@ -47,7 +47,7 @@ function parse_topic_title(title, work_data) {
 	work_data = work_data || CeL.null_Object();
 	work_data.status = [];
 	work_data.author = parse_genre(matched[2]);
-	if (/\s/.test(work_data.author)) {
+	if (need_check && /\s/.test(work_data.author)) {
 		CeL.warn('parse_topic_title: Invalid author? ' + work_data.author);
 	}
 	// check title. e.g., 小說名稱前有多個分類
@@ -55,11 +55,19 @@ function parse_topic_title(title, work_data) {
 	// e.g., 誰主沉浮
 	.replace(/^《(.+?)》$/, '$1').trim();
 
+	if (!work_data.title) {
+		// 當標題一點東西是都不剩下的時候，就把最後一個符合的拿來當標題。
+		// e.g., 罪惡之城
+		work_data.title = work_data.status.pop();
+	}
+
 	// console.log(work_data);
 	return work_data;
 }
 
-var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=bb73d6800fca299b36665ebff4d01037&cx=partner-pub-1630767461540427:6206348626&q=',
+var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=bb73d6800fca299b36665ebff4d01037&cx=partner-pub-1630767461540427:6206348626&cse_tok=AHKYotWVmvV1wohA3g8oNFAm_6cK:1495660148313&googlehost=www.google.com&q=',
+//
+PATTERN_START_QUOTE = /<div class="quote"><blockquote>([\s\S]*?)<\/blockquote><\/div>(?:[\s\n]+|<br([^<>]*)>)*/,
 //
 ck101 = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
@@ -78,18 +86,25 @@ ck101 = new CeL.work_crawler({
 		// console.log(data);
 		var id_data;
 		if (data.results.some(function(result) {
+			// console.log(result);
 			var matched = result.url
 			// [ file name, tid ]
 			.match(/\/thread-(\d{1,8})-\d{1,4}(?:-\d{1,2})?.html?$/);
-			if (matched) {
-				var work_data = parse_topic_title(
-				//
-				get_label(result.titleNoFormatting || result.title));
-				if (work_data.title.trim() === work_title.trim()) {
-					id_data = CeL.null_Object();
-					id_data[matched[1]] = work_title;
-					return true;
-				}
+			if (!matched) {
+				return;
+			}
+
+			var title = result.titleNoFormatting || result.title;
+			if (/txt|pdf|epub|zip|rar|7z/i.test(title)) {
+				return;
+			}
+
+			var work_data = parse_topic_title(get_label(title));
+			// console.log([ work_title, work_data ]);
+			if (work_data && work_data.title.trim() === work_title.trim()) {
+				id_data = CeL.null_Object();
+				id_data[matched[1]] = work_title;
+				return true;
 			}
 		})) {
 			return id_data;
@@ -137,7 +152,7 @@ ck101 = new CeL.work_crawler({
 			}
 		}
 
-		var book_chapter, raw_data = JSON.parse(html.between(
+		var _this = this, book_chapter, raw_data = JSON.parse(html.between(
 				'<script type="application/ld+json">', '</script>')),
 		//
 		mainEntity = raw_data["@graph"][0].mainEntity,
@@ -156,7 +171,15 @@ ck101 = new CeL.work_crawler({
 			if (/(?:^|\s)src=/.test(attributes)) {
 				return all;
 			}
-			return all.replace(/(?:^|\s)file=/, ' src=');
+			return all.replace(/(^|\s)file="([^<>"']+)"/,
+			//
+			function(all, previous, url) {
+				if (!url.startsWith('//') && !url.includes('://')
+				//
+				&& !url.startsWith('/'))
+					url = _this.base_URL + url;
+				return previous + 'src="' + url + '"';
+			});
 		});
 
 		if (false) {
@@ -183,13 +206,34 @@ ck101 = new CeL.work_crawler({
 
 			text = text.between(' class="t_fsz">').between('<table ').between(
 					'>', '</table>').replace(/<div class="adBox">[\s\S]*$/, '')
-					.replace(/<\/?t[adhr][^<>]*>/g, '').trim();
+					.replace(/<\/?t[adhr][^<>]*>/g, '');
+
+			// trim
+			text = text.trimEnd()
+			// .trimStart()
+			.replace(/^(?:[\s\n]+|<br([^<>]*)>)+/i, '');
+
+			var post_status, blockquote;
 			text = text.replace(
-					/^<(strong|font|b)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>/,
-					function(all, $1, title) {
-						part_title = get_label(title);
+					/^(<i class="pstatus">.+<\/i>(?:[\s\n]+|<br([^<>]*)>)*)/,
+					function(pstatus) {
+						post_status = pstatus;
 						return '';
-					});
+					})
+			// 去掉引述。
+			.replace(PATTERN_START_QUOTE, function(all, quote) {
+				blockquote = quote.trim();
+				return '';
+			});
+
+			text = text.replace(
+			//
+			/^<(strong|font|b)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>/,
+			//
+			function(all, $1, title) {
+				part_title = get_label(title);
+				return '';
+			});
 
 			if (rate) {
 				// 納入評分理由。
@@ -214,15 +258,25 @@ ck101 = new CeL.work_crawler({
 				|| book_chapter.match(/第 *(\d+)/);
 				book_chapter_is_OK();
 			} else {
+				// 取第一行。
 				part_title = text.match(/^[^\n]*/)[0];
-				book_chapter = CeL.from_Chinese_numeral(part_title).match(
-						/第 *([\d ]+) *章/);
+				book_chapter = CeL.from_Chinese_numeral(part_title).toString();
+				// /(?:第 *|^)([\d ]+) *章/
+				book_chapter = book_chapter.match(/(?:第 *|^)(\d+)/)
 				if (book_chapter_is_OK()) {
 					part_title = get_label(part_title);
 					text = text.replace(part_title, '');
 				} else {
 					part_title = '第' + work_data.book_chapter_count + '章';
 				}
+			}
+
+			if (blockquote) {
+				text = '<blockquote>' + blockquote + '</blockquote>\n' + text;
+			}
+			if (post_status) {
+				// recover post status
+				text = post_status + text;
 			}
 
 			this.add_ebook_chapter(work_data, work_data.book_chapter_count, {
