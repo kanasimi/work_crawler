@@ -45,15 +45,15 @@ CeL.info(CeL.env.script_name + ': ' + target_directory + ': '
 
 // profile configuration
 compress_each_directory.profiles = {
-	image : {
+	'image folder' : {
 		file_type : 'zip',
 		switches : '-mx=0 -r -sdel -sccUTF-8'
 	},
-	game : {
+	'game folder' : {
 		file_type : '7z',
 		switches : '-mx=9 -r -sdel -sccUTF-8'
 	},
-	padding : {
+	'padding files' : {
 		file_type : '7z',
 		switches : '-mx=9 -r -sdel -sccUTF-8'
 	}
@@ -266,7 +266,7 @@ function check_fso(fso_name) {
 	});
 
 	if (_____padding_file_count > 0 && test_size_OK(null, {
-		profile : 'padding',
+		profile : 'padding files',
 		archive : directory_path + '_____padding_file.7z',
 		fso_list : directory_path + '_____padding_file_*'
 	}, '含有 padding file')) {
@@ -277,7 +277,7 @@ function check_fso(fso_name) {
 	// non_zero_size_array.sort(CeL.descending);
 
 	if (exe_count > 0
-			&& test_size_OK(1e9, 'game', '含有 ' + exe_count + '/'
+			&& test_size_OK(1e9, 'game folder', '含有 ' + exe_count + '/'
 					+ sub_sub_files_count + ' 個可執行檔')) {
 		return;
 	}
@@ -286,7 +286,7 @@ function check_fso(fso_name) {
 	//
 	: image_count > 2 && image_count > sub_sub_files_count - 2)
 			// 壓縮大多只有圖片的目錄。
-			&& test_size_OK(1e7, 'image', '含有 ' + image_count + '/'
+			&& test_size_OK(1e7, 'image folder', '含有 ' + image_count + '/'
 					+ sub_sub_files_count + ' 個圖片')) {
 		return;
 	}
@@ -299,7 +299,7 @@ function check_fso(fso_name) {
 			return sub_fso_name_list.some(function(name) {
 				return PATTERN_executable_file.test(name);
 			});
-		}) && test_size_OK(null, 'game', '次目錄中含有可執行檔')) {
+		}) && test_size_OK(null, 'game folder', '次目錄中含有可執行檔')) {
 			return;
 		}
 	}

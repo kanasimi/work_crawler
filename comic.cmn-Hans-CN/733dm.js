@@ -22,7 +22,7 @@ var _733dm = new CeL.work_crawler({
 	skip_error : true,
 
 	// one_by_one : true,
-	base_URL : 'http://www.733dm.net/',
+	base_URL : 'https://www.733dm.net/',
 	charset : 'gb2312',
 
 	// 取得伺服器列表。
