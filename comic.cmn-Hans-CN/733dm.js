@@ -120,7 +120,10 @@ var _733dm = new CeL.work_crawler({
 					// http://733dm.zgkouqiang.cn/
 					// 2017/7/24: http://733.733dm.net/
 					// 2017/8/26@http://www.733dm.net/skin/2014mh/global.js?v=003:
-					url : 'http://lo.htfrzb.com/' + url
+					// http://lo.htfrzb.com/
+					// 2017/10/14@https://www.733dm.net/skin/2014mh/global.js?v=003:
+					// http://img.tsjjx.com/, http://img.hi328.com/
+					url : 'http://img.tsjjx.com/' + url
 				};
 			})
 		};
