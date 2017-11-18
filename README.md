@@ -49,7 +49,7 @@
 | [看漫画](http://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/) |
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
-| [爱漫画](http://www.2manhua.com/) | 2manhua.js | 許多作品似乎從2017/9/3起就沒有更新 |
+| [爱漫画](http://www.2manhua.com/) | 2manhua.js | 許多作品似乎從2017/9/3起就沒有更新，似乎從2017/11/15左右起就持續"系统发生错误"至 2017/11/17 未復原。 |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikanmanhua.js | |
@@ -61,15 +61,26 @@
 
 ### Node.js lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
-1. 先安裝 [Node.js](https://nodejs.org/)。下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。
-2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮
-3. 進到解壓縮後工具檔所在的目錄，在命令行界面下執行：<!-- 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 -->
+1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://en.wikipedia.org/wiki/7-Zip)。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->
+2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可更改之。
+3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，放到本工具將安裝的標的目錄下。
+4. 在命令行界面下，進到本工具將安裝的標的目錄，執行：
+
+   ``` cmd
+   PROMPT> node _CeL.updater.node.js
+   ```
+
+4. 然後就能[開始試用](#execution-執行)囉。
+5. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
+
+<!-- use npm:
+3. 進到解壓縮後工具檔所在的目錄，在命令行界面下執行：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
 
    ``` cmd
    PROMPT> npm install cejs
    ```
-
 4. 然後就能[開始試用](#execution-執行)囉。
+-->
 
 * 請注意：採用 <code>npm</code> 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。**建議採用下方一般正常安裝方法**，下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 <code>npm install</code> 安裝舊版的程式庫。
 
@@ -88,12 +99,12 @@
 
    e.g.,
    ``` sh
-   $ node qq.js 狐妖小红娘 skip_error=true
-   $ node 23us 斗罗大陆Ⅲ龙王传说
-   $ node 2manhua 大主宰 recheck=true
-   $ node ikanman l=ikanman.txt recheck=true
-   $ echo "via id" && node 630book 267
-   $ node yomou 転生したらスライムだった件
+   $ cd comic.cmn-Hans-CN && node qq.js 狐妖小红娘 skip_error=true
+   $ cd novel.cmn-Hans-CN && node 23us 斗罗大陆Ⅲ龙王传说
+   $ cd comic.cmn-Hans-CN && node 2manhua 大主宰 recheck=true
+   $ cd comic.cmn-Hans-CN && node ikanman l=ikanman.txt recheck=true
+   $ cd novel.cmn-Hans-CN && echo "via id" && node 630book 267
+   $ cd novel.ja-JP       && node yomou 転生したらスライムだった件
    ```
 
 2. 下載的檔案將放在 <code>global.data_directory</code> 所設定的目錄下。若採[懶人安裝法](#nodejs-lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
