@@ -62,27 +62,27 @@
 ### Node.js lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
 1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://en.wikipedia.org/wiki/7-Zip)。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->
-2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可更改之。
+2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可將之改名。
 3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，放到本工具將安裝的標的目錄下。
-4. 在命令行界面下，進到本工具將安裝的標的目錄，執行：
+4. 在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具將安裝的標的目錄，執行命令以下載 CeJS 程式庫：
 
    ``` cmd
-   PROMPT> node _CeL.updater.node.js
+   node _CeL.updater.node.js
    ```
 
 4. 然後就能[開始試用](#execution-執行)囉。
 5. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
 
 <!-- use npm:
-3. 進到解壓縮後工具檔所在的目錄，在命令行界面下執行：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
+3. 在命令行界面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
 
    ``` cmd
-   PROMPT> npm install cejs
+   npm install cejs
    ```
 4. 然後就能[開始試用](#execution-執行)囉。
 -->
 
-* 請注意：採用 <code>npm</code> 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。**建議採用下方一般正常安裝方法**，下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 <code>npm install</code> 安裝舊版的程式庫。
+* 請注意：採用 <code>npm install cejs</code> 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。**建議採用下方一般正常安裝方法**，下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 <code>npm install</code> 安裝舊版的程式庫。
 
 ### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
@@ -94,17 +94,17 @@
 1. 確認要下載的網站名與作品名。之後在命令行界面下，執行：
 
    ``` sh
-   $ node 工具檔名.js "作品名" [option=true]
+   node 工具檔名.js "作品名" [option=true]
    ```
 
    e.g.,
    ``` sh
-   $ cd comic.cmn-Hans-CN && node qq.js 狐妖小红娘 skip_error=true
-   $ cd novel.cmn-Hans-CN && node 23us 斗罗大陆Ⅲ龙王传说
-   $ cd comic.cmn-Hans-CN && node 2manhua 大主宰 recheck=true
-   $ cd comic.cmn-Hans-CN && node ikanman l=ikanman.txt recheck=true
-   $ cd novel.cmn-Hans-CN && echo "via id" && node 630book 267
-   $ cd novel.ja-JP       && node yomou 転生したらスライムだった件
+   cd comic.cmn-Hans-CN && node qq.js 狐妖小红娘 skip_error=true
+   cd novel.cmn-Hans-CN && node 23us 斗罗大陆Ⅲ龙王传说
+   cd comic.cmn-Hans-CN && node 2manhua 大主宰 recheck=true
+   cd comic.cmn-Hans-CN && node ikanman l=ikanman.txt recheck=true
+   cd novel.cmn-Hans-CN && echo "via id" && node 630book 267
+   cd novel.ja-JP       && node yomou 転生したらスライムだった件
    ```
 
 2. 下載的檔案將放在 <code>global.data_directory</code> 所設定的目錄下。若採[懶人安裝法](#nodejs-lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
@@ -128,7 +128,7 @@
 
 ## Note 附注
 * 一般約需2至4小時新增或更新一網站，以達初步可用狀態。
-* 小說部份採用單線程下載，以避免對網站造成過度的負荷。漫畫部分則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
+* 小說作品採用單線程下載，以避免對網站造成過度的負荷。漫畫作品則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
 
 ## Purpose 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [work_crawler module](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
