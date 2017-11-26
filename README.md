@@ -49,11 +49,13 @@
 | [看漫画](http://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/) |
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
+| [汗汗酷漫](http://www.hhcool.com/) | hhcool.js | |
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | 許多作品似乎從2017/9/3起就沒有更新。 |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikanmanhua.js | |
-| [733动漫网](http://www.733dm.net/) | 733dm.js | |
+| [733动漫网](https://www.733dm.net/) | 733dm.js | |
+| [733漫画网](http://www.733mh.com/) | 733mh.js | 733mh與733dm其實是一樣的東西... |
 | [动漫之家](http://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/10/19 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/10/19 未復原。 |

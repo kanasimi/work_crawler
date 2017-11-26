@@ -13,8 +13,13 @@ CeL.run([
 , 'application.locale' ]);
 
 var _733dm = new CeL.work_crawler({
-	// recheck:從頭檢測所有作品之所有章節。
+	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
+
+	// 本站常常無法取得圖片，因此得多重新檢查。
+	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
 	// recheck : true,
+	// 當無法取得chapter資料時，直接嘗試下一章節。在手動+監視下recheck時可併用此項。
+	// skip_chapter_data_error : true,
 
 	// allow .jpg without EOI mark.
 	// allow_EOI_error : true,
@@ -26,27 +31,31 @@ var _733dm = new CeL.work_crawler({
 	charset : 'gb2312',
 
 	// 取得伺服器列表。
-	// http://www.733dm.net/skin/2014mh/global.js
 	// use_server_cache : true,
+	server_URL : function() {
+		// http://www.733dm.net/skin/2014mh/global.js
+		return this.base_URL + 'skin/2014mh/global.js';
+	},
+	parse_server_list : function(html) {
+		var server_list = [],
+		// e.g., WebimgServerURL[0]="http://img.tsjjx.com/"
+		// WebimgServerURL[0]="http://www.733mh.com/fd.php?url=http://img.tsjjx.com/";
+		matched, PATTERN = /\nWebimgServerURL\[\d\]\s*=\s*"([^"]+)"/g;
+		while (matched = PATTERN.exec(html)) {
+			server_list.push(matched[1].between('url='));
+		}
+		// console.log(server_list);
+		return server_list;
+	},
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : function(work_title) {
-		return [ this.base_URL + 'e/search/index.php', {
-			show : 'title',
-			keyboard : work_title
-		} ];
+	// @see CeL.application.net.work_crawler.PTCMS
+	search_URL : {
+		URL : 'http://so.733dm.net/cse/search?s=12232769419968673741&q=',
+		charset : 'UTF-8'
 	},
-	parse_search_result : function(html) {
-		html = html.between('id="dmList"', '</div>');
-		var id_list = [], id_data = [];
-		html.each_between('<li>', '</li>', function(token) {
-			var matched = token
-					.match(/<dt><a href="\/mh\/(\d+)" title="([^"]+)">/);
-			id_list.push(matched[1]);
-			id_data.push(matched[2]);
-		});
-		return [ id_list, id_data ];
-	},
+	// for 百度站内搜索工具。非百度搜索系統得要自己撰寫。
+	parse_search_result : 'baidu',
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
@@ -75,7 +84,7 @@ var _733dm = new CeL.work_crawler({
 		work_data.last_update = work_data.更新时间;
 		return work_data;
 	},
-	get_chapter_count : function(work_data, html) {
+	get_chapter_count : function(work_data, html, get_label) {
 		html = html.between('<div id="section">', '<div class="description">');
 		work_data.chapter_list = [];
 		var matched,
@@ -84,7 +93,7 @@ var _733dm = new CeL.work_crawler({
 		while (matched = PATTERN_chapter.exec(html)) {
 			work_data.chapter_list.push({
 				url : matched[1],
-				title : matched[2]
+				title : get_label(matched[2])
 			});
 		}
 		if (work_data.chapter_list.length > 1) {
@@ -116,14 +125,7 @@ var _733dm = new CeL.work_crawler({
 		chapter_data = {
 			image_list : chapter_data.map(function(url) {
 				return {
-					// http://733dm.xxjcw.com.cn/
-					// http://733dm.zgkouqiang.cn/
-					// 2017/7/24: http://733.733dm.net/
-					// 2017/8/26@http://www.733dm.net/skin/2014mh/global.js?v=003:
-					// http://lo.htfrzb.com/
-					// 2017/10/14@https://www.733dm.net/skin/2014mh/global.js?v=003:
-					// http://img.tsjjx.com/, http://img.hi328.com/
-					url : 'http://img.tsjjx.com/' + url
+					url : url
 				};
 			})
 		};
