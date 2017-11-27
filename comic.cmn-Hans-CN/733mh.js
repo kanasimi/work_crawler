@@ -20,7 +20,7 @@ var _733mh = new CeL.work_crawler({
 	// allow .jpg without EOI mark.
 	// allow_EOI_error : true,
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
-	// skip_error : true,
+	skip_error : true,
 
 	// one_by_one : true,
 	base_URL : 'http://www.733mh.com/',
@@ -28,24 +28,21 @@ var _733mh = new CeL.work_crawler({
 
 	// 取得伺服器列表。
 	// use_server_cache : true,
-	server_URL : function() {
-		// http://www.733mh.com/style/js/global.js
-		return this.base_URL + 'style/js/global.js';
-	},
+	// http://www.733mh.com/style/js/global.js
+	server_URL : 'style/js/global.js',
 	parse_server_list : function(html) {
 		var server_list = [],
 		// e.g., WebimgServerURL[0]="http://img.tsjjx.com/"
 		// WebimgServerURL[0]="http://www.733mh.com/fd.php?url=http://img.tsjjx.com/";
 		matched, PATTERN = /\nWebimgServerURL\[\d\]\s*=\s*"([^"]+)"/g;
 		while (matched = PATTERN.exec(html)) {
-			server_list.push(matched[1].between('url='));
+			server_list.push(matched[1].between('url=') || matched[1]);
 		}
 		// console.log(server_list);
 		return server_list;
 	},
 
 	// 解析 作品名稱 → 作品id get_work()
-	// @see CeL.application.net.work_crawler.PTCMS
 	search_URL : 'http://www.733mh.com/e/search/'
 			+ '?searchget=1&show=title,player,playadmin,pinyin&keyboard=',
 	parse_search_result : function(html) {

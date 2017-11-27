@@ -6,7 +6,7 @@
 
 ## Features 特點
 * 可自動下載小說封面以及章節中的插圖。
-* 可自行配置與設定。
+* 採用 CeJS [線上作品程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
 
 ## Supported sites 已完成之網站工具
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command line version first. 請注意：小說之下載必須先安裝 7Zip，這樣才能製作 .epub 電子書。
@@ -54,8 +54,8 @@
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikanmanhua.js | |
-| [733动漫网](https://www.733dm.net/) | 733dm.js | |
-| [733漫画网](http://www.733mh.com/) | 733mh.js | 733mh與733dm其實是一樣的東西... |
+| [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。 |
+| [733漫画网](http://www.733mh.com/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
 | [动漫之家](http://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/10/19 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/10/19 未復原。 |

@@ -8,10 +8,6 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-CeL.run([
-// CeL.detect_HTML_language()
-, 'application.locale' ]);
-
 var _733dm = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
@@ -32,24 +28,21 @@ var _733dm = new CeL.work_crawler({
 
 	// 取得伺服器列表。
 	// use_server_cache : true,
-	server_URL : function() {
-		// http://www.733dm.net/skin/2014mh/global.js
-		return this.base_URL + 'skin/2014mh/global.js';
-	},
+	// http://www.733dm.net/skin/2014mh/global.js
+	server_URL : 'skin/2014mh/global.js',
 	parse_server_list : function(html) {
 		var server_list = [],
 		// e.g., WebimgServerURL[0]="http://img.tsjjx.com/"
 		// WebimgServerURL[0]="http://www.733mh.com/fd.php?url=http://img.tsjjx.com/";
 		matched, PATTERN = /\nWebimgServerURL\[\d\]\s*=\s*"([^"]+)"/g;
 		while (matched = PATTERN.exec(html)) {
-			server_list.push(matched[1].between('url='));
+			server_list.push(matched[1].between('url=') || matched[1]);
 		}
 		// console.log(server_list);
 		return server_list;
 	},
 
 	// 解析 作品名稱 → 作品id get_work()
-	// @see CeL.application.net.work_crawler.PTCMS
 	search_URL : {
 		URL : 'http://so.733dm.net/cse/search?s=12232769419968673741&q=',
 		charset : 'UTF-8'
