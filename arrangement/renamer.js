@@ -1,5 +1,5 @@
 ﻿/**
- * rename files downloaded.
+ * @fileoverview rename files downloaded.
  * 
  * e.g., abc.rar → 確実な名前.abc.rar
  * 
@@ -73,6 +73,7 @@ if (target_directory) {
 	if (!/[\\\/]$/.test(target_directory)) {
 		target_directory += CeL.env.path_separator;
 	}
+	CeL.info('Target directory: ' + target_directory);
 
 	CeL.traverse_file_system(target_directory, function(path, fso_status,
 			is_directory) {

@@ -13,6 +13,10 @@ CeL.run('application.net.work_crawler.PTCMS');
 // ----------------------------------------------------------------------------
 
 var PTCMS = CeL.PTCMS({
+	// 23us 在連續下載2000章左右後似乎會自動404，得要等如3分鐘才會回復。
+	// 明確指定自上次下載過的章節接續下載。
+	// recheck : false,
+
 	base_URL : 'http://www.23us.cc/',
 
 	// 解析 作品名稱 → 作品id get_work()

@@ -1,5 +1,5 @@
 ﻿/**
- * 依照名稱分類檔案與目錄。符合條件時壓縮目錄。
+ * @fileoverview 依照名稱、內容分類檔案與目錄。符合條件時壓縮目錄。
  * 
  * @since 2017/8/24 10:16:34
  */
@@ -90,6 +90,7 @@ catalog_directory = {
 	comic_sub : {
 		shojo_manga : '_少女コミック',
 		artbook : '_イラスト,画集,Visual Book,Art Work,Artbook',
+		CG_no_title : '_イラスト,画集,Visual Book,Art Work,Artbook/_no title',
 		comic_magazine : '_雑誌'
 	},
 	adult : [ 'Hcomic,成年コミック,無修正', 'Hcomic', 'H' ],
@@ -116,14 +117,26 @@ catalog_directory = {
 		general_game : '_一般ゲーム'
 	},
 	tool : [ 'Tools', 't' ],
+
+	_maybe_doujin : [ '_maybe_doujin' ],
+	_maybe_comic_novel : [ '_maybe_comic_novel' ],
+	_maybe_translated_adult_comic : [ '_maybe_translated_adult_comic' ],
+
 	root : append_path_separator(catalog_directory)
 };
 
+// 初始化各個分類目錄的位置。
 Object.keys(catalog_directory).forEach(function(catalog) {
 	var directory = catalog_directory[catalog];
 	if (Array.isArray(directory)) {
 		if (!directory.some(function(candidate) {
-			candidate = catalog_directory.root + candidate;
+			if (catalog.startsWith('_')) {
+				candidate = target_directory + candidate;
+				CeL.create_directory(candidate);
+			} else {
+				candidate = catalog_directory.root + candidate;
+			}
+			// console.log([ catalog, candidate, target_directory ]);
 			if (CeL.directory_exists(candidate)) {
 				catalog_directory[catalog] = append_path_separator(candidate);
 				return true;
@@ -135,6 +148,7 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 		return;
 	}
 
+	// assert: typeof directory === 'string'
 	var matched = catalog.match(/^(.+)_sub$/);
 	if (matched && CeL.is_Object(directory)) {
 		delete catalog_directory[catalog];
@@ -191,6 +205,7 @@ function check_fso(fso_name) {
 		return;
 	}
 
+	// assert: fso_status.isDirectory()
 	directory_path += CeL.env.path_separator;
 	var sub_fso = CeL.read_directory(directory_path);
 	if (!sub_fso) {
@@ -392,6 +407,58 @@ function classify(fso_name, fso_path, fso_status) {
 		return;
 	}
 
+	if (/^(?:\[Pixiv\]|artist -|art -)/i.test(fso_name)) {
+		move_to('CG_no_title');
+		return;
+	}
+
+	// ------------------------------------------
+
+	if (fso_name.startsWith('[Shin-S]')) {
+		move_to('anime_music');
+		return;
+	}
+
+	// ------------------------------------------
+
+	if (/\.(zip|rar)$/.test(fso_name)
+			&& /第\d{1,2}(?:-\d{1,2})?巻/.test(fso_name)) {
+		move_to('_maybe_comic_novel');
+		return;
+	}
+
+	matched = fso_name
+			.match(/\(([^()\[\]]+)\)(?: *\[(?:DL版|見本)\])?(?: *\(\d\))?\.(zip|rar)$/);
+	if (matched) {
+		if (/^x\d{3,4}$/.test(matched[1])
+		// COMIC 阿吽, コミックマグナム
+		|| /^(?:COMIC |コミック)/i.test(matched[1])) {
+			move_to('adult_comic');
+			return;
+		}
+
+		if (/^ビッグコミックス/.test(matched[1])) {
+			move_to('comic');
+			return;
+		}
+
+		if (
+		// "1", "12-13-15", "3211231", "2014"
+		/^(?:[\d\- ]*|Ongoing|Eng?|English|korean|kor|Jap|Japanese|更正|GIFs?|CG)$/i
+				.test(matched[1])) {
+			// [Pixiv] 60枚 (3322006).zip
+		} else {
+			move_to('_maybe_doujin');
+			return;
+		}
+	}
+
+	if (/中文|漢化|翻中|汉化|\[(?:中|CHT|ENG)\]|\(Eng\)|English|Español|Korean|Chinese|Spanish|Russian|翻訳/i
+			.test(fso_name)) {
+		move_to('_maybe_translated_adult_comic');
+		return;
+	}
+
 	// TODO: add more patterns
 }
 
@@ -465,5 +532,13 @@ function compress_each_directory(config, index) {
 
 // -----------------------------------------------------------------
 // finish up
+
+Object.keys(catalog_directory).forEach(function(catalog) {
+	if (catalog.startsWith('_')
+	// 移除空的候選目錄。
+	&& CeL.directory_is_empty(catalog_directory[catalog])) {
+		CeL.remove_directory(catalog_directory[catalog]);
+	}
+});
 
 // CeL.log('Done.');

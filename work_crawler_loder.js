@@ -9,8 +9,21 @@
 // npm: 若有 CeJS module 則用之。
 global.use_cejs_mudule = true;
 
-// default directory to place images '': the same as the .js running
+// default directory to place comic images and novels. 指定下載的檔案要放置的標的目錄。
+// '': the same as the .js running
 global.data_directory = '';
+
+// ------------------------------------
+// configuration for arrangement/*.js
+
+// default directory to place completed files
+// 將會被指定為第一個存在的目錄。
+global.completed_directory = [ '', '' ];
+
+// 檔案分類完後要放置的標的目錄。
+global.catalog_directory = '';
+
+// ------------------------------------
 
 try {
 	// Load configuration.

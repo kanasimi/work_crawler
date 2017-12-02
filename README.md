@@ -74,7 +74,8 @@
    ```
 
 4. 然後就能[開始試用](#execution-執行)囉。
-5. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
+5. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。
+6. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
 
 <!-- use npm:
 3. 在命令行界面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
@@ -90,7 +91,7 @@
 ### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
 2. Setup [_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt) if necessary.
-2. Setup [work_crawler_loder.config.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.config.js). 最後設定好 work_crawler_loder.config.js。例如指定 <code>global.data_directory</code>。
+2. Setup [work_crawler_loder.configuration.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js). 最後設定好設定檔 <code>work_crawler_loder.configuration.js</code>。例如指定 <code>global.data_directory</code>。
 
 ## Execution 執行
 所有操作都必須進到工具檔所在的目錄，在命令行界面下執行。
@@ -110,7 +111,7 @@
    cd novel.ja-JP       && node yomou 転生したらスライムだった件
    ```
 
-2. 下載的檔案將放在 <code>global.data_directory</code> 所設定的目錄下。若採[懶人安裝法](#nodejs-lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
+2. 下載的檔案將放在設定檔 <code>work_crawler_loder.configuration.js</code> 的 <code>global.data_directory</code> 所設定的目錄下。若採[懶人安裝法](#nodejs-lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
 3. 若是下載出錯，**重新執行即可接續下載**。
 
 ## Workflow 工作流程
@@ -130,11 +131,11 @@
 ![小說 → epub](https://lh3.googleusercontent.com/zXxohSbIAwXJuNdmq039hPVTPrFGf_DTUbhVzrIGNjr_9MT08ATuOsi6eMS1kTNlEt502dQeWNGCnRl8_kM6sWMrsTH8LINnKg7IiMxRj7wF4TR-Tpbt_fVVtHyI_lApDUUG_niDE4ZUphSRCTccLMiKAl3TW7qHqg6PsO4LxkntcF6VG3RPx7d2gb7mBSe-W9_06c3-Zaaq9npqpx8I2Yx5egYbwIT2T7Rsuw3WoeGN153SqrfJpeMQudvQeNbU7DREdqWT3g664Eqhfi73JI2YVPsyL5ntIlHuPTvGnOFCV5o1Qh2SlRMs0q2uVZs3PfkTc81ea0sO6eROnLGxJI3_2gRqVYlp8zkaPymo-t0mlcdcXj-dOuvke9o7ckqa-8-8JyTyzPWUZvZVdEVEI3FS-nv1aoDOs169xZnPuz1yYt0IoKS1LwObYYW6KMzTNAi-fCp7JNvtMzKZRy6aI9PbwDfEY0S178aaF_A6-p7udFtsb31Dy11j4BmT911wiYwPCNbRRJqWA0AaLJIcetC0jjY-BugWLqePsVZTgzNocwMIUe8xj54kZOy9aD4mckFXXkS9BHnwbr0096nQQ5GduKGQATSRvdSFfSu-ttOMZExz0DKcxyKimPiir7KZ-jzMUMbW9F3AS4mn2lKsTdRwhtieux10ojXq6Pdqap8VIA=w1366-h738-no)
 
 ## Note 附注
-* 一般約需2至4小時新增或更新一網站，以達初步可用狀態。
+* 熟練後，一般約需2至4小時新增或更新一網站的下載工具，以達初步可用狀態。
 * 小說作品採用單線程下載，以避免對網站造成過度的負荷。漫畫作品則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
 
 ## Purpose 公開目的
-* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [work_crawler module](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
+* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [線上作品程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
 * 展示程式撰寫當時，各線上小說漫畫網站之網站資料結構。
 * 提供離線瀏覽小說漫畫功能，以利個人化閱覽方式。增進閱覽體驗、掌控閱覽環境。
 * 增加對閱讀權的掌控能力，預防數十年後找不到記憶中閱覽過的作品。
@@ -143,11 +144,11 @@
 
 ## Announce 聲明
 * 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容版權屬原作者所有，請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
-* 各漫畫網站往往不時更改結構，同時造成本工具無法作動；因此若是有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
+* 各線上作品網站往往不時更改結構，同時造成本工具無法作動；因此若是有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
 
 ## Uninstallation 移除
 * 要移除本工具，只需將解壓縮後工具檔所在的目錄整個刪除即可。
-* 圖片檔與紀錄檔的目錄需另外手動刪除。
+* 作品下載的標的目錄（存放圖片檔與紀錄檔的目錄）需另外手動刪除。
 
 <!--
 TODO:
