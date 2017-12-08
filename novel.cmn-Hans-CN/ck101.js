@@ -18,7 +18,7 @@ CeL.run([ 'application.storage.EPUB' ]);
 // 解析論壇討論串標題
 function parse_topic_title(title, work_data) {
 	function parse_genre(genre) {
-		genre = genre.replace(/[\[【(（<「]([^\[【(（<「\]】)）>」]+?)[\]】)）>」]/g,
+		genre = genre.replace(/[\[【(（<「〈]([^\[【(（<「〈\]】)）>」〉]+?)[\]】)）>」〉]/g,
 		//
 		function(all, genre) {
 			if (/第.+部/.test(genre)) {
@@ -65,7 +65,23 @@ function parse_topic_title(title, work_data) {
 	return work_data;
 }
 
-var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=bb73d6800fca299b36665ebff4d01037&cx=partner-pub-1630767461540427:6206348626&cse_tok=AHKYotWVmvV1wohA3g8oNFAm_6cK:1495660148313&googlehost=www.google.com&q=',
+function get_work_data_from_html(html) {
+	html = html.between('<script type="application/ld+json">', '</script>')
+	// e.g., 異常生物見聞錄
+	.replace(/\t/g, '\\t')
+	// e.g., 不死不滅 thread-2332198-1-1.html
+	.replace(/("(?:pageEnd|pagination)": ),/g, '$1 1,');
+	try {
+		html = JSON.parse(html);
+	} catch (e) {
+		console.log(html);
+		// TODO: handle exception
+		return;
+	}
+	return html;
+}
+
+var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=ebaa7a3b8b3fa3d882a727859972d6ad&cx=partner-pub-1630767461540427:6206348626&cse_tok=APbAYefCarQOywugS7Jt3z-nchF-9_ZrLQ:1512555592025&sort=&googlehost=www.google.com&q=',
 //
 PATTERN_START_QUOTE = /<div class="quote"><blockquote>([\s\S]*?)<\/blockquote><\/div>(?:[\s\n]+|<br([^<>]*)>)*/,
 //
@@ -109,6 +125,8 @@ ck101 = new CeL.work_crawler({
 		})) {
 			return id_data;
 		}
+		// 未找到相符者。
+		return [];
 	},
 
 	// 取得作品的章節資料。 get_work_data()
@@ -116,8 +134,13 @@ ck101 = new CeL.work_crawler({
 		return 'thread-' + work_id + '-1-1.html';
 	},
 	parse_work_data : function(html, get_label) {
-		var raw_data = JSON.parse(html.between(
-				'<script type="application/ld+json">', '</script>')),
+		var error = html.between('<div id="messagetext" class="alert_error">',
+				'</div>')
+		if (error) {
+			CeL.error(get_label(error.between(null, '<script')));
+		}
+
+		var raw_data = get_work_data_from_html(html),
 		//
 		mainEntity = raw_data["@graph"][0].mainEntity,
 		//
@@ -143,17 +166,20 @@ ck101 = new CeL.work_crawler({
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		//
-		function book_chapter_is_OK() {
+		function book_chapter_is_OK(diff) {
 			if (book_chapter && (book_chapter = +book_chapter[1]) >= 1
 			// 差距不大時才可算數。
-			&& Math.abs(book_chapter - work_data.book_chapter_count) < 4) {
+			&& Math.abs(book_chapter - work_data.book_chapter_count)
+			//
+			< (diff || 4)) {
 				work_data.book_chapter_count = book_chapter;
 				return true;
 			}
 		}
 
-		var _this = this, book_chapter, raw_data = JSON.parse(html.between(
-				'<script type="application/ld+json">', '</script>')),
+		var _this = this, book_chapter,
+		//
+		raw_data = get_work_data_from_html(html),
 		//
 		mainEntity = raw_data["@graph"][0].mainEntity,
 		// /<div id="(post_\d+)" class="plhin">/g
@@ -253,21 +279,35 @@ ck101 = new CeL.work_crawler({
 			// 嘗試解析章節號碼。
 			if (part_title) {
 				book_chapter = CeL.from_Chinese_numeral(part_title);
-				book_chapter = book_chapter.match(/(\d+) *章/)
-				// 先檢查"章"，預防有"第?卷 第?章"。
-				|| book_chapter.match(/第 *(\d+)/);
-				book_chapter_is_OK();
+				var matched = book_chapter.match(/第 {0,2}(\d+) {0,2}章/);
+				if (matched) {
+					book_chapter = matched;
+					// 當格式明確的時候，可以容許比較大的跨度。
+					book_chapter_is_OK(40);
+				} else {
+					book_chapter = book_chapter.match(/(\d+) *章/)
+					// 先檢查"章"，預防有"第?卷 第?章"。
+					|| book_chapter.match(/第 *(\d+)/);
+					book_chapter_is_OK();
+				}
 			} else {
 				// 取第一行。
 				part_title = text.match(/^[^\n]*/)[0];
 				book_chapter = CeL.from_Chinese_numeral(part_title).toString();
-				// /(?:第 *|^)([\d ]+) *章/
-				book_chapter = book_chapter.match(/(?:第 *|^)(\d+)/)
-				if (book_chapter_is_OK()) {
-					part_title = get_label(part_title);
-					text = text.replace(part_title, '');
+				var matched = book_chapter.match(/第 {0,2}(\d+) {0,2}章/);
+				if (matched) {
+					book_chapter = matched;
+					// 當格式明確的時候，可以容許比較大的跨度。
+					book_chapter_is_OK(40);
 				} else {
-					part_title = '第' + work_data.book_chapter_count + '章';
+					// /(?:第 *|^)([\d ]+) *章/
+					book_chapter = book_chapter.match(/(?:第 *|^)(\d+)/)
+					if (book_chapter_is_OK()) {
+						part_title = get_label(part_title);
+						text = text.replace(part_title, '');
+					} else {
+						part_title = '第' + work_data.book_chapter_count + '章';
+					}
 				}
 			}
 

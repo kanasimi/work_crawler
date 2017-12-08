@@ -148,7 +148,7 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 		return;
 	}
 
-	// assert: typeof directory === 'string'
+	// assert: directory = {catalog:'string'}
 	var matched = catalog.match(/^(.+)_sub$/);
 	if (matched && CeL.is_Object(directory)) {
 		delete catalog_directory[catalog];
@@ -171,6 +171,8 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 			catalog_directory[sub_catalog] = sub_catalog_directory;
 		});
 		return;
+	} else if (catalog !== 'root') {
+		CeL.error('Invalid catalog: ' + catalog);
 	}
 });
 
@@ -369,7 +371,10 @@ function classify(fso_name, fso_path, fso_status) {
 		return;
 	}
 
-	if (/[\[(（【](?:18禁ゲーム|ACT|ADV|RPG|SLG)/i.test(fso_name)) {
+	if (/[\[(（【](?:18禁ゲーム|ACT|ADV|RPG|SLG|3D|PL\])/i.test(fso_name)
+			|| /パッケージ版|修正パッチ|予約特典|本編同梱|\+ ?update/i.test(fso_name)
+	// || /ver[. ]1\.\d+/i.test(fso_name)
+	) {
 		move_to('game');
 		return;
 	}
@@ -407,7 +412,7 @@ function classify(fso_name, fso_path, fso_status) {
 		return;
 	}
 
-	if (/^(?:\[Pixiv\]|artist -|art -)/i.test(fso_name)) {
+	if (/^(?:[\[(]?Pixiv|artist -|art -|アーティスト -)/i.test(fso_name)) {
 		move_to('CG_no_title');
 		return;
 	}
@@ -428,7 +433,7 @@ function classify(fso_name, fso_path, fso_status) {
 	}
 
 	matched = fso_name
-			.match(/\(([^()\[\]]+)\)(?: *\[(?:DL版|見本)\])?(?: *\(\d\))?\.(zip|rar)$/);
+			.match(/\(([^()\[\]]+)\)(?: *[\[【](?:DL版|Digital|見本)[\]】])?(?: *\(\d\))?\.(zip|rar|cbz)$/);
 	if (matched) {
 		if (/^x\d{3,4}$/.test(matched[1])
 		// COMIC 阿吽, コミックマグナム
@@ -444,7 +449,7 @@ function classify(fso_name, fso_path, fso_status) {
 
 		if (
 		// "1", "12-13-15", "3211231", "2014"
-		/^(?:[\d\- ]*|Ongoing|Eng?|English|korean|kor|Jap|Japanese|更正|GIFs?|CG)$/i
+		/^(?:[\d\- ]*|Ongoing|Eng?|English|korean|kor|Jap|Japanese|英訳|中国語|更正|GIFs?|CG)$/i
 				.test(matched[1])) {
 			// [Pixiv] 60枚 (3322006).zip
 		} else {
@@ -453,7 +458,7 @@ function classify(fso_name, fso_path, fso_status) {
 		}
 	}
 
-	if (/中文|漢化|翻中|汉化|\[(?:中|CHT|ENG)\]|\(Eng\)|English|Español|Korean|Chinese|Spanish|Russian|翻訳/i
+	if (/中文|漢化|翻中|汉化|\[(?:中|CHT|ENG)\]|\(Eng\)|English|Español|Korean|Chinese|Spanish|Russian|翻訳|英訳|中国語/i
 			.test(fso_name)) {
 		move_to('_maybe_translated_adult_comic');
 		return;
@@ -505,6 +510,7 @@ function compress_each_directory(config, index) {
 		profile_name = profile_name.profile;
 	}
 
+	process.title = 'Compress ' + (index + 1) + '/' + process_queue.length;
 	CeL.info((index + 1) + '/' + process_queue.length + ' Compress '
 			+ profile_name + ': [' + directory_path + '] ' + (message || '')
 			+ '...');

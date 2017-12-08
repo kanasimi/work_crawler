@@ -62,36 +62,32 @@
 
 ## Installation 安裝
 
-### Node.js lazy installation 懶人安裝法
+### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
 1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://en.wikipedia.org/wiki/7-Zip)。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->
 2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可將之改名。
 3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，放到本工具將安裝的標的目錄下。
 4. 在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具將安裝的標的目錄，執行命令以下載 CeJS 程式庫：
-
    ``` cmd
    node _CeL.updater.node.js
    ```
-
-4. 然後就能[開始試用](#execution-執行)囉。
-5. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。
-6. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
+5. 然後就能[開始試用](#execution-執行)囉。
+6. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。
+7. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
 
 <!-- use npm:
 3. 在命令行界面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
-
    ``` cmd
    npm install cejs
    ```
 4. 然後就能[開始試用](#execution-執行)囉。
--->
-
 * 請注意：採用 <code>npm install cejs</code> 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。**建議採用下方一般正常安裝方法**，下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 <code>npm install</code> 安裝舊版的程式庫。
+-->
 
 ### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
 2. Setup [_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt) if necessary.
-2. Setup [work_crawler_loder.configuration.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js). 最後設定好設定檔 <code>work_crawler_loder.configuration.js</code>。例如指定 <code>global.data_directory</code>。
+3. Setup <code>work_crawler_loder.configuration.js</code> (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js)). 最後設定好設定檔 <code>work_crawler_loder.configuration.js</code>。例如指定 <code>global.data_directory</code>。
 
 ## Execution 執行
 所有操作都必須進到工具檔所在的目錄，在命令行界面下執行。

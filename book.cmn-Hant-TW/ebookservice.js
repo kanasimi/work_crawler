@@ -256,6 +256,7 @@ if (html.includes('<iframe id="')) {
 		}
 	}
 
-	CeL.info((start_empty_NO > 0 ? start_empty_NO - 1 : image_NO)
+	CeL.info(source_file + ': '
+			+ (start_empty_NO > 0 ? start_empty_NO - 1 : image_NO)
 			+ ' images get.');
 }
