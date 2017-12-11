@@ -449,7 +449,7 @@ function classify(fso_name, fso_path, fso_status) {
 
 		if (
 		// "1", "12-13-15", "3211231", "2014"
-		/^(?:[\d\- ]*|Ongoing|Eng?|English|korean|kor|Jap|Japanese|英訳|中国語|更正|GIFs?|CG)$/i
+		/^(?:[\d\- ]*|Ongoing|Eng?|English|korean|kor|Jap|Japanese|RUS|英訳|中国語|更正|GIFs?|CG)$/i
 				.test(matched[1])) {
 			// [Pixiv] 60枚 (3322006).zip
 		} else {
@@ -458,7 +458,7 @@ function classify(fso_name, fso_path, fso_status) {
 		}
 	}
 
-	if (/中文|漢化|翻中|汉化|\[(?:中|CHT|ENG)\]|\(Eng\)|English|Español|Korean|Chinese|Spanish|Russian|翻訳|英訳|中国語/i
+	if (/中文|漢化|翻中|汉化|\[(?:中|CHT|ENG)\]|\(Eng\)|English|Español|Korean|Chinese|Spanish|Russian|RUS|翻訳|英訳|中国語/i
 			.test(fso_name)) {
 		move_to('_maybe_translated_adult_comic');
 		return;

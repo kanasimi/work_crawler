@@ -82,8 +82,12 @@ function get_work_data_from_html(html) {
 }
 
 var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=ebaa7a3b8b3fa3d882a727859972d6ad&cx=partner-pub-1630767461540427:6206348626&cse_tok=APbAYefCarQOywugS7Jt3z-nchF-9_ZrLQ:1512555592025&sort=&googlehost=www.google.com&q=',
+// cf. .trimStart()
+PATTERN_START_SPACE = /^(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)+/i,
 //
-PATTERN_START_QUOTE = /<div class="quote"><blockquote>([\s\S]*?)<\/blockquote><\/div>(?:[\s\n]+|<br([^<>]*)>)*/,
+PATTERN_START_QUOTE = /<div class="quote"><blockquote>([\s\S]*?)<\/blockquote><\/div>(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)*/i,
+//
+PATTERN_POST_STATUS = /^(<i class="pstatus">.+<\/i>)(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)*/i,
 //
 ck101 = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
@@ -166,13 +170,15 @@ ck101 = new CeL.work_crawler({
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		//
-		function book_chapter_is_OK(diff) {
-			if (book_chapter && (book_chapter = +book_chapter[1]) >= 1
-			// 差距不大時才可算數。
-			&& Math.abs(book_chapter - work_data.book_chapter_count)
+		function book_chapter_is_OK(matched, diff) {
+			if (matched === undefined)
+				matched = book_chapter;
+			if (matched && (matched = +matched[1]) >= 1
+			// 4: 差距不大時才可算數。
+			&& Math.abs(matched - work_data.book_chapter_count)
 			//
 			< (diff || 4)) {
-				work_data.book_chapter_count = book_chapter;
+				work_data.book_chapter_count = matched;
 				return true;
 			}
 		}
@@ -190,7 +196,8 @@ ck101 = new CeL.work_crawler({
 		html = html.between('<!--postlist-->', '<!--postlist end-->')
 		// e.g., ' src="https://ck101.com/static/image/common/none.gif"'
 		.replace(/ src="[^"]+?\/(?:none|nophoto|back)\.[a-z]+"/g, '')
-		// e.g., https://ck101.com/thread-3397649-147-1.html#post_108084487
+		// e.g.,
+		// https://ck101.com/thread-3397649-147-1.html#post_108084487
 		.replace(/<a href="[^"<>]*email-protection"[^<>]*>.*?<\/a>/g, '@')
 		// e.g., https://ck101.com/thread-3277544-1-1.html
 		.replace(/<img ([^<>]+)>/g, function(all, attributes) {
@@ -221,8 +228,8 @@ ck101 = new CeL.work_crawler({
 
 		for (var index = 0; index < matched_list.length - 1; index++) {
 			var text = html.slice(matched_list[index][0],
-					matched_list[index + 1][0]), part_title = null, date = text
-					.between(' class="postDateLine">', '</span>');
+					matched_list[index + 1][0]), date = text.between(
+					' class="postDateLine">', '</span>');
 			if (date) {
 				date = date.to_Date();
 				// date.replace(/發表於 *:?/, '').trim();
@@ -235,31 +242,83 @@ ck101 = new CeL.work_crawler({
 					.replace(/<\/?t[adhr][^<>]*>/g, '');
 
 			// trim
-			text = text.trimEnd()
-			// .trimStart()
-			.replace(/^(?:[\s\n]+|<br([^<>]*)>)+/i, '');
+			text = text.trimEnd().replace(PATTERN_START_SPACE, '');
 
 			var post_status, blockquote;
-			text = text.replace(
-					/^(<i class="pstatus">.+<\/i>(?:[\s\n]+|<br([^<>]*)>)*)/,
-					function(pstatus) {
-						post_status = pstatus;
-						return '';
-					})
+			text = text.replace(PATTERN_POST_STATUS, function(all, pstatus) {
+				post_status = pstatus;
+				return '';
+			})
 			// 去掉引述。
 			.replace(PATTERN_START_QUOTE, function(all, quote) {
 				blockquote = quote.trim();
 				return '';
 			});
 
+			// console.log('-'.repeat(80));
+			// console.log(text);
+			work_data.book_chapter_count++;
+
+			// ----------------------------------
+			// 嘗試解析章節號碼與章節標題。
+
+			var part_title = undefined, first_line, _part_title;
+
 			text = text.replace(
-			//
+			// 正規的標題形式。
 			/^<(strong|font|b)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>/,
 			//
-			function(all, $1, title) {
+			function(all, tag_attributes, title) {
+				first_line = all;
 				part_title = get_label(title);
 				return '';
 			});
+
+			if (!part_title) {
+				// 取第一行。
+				first_line = text.match(/^[^\n]*/)[0];
+				_part_title = get_label(first_line) || '';
+			}
+
+			book_chapter = CeL.from_Chinese_numeral(part_title || _part_title)
+					.toString();
+
+			var matched = book_chapter.match(/(?:第 *|^) {0,2}(\d+) {0,2}章/);
+			if (book_chapter_is_OK(matched, 40)
+			// ↑ 40: 當格式明確的時候，可以容許比較大的跨度。
+			|| part_title && book_chapter_is_OK(book_chapter.match(/(\d+) *章/)
+			// 先檢查"章"，預防有"第?卷 第?章"。
+			|| book_chapter.match(/第 *(\d+)/))
+			//
+			|| book_chapter_is_OK(book_chapter.match(/(?:^|[^\d])(\d{1,4})章/)
+			//
+			|| book_chapter.match(/(?:第 *|^)(\d{1,4})(?:$|[^\d])/))) {
+				if (!part_title) {
+					// assert: !!part_title===false
+					// && !!first_line===true && !!_part_title===true
+					part_title = _part_title;
+
+					// 去除章節標題: 第1行為章節標題。既然可以從第一行抽取出章節標題，那麼就應該要把這一行去掉。
+					text = text.replace(first_line, '').replace(
+							PATTERN_START_SPACE, '');
+				}
+				part_title = part_title
+				// 去除過多的空白字元。
+				.replace(/(\s){2,}/g, '$1')
+				// 去除書名: 有時第一行會包含書名。
+				.replace(work_data.title, '')
+				// e.g., 完美世界
+				.replace(/^\s*正文/, '').trim();
+
+			} else {
+				if (part_title) {
+					// 無法從第一行抽取出章節標題。回補第一行。
+					text = first_line + text;
+				}
+				part_title = '第' + work_data.book_chapter_count + '章';
+			}
+
+			// ----------------------------------
 
 			if (rate) {
 				// 納入評分理由。
@@ -272,51 +331,12 @@ ck101 = new CeL.work_crawler({
 				}) + '</table>';
 			}
 
-			// console.log('-'.repeat(80));
-			// console.log(text);
-			work_data.book_chapter_count++;
-
-			// 嘗試解析章節號碼。
-			if (part_title) {
-				book_chapter = CeL.from_Chinese_numeral(part_title);
-				var matched = book_chapter.match(/第 {0,2}(\d+) {0,2}章/);
-				if (matched) {
-					book_chapter = matched;
-					// 當格式明確的時候，可以容許比較大的跨度。
-					book_chapter_is_OK(40);
-				} else {
-					book_chapter = book_chapter.match(/(\d+) *章/)
-					// 先檢查"章"，預防有"第?卷 第?章"。
-					|| book_chapter.match(/第 *(\d+)/);
-					book_chapter_is_OK();
-				}
-			} else {
-				// 取第一行。
-				part_title = text.match(/^[^\n]*/)[0];
-				book_chapter = CeL.from_Chinese_numeral(part_title).toString();
-				var matched = book_chapter.match(/第 {0,2}(\d+) {0,2}章/);
-				if (matched) {
-					book_chapter = matched;
-					// 當格式明確的時候，可以容許比較大的跨度。
-					book_chapter_is_OK(40);
-				} else {
-					// /(?:第 *|^)([\d ]+) *章/
-					book_chapter = book_chapter.match(/(?:第 *|^)(\d+)/)
-					if (book_chapter_is_OK()) {
-						part_title = get_label(part_title);
-						text = text.replace(part_title, '');
-					} else {
-						part_title = '第' + work_data.book_chapter_count + '章';
-					}
-				}
-			}
-
 			if (blockquote) {
 				text = '<blockquote>' + blockquote + '</blockquote>\n' + text;
 			}
 			if (post_status) {
 				// recover post status
-				text = post_status + text;
+				text = post_status + '<br />\n' + text;
 			}
 
 			this.add_ebook_chapter(work_data, work_data.book_chapter_count, {
