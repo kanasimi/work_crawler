@@ -66,7 +66,10 @@
 為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
 1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://en.wikipedia.org/wiki/7-Zip)。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->
 2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可將之改名。
-3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，放到本工具將安裝的標的目錄下。
+3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，另外儲存到本工具將安裝的標的目錄下。
+
+![本工具將安裝的標的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
+
 4. 在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具將安裝的標的目錄，執行命令以下載 CeJS 程式庫：
    ``` cmd
    node _CeL.updater.node.js
@@ -120,7 +123,9 @@
 
 接續下載時，將從上次的進度（最後下載的章節）接著下載。
 
-![接續下載](https://lh3.googleusercontent.com/LMpFtmfIIeH3bCbM2DuEX_AJ2r17X-_OGM8O6EitrLYLRzqxYn0tt6CbjZciL1Hav60vDEXAMFILWviPu-wFjqfpuO_srKNKbVUVr-5XJ7wBm0J6r730vYVZ4Iun1Ug5tm7iRBK24kWZKAJwD6Fpx_WagdQji81k6yVvmMO-_KHx-UwaUtox2Z9CLQvpHG63XqAcoTJdob3_gBCyen82HNlmmQLMLFrvjvFeywYrR2YsOkem_fypz5jvM1UM9BS8Bd0WzkjQ5SoE_SNgF_EhOuESbTu_pmLjZL0OoZX0eAUisfcGnLptk0ea8eM4KqU3oOQhG44emNxuH31gQMHQiXVd-7-X2H_VK2IhlosyPQuObveuGv6C0fjNJmoJdEFjPPlZVx25JuGJZe_PfRkdkoliNHcn5UMaqp8YiTF7wvGOktLnE2OBJXx7DuvUzjO2VY8aoebwdRjJI9ft-Co0zIe1AZUW0rcmrWROqFJNTHYNoLyVo_lmxgw_THlgv1GaY5BhKfKOXC_Zx-n6ye_xtQgO-wxSgDaCvBPuE7G8VMGdYyl-12LLa1IKROtqjfVePilpWRsWq5tO1SnCb1rn2ulDoF9cxlIo3yKMtpdWCCppM9ro=w745-h481-no)
+![接續下載](https://lh3.googleusercontent.com/PpNidzWOTdQe0VMxIfgXrCJVVJ_g5dXENCPMM7OMX7vdlTywcCqN5fKtTxNT8Fm9hTG3-2H5mdHfgFPDpHzP2yeSRQ8ObuabMGnFnatDId5UvSXC9BOk_94O2CxCAkSLTov6KU-qSA=w732-h463-no)
+
+小說 → epub
 
 ![小說 → epub list](https://lh3.googleusercontent.com/E1IHu14DmtTyB5FO090wrAQ2szVB3TxUIQAuQfqklRITRA-zE6r8aG22nSAFQvRpncooGCN_q9Lym1bsOaCSrFY9Yadvapzjkqbi9F4iQIBV_IgZUKMB5tURe9B_XtOikcQ4lTg4dBhZPnCI1w-cM9J4rdyg3jvXpej-vT3AZyFQJZUDBLOCEKmRCvt9va1XZslmkPTjegDD2XxZ_Eff6KGRVaLXUyOfqngT-EGwV2Wn82AN20bgmw3yVRjLWzzzKHTT3ZR46QWhHskR_3QcfWwOJZN8nLTmXZVXfuL3EbXKh5xEVUZnUc-HeOxUSp6QIEQlowCZu5jKW8d2YQtiP1xnmabDk4VpuNWVYRWHrgAdb8ahE-e7EPU0iuj40lTrUJ4rxOSp9G35AtYDFDy33GOOsxXvv1UO2KitCXp56vfdjyuOPZL0-vLdJIJ41aJ8RBhsaOlxhiWfLA9AqaNoUOWBojx-6CiSLFc6iisiSWk30r9x2rf-4eDYiB_UmvHlLpZCIIci3YAyREy2cqJ-QQSC76gphXoQh4RPW4ThAX_rAEmh4mfgojmTvgDJqdZCtC103CJASBcJYvt1ZpBDuLSfzdRZF64VaOynO6ln9trimMjTI6fc6zUIL-GR_7wtEsnVKwLthalI-0qMlEf0Og3MHs8D6wkkthrzmu5WyzZG6g=w1366-h738-no)
 
