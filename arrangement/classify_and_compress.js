@@ -309,16 +309,17 @@ function check_fso(fso_name) {
 	}
 
 	if (non_zero_size_count < 9 && !(biggest_file_size > 2e8)
-			&& sub_directories.length < 9) {
-		if (sub_directories.some(function(sub_directory) {
-			sub_directory = directory_path + sub_directory;
-			var sub_fso_name_list = CeL.read_directory(sub_directory);
-			return sub_fso_name_list.some(function(name) {
-				return PATTERN_executable_file.test(name);
-			});
-		}) && test_size_OK(null, 'game folder', '次目錄中含有可執行檔')) {
-			return;
-		}
+	//
+	&& sub_directories.length < 9
+	//
+	&& sub_directories.some(function(sub_directory) {
+		sub_directory = directory_path + sub_directory;
+		var sub_fso_name_list = CeL.read_directory(sub_directory);
+		return sub_fso_name_list.some(function(name) {
+			return PATTERN_executable_file.test(name);
+		});
+	}) && test_size_OK(null, 'game folder', '次目錄中含有可執行檔')) {
+		return;
 	}
 
 	if (image_count > 9 && image_count / sub_sub_files_count > .5) {
@@ -458,7 +459,8 @@ function classify(fso_name, fso_path, fso_status) {
 		}
 	}
 
-	if (/中文|漢化|翻中|汉化|\[(?:中|CHT|ENG)\]|\(Eng\)|English|Español|Korean|Chinese|Spanish|Russian|RUS|翻訳|英訳|中国語/i
+	// NG: RUS: "Crusaders"
+	if (/中文|漢化|翻中|汉化|\[(?:中|CHT|ENG)\]|\(Eng\)|English|Español|Korean|Chinese|Spanish|Russian|翻訳|英訳|中国語/i
 			.test(fso_name)) {
 		move_to('_maybe_translated_adult_comic');
 		return;

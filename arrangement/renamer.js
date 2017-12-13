@@ -28,8 +28,9 @@ CeL.run(
 CeL.get_URL.default_user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 		+ Math.random();
 
-var torrent_directory = 'torrent' + CeL.env.path_separator && false,
-// 下載完成、要處理的檔案/目錄所放置的目錄。 e.g., "node renamer.js C target_directory"
+var torrent_directory// = 'torrent' + CeL.env.path_separator
+,
+/** {String}下載完成、要處理的檔案/目錄所放置的目錄。 e.g., "node renamer.js C target_directory" */
 target_directory = process.argv[3]
 		|| CeL.first_exist_fso(global.completed_directory) || '.',
 //

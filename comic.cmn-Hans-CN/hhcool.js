@@ -93,9 +93,7 @@ var hhcool = new CeL.work_crawler({
 	pre_parse_chapter_data : function(XMLHttp, work_data, callback, chapter) {
 		var html = XMLHttp.responseText;
 
-		var chapter_list = [], URL = XMLHttp.URL, _this = this,
-		//
-		hdS = html.match(/id="hdS" value="(\d+)"/)[1],
+		var chapter_list = [], URL = XMLHttp.URL,
 		// 每一張圖片都得要從載入的頁面獲得資訊。
 		matched, PATTERN = /csel2\((\d{1,3})\)/g;
 

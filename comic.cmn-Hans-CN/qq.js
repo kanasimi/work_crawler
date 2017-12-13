@@ -72,9 +72,11 @@ var qq = new CeL.work_crawler({
 				free = CeL.get_JSON(free_file) || CeL.null_Object();
 
 				for ( var title in _this.free_title) {
-					id_list.push(title);
-					// TODO: should use UTF+8
-					free[title] = (new Date).toISOString();
+					if (_this.free_title.hasOwnProperty(title)) {
+						id_list.push(title);
+						// TODO: should use UTF+8
+						free[title] = (new Date).toISOString();
+					}
 				}
 
 				if (id_list.length > 0) {
@@ -184,8 +186,8 @@ var qq = new CeL.work_crawler({
 				d = (d & 15) << 4 | f >> 2;
 				h = (f & 3) << 6 | g;
 				a += String.fromCharCode(b);
-				64 != f && (a += String.fromCharCode(d));
-				64 != g && (a += String.fromCharCode(h));
+				64 !== f && (a += String.fromCharCode(d));
+				64 !== g && (a += String.fromCharCode(h));
 			}
 			c = a;
 			for (var a = "", b = 0, c1, c2, d = c1 = c2 = 0; b < c.length;) {
