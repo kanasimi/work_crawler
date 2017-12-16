@@ -1,0 +1,46 @@
+{
+	"name": "work_crawler",
+	"version": "1.0",
+	"main": "gui_electron/gui_electron.js",
+	"description": "CeJS online novels / comics downloader",
+	"author": "vimunci",
+	"homepage": "https://github.com/kanasimi/work_crawler",
+	"license": "BSD-3-Clause",
+	"scripts": {
+		"postinstall": "install-app-deps",
+		"start": "npm install && electron ./app",
+		"pack": "build --dir",
+		"dist": "build"
+	},
+	"build": {
+		"appId": "work_crawler",
+		"dmg": {
+			"contents": [
+				{
+					"x": 110,
+					"y": 150
+				},
+				{
+					"x": 240,
+					"y": 150,
+					"type": "link",
+					"path": "/Applications"
+				}
+			]
+		},
+		"linux": {
+			"target": [
+				"AppImage",
+				"deb"
+			]
+		},
+		"win": {
+			"target": "NSIS"
+		}
+	},
+	"devDependencies": {
+		"electron": "latest",
+		"electron-builder": "latest",
+		"electron-packager": "latest"
+	}
+}

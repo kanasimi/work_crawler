@@ -86,11 +86,13 @@ CeL.run([
 
 // console.log(process.argv);
 
-global.work_id = CeL.env.arg_hash
-		&& (CeL.env.arg_hash.title || CeL.env.arg_hash.id) || process.argv[2]
+var is_CLI = CeL.platform.browser === 'node';
+
+global.work_id = is_CLI
+		&& (CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id) || process.argv[2])
 		|| global.work_id;
 
-if (!work_id && process.mainModule
+if (is_CLI && !work_id && process.mainModule
 		&& (typeof need_work_id === 'undefined' || need_work_id)) {
 	var main_script = process.mainModule.filename.match(/[^\\\/]+$/)[0];
 	CeL.log('Usage:\n	node ' + main_script
@@ -106,8 +108,38 @@ if (!work_id && process.mainModule
 	process.exit();
 }
 
-// main_directory 必須以 path separator 作結。
-CeL.work_crawler.prototype.main_directory = data_directory
-		+ CeL.work_crawler.prototype.main_directory;
+if (is_CLI) {
+	// 儲存路徑。圖片檔+紀錄檔下載位置。
+	// main_directory 必須以 path separator 作結。
+	CeL.work_crawler.prototype.main_directory = data_directory
+			+ CeL.work_crawler.prototype.main_directory;
+}
+
+function setup_task(operator) {
+	if (is_CLI) {
+		return;
+	}
+
+	operator.main_directory = data_directory + operator.id
+			+ CeL.env.path_separator;
+	console.log('setup_task: ' + operator.id + ', ' + operator.main_directory);
+}
+
+global.setup_task = setup_task;
+
+function start_task(operator) {
+	if (is_CLI) {
+		operator.start(work_id);
+		return;
+	}
+
+	setup_task(operator);
+	if (module && module.parent) {
+		module.parent.exports = operator;
+	}
+}
+
+global.start_task = start_task;
 
 // CeL.set_debug(3);
+

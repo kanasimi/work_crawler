@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>CeJS 線上小說漫畫下載工具 online novels / comics downloader</title>
+<link rel="stylesheet" href="gui_electron.css" />
+<script src="gui_electron_functions.js"></script>
+</head>
+<body>
+	<h2>CeJS 線上小說漫畫下載工具 online novels / comics downloader</h2>
+	作品名稱:
+	<input id="input_work_id" value="" /> 使用線上作品網站:
+	<select id="input_site_id"><option
+			value="comic.cmn-Hans-CN/qq">腾讯漫画</option>
+		<option value="comic.cmn-Hans-CN/omanhua">哦漫画</option>
+		<option value="comic.cmn-Hans-CN/manhuagui">漫画柜</option></select>
+	<a href="#" onclick="start_gui_task(); return false;">下載</a>
+	<a href="#" onclick="">搜尋</a>
+	<a href="#" onclick="">開啓下載目錄</a>
+	<br /> 下載選項：
+	<div id="download_options_panel"></div>
+
+	<hr />
+	<div id="log_panel"></div>
+</body>
+</html>

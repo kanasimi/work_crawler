@@ -355,9 +355,20 @@ function classify(fso_name, fso_path, fso_status) {
 
 	var matched;
 
-	if (/[\[(（【]一般(?:コミック|漫画)/.test(fso_name)
+	if (/[\[(（【]一般(?:コミック|漫画|書籍)/.test(fso_name)
 			|| /(?:^|[\[(]?)Manga[^a-z]/i.test(fso_name)) {
 		move_to('comic');
+		return;
+	}
+
+	if (/[\[(（【]少女(?:コミック|漫画|書籍)/.test(fso_name)
+			|| /(?:^|[\[(]?)Manga[^a-z]/i.test(fso_name)) {
+		move_to('shojo_manga');
+		return;
+	}
+
+	if (/[\[(（【]成年(?:コミック|漫画|書籍)/.test(fso_name)) {
+		move_to('adult_comic');
 		return;
 	}
 
@@ -408,11 +419,6 @@ function classify(fso_name, fso_path, fso_status) {
 		return;
 	}
 
-	if (/[\[(（【]成年コミック/.test(fso_name)) {
-		move_to('adult_comic');
-		return;
-	}
-
 	if (/^(?:[\[(]?Pixiv|artist -|art -|アーティスト -)/i.test(fso_name)) {
 		move_to('CG_no_title');
 		return;
@@ -434,7 +440,7 @@ function classify(fso_name, fso_path, fso_status) {
 	}
 
 	matched = fso_name
-			.match(/\(([^()\[\]]+)\)(?: *[\[【](?:DL版|Digital|見本)[\]】])?(?: *\(\d\))?\.(zip|rar|cbz)$/);
+			.match(/\(([^()\[\]]+)\)(?: *[\[【](?:DL版|Digital|見本|ページ欠落)[\]】])*(?: *\(\d\))?\.(zip|rar|cbz)$/);
 	if (matched) {
 		if (/^x\d{3,4}$/.test(matched[1])
 		// COMIC 阿吽, コミックマグナム

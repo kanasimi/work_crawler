@@ -100,10 +100,12 @@ var omanhua = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
+setup_task(omanhua);
+
 var decode_file = 'scripts/show/ssncore.js';
 // 創建 main directory。
 CeL.create_directory(omanhua.main_directory);
 CeL.get_URL_cache(omanhua.base_URL + decode_file, function(contents) {
 	// var servs = [{...
-	omanhua.start(work_id);
+	start_task(omanhua);
 }, omanhua.main_directory + decode_file.match(/[^\\\/]+$/)[0]);

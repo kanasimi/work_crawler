@@ -232,6 +232,8 @@ var manhuagui = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
+setup_task(manhuagui);
+
 var LZString, decode_file = 'main_3A454149B2D2500411BC344B15DB58A4.js';
 // 創建 main directory。
 CeL.create_directory(manhuagui.main_directory);
@@ -245,5 +247,5 @@ function(contents) {
 	});
 	contents = eval(contents).replace(/^var /, '');
 	eval(contents);
-	manhuagui.start(work_id);
+	start_task(manhuagui);
 }, manhuagui.main_directory + decode_file);

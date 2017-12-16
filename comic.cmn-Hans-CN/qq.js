@@ -232,4 +232,4 @@ var qq = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-qq.start(work_id);
+start_task(qq);
