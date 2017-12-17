@@ -8,7 +8,7 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var omanhua = new CeL.work_crawler({
+var crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// 本站常常無法取得圖片，因此得多重新檢查。
@@ -100,12 +100,12 @@ var omanhua = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-setup_task(omanhua);
+setup_crawler(crawler, typeof module === 'object' && module);
 
 var decode_file = 'scripts/show/ssncore.js';
 // 創建 main directory。
-CeL.create_directory(omanhua.main_directory);
-CeL.get_URL_cache(omanhua.base_URL + decode_file, function(contents) {
+CeL.create_directory(crawler.main_directory);
+CeL.get_URL_cache(crawler.base_URL + decode_file, function(contents) {
 	// var servs = [{...
-	start_task(omanhua);
-}, omanhua.main_directory + decode_file.match(/[^\\\/]+$/)[0]);
+	start_crawler(crawler, typeof module === 'object' && module);
+}, crawler.main_directory + decode_file.match(/[^\\\/]+$/)[0]);

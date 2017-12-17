@@ -18,7 +18,7 @@ var PATTERN_chapter = /<div class="list">(.+)<\/div>|<a href="(\d+\.html)">(.+)<
 // 打廣告就算了；每個章節都要檢查這個資源檔，有些煩人了。
 PATTERN_AD = /<a href="http:\/\/www\.piaotian\.com\/?(?:&[a-z]+;[^"]*)?"[^<>]*>[^<>]*<\/a>/ig,
 //
-piaotian = new CeL.work_crawler({
+crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!
 	need_create_ebook : true,
@@ -196,4 +196,4 @@ piaotian = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-piaotian.start(work_id);
+start_crawler(crawler, typeof module === 'object' && module);

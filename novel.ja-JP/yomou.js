@@ -14,7 +14,8 @@ CeL.run('application.net.work_crawler.yomou');
 
 // CeL.set_debug(3);
 
-CeL.yomou().start(work_id);
+var crawler = CeL.yomou();
+start_crawler(crawler, typeof module === 'object' && module);
 
 if (false) {
 	CeL.yomou().data_of(work_id, function(work_data) {

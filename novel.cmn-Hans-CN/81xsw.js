@@ -12,7 +12,7 @@ CeL.run('application.net.work_crawler.PTCMS');
 
 // ----------------------------------------------------------------------------
 
-var PTCMS = CeL.PTCMS({
+var crawler = CeL.PTCMS({
 	base_URL : 'http://www.81xsw.com/',
 	charset : 'gbk',
 
@@ -33,4 +33,4 @@ var PTCMS = CeL.PTCMS({
 
 // CeL.set_debug(3);
 
-PTCMS.start(work_id);
+start_crawler(crawler, typeof module === 'object' && module);

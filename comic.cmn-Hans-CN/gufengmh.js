@@ -8,7 +8,7 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var gufengmh = new CeL.work_crawler({
+var crawler = new CeL.work_crawler({
 	// 本站常常無法取得圖片，因此得多重新檢查。
 	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
 	// recheck : true,
@@ -142,4 +142,4 @@ var gufengmh = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-gufengmh.start(work_id);
+start_crawler(crawler, typeof module === 'object' && module);

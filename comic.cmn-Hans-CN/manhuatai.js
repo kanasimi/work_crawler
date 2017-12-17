@@ -12,7 +12,7 @@ var server_list_hash = CeL.null_Object(),
 //
 PATTERN_chapter_data = /<li><a title="([^"]+)" href="((\d{0,4})[^"]*)"><span>(.+?)<\/span><\/a><\/li>/g,
 //
-manhuatai = new CeL.work_crawler({
+crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 
@@ -191,4 +191,4 @@ manhuatai = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-manhuatai.start(work_id);
+start_crawler(crawler, typeof module === 'object' && module);

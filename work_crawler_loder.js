@@ -93,7 +93,8 @@ global.work_id = is_CLI
 		|| global.work_id;
 
 if (is_CLI && !work_id && process.mainModule
-		&& (typeof need_work_id === 'undefined' || need_work_id)) {
+// 檔案整理工具不需要下載作品，因此也不需要作品名稱。
+&& (typeof need_work_id === 'undefined' || need_work_id)) {
 	var main_script = process.mainModule.filename.match(/[^\\\/]+$/)[0];
 	CeL.log('Usage:\n	node ' + main_script
 			+ ' "work title / work id" [option=true]\n	node ' + main_script
@@ -108,38 +109,31 @@ if (is_CLI && !work_id && process.mainModule
 	process.exit();
 }
 
-if (is_CLI) {
+function setup_crawler(crawler, crawler_module) {
+	if (crawler_module) {
+		crawler_module.exports = crawler;
+		crawler.id = crawler_module.filename.match(/([^\\\/]+)\.js$/)[1];
+	}
+
 	// 儲存路徑。圖片檔+紀錄檔下載位置。
 	// main_directory 必須以 path separator 作結。
-	CeL.work_crawler.prototype.main_directory = data_directory
-			+ CeL.work_crawler.prototype.main_directory;
-}
-
-function setup_task(operator) {
-	if (is_CLI) {
-		return;
-	}
-
-	operator.main_directory = data_directory + operator.id
+	crawler.main_directory = data_directory + crawler.id
 			+ CeL.env.path_separator;
-	console.log('setup_task: ' + operator.id + ', ' + operator.main_directory);
+
+	CeL.debug('setup_crawler: ' + crawler.id + ', ' + crawler.main_directory);
 }
 
-global.setup_task = setup_task;
+global.setup_crawler = setup_crawler;
 
-function start_task(operator) {
+function start_crawler(crawler, crawler_module) {
+	setup_crawler(crawler, crawler_module);
+	// console.log(crawler_module);
 	if (is_CLI) {
-		operator.start(work_id);
-		return;
-	}
-
-	setup_task(operator);
-	if (module && module.parent) {
-		module.parent.exports = operator;
+		crawler.start(work_id);
 	}
 }
 
-global.start_task = start_task;
+global.start_crawler = start_crawler;
 
 // CeL.set_debug(3);
 

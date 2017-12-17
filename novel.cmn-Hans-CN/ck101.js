@@ -89,7 +89,7 @@ PATTERN_START_QUOTE = /<div class="quote"><blockquote>([\s\S]*?)<\/blockquote><\
 //
 PATTERN_POST_STATUS = /^(<i class="pstatus">.+<\/i>)(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)*/i,
 //
-ck101 = new CeL.work_crawler({
+crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!
 	need_create_ebook : true,
@@ -354,4 +354,4 @@ ck101 = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-ck101.start(work_id);
+start_crawler(crawler, typeof module === 'object' && module);

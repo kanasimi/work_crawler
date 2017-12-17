@@ -14,7 +14,7 @@ CeL.run([ 'application.storage.EPUB'
 // CeL.detect_HTML_language()
 , 'application.locale' ]);
 
-var Hameln = new CeL.work_crawler({
+var crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!
 	need_create_ebook : true,
@@ -196,5 +196,5 @@ var Hameln = new CeL.work_crawler({
 // CeL.set_debug(3);
 
 // for 年齢確認: あなたは18歳以上ですか？
-Hameln.get_URL_options.cookie = 'over18=off';
-Hameln.start(work_id);
+crawler.get_URL_options.cookie = 'over18=off';
+start_crawler(crawler, typeof module === 'object' && module);

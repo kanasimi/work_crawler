@@ -20,7 +20,7 @@ CeL.run([ 'application.storage.EPUB'
 
 // ----------------------------------------------------------------------------
 
-var AlphaPolis = new CeL.work_crawler({
+var crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!
 	need_create_ebook : true,
@@ -148,4 +148,4 @@ var AlphaPolis = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-AlphaPolis.start(work_id);
+start_crawler(crawler, typeof module === 'object' && module);

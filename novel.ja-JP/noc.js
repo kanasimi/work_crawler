@@ -12,7 +12,7 @@ CeL.run('application.net.work_crawler.yomou');
 
 // ----------------------------------------------------------------------------
 
-var syosetu = CeL.yomou({
+var crawler = CeL.yomou({
 	site_name : 'ノクターンノベルズ',
 	base_URL : 'http://noc.syosetu.com/',
 	novel_base_URL : 'http://novel18.syosetu.com/',
@@ -26,5 +26,5 @@ var syosetu = CeL.yomou({
 // CeL.set_debug(3);
 
 // for 年齢確認
-syosetu.get_URL_options.cookie = 'over18=yes';
-syosetu.start(work_id);
+crawler.get_URL_options.cookie = 'over18=yes';
+start_crawler(crawler, typeof module === 'object' && module);

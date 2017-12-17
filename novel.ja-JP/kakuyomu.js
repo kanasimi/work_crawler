@@ -14,7 +14,7 @@ CeL.run([ 'application.storage.EPUB'
 // CeL.detect_HTML_language()
 , 'application.locale' ]);
 
-var kakuyomu = new CeL.work_crawler({
+var crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!
 	need_create_ebook : true,
@@ -144,4 +144,4 @@ var kakuyomu = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-kakuyomu.start(work_id);
+start_crawler(crawler, typeof module === 'object' && module);

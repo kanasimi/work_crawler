@@ -13,10 +13,9 @@ var win;
 
 function create_window() {
 	// Create the browser window.
-	win = new BrowserWindow({
-		width : 800,
-		height : 600
-	});
+	win = new BrowserWindow(
+	// https://github.com/electron/electron/blob/master/docs/api/screen.md
+	require('electron').screen.getPrimaryDisplay().workAreaSize);
 
 	// and load the gui_electron.html of the app.
 	win.loadURL(url.format({
@@ -51,7 +50,7 @@ app.on('window-all-closed', function() {
 	if (process.platform !== 'darwin') {
 		app.quit();
 	}
-})
+});
 
 app.on('activate', function() {
 	// On macOS it's common to re-create a window in the app when the
@@ -59,7 +58,7 @@ app.on('activate', function() {
 	if (win === null) {
 		create_window();
 	}
-})
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

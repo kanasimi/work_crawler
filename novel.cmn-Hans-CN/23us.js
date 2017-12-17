@@ -12,7 +12,7 @@ CeL.run('application.net.work_crawler.PTCMS');
 
 // ----------------------------------------------------------------------------
 
-var PTCMS = CeL.PTCMS({
+var crawler = CeL.PTCMS({
 	// 23us 在連續下載2000章左右後似乎會自動404，得要等如3分鐘才會回復。
 	// 明確指定自上次下載過的章節接續下載。
 	// recheck : false,
@@ -36,4 +36,4 @@ var PTCMS = CeL.PTCMS({
 
 // CeL.set_debug(3);
 
-PTCMS.start(work_id);
+start_crawler(crawler, typeof module === 'object' && module);

@@ -8,7 +8,7 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var dmzj = new CeL.work_crawler({
+var crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// 本站常常無法取得圖片，因此得多重新檢查。
@@ -160,4 +160,4 @@ var dmzj = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-dmzj.start(work_id);
+start_crawler(crawler, typeof module === 'object' && module);

@@ -8,7 +8,7 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var NetEase = new CeL.work_crawler({
+var crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 	// one_by_one : true,
@@ -146,4 +146,4 @@ var NetEase = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-NetEase.start(work_id);
+start_crawler(crawler, typeof module === 'object' && module);

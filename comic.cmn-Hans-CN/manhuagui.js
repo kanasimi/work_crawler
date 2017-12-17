@@ -10,7 +10,7 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var manhuagui = new CeL.work_crawler({
+var crawler = new CeL.work_crawler({
 	// 本站常常無法取得圖片，因此得多重新檢查。
 	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
 	// recheck : true,
@@ -232,12 +232,12 @@ var manhuagui = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-setup_task(manhuagui);
+setup_crawler(crawler, typeof module === 'object' && module);
 
 var LZString, decode_file = 'main_3A454149B2D2500411BC344B15DB58A4.js';
 // 創建 main directory。
-CeL.create_directory(manhuagui.main_directory);
-CeL.get_URL_cache(manhuagui.script_base_URL + decode_file,
+CeL.create_directory(crawler.main_directory);
+CeL.get_URL_cache(crawler.script_base_URL + decode_file,
 // 2017/3/3? ikanman 改版
 function(contents) {
 	contents = contents.between('\nwindow["\\x65\\x76\\x61\\x6c"]', ';\n')
@@ -247,5 +247,5 @@ function(contents) {
 	});
 	contents = eval(contents).replace(/^var /, '');
 	eval(contents);
-	start_task(manhuagui);
-}, manhuagui.main_directory + decode_file);
+	start_crawler(crawler, typeof module === 'object' && module);
+}, crawler.main_directory + decode_file);

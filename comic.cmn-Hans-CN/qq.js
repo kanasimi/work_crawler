@@ -8,7 +8,7 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var qq = new CeL.work_crawler({
+var crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 	// one_by_one : true,
@@ -232,4 +232,4 @@ var qq = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-start_task(qq);
+start_crawler(crawler, typeof module === 'object' && module);
