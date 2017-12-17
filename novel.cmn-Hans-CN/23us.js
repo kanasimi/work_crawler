@@ -17,7 +17,7 @@ var crawler = CeL.PTCMS({
 	// 明確指定自上次下載過的章節接續下載。
 	// recheck : false,
 
-	base_URL : 'http://www.23us.cc/',
+	base_URL : 'https://www.23us.cc/',
 
 	// 解析 作品名稱 → 作品id get_work()
 	baidu_cse : '1682272515249779940',

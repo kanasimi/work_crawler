@@ -39,8 +39,10 @@
 		}
 	},
 	"devDependencies": {
-		"electron": "latest",
 		"electron-builder": "latest",
 		"electron-packager": "latest"
+	},
+	"dependencies": {
+		"electron": "^1.8.1"
 	}
 }

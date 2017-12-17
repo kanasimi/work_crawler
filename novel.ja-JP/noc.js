@@ -14,8 +14,8 @@ CeL.run('application.net.work_crawler.yomou');
 
 var crawler = CeL.yomou({
 	site_name : 'ノクターンノベルズ',
-	base_URL : 'http://noc.syosetu.com/',
-	novel_base_URL : 'http://novel18.syosetu.com/',
+	base_URL : 'https://noc.syosetu.com/',
+	novel_base_URL : 'https://novel18.syosetu.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search/search/search.php?order=hyoka&word=',

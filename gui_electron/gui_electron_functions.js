@@ -1,7 +1,5 @@
 ﻿/**
  * 新增或更新網站的時候，除了.js功能寫完之外，還必須要更改 README.md 以及本檔案中的 download_sites_set。
- * 
- * TODO: 暫停, 取消下載作業
  */
 
 // work_crawler/
@@ -60,7 +58,9 @@ download_options_set = {
 	// main_directory : '',
 	// user_agent : '',
 	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。'
-}, download_site_nodes = [], download_options_nodes = {};
+}, download_site_nodes = [], download_options_nodes = {}, MESSAGE_set_site_first = '請先指定要下載的網站。';
+download_site_nodes.link_of_site = {};
+download_site_nodes.node_of_id = {};
 
 require(base_directory + 'work_crawler_loder.js');
 
@@ -90,6 +90,8 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 				}
 			});
 			download_site_nodes.push(site_node);
+			site_id = site_type + '/' + site_id;
+			download_site_nodes.node_of_id[site_id] = site_node;
 			site_nodes.push({
 				div : site_node,
 				C : 'click_item'
@@ -101,14 +103,15 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	var options_nodes = [];
 	for ( var download_option in download_options_set) {
 		download_options_nodes[download_option] = CeL.new_node({
-			span : [ download_option, ':',
-					download_options_set[download_option] ],
+			span : [ {
+				b : download_option
+			}, ':', download_options_set[download_option] ],
 			C : 'download_options',
 			title : download_option,
 			onclick : function() {
 				var crawler = get_crawler();
 				if (!crawler) {
-					CeL.log('請先指定要下載的網站。');
+					CeL.log(MESSAGE_set_site_first);
 					return;
 				}
 				crawler[this.title] = !crawler[this.title];
@@ -151,6 +154,19 @@ function get_crawler() {
 	CeL.debug('當前路徑: ' + process.cwd(), 'get_crawler');
 	CeL.debug('Load ' + crawler, 'get_crawler');
 	crawler = require(crawler);
+	if (!(site_id in download_site_nodes.link_of_site)) {
+		download_site_nodes.link_of_site[site_id] = crawler.base_URL;
+		// add link to site
+		CeL.new_node([ ' ', {
+			a : '🔗 link',
+			href : crawler.base_URL,
+			target : '_blank',
+			onclick : function() {
+				require('electron').shell.openExternal(this.href);
+				return false;
+			}
+		} ], download_site_nodes.node_of_id[site_id].parentNode);
+	}
 
 	return crawler;
 }
@@ -158,7 +174,7 @@ function get_crawler() {
 function start_gui_crawler() {
 	var crawler = get_crawler();
 	if (!crawler) {
-		CeL.log('請指定要下載的網站。');
+		CeL.log(MESSAGE_set_site_first);
 		return;
 	}
 
@@ -176,7 +192,7 @@ function start_gui_crawler() {
 function open_download_directory() {
 	var crawler = get_crawler();
 	if (!crawler) {
-		CeL.log('請指定要下載的網站。');
+		CeL.log(MESSAGE_set_site_first);
 		return;
 	}
 

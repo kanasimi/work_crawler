@@ -17,6 +17,9 @@ function create_window() {
 	// https://github.com/electron/electron/blob/master/docs/api/screen.md
 	require('electron').screen.getPrimaryDisplay().workAreaSize);
 
+	// https://electronjs.org/docs/api/browser-window
+	win.maximize();
+
 	// and load the gui_electron.html of the app.
 	win.loadURL(url.format({
 		pathname : path.join(__dirname, 'gui_electron.html'),

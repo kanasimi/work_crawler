@@ -18,11 +18,11 @@
 
 | Site | Tool file | Note |
 | --- | --- | --- |
-| [アルファポリス](http://www.alphapolis.co.jp/) | AlphaPolis.js | レンタルする話は取得できません |
+| [アルファポリス](https://www.alphapolis.co.jp/) | AlphaPolis.js | レンタルする話は取得できません |
 | [カクヨム](https://kakuyomu.jp/) | kakuyomu.js | |
 | [ハーメルン](https://syosetu.org/) | Hameln.js | |
-| [小説を読もう！](http://yomou.syosetu.com/) | yomou.js | [小説家になろう](http://syosetu.com/) |
-| [ノクターンノベルズ](http://noc.syosetu.com/) | noc.js | [小説家になろう](http://syosetu.com/)の[男性読者向けの18禁部門サイト](http://noc.syosetu.com/site/faq/) |
+| [小説を読もう！](https://yomou.syosetu.com/) | yomou.js | [小説家になろう](http://syosetu.com/) |
+| [ノクターンノベルズ](https://noc.syosetu.com/) | noc.js | [小説家になろう](http://syosetu.com/)の[男性読者向けの18禁部門サイト](http://noc.syosetu.com/site/faq/) |
 
 ### Chinese web fictions / novels 中国内地小说 中国のオンライン小説
 [novel.cmn-Hans-CN/](novel.cmn-Hans-CN/)*.js, web pages → epub
@@ -30,7 +30,7 @@
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [八一中文网](http://www.81xsw.com/) | 81xsw.js | [PTCMS](https://www.ptcms.com/)系统 |
-| [顶点小说](http://www.23us.cc) | 23us.js | PTCMS |
+| [顶点小说](https://www.23us.cc) | 23us.js | PTCMS |
 | [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
 | [八八读书网](http://www.88dushu.com/) | 88dushu.js | 88读书网，PTCMS? |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | |
@@ -56,7 +56,7 @@
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikanmanhua.js | |
 | [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。 |
 | [733漫画网](http://www.733mh.com/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
-| [动漫之家](http://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。 |
+| [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/10/19 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/10/19 未復原。 |
 
