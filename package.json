@@ -35,7 +35,8 @@
 			]
 		},
 		"win": {
-			"target": "NSIS"
+			"target": "NSIS",
+			"icon": "gui_electron/Colorless echo.ico"
 		}
 	},
 	"devDependencies": {

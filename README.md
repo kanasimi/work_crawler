@@ -71,7 +71,7 @@
 ![本工具將安裝的標的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
 
 4. 在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具將安裝的標的目錄，執行命令以下載 CeJS 程式庫：
-   ``` cmd
+   ``` sh
    node _CeL.updater.node.js
    ```
 5. 然後就能[開始試用](#execution-執行)囉。
@@ -80,12 +80,20 @@
 
 <!-- use npm:
 3. 在命令行界面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
-   ``` cmd
+   ``` sh
    npm install cejs
    ```
 4. 然後就能[開始試用](#execution-執行)囉。
 * 請注意：採用 <code>npm install cejs</code> 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。**建議採用下方一般正常安裝方法**，下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 <code>npm install</code> 安裝舊版的程式庫。
 -->
+
+### GUI 設定視窗型態介面
+若是你希望使用[視窗型態介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，那麼您還需要安裝 [Electron](https://electronjs.org/)。請在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具將安裝的標的目錄，執行命令以安裝 Electron 程式庫：
+   ``` sh
+   npm install electron
+   ```
+
+![視窗型態介面](https://lh3.googleusercontent.com/3dGaOZnsMNrCr6OrYdSg_Ia6dgQBZHBbwplgbOAaQn4RQkLcxGJbly3IDRicw6PbZFwG97TfJuHl3EeAqc3Nl34Tc6LmntqrxwCZl6djLfOqfZnnlo_6aCwUGS0rraGf8xBTd8JEYg=w852-h896-no)
 
 ### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
