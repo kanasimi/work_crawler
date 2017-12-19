@@ -66,7 +66,20 @@ function parse_topic_title(title, work_data) {
 }
 
 function get_work_data_from_html(html) {
-	html = html.between('<script type="application/ld+json">', '</script>')
+	// 2017/12/19 改版
+	html = html.all_between('<script type="application/ld+json">', '</script>')
+			.filter(function(slice) {
+				return slice.includes('mainEntityOfPage');
+			});
+	if (html.length !== 1) {
+		console.log(html);
+		throw 'Can not parse page!';
+	}
+
+	html = html[0].replace(/"(?:[^"]*|\\")*"/g, function(quoted) {
+		// console.log(quoted);
+		return quoted.replace(/\r?\n/g, '\\n');
+	})
 	// e.g., 異常生物見聞錄
 	.replace(/\t/g, '\\t')
 	// e.g., 不死不滅 thread-2332198-1-1.html
@@ -74,7 +87,7 @@ function get_work_data_from_html(html) {
 	try {
 		html = JSON.parse(html);
 	} catch (e) {
-		console.log(html);
+		console.log('Invalid JSON:\n' + JSON.stringify(html));
 		// TODO: handle exception
 		return;
 	}
@@ -146,9 +159,11 @@ crawler = new CeL.work_crawler({
 
 		var raw_data = get_work_data_from_html(html),
 		//
-		mainEntity = raw_data["@graph"][0].mainEntity,
+		mainEntity = raw_data,
 		//
 		work_data = {
+			title : mainEntity.name,
+			author : mainEntity.author.name,
 			last_update : mainEntity.dateModified,
 			description : get_label(mainEntity.description),
 			chapter_count : mainEntity.pageEnd,
@@ -158,7 +173,7 @@ crawler = new CeL.work_crawler({
 			raw : raw_data
 		};
 
-		parse_topic_title(get_label(mainEntity.name), work_data);
+		parse_topic_title(get_label(mainEntity.headline), work_data);
 
 		return work_data;
 	},
@@ -187,7 +202,7 @@ crawler = new CeL.work_crawler({
 		//
 		raw_data = get_work_data_from_html(html),
 		//
-		mainEntity = raw_data["@graph"][0].mainEntity,
+		mainEntity = raw_data,
 		// /<div id="(post_\d+)" class="plhin">/g
 		PATTERN = /<div id="(post_\d+)"/g,
 		//
