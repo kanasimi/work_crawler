@@ -47,18 +47,18 @@ download_options_set = {
 	recheck : '從頭檢測所有作品之所有章節與所有圖片。',
 	// 重新擷取用的相關操作設定。
 	regenerate : '章節數量無變化時依舊利用 cache 重建資料(如ebook)。',
-	reget_chapter : '重新取得每個章節內容chapter_page。',
+	reget_chapter : '重新取得每個所檢測的章節內容。',
 
 	// 容許錯誤用的相關操作設定。
 	// MAX_ERROR : '',
 	allow_EOI_error : '當圖像不存在 EOI (end of image) 標記，或是被偵測出非圖像時，依舊強制儲存檔案。',
 	skip_error : '忽略/跳過圖像錯誤。',
-	skip_chapter_data_error : '當無法取得chapter資料時，直接嘗試下一章節。',
+	skip_chapter_data_error : '當無法取得 chapter 資料時，直接嘗試下一章節。',
 
 	// main_directory : '',
 	// user_agent : '',
 	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。'
-}, download_site_nodes = [], download_options_nodes = {}, MESSAGE_set_site_first = '請先指定要下載的網站。';
+}, download_site_nodes = [], download_options_nodes = {};
 download_site_nodes.link_of_site = {};
 download_site_nodes.node_of_id = {};
 
@@ -111,7 +111,6 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 			onclick : function() {
 				var crawler = get_crawler();
 				if (!crawler) {
-					CeL.log(MESSAGE_set_site_first);
 					return;
 				}
 				crawler[this.title] = !crawler[this.title];
@@ -146,9 +145,13 @@ function reset_site_options() {
 	}
 }
 
-function get_crawler() {
-	if (!site_used)
+function get_crawler(just_test) {
+	if (!site_used) {
+		if (!just_test) {
+			CeL.info('請先指定要下載的網站。');
+		}
 		return;
+	}
 
 	var site_id = site_used, crawler = base_directory + site_id + '.js';
 	CeL.debug('當前路徑: ' + process.cwd(), 'get_crawler');
@@ -171,10 +174,11 @@ function get_crawler() {
 	return crawler;
 }
 
+// ----------------------------------------------
+
 function start_gui_crawler() {
 	var crawler = get_crawler();
 	if (!crawler) {
-		CeL.log(MESSAGE_set_site_first);
 		return;
 	}
 
@@ -184,15 +188,31 @@ function start_gui_crawler() {
 	if (work_id) {
 		crawler.start(work_id);
 	} else {
-		CeL.log('請輸入作品名稱。');
+		CeL.info('請輸入作品名稱。');
 	}
 }
+
+function stop_task() {
+	var crawler = get_crawler();
+	crawler && crawler.stop_task();
+}
+
+function continue_task() {
+	var crawler = get_crawler();
+	crawler && crawler.continue_task();
+}
+
+function cancel_task() {
+	var crawler = get_crawler();
+	crawler && crawler.stop_task(true);
+}
+
+// ----------------------------------------------
 
 // https://github.com/electron/electron/blob/master/docs/api/shell.md
 function open_download_directory() {
 	var crawler = get_crawler();
 	if (!crawler) {
-		CeL.log(MESSAGE_set_site_first);
 		return;
 	}
 
