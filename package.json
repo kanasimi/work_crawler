@@ -1,49 +1,55 @@
 {
-	"name": "work_crawler",
-	"version": "1.0",
-	"main": "gui_electron/gui_electron.js",
-	"description": "CeJS online novels / comics downloader",
-	"author": "vimunci",
-	"homepage": "https://github.com/kanasimi/work_crawler",
-	"license": "BSD-3-Clause",
-	"scripts": {
-		"postinstall": "install-app-deps",
-		"start": "npm install && electron ./app",
-		"pack": "build --dir",
-		"dist": "build"
+	"name" : "work_crawler",
+	"version" : "1.0.20171222",
+	"main" : "gui_electron/gui_electron.js",
+	"description" : "CeJS online novels / comics downloader",
+	"author" : {
+		"name" : "vimunci",
+		"email" : "vimunci@gmail.com",
+		"url" : "https://github.com/kanasimi/work_crawler"
 	},
-	"build": {
-		"appId": "work_crawler",
-		"dmg": {
-			"contents": [
-				{
-					"x": 110,
-					"y": 150
-				},
-				{
-					"x": 240,
-					"y": 150,
-					"type": "link",
-					"path": "/Applications"
-				}
-			]
+	"homepage" : "https://github.com/kanasimi/work_crawler",
+	"license" : "BSD-3-Clause",
+	"scripts" : {
+		"start" : "npm install && electron ./app",
+		"pack" : "node_modules/.bin/electron-builder --dir",
+		"dist" : "node_modules/.bin/electron-builder",
+		"postinstall" : "node_modules/.bin/electron-builder install-app-deps"
+	},
+	"build" : {
+		"appId" : "org.kanasimi.work_crawler",
+		"dmg" : {
+			"contents" : [ {
+				"x" : 110,
+				"y" : 150
+			}, {
+				"x" : 240,
+				"y" : 150,
+				"type" : "link",
+				"path" : "/Applications"
+			} ]
 		},
-		"linux": {
-			"target": [
-				"AppImage",
-				"deb"
-			]
+		"directories" : {
+			"output" : "build"
 		},
-		"win": {
-			"target": "NSIS",
-			"icon": "gui_electron/Colorless echo.ico"
+		"files" : [ "package.json", "gui_electron/", "node_modules/",
+				"_CeL.loader.nodejs.js", "_CeL.path.txt",
+				"work_crawler_loder.js", "comic.cmn-Hans-CN/",
+				"novel.cmn-Hans-CN/", "novel.ja-JP/" ],
+		"linux" : {
+			"target" : [ "AppImage", "deb" ]
+		},
+		"win" : {
+			"target" : "NSIS",
+			"icon" : "gui_electron/rasen1.ico"
 		}
 	},
-	"devDependencies": {
-		"electron-builder": "latest",
-		"electron-packager": "latest"
+	"devDependencies" : {
+		"electron" : "latest",
+		"electron-builder" : "latest",
+		"electron-packager" : "latest"
 	},
-	"dependencies": {
-		"electron": "^1.8.1"
+	"dependencies" : {
+		"cejs" : "latest"
 	}
 }
