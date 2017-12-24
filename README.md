@@ -93,7 +93,7 @@
    ``` sh
    npm install electron
    ```
-2. 在本工具安裝的目錄下，執行 <code>_start_gui_electron.sh</code> 或 <code>_start_gui_electron.bat</code>。
+2. 在本工具安裝的目錄下，執行 <code>start_gui_electron.sh</code> 或 <code>start_gui_electron.bat</code>。
 
 ![視窗型態介面](https://lh3.googleusercontent.com/3dGaOZnsMNrCr6OrYdSg_Ia6dgQBZHBbwplgbOAaQn4RQkLcxGJbly3IDRicw6PbZFwG97TfJuHl3EeAqc3Nl34Tc6LmntqrxwCZl6djLfOqfZnnlo_6aCwUGS0rraGf8xBTd8JEYg=w852-h896-no)
 
