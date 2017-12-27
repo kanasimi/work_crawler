@@ -1,6 +1,6 @@
 {
 	"name" : "work_crawler",
-	"version" : "1.0.20171222",
+	"version" : "1.0.20171228",
 	"main" : "gui_electron/gui_electron.js",
 	"description" : "CeJS online novels / comics downloader",
 	"author" : {
@@ -11,13 +11,21 @@
 	"homepage" : "https://github.com/kanasimi/work_crawler",
 	"license" : "BSD-3-Clause",
 	"scripts" : {
-		"start" : "npm install && electron ./app",
+		"start" : "node_modules/.bin/electron . || ~/node_modules/.bin/electron .",
 		"pack" : "node_modules/.bin/electron-builder --dir",
 		"dist" : "node_modules/.bin/electron-builder",
 		"postinstall" : "node_modules/.bin/electron-builder install-app-deps"
 	},
 	"build" : {
 		"appId" : "org.kanasimi.work_crawler",
+		"productName" : "CeJS 線上小說漫畫下載工具",
+		"directories" : {
+			"output" : "build"
+		},
+		"files" : [ "package.json", "node_modules/*", "_CeL.loader.nodejs.js",
+				"_CeL.path.txt", "gui_electron/**/*", "work_crawler_loder.js",
+				"comic.cmn-Hans-CN/**/*", "novel.cmn-Hans-CN/**/*",
+				"novel.ja-JP/**/*" ],
 		"dmg" : {
 			"contents" : [ {
 				"x" : 110,
@@ -29,25 +37,28 @@
 				"path" : "/Applications"
 			} ]
 		},
-		"directories" : {
-			"output" : "build"
-		},
-		"files" : [ "package.json", "gui_electron/", "node_modules/",
-				"_CeL.loader.nodejs.js", "_CeL.path.txt",
-				"work_crawler_loder.js", "comic.cmn-Hans-CN/",
-				"novel.cmn-Hans-CN/", "novel.ja-JP/" ],
 		"linux" : {
 			"target" : [ "AppImage", "deb" ]
 		},
 		"win" : {
-			"target" : "NSIS",
+			"target" : [ {
+				"target" : "nsis",
+				"arch" : [ "x64", "ia32" ]
+			} ],
+			"msi" : false,
 			"icon" : "gui_electron/rasen1.ico"
+		},
+		"nsis" : {
+			"oneClick" : false,
+			"perMachine" : false,
+			"allowElevation" : true,
+			"allowToChangeInstallationDirectory" : true,
+			"runAfterFinish" : true
 		}
 	},
 	"devDependencies" : {
 		"electron" : "latest",
-		"electron-builder" : "latest",
-		"electron-packager" : "latest"
+		"electron-builder" : "latest"
 	},
 	"dependencies" : {
 		"cejs" : "latest"
