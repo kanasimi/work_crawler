@@ -36,20 +36,29 @@ function parse_topic_title(title, work_data) {
 		return genre;
 	}
 
-	var matched = title.match(/^(.+)作者 *[:：︰]?(.+)$/), need_check = !!work_data;
+	var need_check = !!work_data,
+	// 防止如"新聞工作者"
+	matched = title.match(/^(.*[^工寫製制勞合協動運操炒名習振大小不表轉亂傑舊之拙耕])作者 *[:：︰]?(.+)$/);
 	if (!matched) {
 		if (need_check) {
-			throw 'parse_topic_title: 無法解析論壇討論串標題';
+			throw 'parse_topic_title: 無法解析論壇討論串標題: [' + title + ']';
 		}
 		return;
 	}
 
 	work_data = work_data || CeL.null_Object();
 	work_data.status = [];
-	work_data.author = parse_genre(matched[2]);
-	if (need_check && /\s/.test(work_data.author)) {
-		CeL.warn('parse_topic_title: Invalid author? ' + work_data.author);
+	var _author = parse_genre(matched[2]);
+	if (!work_data.author) {
+		work_data.author = _author;
+		if (need_check && /\s/.test(work_data.author)) {
+			CeL.warn('parse_topic_title: Invalid author? ' + work_data.author);
+		}
+	} else if (_author && !_author.includes(work_data.author)) {
+		CeL.warn('從網頁資訊取得的作者名稱是[' + work_data.author + ']，但是從網頁標題取得的作者名稱是['
+				+ _author + ']，兩者不同！');
 	}
+
 	// check title. e.g., 小說名稱前有多個分類
 	work_data.title = parse_genre(matched[1])
 	// e.g., 誰主沉浮
@@ -94,7 +103,7 @@ function get_work_data_from_html(html) {
 	return html;
 }
 
-var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=ebaa7a3b8b3fa3d882a727859972d6ad&cx=partner-pub-1630767461540427:6206348626&cse_tok=APbAYefCarQOywugS7Jt3z-nchF-9_ZrLQ:1512555592025&sort=&googlehost=www.google.com&q=',
+var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=4368fa9a9824ad4f837cbd399d21811d&cx=partner-pub-1630767461540427:6206348626&cse_tok=AOdTmaD-8P-9dqB_ihmfrf2DZk46lkl4rg:1514090169341&sort=&googlehost=www.google.com&q=',
 // cf. .trimStart()
 PATTERN_START_SPACE = /^(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)+/i,
 //
