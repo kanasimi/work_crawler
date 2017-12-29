@@ -12,13 +12,13 @@
 	"license" : "BSD-3-Clause",
 	"scripts" : {
 		"start" : "node_modules/.bin/electron . || ~/node_modules/.bin/electron .",
-		"pack" : "node_modules/.bin/electron-builder --dir",
-		"dist" : "node_modules/.bin/electron-builder",
-		"postinstall" : "node_modules/.bin/electron-builder install-app-deps"
+		"pack" : "~/node_modules/.bin/electron-builder --dir",
+		"dist" : "~/node_modules/.bin/electron-builder",
+		"postinstall" : "~/node_modules/.bin/electron-builder install-app-deps"
 	},
 	"build" : {
+		"productName" : "work_crawler",
 		"appId" : "org.kanasimi.work_crawler",
-		"productName" : "CeJS 線上小說漫畫下載工具",
 		"directories" : {
 			"output" : "build"
 		},
@@ -26,6 +26,9 @@
 				"_CeL.path.txt", "gui_electron/**/*", "work_crawler_loder.js",
 				"comic.cmn-Hans-CN/**/*", "novel.cmn-Hans-CN/**/*",
 				"novel.ja-JP/**/*" ],
+		"mac" : {
+			"target" : "dmg"
+		},
 		"dmg" : {
 			"contents" : [ {
 				"x" : 110,
@@ -38,15 +41,22 @@
 			} ]
 		},
 		"linux" : {
-			"target" : [ "AppImage", "deb" ]
+			"target" : [ {
+				"target" : "AppImage",
+				"arch" : [ "x64", "ia32" ]
+			}, {
+				"target" : "deb",
+				"arch" : [ "x64", "ia32" ]
+			} ],
+			"category" : "Utility",
+			"icon" : "gui_electron/icon/"
 		},
 		"win" : {
 			"target" : [ {
 				"target" : "nsis",
 				"arch" : [ "x64", "ia32" ]
 			} ],
-			"msi" : false,
-			"icon" : "gui_electron/rasen1.ico"
+			"icon" : "gui_electron/icon/rasen1.ico"
 		},
 		"nsis" : {
 			"oneClick" : false,

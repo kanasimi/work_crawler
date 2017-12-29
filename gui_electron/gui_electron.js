@@ -13,9 +13,12 @@ var win;
 
 function create_window() {
 	// Create the browser window.
-	win = new BrowserWindow(
+	win = new BrowserWindow(Object.assign({
+		// https://github.com/electron-userland/electron-builder/issues/2269#issuecomment-342168989
+		icon : path.join(__dirname, '/icon/rasen1.png')
+	},
 	// https://github.com/electron/electron/blob/master/docs/api/screen.md
-	require('electron').screen.getPrimaryDisplay().workAreaSize);
+	require('electron').screen.getPrimaryDisplay().workAreaSize));
 
 	// https://electronjs.org/docs/api/browser-window
 	win.maximize();
