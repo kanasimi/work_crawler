@@ -36,11 +36,11 @@ function parse_topic_title(title, work_data) {
 		return genre;
 	}
 
-	var need_check = !!work_data,
+	var need_check_title = !!work_data,
 	// 防止如"新聞工作者"
 	matched = title.match(/^(.*[^工寫製制勞合協動運操炒名習振大小不表轉亂傑舊之拙耕])作者 *[:：︰]?(.+)$/);
 	if (!matched) {
-		if (need_check) {
+		if (need_check_title) {
 			throw 'parse_topic_title: 無法解析論壇討論串標題: [' + title + ']';
 		}
 		return;
@@ -51,7 +51,7 @@ function parse_topic_title(title, work_data) {
 	var _author = parse_genre(matched[2]);
 	if (!work_data.author) {
 		work_data.author = _author;
-		if (need_check && /\s/.test(work_data.author)) {
+		if (need_check_title && /\s/.test(work_data.author)) {
 			CeL.warn('parse_topic_title: Invalid author? ' + work_data.author);
 		}
 	} else if (_author && !_author.includes(work_data.author)) {
@@ -168,9 +168,15 @@ crawler = new CeL.work_crawler({
 
 		var raw_data = get_work_data_from_html(html),
 		//
-		mainEntity = raw_data,
-		//
-		work_data = {
+		mainEntity = raw_data, need_check_title = true;
+		// 處理非小說的情況。
+		if (!mainEntity.name) {
+			if (mainEntity['@graph']) {
+				mainEntity = mainEntity['@graph'][0].mainEntity;
+				need_check_title = false;
+			}
+		}
+		var work_data = {
 			title : mainEntity.name,
 			author : mainEntity.author.name,
 			last_update : mainEntity.dateModified,
@@ -182,7 +188,8 @@ crawler = new CeL.work_crawler({
 			raw : raw_data
 		};
 
-		parse_topic_title(get_label(mainEntity.headline), work_data);
+		parse_topic_title(get_label(mainEntity.headline), need_check_title
+				&& work_data);
 
 		return work_data;
 	},
@@ -307,6 +314,7 @@ crawler = new CeL.work_crawler({
 			book_chapter = CeL.from_Chinese_numeral(part_title || _part_title)
 					.toString();
 
+			// TODO: 雪鷹領主
 			var matched = book_chapter.match(/(?:第 *|^) {0,2}(\d+) {0,2}章/);
 			if (book_chapter_is_OK(matched, 40)
 			// ↑ 40: 當格式明確的時候，可以容許比較大的跨度。

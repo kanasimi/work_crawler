@@ -25,7 +25,7 @@
 
 node_modules/.bin/electron . || ~/node_modules/.bin/electron .
 # start_gui_electron.bat
-#node_modules\.bin\electron . || %HOMEPATH%\node_modules\.bin\electron .
+#node_modules\.bin\electron . || %HOMEPATH%\node_modules\.bin\electron . || PAUSE
 
 
 # node_modules/.bin/build --prepackaged .

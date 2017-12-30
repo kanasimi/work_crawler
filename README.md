@@ -1,15 +1,15 @@
 ﻿# CeJS 線上小說漫畫下載工具 online novels / comics downloader
-- [en] Download novels → epub and comics with command line interface.
-- [TW] 批量下載小說 → epub、漫畫網站的工具。命令行界面。
-- [CN] 批量下载小说 → epub、漫画网站的工具。命令行界面。
-- [ja] ウェブ小説 → epub、ウェブ漫画作品を一括ダウンロードツール。コマンドラインインターフェース。
+- [en] Download novels → epub and comics with [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) and [command-line interface](https://en.wikipedia.org/wiki/Command-line_interface).
+- [TW] 批量下載小說 → epub、漫畫網站的工具。視窗+命令行介面。
+- [CN] 批量下载小说 → epub、漫画网站的工具。图形+命令行界面。
+- [ja] ウェブ小説 → epub、ウェブ漫画作品を一括ダウンロードツール。グラフィカル+コマンドラインインターフェース。
 
 ## Features 特點
 * 可自動下載小說封面以及章節中的插圖。
 * 採用 CeJS [線上作品程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
 
 ## Supported sites 已完成之網站工具
-* For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command line version first. 請注意：小說之下載必須先安裝 7Zip，這樣才能製作 .epub 電子書。
+* For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：小說之下載必須先安裝 7Zip，這樣才能製作 .epub 電子書。
 
 已撰寫完的各大小說漫畫網站工具包括：
 
@@ -62,6 +62,8 @@
 
 ## Installation 安裝
 
+若是想要使用圖形介面，您可以 **[直接下載安裝包](releases/latest/)**。若是想要使用命令行界面，或者用作研究開發，請採用下列步驟。
+
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
 1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://en.wikipedia.org/wiki/7-Zip)。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->
@@ -87,8 +89,8 @@
 * 請注意：採用 <code>npm install cejs</code> 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。**建議採用下方一般正常安裝方法**，下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 <code>npm install</code> 安裝舊版的程式庫。
 -->
 
-### GUI 設定視窗型態介面
-若是您希望使用[視窗型態介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，那麼您還需要安裝 [Electron](https://electronjs.org/)。
+### Setup GUI 設定視窗型態介面
+若是您希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，那麼您還需要安裝 [Electron](https://electronjs.org/)。
 1. 請在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具安裝的目錄，執行命令以安裝 Electron 程式庫：
    ``` sh
    npm install electron
@@ -142,6 +144,7 @@
 ![小說 → epub](https://lh3.googleusercontent.com/JJ4SGDQF-HzQb0baRZ0mCio19jJTnNp3VnWutirYgZbYg5i--ufS_ElL8DEetP6x7uJ4HUv8szNqzVLbGlr84_OnxFxjIZCDsOEOEmKBubYC6PkpaE2xBYk9KIHzBR4YPwjQVM2FTA=w1366-h738-no)
 
 ## Note 附注
+* 目前不支援自動更新。
 * 熟練後，一般約需2至4小時新增或更新一網站的下載工具，以達初步可用狀態。
 * 小說作品採用單線程下載，以避免對網站造成過度的負荷。漫畫作品則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
 
