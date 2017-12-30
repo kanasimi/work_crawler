@@ -209,12 +209,12 @@ function check_fso(fso_name) {
 
 	// assert: fso_status.isDirectory()
 	directory_path += CeL.env.path_separator;
-	var sub_fso = CeL.read_directory(directory_path);
-	if (!sub_fso) {
+	var sub_fso_list = CeL.read_directory(directory_path);
+	if (!sub_fso_list) {
 		CeL.error('Can not read directory: ' + directory_path);
 		return;
 	}
-	if (sub_fso.length === 0) {
+	if (sub_fso_list.length === 0) {
 		if (!Object.values(catalog_directory).includes(directory_path))
 			CeL.warn('Empty directory: ' + directory_path);
 		return;
@@ -251,8 +251,8 @@ function check_fso(fso_name) {
 		}
 
 		if (sub_fso_status.isDirectory()) {
-			var sub_fso = CeL.read_directory(directory + sub_fso_name);
-			sub_fso.forEach(function(sub_sub_fso_name) {
+			var sub_sub_fso_list = CeL.read_directory(directory + sub_fso_name);
+			sub_sub_fso_list.forEach(function(sub_sub_fso_name) {
 				search_sub_sub_folder_for_files(sub_sub_fso_name, directory
 						+ sub_fso_name + CeL.env.path_separator);
 			});
@@ -262,7 +262,7 @@ function check_fso(fso_name) {
 	}
 
 	// for 第一子層
-	sub_fso.forEach(function(sub_fso_name) {
+	sub_fso_list.forEach(function(sub_fso_name) {
 		if (sub_fso_name.startsWith('_____padding_file_')) {
 			_____padding_file_count++;
 			return;
@@ -327,13 +327,13 @@ function check_fso(fso_name) {
 		return;
 	}
 
-	classify(fso_name, directory_path, fso_status);
+	classify(fso_name, directory_path, fso_status, sub_fso_list);
 }
 
 // -----------------------------------------------------------------
 // classification 依照檔案名稱來做基本的分類。
 
-function classify(fso_name, fso_path, fso_status) {
+function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 	function move_to(catalog) {
 		var move_to_path = catalog_directory[catalog];
 		if (!move_to_path) {
@@ -367,8 +367,14 @@ function classify(fso_name, fso_path, fso_status) {
 		return;
 	}
 
-	if (/[\[(（【]成年(?:コミック|漫画|書籍)/.test(fso_name)) {
+	if (/[\[(（【]成年(?:コミック|漫画|書籍)/.test(fso_name) || fso_name.includes('FAKKU')) {
 		move_to('adult_comic');
+		return;
+	}
+
+	if (/[\[(（【]官能小説/.test(fso_name)
+			|| /エロライトノベル|フランス書院|美少女文庫|ティアラ文庫/.test(fso_name)) {
+		move_to('erotic_novel');
 		return;
 	}
 
@@ -469,6 +475,26 @@ function classify(fso_name, fso_path, fso_status) {
 	if (/中文|漢化|翻中|汉化|\[(?:中|CHT|ENG)\]|\(Eng\)|English|Español|Korean|Chinese|Spanish|Russian|翻訳|英訳|中国語/i
 			.test(fso_name)) {
 		move_to('_maybe_translated_adult_comic');
+		return;
+	}
+
+	// TODO: add more patterns
+
+	// ------------------------------------------
+
+	if (!sub_fso_list) {
+		return;
+	}
+
+	if (sub_fso_list.some(function(sub_fso_name) {
+		if (/[\[(（【](?:18禁ゲーム|ACT|ADV|RPG|SLG|3D|PL\])/i.test(sub_fso_name)
+				|| /パッケージ版|修正パッチ|予約特典|本編同梱|\+ ?update/i.test(sub_fso_name)
+		// || /ver[. ]1\.\d+/i.test(fso_name)
+		) {
+			move_to('game');
+			return true;
+		}
+	})) {
 		return;
 	}
 

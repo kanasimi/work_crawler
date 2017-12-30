@@ -62,7 +62,7 @@
 
 ## Installation 安裝
 
-若是想要使用圖形介面，您可以 **[直接下載安裝包](releases/latest/)**。若是想要使用命令行界面，或者用作研究開發，請採用下列步驟。
+若是想要使用圖形介面，您可以 **[直接下載安裝包](https://github.com/kanasimi/work_crawler/releases/latest/)**。若是想要使用命令行界面，或者用作研究開發，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
