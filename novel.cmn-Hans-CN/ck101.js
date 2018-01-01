@@ -104,6 +104,8 @@ function get_work_data_from_html(html) {
 }
 
 var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=4368fa9a9824ad4f837cbd399d21811d&cx=partner-pub-1630767461540427:6206348626&cse_tok=AOdTmaD-8P-9dqB_ihmfrf2DZk46lkl4rg:1514090169341&sort=&googlehost=www.google.com&q=',
+//
+PATTERN_search = /<a href="[^"<>]+?tid=(\d+)[^"<>]*"[^<>]*>([^<>]+)<\/a>[\s\S]+?<p class="xg1">([^<>]+)/g,
 // cf. .trimStart()
 PATTERN_START_SPACE = /^(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)+/i,
 //
@@ -122,10 +124,9 @@ crawler = new CeL.work_crawler({
 	base_URL : 'https://ck101.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : search_URL,
-	parse_search_result : function(data, get_label, work_title) {
+	search_URL_2017 : search_URL,
+	parse_search_result_2017 : function(data, get_label, work_title) {
 		data = JSON.parse(data);
-		// console.log(data);
 		var id_data;
 		if (data.results.some(function(result) {
 			// console.log(result);
@@ -152,6 +153,42 @@ crawler = new CeL.work_crawler({
 			return id_data;
 		}
 		// 未找到相符者。
+		return [];
+	},
+
+	search_URL : function(work_title) {
+		return [ 'search.php?mod=forum', {
+			formhash : 'aa2d7d2d',
+			srchtxt : work_title,
+			searchsubmit : 'yes'
+		} ];
+	},
+	parse_search_result : function(html, get_label, work_title) {
+		html = html.between('<h2>');
+		// console.log(html);
+		var matched, best_result;
+		while (matched = PATTERN_search.exec(html)) {
+			// delete matched.input;
+			// console.log(matched);
+			var work_data = parse_topic_title(get_label(matched[2]));
+			if (work_data && work_data.title === work_title) {
+				work_data.id = matched[1];
+				var point_1 = matched[3].match(/(\d+) 個回覆/),
+				//
+				point_2 = matched[3].match(/(\d+) 次查看/);
+				work_data.point = (point_1 ? point_1[1] * 100 : 0)
+						+ (point_2 ? +point_2[1] : 0);
+				if (!best_result || best_result.point < work_data.point) {
+					best_result = work_data;
+				}
+			}
+			// console.log(work_data);
+		}
+		if (best_result) {
+			best_result = [ [ best_result.id ], [ best_result.title ] ];
+			// console.log(best_result);
+			return best_result;
+		}
 		return [];
 	},
 
@@ -314,10 +351,13 @@ crawler = new CeL.work_crawler({
 			book_chapter = CeL.from_Chinese_numeral(part_title || _part_title)
 					.toString();
 
-			// TODO: 雪鷹領主
-			var matched = book_chapter.match(/(?:第 *|^) {0,2}(\d+) {0,2}章/);
-			if (book_chapter_is_OK(matched, 40)
-			// ↑ 40: 當格式明確的時候，可以容許比較大的跨度。
+			var matched = book_chapter.match(/(?:第 *|^) {0,2}(\d+) {0,2}篇/),
+			// e.g., 雪鷹領主
+			has_part = matched && +matched[1] > 0;
+
+			matched = book_chapter.match(/(?:第 *|^) {0,2}(\d+) {0,2}章/);
+			if (book_chapter_is_OK(matched, has_part ? 200 : 40)
+			// ↑ 200, 40: 當格式明確的時候，可以容許比較大的跨度。
 			|| part_title && book_chapter_is_OK(book_chapter.match(/(\d+) *章/)
 			// 先檢查"章"，預防有"第?卷 第?章"。
 			|| book_chapter.match(/第 *(\d+)/))
