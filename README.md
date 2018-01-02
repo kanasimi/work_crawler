@@ -77,8 +77,21 @@
    node _CeL.updater.node.js
    ```
 5. 然後就能[開始試用](#execution-執行)囉。
+   ``` sh
+   # sample commands to extract work_crawler + cejs
+   mkdir work_crawler
+   cd work_crawler
+   wget --output-document=work_crawler.zip https://github.com/kanasimi/work_crawler/archive/master.zip
+   unzip work_crawler.zip
+   cd work_crawler-master
+   wget --output-document=_CeL.updater.node.js https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js
+   node _CeL.updater.node.js
+   ```
 6. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。
 7. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
+   ``` sh
+   node _CeL.updater.node.js
+   ```
 
 <!-- use npm:
 3. 在命令行界面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）

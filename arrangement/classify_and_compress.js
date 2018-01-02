@@ -118,9 +118,14 @@ catalog_directory = {
 	},
 	tool : [ 'Tools', 't' ],
 
-	_maybe_doujin : [ '_maybe_doujin' ],
-	_maybe_comic_novel : [ '_maybe_comic_novel' ],
-	_maybe_translated_adult_comic : [ '_maybe_translated_adult_comic' ],
+	_maybe_doujin : null,
+	_maybe_comic_novel : null,
+	_maybe_translated_adult_comic : null,
+	_maybe_anime : null,
+	_maybe_music : null,
+	_maybe_image : null,
+	_maybe_game : null,
+	_should_be_game : null,
 
 	root : append_path_separator(catalog_directory)
 };
@@ -128,6 +133,9 @@ catalog_directory = {
 // 初始化各個分類目錄的位置。
 Object.keys(catalog_directory).forEach(function(catalog) {
 	var directory = catalog_directory[catalog];
+	if (catalog.startsWith('_') && !directory) {
+		directory = catalog_directory[catalog] = [ catalog ];
+	}
 	if (Array.isArray(directory)) {
 		if (!directory.some(function(candidate) {
 			if (catalog.startsWith('_')) {
@@ -185,6 +193,10 @@ var process_queue = [], PATTERN_executable_file = /\.(?:exe)$/i;
 fso_name_list.forEach(check_fso);
 
 function check_fso(fso_name) {
+	if (fso_name in catalog_directory) {
+		return;
+	}
+
 	function test_size_OK(size, profile, message) {
 		if (!size || biggest_file_size < size) {
 			process_queue.push([ directory_path, profile, message ]);
@@ -221,7 +233,7 @@ function check_fso(fso_name) {
 	}
 	// TODO: 這會漏掉只有空目錄的情況。
 
-	var image_count = 0, exe_count = 0, _____padding_file_count = 0, non_zero_size_count = 0,
+	var image_count = 0, exe_count = 0, iso_count = 0, music_count = 0, anime_count = 0, _____padding_file_count = 0, non_zero_size_count = 0,
 	//
 	sub_files = [], sub_directories = [], sub_sub_files_count = 0,
 	// 最大的檔案size
@@ -239,6 +251,12 @@ function check_fso(fso_name) {
 			image_count++;
 		} else if (PATTERN_executable_file.test(sub_fso_name)) {
 			exe_count++;
+		} else if (/\.(?:iso|mdf|mds)$/i.test(sub_fso_name)) {
+			iso_count++;
+		} else if (/\.(?:mp3|flac|ape)$/i.test(sub_fso_name)) {
+			music_count++;
+		} else if (/\.(?:avi|mp4|mkv|ass)$/i.test(sub_fso_name)) {
+			anime_count++;
 		}
 	}
 
@@ -282,6 +300,19 @@ function check_fso(fso_name) {
 		}
 	});
 
+	fso_status.counter = {
+		sub_sub_files : sub_sub_files_count,
+		_____padding_file : _____padding_file_count,
+		exe : exe_count,
+		iso : iso_count,
+		music : music_count,
+		anime : anime_count,
+		zero_size : non_zero_size_count,
+		image : image_count
+	};
+	// console.log(directory_path);
+	// console.log(fso_status.counter);
+
 	if (_____padding_file_count > 0 && test_size_OK(null, {
 		profile : 'padding files',
 		archive : directory_path + '_____padding_file.7z',
@@ -301,11 +332,13 @@ function check_fso(fso_name) {
 
 	if ((image_count > 20 ? image_count / sub_sub_files_count > .8
 	//
-	: image_count > 2 && image_count > sub_sub_files_count - 2)
-			// 壓縮大多只有圖片的目錄。
-			&& test_size_OK(1e7, 'image folder', '含有 ' + image_count + '/'
-					+ sub_sub_files_count + ' 個圖片')) {
-		return;
+	: image_count > 2 && image_count > sub_sub_files_count - 2)) {
+		fso_status.maybe_image = true;
+		// 壓縮大多只有圖片的目錄。
+		if (test_size_OK(1e7, 'image folder', '含有 ' + image_count + '/'
+				+ sub_sub_files_count + ' 個圖片')) {
+			return;
+		}
 	}
 
 	if (non_zero_size_count < 9 && !(biggest_file_size > 2e8)
@@ -323,8 +356,9 @@ function check_fso(fso_name) {
 	}
 
 	if (image_count > 9 && image_count / sub_sub_files_count > .5) {
+		fso_status.maybe_image = true;
 		CeL.warn('需要手動檢查的目錄: ' + directory_path);
-		return;
+		// return;
 	}
 
 	classify(fso_name, directory_path, fso_status, sub_fso_list);
@@ -356,18 +390,17 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 	var matched;
 
 	if (/[\[(（【]一般(?:コミック|漫画|書籍)/.test(fso_name)
-			|| /(?:^|[\[(]?)Manga[^a-z]/i.test(fso_name)) {
+			|| /(?:^|[^a-z])Manga[^a-z]/i.test(fso_name)) {
 		move_to('comic');
 		return;
 	}
 
-	if (/[\[(（【]少女(?:コミック|漫画|書籍)/.test(fso_name)
-			|| /(?:^|[\[(]?)Manga[^a-z]/i.test(fso_name)) {
+	if (/[\[(（【]少女(?:コミック|漫画|書籍)/.test(fso_name)) {
 		move_to('shojo_manga');
 		return;
 	}
 
-	if (/[\[(（【]成年(?:コミック|漫画|書籍)/.test(fso_name) || fso_name.includes('FAKKU')) {
+	if (/[\[(（【]成年(?:コミック|漫画|書籍)/.test(fso_name) || /FAKKU|ガチコミ/.test(fso_name)) {
 		move_to('adult_comic');
 		return;
 	}
@@ -379,7 +412,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 	}
 
 	if (/[\[(（【]一般小説/.test(fso_name)
-			|| /(?:^|[\[(]?)Novel[^a-z]/i.test(fso_name)) {
+			|| /(?:^|[^a-z])Novel[^a-z]/i.test(fso_name)) {
 		move_to('novel');
 		return;
 	}
@@ -390,9 +423,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 	}
 
 	if (/[\[(（【](?:18禁ゲーム|ACT|ADV|RPG|SLG|3D|PL\])/i.test(fso_name)
-			|| /パッケージ版|修正パッチ|予約特典|本編同梱|\+ ?update/i.test(fso_name)
-	// || /ver[. ]1\.\d+/i.test(fso_name)
-	) {
+			|| /パッケージ版|修正パッチ|予約特典|本編同梱|\+ ?update/i.test(fso_name)) {
 		move_to('game');
 		return;
 	}
@@ -487,14 +518,37 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 	}
 
 	if (sub_fso_list.some(function(sub_fso_name) {
-		if (/[\[(（【](?:18禁ゲーム|ACT|ADV|RPG|SLG|3D|PL\])/i.test(sub_fso_name)
-				|| /パッケージ版|修正パッチ|予約特典|本編同梱|\+ ?update/i.test(sub_fso_name)
-		// || /ver[. ]1\.\d+/i.test(fso_name)
-		) {
-			move_to('game');
+		if (/[\[(（【](?:18禁ゲーム)/i.test(sub_fso_name)) {
+			move_to('_should_be_game');
 			return true;
 		}
 	})) {
+		return;
+	}
+
+	if (fso_status.counter.exe > 0 || fso_status.counter.iso > 0
+			|| /[^a-z\d]ver[. ]\d\.\d+/i.test(fso_name)) {
+		move_to('_maybe_game');
+		return;
+	}
+
+	if (fso_status.maybe_image) {
+		move_to('_maybe_image');
+		return;
+	}
+
+	if (fso_status.counter.anime / fso_status.counter.sub_sub_files > .4) {
+		move_to('anime');
+		return;
+	}
+
+	if (fso_status.counter.anime / fso_status.counter.sub_sub_files > .1) {
+		move_to('_maybe_anime');
+		return;
+	}
+
+	if (fso_status.counter.music > 0) {
+		move_to('_maybe_music');
 		return;
 	}
 
