@@ -72,7 +72,7 @@ if (typeof CeL !== 'function') {
 }
 
 // ----------------------------------------------------------------------------
-// Load module.
+// Load modules.
 
 // CeL.set_debug(6);
 

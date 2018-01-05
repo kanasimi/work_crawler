@@ -518,6 +518,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 	}
 
 	if (sub_fso_list.some(function(sub_fso_name) {
+		// 18禁ゲーム
 		if (/[\[(（【](?:18禁ゲーム)/i.test(sub_fso_name)) {
 			move_to('_should_be_game');
 			return true;
@@ -532,18 +533,19 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
-	if (fso_status.maybe_image) {
-		move_to('_maybe_image');
-		return;
-	}
-
 	if (fso_status.counter.anime / fso_status.counter.sub_sub_files > .4) {
 		move_to('anime');
 		return;
 	}
 
-	if (fso_status.counter.anime / fso_status.counter.sub_sub_files > .1) {
+	if (fso_status.counter.anime > 9
+			|| fso_status.counter.anime / fso_status.counter.sub_sub_files > .1) {
 		move_to('_maybe_anime');
+		return;
+	}
+
+	if (fso_status.maybe_image) {
+		move_to('_maybe_image');
 		return;
 	}
 
@@ -554,6 +556,17 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 
 	// TODO: add more patterns
 }
+
+// -----------------------------------------------------------------
+// 先去掉空的擬分類目錄再慢慢壓縮。
+
+Object.keys(catalog_directory).forEach(function(catalog) {
+	if (catalog.startsWith('_')
+	// 移除空的候選目錄。
+	&& CeL.directory_is_empty(catalog_directory[catalog])) {
+		CeL.remove_directory(catalog_directory[catalog]);
+	}
+});
 
 // -----------------------------------------------------------------
 
@@ -626,13 +639,5 @@ function compress_each_directory(config, index) {
 
 // -----------------------------------------------------------------
 // finish up
-
-Object.keys(catalog_directory).forEach(function(catalog) {
-	if (catalog.startsWith('_')
-	// 移除空的候選目錄。
-	&& CeL.directory_is_empty(catalog_directory[catalog])) {
-		CeL.remove_directory(catalog_directory[catalog]);
-	}
-});
 
 // CeL.log('Done.');

@@ -61,6 +61,8 @@ function parse_topic_title(title, work_data) {
 
 	// check title. e.g., 小說名稱前有多個分類
 	work_data.title = parse_genre(matched[1])
+	// e.g., 召喚聖劍
+	.replace(/ +小說$/, '')
 	// e.g., 誰主沉浮
 	.replace(/^《(.+?)》$/, '$1').trim();
 
@@ -174,7 +176,7 @@ crawler = new CeL.work_crawler({
 			if (work_data && work_data.title === work_title) {
 				work_data.id = matched[1];
 				var point_1 = matched[3].match(/(\d+) 個回覆/),
-				//
+				// 選擇最多人參與的帖子。
 				point_2 = matched[3].match(/(\d+) 次查看/);
 				work_data.point = (point_1 ? point_1[1] * 100 : 0)
 						+ (point_2 ? +point_2[1] : 0);
@@ -182,7 +184,7 @@ crawler = new CeL.work_crawler({
 					best_result = work_data;
 				}
 			}
-			// console.log(work_data);
+			console.log(work_data);
 		}
 		if (best_result) {
 			best_result = [ [ best_result.id ], [ best_result.title ] ];

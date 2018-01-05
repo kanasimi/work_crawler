@@ -12,8 +12,8 @@
 	"license" : "BSD-3-Clause",
 	"scripts" : {
 		"start" : "node_modules/.bin/electron . || ~/node_modules/.bin/electron .",
-		"pack" : "%HOMEPATH%\node_modules\.bin\electron-builder --dir || ~/node_modules/.bin/electron-builder --dir",
-		"dist" : "%HOMEPATH%\node_modules\.bin\electron-builder || ~/node_modules/.bin/electron-builder",
+		"pack" : "%HOMEPATH%\\node_modules\\.bin\\electron-builder --dir || ~/node_modules/.bin/electron-builder --dir",
+		"dist" : "%HOMEPATH%\\node_modules\\.bin\\electron-builder || ~/node_modules/.bin/electron-builder",
 		"postinstall" : "~/node_modules/.bin/electron-builder install-app-deps"
 	},
 	"build" : {
