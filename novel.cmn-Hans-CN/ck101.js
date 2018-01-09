@@ -184,7 +184,7 @@ crawler = new CeL.work_crawler({
 					best_result = work_data;
 				}
 			}
-			console.log(work_data);
+			// console.log(work_data);
 		}
 		if (best_result) {
 			best_result = [ [ best_result.id ], [ best_result.title ] ];

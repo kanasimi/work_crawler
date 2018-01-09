@@ -77,6 +77,17 @@ if (!catalog_directory) {
 	catalog_directory = target_directory.replace(/[^\\\/]+[\\\/]*$/, '');
 }
 
+// sub-catalog, 子分類目錄。
+function is_sub_catalog(catalog) {
+	var matched = catalog.match(/^(.+)_sub$/);
+	return matched && matched[1];
+}
+
+// 候選/擬分類目錄。
+function is_pseudo_catalog(catalog) {
+	return catalog.startsWith('_');
+}
+
 catalog_directory = {
 	anime : [ 'anime,アニメ', 'a' ],
 	anime_sub : {
@@ -130,16 +141,20 @@ catalog_directory = {
 	root : append_path_separator(catalog_directory)
 };
 
+var auto_created_directory_list = [];
+
 // 初始化各個分類目錄的位置。
 Object.keys(catalog_directory).forEach(function(catalog) {
 	var directory = catalog_directory[catalog];
-	if (catalog.startsWith('_') && !directory) {
+	if (is_pseudo_catalog(catalog) && !directory) {
+		// 擬分類目錄。
 		directory = catalog_directory[catalog] = [ catalog ];
 	}
 	if (Array.isArray(directory)) {
 		if (!directory.some(function(candidate) {
-			if (catalog.startsWith('_')) {
+			if (is_pseudo_catalog(catalog)) {
 				candidate = target_directory + candidate;
+				auto_created_directory_list.push(candidate);
 				CeL.create_directory(candidate);
 			} else {
 				candidate = catalog_directory.root + candidate;
@@ -157,10 +172,10 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 	}
 
 	// assert: directory = {catalog:'string'}
-	var matched = catalog.match(/^(.+)_sub$/);
+	var matched = is_sub_catalog(catalog);
 	if (matched && CeL.is_Object(directory)) {
 		delete catalog_directory[catalog];
-		var main_catalog_directory = catalog_directory[matched[1]];
+		var main_catalog_directory = catalog_directory[matched];
 		if (!main_catalog_directory) {
 			return;
 		}
@@ -173,7 +188,8 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 				//
 				+ sub_catalog + ']:	' + sub_catalog_directory;
 				add_log(message);
-				CeL.info(message);
+				CeL.debug(message);
+				auto_created_directory_list.push(sub_catalog_directory);
 				CeL.create_directory(sub_catalog_directory);
 			}
 			catalog_directory[sub_catalog] = sub_catalog_directory;
@@ -558,13 +574,32 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 }
 
 // -----------------------------------------------------------------
-// 先去掉空的擬分類目錄再慢慢壓縮。
+// 先去掉空的分類目錄再慢慢壓縮。
 
+auto_created_directory_list.forEach(function(auto_created_directory) {
+	// 移除空的擬分類目錄/子分類目錄。
+	if (CeL.directory_is_empty(auto_created_directory)) {
+		CeL.remove_directory(auto_created_directory);
+	}
+});
+
+// console.log(catalog_directory);
 Object.keys(catalog_directory).forEach(function(catalog) {
-	if (catalog.startsWith('_')
-	// 移除空的候選目錄。
-	&& CeL.directory_is_empty(catalog_directory[catalog])) {
-		CeL.remove_directory(catalog_directory[catalog]);
+	var move_to_path = catalog_directory[catalog];
+	if (!is_pseudo_catalog(catalog) && !is_sub_catalog(catalog)
+	//
+	|| !CeL.directory_exists(move_to_path)) {
+		return;
+	}
+
+	// 移除空的擬分類目錄/子分類目錄。
+	if (CeL.directory_is_empty(move_to_path)) {
+		CeL.log('Remove empty directory: ' + move_to_path);
+		CeL.remove_directory(move_to_path);
+	} else if (is_sub_catalog(catalog)) {
+		CeL.info('Directory of sub-catalog [' + catalog
+		//
+		+ '] created: ' + move_to_path);
 	}
 });
 
