@@ -646,7 +646,7 @@ function compress_each_directory(config, index) {
 		profile_name = profile_name.profile;
 	}
 
-	process.title = 'Compress ' + (index + 1) + '/' + process_queue.length;
+	process.title = (index + 1) + '/' + process_queue.length + ' compressing';
 	CeL.info((index + 1) + '/' + process_queue.length + ' Compress '
 			+ profile_name + ': [' + directory_path + '] ' + (message || '')
 			+ '...');
