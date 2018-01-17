@@ -76,18 +76,19 @@ function parse_topic_title(title, work_data) {
 	return work_data;
 }
 
-function get_work_data_from_html(html) {
+function get_work_data_from_html(html, get_label) {
 	// 2017/12/19 改版
-	html = html.all_between('<script type="application/ld+json">', '</script>')
-			.filter(function(slice) {
-				return slice.includes('mainEntityOfPage');
-			});
-	if (html.length !== 1) {
+	var data = html.all_between('<script type="application/ld+json">',
+			'</script>').filter(function(slice) {
+		return slice.includes('mainEntityOfPage');
+	});
+	if (data.length !== 1) {
+		// e.g., 已經將此出錯信息詳細記錄, 由此給您帶來的訪問不便我們深感歉意.
 		console.log(html);
 		throw 'Can not parse page!';
 	}
 
-	html = html[0].replace(/"(?:[^"]*|\\")*"/g, function(quoted) {
+	data = data[0].replace(/"(?:[^"]*|\\")*"/g, function(quoted) {
 		// console.log(quoted);
 		return quoted.replace(/\r?\n/g, '\\n');
 	})
@@ -96,13 +97,13 @@ function get_work_data_from_html(html) {
 	// e.g., 不死不滅 thread-2332198-1-1.html
 	.replace(/("(?:pageEnd|pagination)": ),/g, '$1 1,');
 	try {
-		html = JSON.parse(html);
+		data = JSON.parse(data);
 	} catch (e) {
-		console.log('Invalid JSON:\n' + JSON.stringify(html));
+		console.log('Invalid JSON:\n' + JSON.stringify(data));
 		// TODO: handle exception
 		return;
 	}
-	return html;
+	return data;
 }
 
 var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=4368fa9a9824ad4f837cbd399d21811d&cx=partner-pub-1630767461540427:6206348626&cse_tok=AOdTmaD-8P-9dqB_ihmfrf2DZk46lkl4rg:1514090169341&sort=&googlehost=www.google.com&q=',
@@ -205,7 +206,7 @@ crawler = new CeL.work_crawler({
 			CeL.error(get_label(error.between(null, '<script')));
 		}
 
-		var raw_data = get_work_data_from_html(html),
+		var raw_data = get_work_data_from_html(html, get_label),
 		//
 		mainEntity = raw_data, need_check_title = true;
 		// 處理非小說的情況。
@@ -255,7 +256,7 @@ crawler = new CeL.work_crawler({
 
 		var _this = this, book_chapter,
 		//
-		raw_data = get_work_data_from_html(html),
+		raw_data = get_work_data_from_html(html, get_label),
 		//
 		mainEntity = raw_data,
 		// /<div id="(post_\d+)" class="plhin">/g
@@ -307,9 +308,13 @@ crawler = new CeL.work_crawler({
 
 			var rate = text.between('<table class="ratl">', '</table>');
 
-			text = text.between(' class="t_fsz">').between('<table ').between(
-					'>', '</table>').replace(/<div class="adBox">[\s\S]*$/, '')
-					.replace(/<\/?t[adhr][^<>]*>/g, '');
+			text = text.between(' class="pcb">');
+			var matched = text.match(
+			// e.g., 凡人修仙傳
+			/^\s*<(h2)>([\s\S]{1,150}?)<\/\1>[\r\n]*/);
+			text = text.between('<table ').between('>', '</table>').replace(
+					/<div class="adBox">[\s\S]*$/, '').replace(
+					/<\/?t[adhr][^<>]*>/g, '');
 
 			// trim
 			text = text.trimEnd().replace(PATTERN_START_SPACE, '');
@@ -334,9 +339,13 @@ crawler = new CeL.work_crawler({
 
 			var part_title = undefined, first_line, _part_title;
 
+			if (matched) {
+				text = matched[0].trimStart() + text;
+			}
+
 			text = text.replace(
 			// 正規的標題形式。
-			/^<(strong|font|b)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>/,
+			/^<(strong|font|b|h2)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>/,
 			//
 			function(all, tag_attributes, title) {
 				first_line = all;
@@ -353,8 +362,8 @@ crawler = new CeL.work_crawler({
 			book_chapter = CeL.from_Chinese_numeral(part_title || _part_title)
 					.toString();
 
-			var matched = book_chapter.match(/(?:第 *|^) {0,2}(\d+) {0,2}篇/),
-			// e.g., 雪鷹領主
+			var matched = book_chapter.match(/(?:第 *|^) {0,2}(\d+) {0,2}[篇卷]/),
+			// e.g., 雪鷹領主, 凡人修仙傳
 			has_part = matched && +matched[1] > 0;
 
 			matched = book_chapter.match(/(?:第 *|^) {0,2}(\d+) {0,2}章/);
