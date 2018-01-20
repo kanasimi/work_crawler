@@ -242,7 +242,11 @@ crawler = new CeL.work_crawler({
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		//
 		function book_chapter_is_OK(matched, diff) {
-			if (matched === undefined)
+			if (false) {
+				console.log([ book_chapter, matched, diff,
+						work_data.book_chapter_count ]);
+			}
+			if (matched === undefined || matched === null)
 				matched = book_chapter;
 			if (matched && (matched = +matched[1]) >= 1
 			// 4: 差距不大時才可算數。
@@ -308,7 +312,8 @@ crawler = new CeL.work_crawler({
 
 			var rate = text.between('<table class="ratl">', '</table>');
 
-			text = text.between(' class="pcb">');
+			text = text.between(' class="pcb">')
+					|| text.between(' class="t_fsz">');
 			var matched = text.match(
 			// e.g., 凡人修仙傳
 			/^\s*<(h2)>([\s\S]{1,150}?)<\/\1>[\r\n]*/);
@@ -362,7 +367,10 @@ crawler = new CeL.work_crawler({
 			book_chapter = CeL.from_Chinese_numeral(part_title || _part_title)
 					.toString();
 
-			var matched = book_chapter.match(/(?:第 *|^) {0,2}(\d+) {0,2}[篇卷]/),
+			var matched = book_chapter
+					.match(/(?:第 *|^) {0,2}(\d{1,2}) {0,2}[篇卷]/)
+					// e.g., 永夜君王
+					|| book_chapter.match(/(?:[\s《]|^)卷(\d{1,2})(?:[\s》]|$)/),
 			// e.g., 雪鷹領主, 凡人修仙傳
 			has_part = matched && +matched[1] > 0;
 
@@ -371,7 +379,11 @@ crawler = new CeL.work_crawler({
 			// ↑ 200, 40: 當格式明確的時候，可以容許比較大的跨度。
 			|| part_title && book_chapter_is_OK(book_chapter.match(/(\d+) *章/)
 			// 先檢查"章"，預防有"第?卷 第?章"。
-			|| book_chapter.match(/第 *(\d+)/))
+			|| book_chapter.match(/第 *(\d+)/)
+			// e.g., 永夜君王
+			|| book_chapter.match(/(?:[\s《]|^)章(\d{1,4})(?:[\s》]|$)/),
+			//
+			has_part ? 40 : 4)
 			//
 			|| book_chapter_is_OK(book_chapter.match(/(?:^|[^\d])(\d{1,4})章/)
 			//

@@ -165,7 +165,7 @@
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [線上作品程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
 * 展示程式撰寫當時，各線上小說漫畫網站之網站資料結構。
 * 提供離線瀏覽小說漫畫功能，以利個人化閱覽方式。增進閱覽體驗、掌控閱覽環境。
-* 增加對閱讀權的掌控能力，預防數十年後找不到記憶中閱覽過的作品。
+* 增加對閱讀權的掌控能力，預防暫時無法連接網頁，或者數十年後找不到記憶中閱覽過的作品。
 
 非常歡迎[提供使用意見與改善建議](https://github.com/kanasimi/work_crawler/issues/new)。
 

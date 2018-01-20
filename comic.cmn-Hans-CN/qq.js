@@ -98,7 +98,7 @@ var crawler = new CeL.work_crawler({
 					finish_free();
 				});
 			}, this.charset, null, Object.assign({
-				error_retry : this.MAX_ERROR
+				error_retry : this.MAX_ERROR_RETRY
 			}, this.get_URL_options));
 		}
 	},

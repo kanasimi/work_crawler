@@ -50,7 +50,7 @@ download_options_set = {
 	reget_chapter : '重新取得每個所檢測的章節內容。',
 
 	// 容許錯誤用的相關操作設定。
-	// MAX_ERROR : '',
+	// MAX_ERROR_RETRY : '',
 	allow_EOI_error : '當圖像不存在 EOI (end of image) 標記，或是被偵測出非圖像時，依舊強制儲存檔案。',
 	skip_error : '忽略/跳過圖像錯誤。',
 	skip_chapter_data_error : '當無法取得 chapter 資料時，直接嘗試下一章節。',
