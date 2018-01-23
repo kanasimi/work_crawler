@@ -67,9 +67,14 @@ var crawler = new CeL.work_crawler({
 		exact_work_data(work_data, html.between('<div class="anim-main_list">',
 				'</div>'), /<th>([^<>]+?)<\/th>[\s\n]*<td>(.+?)<\/td>/g);
 		work_data.status = work_data.状态;
-		work_data.last_update = work_data.最新收录
-		//
-		.match(/\d+-\d{1,2}-\d{1,2}$/)[0];
+		if (work_data.最新收录) {
+			work_data.last_update = work_data.最新收录
+			//
+			.match(/\d+-\d{1,2}-\d{1,2}$/)[0];
+		} else {
+			work_data.last_update = html.between(
+					'<span class="zj_list_head_dat">[ 更新时间：', ']</span>');
+		}
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html, get_label) {
@@ -122,6 +127,7 @@ var crawler = new CeL.work_crawler({
 				// is_manhua===false
 				pages = pages.page_url.split('|');
 			}
+			// console.log(pages);
 			return pages;
 		}
 
@@ -137,6 +143,9 @@ var crawler = new CeL.work_crawler({
 			image_list : decode(html.between('<script type="text/javascript">',
 			//
 			'</script>').between('eval', '\n')).map(function(url) {
+				if (!/%[\dA-F]{2}/.test(url)) {
+					url = encodeURI(CeL.HTML_to_Unicode(url));
+				}
 				return {
 					// 指定圖片要儲存檔的檔名。
 					file : function(work_data, chapter, index) {
@@ -145,13 +154,12 @@ var crawler = new CeL.work_crawler({
 						// CeL.application.net.work_crawler
 						+ '-' + chapter + '-' + (index + 1).pad(3) + '.jpg'
 					},
-					url : 'http://images.dmzj.com/'
-					//
-					+ encodeURI(CeL.HTML_to_Unicode(url))
+					url : 'http://images.dmzj.com/' + url
 				}
 			})
 		};
 
+		// console.log(chapter_data.image_list);
 		return chapter_data;
 	}
 });
