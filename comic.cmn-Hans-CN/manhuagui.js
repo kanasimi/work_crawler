@@ -10,7 +10,15 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var crawler = new CeL.work_crawler({
+// core_9D227AD5A911B7758A332C9CA35C640C.js
+// 2017/3/11 20:6:35: core_33A91659E79CDC4A0F31ED884877F3EF.js
+// 2018/1/30與2/2之間改版: core_E95EAFDD32D7F97E369526C7AD9A8837.js
+var core_filename = 'core_E95EAFDD32D7F97E369526C7AD9A8837.js',
+// 2017: main_3A454149B2D2500411BC344B15DB58A4.js'
+// 2018/2: config_25855B4C08F7A6545A30D049ABD0F9EE.js
+decode_filename = 'config_25855B4C08F7A6545A30D049ABD0F9EE.js',
+//
+crawler = new CeL.work_crawler({
 	// 本站常常無法取得圖片，因此得多重新檢查。
 	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
 	// recheck : true,
@@ -27,16 +35,13 @@ var crawler = new CeL.work_crawler({
 	// 取得伺服器列表。
 	// use_server_cache : true,
 	server_URL : function() {
-		return this.script_base_URL
-		// + 'core_9D227AD5A911B7758A332C9CA35C640C.js'
-		// 2017/3/11 20:6:35
-		+ 'core_33A91659E79CDC4A0F31ED884877F3EF.js';
+		return this.script_base_URL + core_filename;
 	},
 	parse_server_list : function(html) {
 		var server_list = [];
 		eval(html.between('var servs=', ',pfuncs=')).forEach(function(data) {
 			data.hosts.forEach(function(server_data) {
-				// @see SMH.utils.getPath
+				// @see SMH.utils.getPath() @ ((core_filename))
 				server_list.push(server_data.h + '.hamreus.com:8080');
 			});
 		});
@@ -163,7 +168,6 @@ var crawler = new CeL.work_crawler({
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	_pre_chapter_URL : function(work_data, chapter, callback) {
-		// console.log(chapter_data);
 		var chapter_data = work_data.chapter_list[chapter - 1],
 		// e.g., "/comic/8772/86612.html"
 		chapter_id = +chapter_data.url.match(/^\/comic\/\d+\/(\d+)\.html$/)[1];
@@ -221,9 +225,7 @@ var crawler = new CeL.work_crawler({
 		chapter_data.image_list = chapter_data.files.map(function(url) {
 			return {
 				url : path + url
-				// @see
-				// http://c.3qfm.com/scripts/core_9D227AD5A911B7758A332C9CA35C640C.js
-				// .replace(/\.webp$/, '')
+				// @see ((core_filename))
 				+ '?cid=' + chapter_data.cid + '&md5=' + chapter_data.sl.md5
 			}
 		});
@@ -238,10 +240,10 @@ var crawler = new CeL.work_crawler({
 
 setup_crawler(crawler, typeof module === 'object' && module);
 
-var LZString, decode_file = 'main_3A454149B2D2500411BC344B15DB58A4.js';
+var LZString;
 // 創建 main directory。
 CeL.create_directory(crawler.main_directory);
-CeL.get_URL_cache(crawler.script_base_URL + decode_file,
+CeL.get_URL_cache(crawler.script_base_URL + decode_filename,
 // 2017/3/3? ikanman 改版
 function(contents) {
 	contents = contents.between('\nwindow["\\x65\\x76\\x61\\x6c"]', ';\n')
@@ -252,4 +254,4 @@ function(contents) {
 	contents = eval(contents).replace(/^var /, '');
 	eval(contents);
 	start_crawler(crawler, typeof module === 'object' && module);
-}, crawler.main_directory + decode_file);
+}, crawler.main_directory + decode_filename);
