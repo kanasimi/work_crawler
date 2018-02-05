@@ -32,6 +32,7 @@ download_sites_set = {
 		'88dushu' : '八八读书网',
 		'630book' : '恋上你看书网',
 		ck101 : '卡提諾論壇 小說頻道',
+		luoxia : '落霞小说网',
 		piaotian : '飘天文学'
 	},
 	'novel.ja-JP' : {

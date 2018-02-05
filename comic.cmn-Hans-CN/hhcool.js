@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載HH漫画 汗汗酷漫的工具。 Download hhcool comics.
+ * 
+ * TODO: http://www.hhmmoo.com/
  */
 
 'use strict';

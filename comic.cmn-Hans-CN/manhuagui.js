@@ -201,7 +201,7 @@ var crawler = new CeL.work_crawler({
 		}
 
 		var chapter_data = html.between(
-		// window["eval"]
+		// window["eval"], window["\x65\x76\x61\x6c"]
 		'<script type="text/javascript">window["\\x65\\x76\\x61\\x6c"]',
 				'</script>');
 		if (!chapter_data || !(chapter_data = decode(chapter_data))) {
@@ -209,6 +209,9 @@ var crawler = new CeL.work_crawler({
 					+ ': No valid chapter data got!');
 			return;
 		}
+		// for debug
+		// console.log(chapter_data);
+		// throw this.id + ': debug throw';
 
 		// 設定必要的屬性。
 		chapter_data.title = chapter_data.cname;
@@ -220,7 +223,8 @@ var crawler = new CeL.work_crawler({
 				url : path + url
 				// @see
 				// http://c.3qfm.com/scripts/core_9D227AD5A911B7758A332C9CA35C640C.js
-				.replace(/\.webp$/, '')
+				// .replace(/\.webp$/, '')
+				+ '?cid=' + chapter_data.cid + '&md5=' + chapter_data.sl.md5
 			}
 		});
 

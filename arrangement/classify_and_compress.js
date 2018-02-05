@@ -416,7 +416,8 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
-	if (/[\[(（【]成年(?:コミック|漫画|書籍)/.test(fso_name) || /FAKKU|ガチコミ/.test(fso_name)) {
+	if (/[\[(（【](?:成年(?:コミック|漫画|書籍)|Anthology|アンソロジー)/.test(fso_name)
+			|| /FAKKU|ガチコミ/.test(fso_name)) {
 		move_to('adult_comic');
 		return;
 	}

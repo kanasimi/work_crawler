@@ -288,7 +288,9 @@ crawler = new CeL.work_crawler({
 					url = _this.base_URL + url;
 				return previous + 'src="' + url + '"';
 			});
-		});
+		})
+		// e.g., 師侄, 侄子
+		.replace(/佷/g, '侄');
 
 		if (false) {
 			html = html.replace(/<i class="pstatus">/g,
