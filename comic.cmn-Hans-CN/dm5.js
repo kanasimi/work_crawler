@@ -138,6 +138,13 @@ var crawler = new CeL.work_crawler({
 					.replace(/^'|'$/g, '"') : matched[2]);
 		}
 		// console.log(DM5);
+		if (!(DM5.IMAGE_COUNT > 0)) {
+			if (html.includes('<p class="subtitle">此章节为付费章节</p>')) {
+				CeL.info(work_data.title + ': 第' + chapter + '章為需要付費的章節');
+			}
+			callback();
+			return;
+		}
 
 		// @see ShowNext() , ajaxloadimage() @
 		// http://css122us.cdndm5.com/v201801302028/dm5/js/chapternew_v22.js
@@ -169,8 +176,9 @@ var crawler = new CeL.work_crawler({
 
 		var chapter_data = work_data.chapter_list[chapter - 1];
 		function image_file_path_of(index) {
+			// @see get_data() @ CeL.application.net.work_crawler
 			var chapter_label = chapter_data.title;
-			// 檔名 NO 的基本長度（不足補零）
+			// 檔名 NO 的基本長度（不足補零）。
 			chapter_label = chapter.pad(4) + (chapter_label ? ' '
 			//
 			+ CeL.to_file_name(
@@ -182,11 +190,16 @@ var crawler = new CeL.work_crawler({
 
 			CeL.create_directory(chapter_directory);
 
+			// @see image_data.file @ CeL.application.net.work_crawler
 			return chapter_directory + work_data.id + '-' + chapter + '_'
-					+ index.pad(3) + '.jpg';
+					+ index.pad(3) + '.' + _this.default_image_extension;
 		}
 
 		// --------------------------------------
+
+		// 這個網站似乎每個章節在呼叫 chapterfun.ashx 之後才能下載圖片。
+		// 並且當呼叫另一次 chapterfun.ashx 之後就不能下載上一次的圖片了。
+		// 由於圖片不能並行下載，下載速度較慢。
 
 		CeL.run_serial(function(run_next, index) {
 			if (CeL.read_file(image_file_path_of(index))) {
@@ -198,6 +211,7 @@ var crawler = new CeL.work_crawler({
 			get_token(index, run_next);
 			return;
 
+			// Skip: 可以不用取得 history.ashx。
 			history_parameters.page = index;
 			CeL.get_URL(_this.base_URL + _this.chapter_URL(work_data, chapter)
 					+ 'history.ashx',
@@ -216,6 +230,7 @@ var crawler = new CeL.work_crawler({
 			work_data.image_list[chapter] = this_image_list;
 			// _this.save_work_data(work_data);
 			// console.log(this_image_list);
+
 			callback();
 		});
 
@@ -231,7 +246,13 @@ var crawler = new CeL.work_crawler({
 			function(XMLHttp) {
 				var html = XMLHttp.responseText;
 				// console.log(html);
-				html = eval(html.replace(/^eval/, ''));
+				html = html.replace(/^eval/, '');
+				if (html === '错误的请求') {
+					CeL.info(work_data.title + ': ' + html);
+					run_next();
+					return;
+				}
+				html = eval(html);
 				// console.log(html);
 				var image_list = eval(html);
 				// console.log(image_list);
@@ -245,20 +266,27 @@ var crawler = new CeL.work_crawler({
 
 		function get_image_file(index, image_list, run_next) {
 			CeL.get_URL_cache(image_list[0], function() {
-				setTimeout(function() {
-					run_next();
-				}, 1000);
+				run_next();
 			}, {
 				file_name : image_file_path_of(index),
 				encoding : undefined,
 				charset : _this.charset,
-				get_URL_options : _this.get_URL_options
+				get_URL_options : Object.assign({
+					// error_retry : 0,
+					onfail : function(error) {
+						throw error;
+					}
+				}, _this.get_URL_options)
 			});
 
 		}
 	},
 
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
+		return {
+			image_list : []
+		};
+
 		// console.log(work_data.image_list[chapter]);
 		var chapter_data = {
 			image_list : work_data.image_list[chapter].map(function(url) {
