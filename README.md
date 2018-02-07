@@ -4,12 +4,18 @@
 - [CN] 批量下载小说 → epub、漫画网站的工具。图形+命令行界面。
 - [ja] ウェブ小説 → epub、ウェブ漫画作品を一括ダウンロードツール。グラフィカル+コマンドラインインターフェース。
 
+## TOC 快速瀏覽
+* [Installation 安裝](#installation-安裝)
+** [Lazy installation 懶人安裝法](#lazy-installation-懶人安裝法)
+* [Execution 執行](#execution-執行)
+
 ## Features 特點
 * 可自動下載小說封面以及章節中的插圖。
 * 採用 CeJS [線上作品程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
 
 ## Supported sites 已完成之網站工具
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：小說之下載必須先安裝 7Zip，這樣才能製作 .epub 電子書。
+* 各線上作品網站往往不時更改結構，同時造成本工具無法正常作動；因此若是有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
 
 已撰寫完的各大小說漫畫網站工具包括：
 
@@ -58,19 +64,19 @@
 | [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。 |
 | [733漫画网](http://www.733mh.com/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。 |
-| [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。 |
+| [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/10/19 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/10/19 未復原。 |
 
 ## Installation 安裝
 
-若是想要使用圖形介面，您可以 **[直接下載安裝包](https://github.com/kanasimi/work_crawler/releases/latest/)**。若是想要使用命令行界面，或者用作研究開發，請採用下列步驟。
+若是想要使用圖形介面，您可以 **[直接下載安裝包](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟安裝包並非最新的版本。若是欲採用最新的版本，想要使用命令行界面，或者用作研究開發，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
-1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://en.wikipedia.org/wiki/7-Zip)。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->
+1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](http://7-zip.org/)。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->
 2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可將之改名。
-3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，另外儲存到本工具將安裝的標的目錄下。
+3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，將此檔儲存到前面所提，本工具將安裝的標的目錄下。
 
 ![本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
 
@@ -89,12 +95,12 @@
    wget --output-document=_CeL.updater.node.js https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js
    node _CeL.updater.node.js
    ```
-6. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。
+6. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
 7. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
    ``` sh
    node _CeL.updater.node.js
    ```
-   由於本工具會 cache 作品資訊，更新幅度較大的時候您可能需要刪除 cache，重新再下載。
+   由於本工具會 cache 作品資訊，更新幅度較大的時候您可能需要刪除 cache，重新下載作品。
 
 <!-- use npm:
 3. 在命令行界面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
@@ -106,7 +112,7 @@
 -->
 
 ### Setup GUI 設定視窗型態介面
-若是您希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，那麼您還需要安裝 [Electron](https://electronjs.org/)。
+若是您在作研究開發時，希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，那麼您還需要安裝 [Electron](https://electronjs.org/)。
 1. 請在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具安裝的目錄，執行命令以安裝 Electron 程式庫：
    ``` sh
    npm install electron
@@ -125,7 +131,8 @@
 1. 確認要下載的網站名與作品名。之後在命令行界面下，執行：
 
    ``` sh
-   node 工具檔名.js "作品名" [option=true]
+   node 工具檔名.js "作品名" [option=true] [option=value]
+   node 工具檔名.js "l=作品列表檔案名" [option=true] [option=value]
    ```
 
    e.g.,
@@ -161,7 +168,7 @@
 
 ## Note 附注
 * 目前不支援自動更新。
-* 熟練後，一般約需2至6小時新增或更新下載工具，以達初步可用狀態。
+* 對於本工具已經包含的下載模式，熟練後一般約需2至4小時新增或更新下載工具，以達初步可用狀態。
 * 小說作品採用單線程下載，以避免對網站造成過度的負荷。漫畫作品則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
 
 ## Purpose 公開目的
@@ -174,7 +181,6 @@
 
 ## Announce 聲明
 * 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容版權屬原作者所有，請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
-* 各線上作品網站往往不時更改結構，同時造成本工具無法作動；因此若是有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
 
 ## Uninstallation 移除
 * 要移除本工具，只需將解壓縮後工具檔所在的目錄整個刪除即可。

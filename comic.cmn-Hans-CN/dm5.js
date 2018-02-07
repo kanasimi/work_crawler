@@ -22,8 +22,10 @@ var crawler = new CeL.work_crawler({
 	one_by_one : true,
 	base_URL : 'http://www.dm5.com/',
 
+	preserve_chapter_page : false,
 	// 回傳引數為作品ID 的 pattern。
 	is_work_id : function(work_id) {
+		// /^manhua-[a-z]+$/;
 		return /^[a-z\-]+$/.test(work_id);
 	},
 	// 解析 作品名稱 → 作品id get_work()
@@ -116,7 +118,6 @@ var crawler = new CeL.work_crawler({
 		}
 	},
 
-	preserve_chapter_page : false,
 	work_URL : function(work_id) {
 		return work_id + '/';
 	},
@@ -127,16 +128,18 @@ var crawler = new CeL.work_crawler({
 			work_data.image_list = [];
 		}
 
-		// 沒 cache 的話，每一次都要重新取得每個圖片的頁面，速度比較慢。
+		// 參照下方原理說明，沒有辦法使用 cache。
 		if (false && !this.recheck
 				&& Array.isArray(work_data.image_list[chapter])) {
 			callback();
 			return;
 		}
 
-		var html = XMLHttp.responseText;
-
-		var text = html.between('var isVip', '</script>'), DM5 = {}, matched,
+		var html = XMLHttp.responseText,
+		//
+		text = html.between('var isVip', '</script>'),
+		//
+		DM5 = work_data.DM5 = CeL.null_Object(), matched,
 		//
 		PATTERN_data =
 		//
@@ -195,6 +198,13 @@ var crawler = new CeL.work_crawler({
 		// --------------------------------------
 
 		var chapter_data = work_data.chapter_list[chapter - 1];
+		// 這段程式碼模仿 work_crawler 模組的行為。
+		// @see process_images(chapter_data, XMLHttp) @
+		// CeL.application.net.work_crawler
+		CeL.log(chapter + '/' + work_data.chapter_list.length + ' ['
+				+ this.get_chapter_directory_name(chapter_data, chapter) + '] '
+				+ DM5.IMAGE_COUNT + ' images.');
+
 		function image_file_path_of(image_index) {
 			// @see get_data() @ CeL.application.net.work_crawler
 			var chapter_label = _this.get_chapter_directory_name(chapter_data,
@@ -204,6 +214,7 @@ var crawler = new CeL.work_crawler({
 
 			CeL.create_directory(chapter_directory);
 
+			// 這段程式碼模仿 work_crawler 模組的行為。
 			// @see image_data.file @ CeL.application.net.work_crawler
 			return chapter_directory + work_data.id + '-' + chapter + '_'
 					+ image_index.pad(3) + '.' + _this.default_image_extension;
@@ -283,6 +294,7 @@ var crawler = new CeL.work_crawler({
 				run_next();
 			}, {
 				file_name : image_file_path_of(image_index),
+				no_write_info : true,
 				encoding : undefined,
 				charset : _this.charset,
 				get_URL_options : _this.get_URL_options
@@ -317,4 +329,5 @@ var crawler = new CeL.work_crawler({
 // for <b>漫画</b> 已被列为限制漫画，其中有部份章节可能含有暴力、血腥、色情或不当的语言等内容，不适合未成年观众，为保护未成年人，我们将对
 // <b>漫画</b> 进行屏蔽。如果你法定年龄已超过18岁。 请点击此处继续阅读！
 crawler.get_URL_options.cookie = 'isAdult=1';
+
 start_crawler(crawler, typeof module === 'object' && module);
