@@ -22,6 +22,10 @@ var crawler = new CeL.work_crawler({
 	one_by_one : true,
 	base_URL : 'http://www.dm5.com/',
 
+	// 回傳引數為作品ID 的 pattern。
+	is_work_id : function(work_id) {
+		return /^[a-z\-]+$/.test(work_id);
+	},
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
 		// @see 搜索框文本改变 function SearchInputChange() @
@@ -81,9 +85,11 @@ var crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html, get_label) {
+		// 1: 由舊至新
+		var reversed = / DM5_COMIC_SORT\s*=\s*2/.test(html);
 		// <ul class="view-detail-list detail-list-select"
 		// id="detail-list-select-1">
-		html = html.between('detail-list-select', '</ul>');
+		html = html.between('detail-list-select', '<div class="index-title">');
 
 		work_data.chapter_list = [];
 		html.each_between('<li>', '</li>',
@@ -104,9 +110,13 @@ var crawler = new CeL.work_crawler({
 			work_data.chapter_list.push(chapter_data);
 		});
 
-		return;
+		if (reversed) {
+			// 轉成由舊至新之順序。
+			work_data.chapter_list.reverse();
+		}
 	},
 
+	preserve_chapter_page : false,
 	work_URL : function(work_id) {
 		return work_id + '/';
 	},
@@ -146,6 +156,17 @@ var crawler = new CeL.work_crawler({
 			return;
 		}
 
+		// e.g., 某科学的超电磁炮
+		matched = html.match(
+		// <input type="hidden" id="dm5_key" value="" />
+		/ id="dm5_key"[\s\S]{1,50}?<script[^<>]*>\s*eval([\s\S]+?)<\/script>/);
+		if (matched) {
+			text = eval(matched[1]).replace(
+			// var var123=''+'f'+'5'+....;$("#dm5_key").val(var123);
+			/\$\("#dm5_key"\)\.val\(([a-z_][a-z_\d]*)\)/, 'DM5.mkey=$1');
+			eval(text);
+		}
+
 		// @see ShowNext() , ajaxloadimage() @
 		// http://css122us.cdndm5.com/v201801302028/dm5/js/chapternew_v22.js
 		// e.g.,
@@ -154,8 +175,7 @@ var crawler = new CeL.work_crawler({
 			cid : DM5.CID,
 			// page : DM5.PAGE,
 			page : 1,
-			// <input type="hidden" id="dm5_key" value="" />
-			key : '',
+			key : DM5.mkey,
 			language : 1,
 			gtk : 6,
 			_cid : DM5.CID,
@@ -175,24 +195,18 @@ var crawler = new CeL.work_crawler({
 		// --------------------------------------
 
 		var chapter_data = work_data.chapter_list[chapter - 1];
-		function image_file_path_of(index) {
+		function image_file_path_of(image_index) {
 			// @see get_data() @ CeL.application.net.work_crawler
-			var chapter_label = chapter_data.title;
-			// 檔名 NO 的基本長度（不足補零）。
-			chapter_label = chapter.pad(4) + (chapter_label ? ' '
-			//
-			+ CeL.to_file_name(
-			//
-			CeL.HTML_to_Unicode(chapter_label)) : '');
+			var chapter_label = _this.get_chapter_directory_name(chapter_data,
+					chapter);
 			var chapter_directory = work_data.directory + chapter_label
-			// 若是以 "." 結尾，在 Windows 7 中會出現問題，無法移動或刪除。
-			.replace(/\.$/, '._') + CeL.env.path_separator;
+					+ CeL.env.path_separator;
 
 			CeL.create_directory(chapter_directory);
 
 			// @see image_data.file @ CeL.application.net.work_crawler
 			return chapter_directory + work_data.id + '-' + chapter + '_'
-					+ index.pad(3) + '.' + _this.default_image_extension;
+					+ image_index.pad(3) + '.' + _this.default_image_extension;
 		}
 
 		// --------------------------------------
@@ -201,24 +215,25 @@ var crawler = new CeL.work_crawler({
 		// 並且當呼叫另一次 chapterfun.ashx 之後就不能下載上一次的圖片了。
 		// 由於圖片不能並行下載，下載速度較慢。
 
-		CeL.run_serial(function(run_next, index) {
-			if (CeL.read_file(image_file_path_of(index))) {
+		CeL.run_serial(function(run_next, image_index) {
+			if (CeL.read_file(image_file_path_of(image_index))) {
 				run_next();
 				return;
 			}
-			process.stdout.write((DM5.IMAGE_COUNT - index) + ' left...\r');
+			process.stdout.write((DM5.IMAGE_COUNT - image_index + 1)
+					+ ' left...\r');
 
-			get_token(index, run_next);
+			get_token(image_index, run_next);
 			return;
 
 			// Skip: 可以不用取得 history.ashx。
-			history_parameters.page = index;
+			history_parameters.page = image_index;
 			CeL.get_URL(_this.base_URL + _this.chapter_URL(work_data, chapter)
 					+ 'history.ashx',
 			//
 			function(XMLHttp) {
 
-				get_token(index, run_next);
+				get_token(image_index, run_next);
 
 			}, null, history_parameters, Object.assign({
 				error_retry : 0,
@@ -236,9 +251,9 @@ var crawler = new CeL.work_crawler({
 
 		// --------------------------------------
 
-		function get_token(index, run_next) {
-			parameters.page = index;
-			// CeL.set_debug(9);
+		function get_token(image_index, run_next) {
+			parameters.page = image_index;
+			// CeL.set_debug(6);
 			// console.log(CeL.get_URL.parameters_to_String(parameters));
 			CeL.get_URL(_this.base_URL + _this.chapter_URL(work_data, chapter)
 					+ 'chapterfun.ashx',
@@ -246,45 +261,40 @@ var crawler = new CeL.work_crawler({
 			function(XMLHttp) {
 				var html = XMLHttp.responseText;
 				// console.log(html);
-				html = html.replace(/^eval/, '');
 				if (html === '错误的请求') {
 					CeL.info(work_data.title + ': ' + html);
 					run_next();
 					return;
 				}
-				html = eval(html);
+				html = eval(html.replace(/^eval/, ''));
 				// console.log(html);
 				var image_list = eval(html);
 				// console.log(image_list);
 				this_image_list.append(image_list);
-				get_image_file(index, image_list, run_next);
+				get_image_file(image_index, image_list, run_next);
 
 			}, null, parameters, _this.get_URL_options);
 		}
 
 		// --------------------------------------
 
-		function get_image_file(index, image_list, run_next) {
-			CeL.get_URL_cache(image_list[0], function() {
+		function get_image_file(image_index, image_list, run_next) {
+			CeL.get_URL_cache(encodeURI(image_list[0]), function() {
 				run_next();
 			}, {
-				file_name : image_file_path_of(index),
+				file_name : image_file_path_of(image_index),
 				encoding : undefined,
 				charset : _this.charset,
-				get_URL_options : Object.assign({
-					// error_retry : 0,
-					onfail : function(error) {
-						throw error;
-					}
-				}, _this.get_URL_options)
+				get_URL_options : _this.get_URL_options
 			});
-
 		}
+
 	},
 
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
 		return {
-			image_list : []
+			// 圖片已經先在前面 get_image_file() 下載完了。
+			images_downloaded : true
 		};
 
 		// console.log(work_data.image_list[chapter]);
