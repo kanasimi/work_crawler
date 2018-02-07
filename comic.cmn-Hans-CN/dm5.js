@@ -55,6 +55,17 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	parse_work_data : function(html, get_label, exact_work_data) {
+		var part_list = [], matched,
+		//
+		text = html.between('<div class="detail-list-title">', '</div>'),
+		//
+		PATTERN = /['"]detail-list-select-(\d)['"][^<>]+>([^<>]+)/g;
+		while (matched = PATTERN.exec(text)) {
+			part_list[matched[1]] = get_label(matched[2]);
+		}
+
+		matched = text.between('最新').match(/<a [^<>]*?title="([^<>"]+)"/);
+
 		html = html.between('<div class="banner_detail_form">',
 				'<div class="bottom"');
 
@@ -69,8 +80,13 @@ var crawler = new CeL.work_crawler({
 			description : get_label(html.between('<p class="content"', '</p>')
 					.between('>').replace(/<a href="#[^<>]+>.+?<\/a>/g, '')),
 			image : html.between('<img src="', '"'),
-			score : html.between('<span class="score">', '</span>')
+			score : html.between('<span class="score">', '</span>'),
+			part_list : part_list
 		};
+
+		if (matched) {
+			work_data.latest_chapter = matched[1];
+		}
 
 		html.between('<p class="tip">', '<p class="content"').split(
 				'<span class="block">').forEach(function(text) {
@@ -88,33 +104,41 @@ var crawler = new CeL.work_crawler({
 	},
 	get_chapter_count : function(work_data, html, get_label) {
 		// 1: 由舊至新
-		var reversed = / DM5_COMIC_SORT\s*=\s*2/.test(html);
-		// <ul class="view-detail-list detail-list-select"
-		// id="detail-list-select-1">
+		work_data.inverted_order = / DM5_COMIC_SORT\s*=\s*2/.test(html);
+
 		html = html.between('detail-list-select', '<div class="index-title">');
 
+		// reset chapter_list
 		work_data.chapter_list = [];
-		html.each_between('<li>', '</li>',
-		//
-		function(text) {
+		var PATTERN_chapter = /<li>([\s\S]+?)<\/li>|<ul ([^<>]+)>/g, matched;
+		while (matched = PATTERN_chapter.exec(html)) {
+			if (matched[2]) {
+				// <ul class="view-detail-list detail-list-select"
+				// id="detail-list-select-1">
+				matched[2] = matched[2].match(/ id="detail-list-select-(\d)"/);
+				if (matched[2]
+						&& (matched[2] = work_data.part_list[matched[2][1]])) {
+					this.set_part(work_data, matched[2]);
+				} else if (!matched[0].includes(' class="chapteritem">')) {
+					CeL.error('get_chapter_count: Invalid NO: ' + matched[0]);
+				}
+				continue;
+			}
+
+			matched = matched[1];
 			var chapter_data = {
-				title : get_label(text.between(' class="title', '</p>')
+				title : get_label(matched.between(' class="title', '</p>')
 						.between('>'))
 						// e.g., 古惑仔
-						|| get_label(text).replace(/\s+/g, ' '),
+						|| get_label(matched).replace(/\s+/g, ' '),
 
-				url : text.between(' href="', '"')
+				url : matched.between(' href="', '"')
 			};
-			text = get_label(text.between('<p class="tip">', '</p>'));
-			if (text) {
-				chapter_data[Date.parse(text) ? 'date' : 'tip'] = text;
+			matched = get_label(matched.between('<p class="tip">', '</p>'));
+			if (matched) {
+				chapter_data[Date.parse(matched) ? 'date' : 'tip'] = matched;
 			}
-			work_data.chapter_list.push(chapter_data);
-		});
-
-		if (reversed) {
-			// 轉成由舊至新之順序。
-			work_data.chapter_list.reverse();
+			this.add_chapter(work_data, chapter_data);
 		}
 	},
 
@@ -166,6 +190,7 @@ var crawler = new CeL.work_crawler({
 		if (matched) {
 			text = eval(matched[1]).replace(
 			// var var123=''+'f'+'5'+....;$("#dm5_key").val(var123);
+			// 有時var123會以數字開頭，屬於網站bug。
 			/\$\("#dm5_key"\)\.val\(([a-z_][a-z_\d]*)\)/, 'DM5.mkey=$1');
 			eval(text);
 		}
@@ -198,16 +223,17 @@ var crawler = new CeL.work_crawler({
 		// --------------------------------------
 
 		var chapter_data = work_data.chapter_list[chapter - 1];
+
 		// 這段程式碼模仿 work_crawler 模組的行為。
 		// @see process_images(chapter_data, XMLHttp) @
 		// CeL.application.net.work_crawler
 		CeL.log(chapter + '/' + work_data.chapter_list.length + ' ['
-				+ this.get_chapter_directory_name(chapter_data, chapter) + '] '
+				+ this.get_chapter_directory_name(work_data, chapter) + '] '
 				+ DM5.IMAGE_COUNT + ' images.');
 
 		function image_file_path_of(image_index) {
 			// @see get_data() @ CeL.application.net.work_crawler
-			var chapter_label = _this.get_chapter_directory_name(chapter_data,
+			var chapter_label = _this.get_chapter_directory_name(work_data,
 					chapter);
 			var chapter_directory = work_data.directory + chapter_label
 					+ CeL.env.path_separator;
@@ -225,6 +251,7 @@ var crawler = new CeL.work_crawler({
 		// 這個網站似乎每個章節在呼叫 chapterfun.ashx 之後才能下載圖片。
 		// 並且當呼叫另一次 chapterfun.ashx 之後就不能下載上一次的圖片了。
 		// 由於圖片不能並行下載，下載速度較慢。
+		// 但是可以多開幾支程式，每一支下載一個作品。
 
 		CeL.run_serial(function(run_next, image_index) {
 			if (CeL.read_file(image_file_path_of(image_index))) {

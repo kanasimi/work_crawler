@@ -6,16 +6,17 @@
 
 ## TOC 快速瀏覽
 * [Installation 安裝](#installation-安裝)
-** [Lazy installation 懶人安裝法](#lazy-installation-懶人安裝法)
+   * [Lazy installation 懶人安裝法](#lazy-installation-懶人安裝法)
 * [Execution 執行](#execution-執行)
 
 ## Features 特點
 * 可自動下載小說封面以及章節中的插圖。
+* 自動檢核下載的圖片是否是否完整。若有破損將重新下載。
 * 採用 CeJS [線上作品程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
 
 ## Supported sites 已完成之網站工具
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：小說之下載必須先安裝 7Zip，這樣才能製作 .epub 電子書。
-* 各線上作品網站往往不時更改結構，同時造成本工具無法正常作動；因此若是有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
+* 各線上作品網站往往不時改版（更改結構），同時造成本工具無法正常作動；因此若有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
 
 已撰寫完的各大小說漫畫網站工具包括：
 
@@ -70,7 +71,7 @@
 
 ## Installation 安裝
 
-若是想要使用圖形介面，您可以 **[直接下載安裝包](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟安裝包並非最新的版本。若是欲採用最新的版本，想要使用命令行界面，或者用作研究開發，請採用下列步驟。
+若是想要使用圖形介面，您可以 **[直接下載安裝包](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包並非最新的版本**。若是欲採用最新的版本，或者用作研究開發、想要使用命令行界面，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
