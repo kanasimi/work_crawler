@@ -95,11 +95,15 @@ global.work_id = is_CLI
 if (is_CLI && !work_id && process.mainModule
 // 檔案整理工具不需要下載作品，因此也不需要作品名稱。
 && (typeof need_work_id === 'undefined' || need_work_id)) {
-	var main_script = process.mainModule.filename.match(/[^\\\/]+$/)[0];
+	var main_script = process.mainModule.filename.match(/[^\\\/]+$/)[0],
+	//
+	options_arguments = ' [option=true] [option=value]';
 	// 顯示幫助信息/用法說明。
-	CeL.log('Usage:\n	node ' + main_script
-			+ ' "work title / work id" [option=true]\n	node ' + main_script
-			+ ' "l=work list file" [option=true]');
+	CeL.log('Usage:\n	node ' + main_script + ' "work title / work id"'
+			+ options_arguments + '\n'
+			//
+			+ '	node ' + main_script + ' "l=work list file"'
+			+ options_arguments);
 	CeL.log('options:'
 	//
 	+ Object.keys(CeL.work_crawler.prototype.import_arg_hash)

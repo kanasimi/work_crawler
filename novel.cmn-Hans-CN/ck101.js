@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載卡提諾論壇小說的工具。 Download Catino novels.
+ * 批量下載卡提諾論壇小說的工具。 Download Catino novels. https://www.facebook.com/ck101fans
  * 
  * TODO: https://ck101.com/forum.php?mod=viewthread&action=printable&tid=2737067
  * 
@@ -15,7 +15,7 @@ require('../work_crawler_loder.js');
 
 CeL.run([ 'application.storage.EPUB' ]);
 
-// 解析論壇討論串標題
+// 解析論壇討論串標題。
 function parse_topic_title(title, work_data) {
 	function parse_genre(genre) {
 		genre = genre.replace(/[\[【(（<「〈]([^\[【(（<「〈\]】)）>」〉]+?)[\]】)）>」〉]/g,
@@ -83,9 +83,10 @@ function get_work_data_from_html(html, get_label) {
 		return slice.includes('mainEntityOfPage');
 	});
 	if (data.length !== 1) {
+		return;
 		// e.g., 已經將此出錯信息詳細記錄, 由此給您帶來的訪問不便我們深感歉意.
 		console.log(html);
-		throw 'Can not parse page!';
+		throw 'get_work_data_from_html: Can not parse page!';
 	}
 
 	data = data[0].replace(/"(?:[^"]*|\\")*"/g, function(quoted) {
@@ -128,6 +129,7 @@ crawler = new CeL.work_crawler({
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL_2017 : search_URL,
+	// parse google search result
 	parse_search_result_2017 : function(data, get_label, work_title) {
 		data = JSON.parse(data);
 		var id_data;
@@ -199,7 +201,7 @@ crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'thread-' + work_id + '-1-1.html';
 	},
-	parse_work_data : function(html, get_label) {
+	parse_work_data : function(html, get_label, exact_work_data) {
 		var error = html.between('<div id="messagetext" class="alert_error">',
 				'</div>')
 		if (error) {
@@ -210,13 +212,13 @@ crawler = new CeL.work_crawler({
 		//
 		mainEntity = raw_data, need_check_title = true;
 		// 處理非小說的情況。
-		if (!mainEntity.name) {
+		if (mainEntity && !mainEntity.name) {
 			if (mainEntity['@graph']) {
 				mainEntity = mainEntity['@graph'][0].mainEntity;
 				need_check_title = false;
 			}
 		}
-		var work_data = {
+		var work_data = mainEntity ? {
 			title : mainEntity.name,
 			author : mainEntity.author.name,
 			last_update : mainEntity.dateModified,
@@ -226,20 +228,58 @@ crawler = new CeL.work_crawler({
 			site_name : '卡提諾論壇',
 
 			raw : raw_data
-		};
+		} : CeL.null_Object();
 
-		parse_topic_title(get_label(mainEntity.headline), need_check_title
-				&& work_data);
+		parse_topic_title(get_label(mainEntity && mainEntity.headline
+		// 2018/2/9 改版
+		|| get_label(html.between('<hgroup>', '</hgroup>')
+		//
+		.replace(/<a href="[^<>"]+" onclick="ga[^<>]+>.+?<\/a>/, '')))
+		//
+		.replace(/[\s\n]+/g, ' '), need_check_title && work_data);
 
+		if (!mainEntity) {
+			// 2018/2/9 改版: 從 HTML 取得資訊。
+			var matched = (html.between('<div class="pg">', '</div>') || html)
+					.match(/([^<>]+)<\/a>\s*<a [^<>]* class="nxt"/),
+			//
+			_work_data = {
+				last_update : html.between(
+						'<meta itemprop="dateModified" content="', '"')
+						|| html.between(
+						//
+						'<meta itemprop="dateCreated" content="', '"'),
+				chapter_count : matched ? +matched[1].trim().replace(/^[.\s]+/,
+						'') : 1,
+				book_chapter_count : 0
+			};
+			// 由 meta data 取得作品資訊。
+			exact_work_data(_work_data, html);
+			// 還是以原 work_data 的為重。
+			work_data = Object.assign(_work_data, work_data);
+		}
+
+		var tags = [], matched, PATTERN = /<a [^<>]*title="([^<>"]+)"/g;
+		while (matched = PATTERN.exec(html.between('<div class="tagBox">',
+				'</div>'))) {
+			matched = matched[1];
+			if (matched !== work_data.title && matched !== work_data.author) {
+				tags.push(matched);
+			}
+		}
+		work_data.status = work_data.status.append(tags).unique();
+
+		// console.log(work_data);
 		return work_data;
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
+	chapter_URL : function(work_data, chapter_NO) {
 		// https://ck101.com/forum.php?mod=viewthread&tid=1848378&page=87
-		return 'thread-' + work_data.id + '-' + chapter + '-1.html';
+		// https://ck101.com/thread-3397649-1-1.html
+		return 'thread-' + work_data.id + '-' + chapter_NO + '-1.html';
 	},
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		//
 		function book_chapter_is_OK(matched, diff) {
 			if (false) {
@@ -264,7 +304,7 @@ crawler = new CeL.work_crawler({
 		//
 		mainEntity = raw_data,
 		// /<div id="(post_\d+)" class="plhin">/g
-		PATTERN = /<div id="(post_\d+)"/g,
+		PATTERN_chapter = /<div id="(post_\d+)"/g,
 		//
 		matched, matched_list = [];
 
@@ -298,18 +338,22 @@ crawler = new CeL.work_crawler({
 			'<i class="pstatus" style="display:none;">');
 		}
 
-		while (matched = PATTERN.exec(html)) {
+		while (matched = PATTERN_chapter.exec(html)) {
 			matched_list.push([ matched.index, matched[1] ]);
 		}
 		matched_list.push([ html.length ]);
 
 		for (var index = 0; index < matched_list.length - 1; index++) {
 			var text = html.slice(matched_list[index][0],
-					matched_list[index + 1][0]), date = text.between(
-					' class="postDateLine">', '</span>');
+					matched_list[index + 1][0]),
+			//
+			date = text.between(' class="postDateLine">', '</span>');
 			if (date) {
 				date = date.to_Date();
 				// date.replace(/發表於 *:?/, '').trim();
+			} else if (text.includes('<div class="locked">')) {
+				// e.g., "<div class="locked">提示: <em>該帖被管理員或版主屏蔽</em></div>"
+				continue;
 			}
 
 			var rate = text.between('<table class="ratl">', '</table>');
@@ -439,8 +483,8 @@ crawler = new CeL.work_crawler({
 			this.add_ebook_chapter(work_data, work_data.book_chapter_count, {
 				title : part_title,
 				text : text,
-				url : this.full_URL(this.chapter_URL(work_data, chapter)) + '#'
-						+ matched_list[index][1],
+				url : this.full_URL(this.chapter_URL(work_data, chapter_NO))
+						+ '#' + matched_list[index][1],
 				date : date || new Date(mainEntity.dateModified)
 			});
 		}

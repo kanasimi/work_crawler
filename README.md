@@ -58,7 +58,6 @@
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [汗汗酷漫](http://www.hhcool.com/) | hhcool.js | |
-| [爱漫画](http://www.2manhua.com/) | 2manhua.js | 許多作品似乎從2017/9/3起就沒有更新。 |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikanmanhua.js | |
@@ -66,6 +65,7 @@
 | [733漫画网](http://www.733mh.com/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。 |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
+| [爱漫画](http://www.2manhua.com/) | ~~2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2018/2 "Too many connections" |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/10/19 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/10/19 未復原。 |
 
@@ -101,7 +101,7 @@
    ``` sh
    node _CeL.updater.node.js
    ```
-   由於本工具會 cache 作品資訊，更新幅度較大的時候您可能需要刪除 cache，重新下載作品。
+   由於本工具會 cache 作品資訊，更新幅度較大的時候您可能需要刪除作品目錄的 cache，重新下載作品。
 
 <!-- use npm:
 3. 在命令行界面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
@@ -161,7 +161,7 @@
 
 ![接續下載](https://lh3.googleusercontent.com/PpNidzWOTdQe0VMxIfgXrCJVVJ_g5dXENCPMM7OMX7vdlTywcCqN5fKtTxNT8Fm9hTG3-2H5mdHfgFPDpHzP2yeSRQ8ObuabMGnFnatDId5UvSXC9BOk_94O2CxCAkSLTov6KU-qSA=w732-h463-no)
 
-若是下載小說，最後將包裝成 可匯入 calibre 的 epub。
+若是下載小說，最後將包裝成可匯入 calibre 的 epub。
 
 ![小說 → epub list](https://lh3.googleusercontent.com/fYB5zhGgw8Thh5mGzR_5PVSCWDqWxOUHxQRaiqDOx0VS0BdsIlNMNCkxvjl1RpNWI5IBfYMZ_LgHTkiuFZvDPOqMRa-6JHsTN3Od3LgD4DPMDy6Lk4ccbZlTB-w4cLjYweEExYJehg=w1366-h738-no)
 
@@ -171,6 +171,7 @@
 * 目前不支援自動更新。
 * 對於本工具已經包含的下載模式，熟練後一般約需2至4小時新增或更新下載工具，以達初步可用狀態。
 * 小說作品採用單線程下載，以避免對網站造成過度的負荷。漫畫作品則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
+* 歡迎熱心友人加入，以改進這個工具。
 
 ## Purpose 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [線上作品程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
