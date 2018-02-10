@@ -67,7 +67,7 @@ crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return this.base_URL + 'comic/' + work_id + '/';
+		return 'comic/' + work_id + '/';
 	},
 	parse_work_data : function(html, get_label, exact_work_data) {
 		var work_data = {
@@ -187,7 +187,7 @@ crawler = new CeL.work_crawler({
 			callback();
 		}, null, null, this.get_URL_options);
 	},
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// decode chapter data
 		function decode_2016(code) {
 			code = eval(code);
@@ -209,7 +209,7 @@ crawler = new CeL.work_crawler({
 		'<script type="text/javascript">window["\\x65\\x76\\x61\\x6c"]',
 				'</script>');
 		if (!chapter_data || !(chapter_data = decode(chapter_data))) {
-			CeL.warn(work_data.title + ' #' + chapter
+			CeL.warn(work_data.title + ' #' + chapter_NO
 					+ ': No valid chapter data got!');
 			return;
 		}
@@ -220,13 +220,15 @@ crawler = new CeL.work_crawler({
 		// 設定必要的屬性。
 		chapter_data.title = chapter_data.cname;
 		chapter_data.image_count = chapter_data.len;
+
 		// e.g., "/ps3/q/qilingu_xmh/第01回上/"
-		var path = encodeURI(chapter_data.path);
+		var path = encodeURI(chapter_data.path),
+		// 令牌 @see SMH.utils.getPicUrl() @ ((core_filename))
+		token = '?cid=' + chapter_data.cid + '&'
+				+ CeL.get_URL.parameters_to_String(chapter_data.sl);
 		chapter_data.image_list = chapter_data.files.map(function(url) {
 			return {
-				url : path + url
-				// @see ((core_filename))
-				+ '?cid=' + chapter_data.cid + '&md5=' + chapter_data.sl.md5
+				url : path + url + token
 			}
 		});
 

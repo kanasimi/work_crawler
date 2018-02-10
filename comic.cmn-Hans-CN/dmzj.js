@@ -24,6 +24,11 @@ var crawler = new CeL.work_crawler({
 	base_URL : 'http://www.dmzj.com/',
 	base_URL_manhua : 'http://manhua.dmzj.com/',
 
+	// 提取出引數（如 URL）中的作品ID 以回傳。
+	extract_work_id : function(work_information) {
+		return /^[a-z_]+$/.test(work_information) && work_information;
+	},
+
 	// 解析 作品名稱 → 作品id get_work()
 	// TODO: https://www.dmzj.com/dynamic/o_search/index
 	search_URL : 'http://s.acg.dmzj.com/comicsum/search.php?s=',

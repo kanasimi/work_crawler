@@ -112,11 +112,11 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
+	chapter_URL : function(work_data, chapter_NO) {
 		return 'reader/' + work_data.id + '/'
-				+ work_data.chapter_list[chapter - 1].sectionId;
+				+ work_data.chapter_list[chapter_NO - 1].sectionId;
 	},
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		var seedLength = html.between('window.DATA.seedLength = ', ';') | 0,
 		//
 		chapter_data = html.between('window.PG_CONFIG', '</script>');
@@ -136,7 +136,7 @@ var crawler = new CeL.work_crawler({
 			image.url = image.url.slice(0, -seedLength);
 		});
 
-		chapter_data.limited = work_data.chapter_list[chapter - 1].needPay;
+		chapter_data.limited = work_data.chapter_list[chapter_NO - 1].needPay;
 
 		return chapter_data;
 	}

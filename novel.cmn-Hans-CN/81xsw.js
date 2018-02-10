@@ -16,13 +16,14 @@ var crawler = CeL.PTCMS({
 	base_URL : 'http://www.81xsw.com/',
 	charset : 'gbk',
 
+	// 提取出引數（如 URL）中的作品ID 以回傳。
+	extract_work_id : function(work_information) {
+		return /^[\d_]+$/.test(work_information) && work_information;
+	},
+
 	// 解析 作品名稱 → 作品id get_work()
 	baidu_cse : '16095493717575840686',
 
-	// 取得作品的章節資料。 get_work_data()
-	work_URL : function(work_id) {
-		return work_id + '/';
-	},
 	// 取得包含章節列表的文字範圍。
 	get_chapter_count_contents : function(html) {
 		return html.between('<div id="list">', '</div>');

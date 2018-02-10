@@ -14,6 +14,7 @@ CeL.run([ 'application.storage.EPUB'
 
 // ----------------------------------------------------------------------------
 
+// 章節以及篇章連結的模式。
 var PATTERN_chapter = /<div class="list">(.+)<\/div>|<a href="(\d+\.html)">(.+)<\/a>/g,
 // 打廣告就算了；每個章節都要檢查這個資源檔，有些煩人了。
 PATTERN_AD = /<a href="http:\/\/www\.piaotian\.com\/?(?:&[a-z]+;[^"]*)?"[^<>]*>[^<>]*<\/a>/ig,
@@ -119,59 +120,36 @@ crawler = new CeL.work_crawler({
 	get_chapter_count : function(work_data, html, get_label) {
 		html = html.between('<div class="centent">', '<div class="bottom">');
 		work_data.chapter_list = [];
-		var matched, part, base_url = work_data.base_url = this
+		var matched, part_title, base_url = work_data.base_url = this
 				.chapter_list_URL(work_data.id).replace(/[^\/]+$/, '');
 		while (matched = PATTERN_chapter.exec(html)) {
 			if (matched[1]) {
-				part = get_label(matched[1]);
-				if (part.includes('正文')) {
-					// e.g., "正文卷"
-					part = '';
+				part_title = get_label(matched[1]);
+				if (part_title.includes('正文')) {
+					// e.g., 《...》正文卷
+					part_title = '';
 				}
+				// console.log(part_title);
+
 			} else {
-				work_data.chapter_list.push({
+				var chapter_data = {
 					url : base_url + matched[2],
-					part : part,
+					part_title : part_title,
 					title : get_label(matched[3]),
-				});
+				};
+				work_data.chapter_list.push(chapter_data);
 			}
 		}
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
-		var chapter_data = work_data.chapter_list[chapter - 1],
-		// e.g., 下一章 →
-		next_url = html.match(/ href="([^"]+.html)"[^<>]*>下一[章页]/),
-		//
-		next_chapter = work_data.chapter_list[chapter];
-		// console.log(chapter + ': ' + next_url[1]);
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		// 在取得小說章節內容的時候，若發現有章節被目錄漏掉，則將之補上。
+		this.check_next_chapter(work_data, chapter_NO, html);
 
-		if (next_chapter && next_url
+		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
-		&& (next_url = next_url[1].replace(/^\.\//,
-		// 去掉開頭的 "./"
-		this.chapter_URL(work_data, chapter).replace(/[^\/]+$/, '')))
-		// 有些在目錄上面的章節連結到了錯誤的頁面，只能靠下一頁來取得正確頁面。
-		&& (next_chapter.url !== next_url)
-		// 許多網站會把最新章節的下一頁設成章節列表，因此必須排除章節列表的網址。
-		&& next_url !== 'index.html'
-		// 檢查正規化規範連結之後是否與本章節相同。
-		&& next_chapter.url.slice(work_data.base_url.length) !== next_url) {
-			if (false) {
-				CeL.info(CeL.display_align([
-						[ 'chapter ' + chapter + ': ', next_chapter.url ],
-						[ '→ ', next_url ] ]));
-				next_chapter.url = next_url;
-			}
-			// insert a url
-			work_data.chapter_list.splice(chapter, 0, {
-				// title : '',
-				url : next_url
-			});
-		}
-
-		var text = html.between('</H1>');
+		text = html.between('</H1>');
 		// e.g.,
 		// http://www.piaotian.com/html/3/3596/1808085.html
 		// http://www.piaotian.com/html/1/1251/576785.html
@@ -182,12 +160,13 @@ crawler = new CeL.work_crawler({
 		//
 		.between('</div>', '</div>');
 
-		this.add_ebook_chapter(work_data, chapter, {
-			title : chapter_data.part,
+		this.add_ebook_chapter(work_data, chapter_NO, {
+			title : chapter_data.part_title,
 			sub_title : chapter_data.title
 					|| get_label(html.between('<H1>', '</H1>')),
-			text : text.replace(/<script[^<>]*>[^<>]*<\/script>/g, '').replace(
-					PATTERN_AD, '')
+			text : text.replace(/<script[^<>]*>[^<>]*<\/script>/g, '')
+			// 去除掉廣告。
+			.replace(PATTERN_AD, '')
 		});
 	}
 });

@@ -79,7 +79,7 @@ var remanba = new CeL.comic.site({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return this.base_URL + 'comic/' + work_id + '/';
+		return 'comic/' + work_id + '/';
 	},
 	parse_work_data : function(html, get_label, exact_work_data) {
 		var work_data = {
@@ -124,9 +124,6 @@ var remanba = new CeL.comic.site({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
-		return work_data.chapter_list[chapter - 1].url;
-	},
 	parse_chapter_data : function(html, work_data, get_label) {
 		// decode chapter data
 		function decode(code) {

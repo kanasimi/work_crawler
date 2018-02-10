@@ -23,11 +23,12 @@ var crawler = new CeL.work_crawler({
 	base_URL : 'http://www.dm5.com/',
 
 	preserve_chapter_page : false,
-	// 回傳引數為作品ID 的 pattern。
-	is_work_id : function(work_id) {
+	// 提取出引數（如 URL）中的作品ID 以回傳。
+	extract_work_id : function(work_information) {
 		// /^manhua-[a-z]+$/;
-		return /^[a-z\-]+$/.test(work_id);
+		return /^[a-z\-]+$/.test(work_information) && work_information;
 	},
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
 		// @see 搜索框文本改变 function SearchInputChange() @
@@ -142,19 +143,17 @@ var crawler = new CeL.work_crawler({
 		}
 	},
 
-	work_URL : function(work_id) {
-		return work_id + '/';
-	},
+	pre_parse_chapter_data
 	// 執行在解析章節資料process_chapter_data()之前的作業(async)。
-	pre_parse_chapter_data : function(XMLHttp, work_data, callback, chapter) {
+	: function(XMLHttp, work_data, callback, chapter_NO) {
 		if (!work_data.image_list) {
-			// image_list[chapter] = [url, url, ...]
+			// image_list[chapter_NO] = [url, url, ...]
 			work_data.image_list = [];
 		}
 
 		// 參照下方原理說明，沒有辦法使用 cache。
 		if (false && !this.recheck
-				&& Array.isArray(work_data.image_list[chapter])) {
+				&& Array.isArray(work_data.image_list[chapter_NO])) {
 			callback();
 			return;
 		}
@@ -177,7 +176,7 @@ var crawler = new CeL.work_crawler({
 		// console.log(DM5);
 		if (!(DM5.IMAGE_COUNT > 0)) {
 			if (html.includes('<p class="subtitle">此章节为付费章节</p>')) {
-				CeL.info(work_data.title + ': 第' + chapter + '章為需要付費的章節');
+				CeL.info(work_data.title + ': 第' + chapter_NO + '章為需要付費的章節');
 			}
 			callback();
 			return;
@@ -190,7 +189,7 @@ var crawler = new CeL.work_crawler({
 		if (matched) {
 			text = eval(matched[1]).replace(
 			// var var123=''+'f'+'5'+....;$("#dm5_key").val(var123);
-			// 有時var123會以數字開頭，屬於網站bug。
+			// 有時var123會以數字開頭，屬於網站bug。 e.g., 风云全集
 			/\$\("#dm5_key"\)\.val\(([a-z_][a-z_\d]*)\)/, 'DM5.mkey=$1');
 			eval(text);
 		}
@@ -203,7 +202,7 @@ var crawler = new CeL.work_crawler({
 			cid : DM5.CID,
 			// page : DM5.PAGE,
 			page : 1,
-			key : DM5.mkey,
+			key : DM5.mkey || '',
 			language : 1,
 			gtk : 6,
 			_cid : DM5.CID,
@@ -222,19 +221,19 @@ var crawler = new CeL.work_crawler({
 
 		// --------------------------------------
 
-		var chapter_data = work_data.chapter_list[chapter - 1];
+		var chapter_data = work_data.chapter_list[chapter_NO - 1];
 
 		// 這段程式碼模仿 work_crawler 模組的行為。
 		// @see process_images(chapter_data, XMLHttp) @
 		// CeL.application.net.work_crawler
-		CeL.log(chapter + '/' + work_data.chapter_list.length + ' ['
-				+ this.get_chapter_directory_name(work_data, chapter) + '] '
+		CeL.log(chapter_NO + '/' + work_data.chapter_list.length + ' ['
+				+ this.get_chapter_directory_name(work_data, chapter_NO) + '] '
 				+ DM5.IMAGE_COUNT + ' images.');
 
 		function image_file_path_of(image_index) {
 			// @see get_data() @ CeL.application.net.work_crawler
 			var chapter_label = _this.get_chapter_directory_name(work_data,
-					chapter);
+					chapter_NO);
 			var chapter_directory = work_data.directory + chapter_label
 					+ CeL.env.path_separator;
 
@@ -242,7 +241,7 @@ var crawler = new CeL.work_crawler({
 
 			// 這段程式碼模仿 work_crawler 模組的行為。
 			// @see image_data.file @ CeL.application.net.work_crawler
-			return chapter_directory + work_data.id + '-' + chapter + '_'
+			return chapter_directory + work_data.id + '-' + chapter_NO + '_'
 					+ image_index.pad(3) + '.' + _this.default_image_extension;
 		}
 
@@ -266,21 +265,22 @@ var crawler = new CeL.work_crawler({
 
 			// Skip: 可以不用取得 history.ashx。
 			history_parameters.page = image_index;
-			CeL.get_URL(_this.base_URL + _this.chapter_URL(work_data, chapter)
-					+ 'history.ashx',
-			//
-			function(XMLHttp) {
+			CeL.get_URL(
+					_this.base_URL + _this.chapter_URL(work_data, chapter_NO)
+							+ 'history.ashx',
+					//
+					function(XMLHttp) {
 
-				get_token(image_index, run_next);
+						get_token(image_index, run_next);
 
-			}, null, history_parameters, Object.assign({
-				error_retry : 0,
-				no_warning : true
-			}, _this.get_URL_options));
+					}, null, history_parameters, Object.assign({
+						error_retry : 0,
+						no_warning : true
+					}, _this.get_URL_options));
 
 		}, DM5.IMAGE_COUNT, 1, function() {
 			this_image_list = this_image_list.unique();
-			work_data.image_list[chapter] = this_image_list;
+			work_data.image_list[chapter_NO] = this_image_list;
 			// _this.save_work_data(work_data);
 			// console.log(this_image_list);
 
@@ -293,7 +293,8 @@ var crawler = new CeL.work_crawler({
 			parameters.page = image_index;
 			// CeL.set_debug(6);
 			// console.log(CeL.get_URL.parameters_to_String(parameters));
-			CeL.get_URL(_this.base_URL + _this.chapter_URL(work_data, chapter)
+			CeL.get_URL(_this.base_URL
+					+ _this.chapter_URL(work_data, chapter_NO)
 					+ 'chapterfun.ashx',
 			//
 			function(XMLHttp) {
@@ -330,15 +331,15 @@ var crawler = new CeL.work_crawler({
 
 	},
 
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		return {
 			// 圖片已經先在前面 get_image_file() 下載完了。
 			images_downloaded : true
 		};
 
-		// console.log(work_data.image_list[chapter]);
+		// console.log(work_data.image_list[chapter_NO]);
 		var chapter_data = {
-			image_list : work_data.image_list[chapter].map(function(url) {
+			image_list : work_data.image_list[chapter_NO].map(function(url) {
 				return {
 					url : encodeURI(CeL.HTML_to_Unicode(url))
 				}

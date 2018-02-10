@@ -60,7 +60,7 @@ var crawler = new CeL.work_crawler({
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
 		// e.g., http://www.2manhua.com/comic/25652.html
-		return this.base_URL + 'comic/' + work_id + '.html';
+		return 'comic/' + work_id + '.html';
 	},
 	parse_work_data : function(html, get_label, exact_work_data) {
 		var work_data = {

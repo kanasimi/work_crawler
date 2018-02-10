@@ -21,6 +21,11 @@ var crawler = new CeL.work_crawler({
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	// skip_error : true,
 
+	// 提取出引數（如 URL）中的作品ID 以回傳。
+	extract_work_id : function(work_information) {
+		return /^[a-z]+$/.test(work_information) && work_information;
+	},
+
 	// 取得伺服器列表。
 	// use_server_cache : true,
 	server_URL : 'js/config.js',
@@ -61,7 +66,7 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return this.base_URL + 'manhua/' + work_id + '/';
+		return 'manhua/' + work_id + '/';
 	},
 	parse_work_data : function(html, get_label, exact_work_data) {
 		var work_data = {
@@ -114,12 +119,12 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		var chapter_data = CeL.null_Object();
 		eval(html.between('<script>', '</script>').replace(/;var /g,
 				';chapter_data.'));
 		if (!chapter_data) {
-			CeL.warn(work_data.title + ' #' + chapter
+			CeL.warn(work_data.title + ' #' + chapter_NO
 					+ ': No valid chapter data got!');
 			return;
 		}

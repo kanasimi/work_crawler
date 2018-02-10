@@ -27,6 +27,11 @@ function parse_topic_title(title, work_data) {
 			work_data.status.push(genre.trim());
 			return '';
 		})
+		// e.g., 飄邈之旅,
+		.replace(/《(全文完?)》/g, function(all, genre) {
+			work_data.status.push(genre.trim());
+			return '';
+		})
 		// e.g., 淫術煉金士
 		.replace(/(?:18|十八)禁/g, function(genre) {
 			work_data.status.push(genre.trim());
@@ -263,7 +268,9 @@ crawler = new CeL.work_crawler({
 		while (matched = PATTERN.exec(html.between('<div class="tagBox">',
 				'</div>'))) {
 			matched = matched[1];
-			if (matched !== work_data.title && matched !== work_data.author) {
+			if (matched !== work_data.title && matched !== work_data.author
+			// e.g., 飄邈之旅之歧天路
+			&& matched !== '作者') {
 				tags.push(matched);
 			}
 		}

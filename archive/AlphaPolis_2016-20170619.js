@@ -109,14 +109,10 @@ var AlphaPolis = new CeL.work_crawler({
 		});
 	},
 
-	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
-		return work_data.chapter_list[chapter - 1].url;
-	},
 	// 檢測所取得內容的章節編號是否相符。
 	check_chapter_NO : [ '<div class="total_content_block_count">', '/' ],
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
-		this.add_ebook_chapter(work_data, chapter, {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		this.add_ebook_chapter(work_data, chapter_NO, {
 			title : html.between('<div class="chapter_title">', '</div>'),
 			sub_title : html.between('<h2>', '</h2>'),
 			text : html.between('<div class="text', '<a class="bookmark ')

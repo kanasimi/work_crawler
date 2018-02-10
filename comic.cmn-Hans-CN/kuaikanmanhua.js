@@ -80,7 +80,7 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label) {
 		var chapter_data = {
 			// 赞我
 			praise : +html.between('<li class="praise-comic">', '</li>')

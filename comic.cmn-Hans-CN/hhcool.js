@@ -91,8 +91,9 @@ var crawler = new CeL.work_crawler({
 		return;
 	},
 
+	pre_parse_chapter_data
 	// 執行在解析章節資料process_chapter_data()之前的作業(async)。
-	pre_parse_chapter_data : function(XMLHttp, work_data, callback, chapter) {
+	: function(XMLHttp, work_data, callback, chapter_NO) {
 		var html = XMLHttp.responseText;
 
 		var chapter_list = [], URL = XMLHttp.URL,
@@ -106,12 +107,19 @@ var crawler = new CeL.work_crawler({
 		work_data.cache_directory = work_data.directory
 				+ this.cache_directory_name;
 		CeL.create_directory(work_data.cache_directory);
-		var this_image_list = this.image_list[chapter] = [];
+		if (!work_data.image_list) {
+			// image_list[chapter_NO] = [url, url, ...]
+			work_data.image_list = [];
+		}
+		var _this = this,
+		//
+		this_image_list = work_data.image_list[chapter_NO] = [];
 		chapter_list.run_async(function(run_next, NO, index) {
 			var url = URL.replace(/\/\d{1,3}\.html/, '/' + NO + '.html'),
 			//
-			save_to = work_data.cache_directory + chapter.pad(3) + '-'
+			save_to = work_data.cache_directory + chapter_NO.pad(3) + '-'
 					+ NO.pad(3) + '.html';
+			// 沒 cache 的話，每一次都要重新取得每個圖片的頁面，速度比較慢。
 			CeL.get_URL_cache(url, function(html) {
 				var image_data = html.match(
 				//
@@ -137,23 +145,23 @@ var crawler = new CeL.work_crawler({
 
 				run_next();
 			}, {
+				get_URL_options : _this.get_URL_options,
+				reget : _this.recheck,
 				no_write_info : true,
 				file_name : save_to
 			});
 		}, callback);
 	},
-	// image_list[chapter] = [url, url, ...]
-	image_list : [],
 
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		var PATTERN = / id="hdDomain"(?:.*?) value="([^<>"]+)"/,
 		// 不同作品放在不同的location。
 		matched = html.match(PATTERN);
 		this.server_list = matched[1].split('|');
 
-		// console.log(this.image_list[chapter]);
+		// console.log(work_data.image_list[chapter_NO]);
 		var chapter_data = {
-			image_list : this.image_list[chapter].map(function(url) {
+			image_list : work_data.image_list[chapter_NO].map(function(url) {
 				return {
 					url : encodeURI(CeL.HTML_to_Unicode(url))
 				}
@@ -189,10 +197,10 @@ function unsuan(s) {
 
 setup_crawler(crawler, typeof module === 'object' && module);
 
-var decode_file = 'script/view.js', unsuan;
+var decode_filename = 'script/view.js', unsuan;
 // 創建 main directory。 C
 CeL.create_directory(crawler.main_directory);
-CeL.get_URL_cache(crawler.base_URL + decode_file, function(contents) {
+CeL.get_URL_cache(crawler.base_URL + decode_filename, function(contents) {
 	// eval('unsuan=function' + contents.between('function unsuan', '\nvar'));
 	start_crawler(crawler, typeof module === 'object' && module);
-}, crawler.main_directory + decode_file.match(/[^\\\/]+$/)[0]);
+}, crawler.main_directory + decode_filename.match(/[^\\\/]+$/)[0]);

@@ -24,6 +24,11 @@ crawler = new CeL.work_crawler({
 	// one_by_one : true,
 	base_URL : 'http://www.manhuatai.com/',
 
+	// 提取出引數（如 URL）中的作品ID 以回傳。
+	extract_work_id : function(work_information) {
+		return /^[a-z\d]+$/.test(work_information) && work_information;
+	},
+
 	// 取得伺服器列表。
 	// http://server.taomanhua.com:82/mhpic.asp?callback=1&_=1478324001349
 	// JSON.parse("{'o':[['mhpic.taomanhua.com','线路1',0],['58.218.199.16','线路2',0],['59.45.79.108','线路3',0]]}".replace(/'/g,'"')).o
@@ -55,9 +60,6 @@ crawler = new CeL.work_crawler({
 	title_of_search_result : 'cartoon_name',
 
 	// 取得作品的章節資料。 get_work_data()
-	work_URL : function(work_id) {
-		return this.base_URL + work_id + '/';
-	},
 	parse_work_data : function(html, get_label) {
 		// work_data={id,title,author,authors,chapters,last_update,last_download:{date,chapter}}
 		return {
@@ -107,15 +109,15 @@ crawler = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
+	chapter_URL : function(work_data, chapter_NO) {
 		return this.work_URL(work_data.id)
-				+ work_data.chapter_list[chapter - 1].url;
+				+ work_data.chapter_list[chapter_NO - 1].url;
 	},
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		if (work_data.trying) {
 			var matched = html.match(/<a( [^<>]+)>下一章<\/a>/);
 			if (matched && (matched = matched[1].match(/ href="([^<>"]+)"/))) {
-				work_data.chapter_list.truncate(chapter);
+				work_data.chapter_list.truncate(chapter_NO);
 				if (/html?$/i.test(matched[1])) {
 					// CeL.info('parse_chapter_data: next: ' + matched[1]);
 					work_data.chapter_list.push({

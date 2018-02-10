@@ -128,12 +128,12 @@ var _23us = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
+	chapter_URL : function(work_data, chapter_NO) {
 		return work_data.chapter_list_URL
-				+ work_data.chapter_list[chapter - 1].url;
+				+ work_data.chapter_list[chapter_NO - 1].url;
 	},
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
-		this.add_ebook_chapter(work_data, chapter, {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		this.add_ebook_chapter(work_data, chapter_NO, {
 			title : get_label(html.between('<h1>', '</h1>')
 			//
 			.replace(/^正文/, '')),

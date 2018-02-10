@@ -27,7 +27,7 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return this.base_URL + 'comic/' + work_id + '/';
+		return 'comic/' + work_id + '/';
 	},
 	parse_work_data : function(html, get_label, exact_work_data) {
 		var work_data = {
@@ -65,7 +65,7 @@ var crawler = new CeL.work_crawler({
 		work_data.chapter_list = chapter_list.reverse();
 	},
 
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 
 		function decode(code) {
 			code = eval(code);
@@ -75,7 +75,7 @@ var crawler = new CeL.work_crawler({
 
 		var chapter_data = html.between(';eval', '</script>');
 		if (!chapter_data || !(chapter_data = decode(chapter_data))) {
-			CeL.warn(work_data.title + ' #' + chapter
+			CeL.warn(work_data.title + ' #' + chapter_NO
 					+ ': No valid chapter data got!');
 			return;
 		}
@@ -102,10 +102,10 @@ var crawler = new CeL.work_crawler({
 
 setup_crawler(crawler, typeof module === 'object' && module);
 
-var decode_file = 'scripts/show/ssncore.js';
+var decode_filename = 'scripts/show/ssncore.js';
 // 創建 main directory。
 CeL.create_directory(crawler.main_directory);
-CeL.get_URL_cache(crawler.base_URL + decode_file, function(contents) {
+CeL.get_URL_cache(crawler.base_URL + decode_filename, function(contents) {
 	// var servs = [{...
 	start_crawler(crawler, typeof module === 'object' && module);
-}, crawler.main_directory + decode_file.match(/[^\\\/]+$/)[0]);
+}, crawler.main_directory + decode_filename.match(/[^\\\/]+$/)[0]);

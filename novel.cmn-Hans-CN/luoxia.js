@@ -20,6 +20,7 @@ CeL.run([ 'application.storage.EPUB'
  <li><a target="_blank" title="引子" href="http://www.luoxia.com/guichui/27426.htm">引子</a></li>
  </code>
  */
+// 章節以及篇章連結的模式。
 // [ list code, list or title, title, href, title ]
 var PATTERN_chapter = /<(li|h3)[^<>]*><a [^<>]*? title="([^"<>]+)" href="([^"<>]+)">(.+?)<\/a><\/\1>/g,
 /**
@@ -46,6 +47,11 @@ crawler = new CeL.work_crawler({
 	// site_name : '',
 	base_URL : 'http://www.luoxia.com/',
 
+	// 提取出引數（如 URL）中的作品ID 以回傳。
+	extract_work_id : function(work_information) {
+		return /^[a-z\-]+$/.test(work_information) && work_information;
+	},
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : '?s=',
 	parse_search_result : function(html, get_label) {
@@ -69,9 +75,6 @@ crawler = new CeL.work_crawler({
 	},
 
 	// 取得作品的章節資料。 get_work_data()
-	work_URL : function(work_id) {
-		return work_id;
-	},
 	parse_work_data : function(html, get_label, exact_work_data) {
 		var data = html.between('<div class="book-describe">', '</div>'),
 		//
@@ -112,27 +115,27 @@ crawler = new CeL.work_crawler({
 			if (matched[1] !== 'li') {
 				part_title = matched[2];
 				// console.log(part_title);
-				continue;
-			}
 
-			var chapter_data = {
-				url : matched[3],
-				part_title : part_title,
-				// 這裡的標題可能有缺。
-				title : matched[2]
-			};
-			work_data.chapter_list.push(chapter_data);
+			} else {
+				var chapter_data = {
+					url : matched[3],
+					part_title : part_title,
+					// 這裡的標題可能有缺。
+					title : matched[2]
+				};
+				work_data.chapter_list.push(chapter_data);
+			}
 		}
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 在取得小說章節內容的時候，若發現有章節被目錄漏掉，則將之補上。
-		this.check_next_chapter(work_data, chapter, html,
+		this.check_next_chapter(work_data, chapter_NO, html,
 		// PATTERN_next_chapter: [ all, next chapter url ]
 		/下一[章页][：: →]*<a [^<>]*?href="([^"]+.html)"[^<>]*>/);
 
-		var chapter_data = work_data.chapter_list[chapter - 1],
+		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
 		text = html.between('<article class="post', '</article>');
 		text = text.between('</nav>') || text.between('>');
@@ -148,7 +151,7 @@ crawler = new CeL.work_crawler({
 		// 修正這個網站的語法錯誤。
 		.replace(PATTERN_syntax_error, '</p>\n$1');
 
-		this.add_ebook_chapter(work_data, chapter, {
+		this.add_ebook_chapter(work_data, chapter_NO, {
 			sub_title : get_label(
 			//
 			html.between('<h1 class="post-title">', '</h1>')),

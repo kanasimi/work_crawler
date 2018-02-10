@@ -68,7 +68,7 @@ var crawler = new CeL.work_crawler({
 		}, PATTERN = /<meta property="og:([^"]+)" content="([^"]+)"/g, matched;
 
 		while (matched = PATTERN.exec(html)) {
-			// 避免覆寫
+			// 避免覆寫。
 			if (!work_data[matched[1]]) {
 				work_data[matched[1]] = get_label(matched[2]);
 			}

@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載腾讯漫画的工具。 Download qq comics.
+ * 
+ * @see https://github.com/abcfy2/getComic
  */
 
 'use strict';
@@ -161,9 +163,9 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
+	chapter_URL : function(work_data, chapter_NO) {
 		return 'ComicView/index/id/' + work_data.id + '/cid/'
-				+ work_data.chapter_list[chapter - 1].NO;
+				+ work_data.chapter_list[chapter_NO - 1].NO;
 	},
 	parse_chapter_data : function(html, work_data) {
 		// decode chapter data
