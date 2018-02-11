@@ -57,6 +57,7 @@
 | [看漫画](http://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/) |
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
+| [爱漫画](http://www.2manhua.com/) | 2manhua.js | 許多作品似乎從2017/9/3起就沒有更新。 |
 | [汗汗酷漫](http://www.hhcool.com/) | hhcool.js | |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
@@ -65,13 +66,12 @@
 | [733漫画网](http://www.733mh.com/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。 |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
-| [爱漫画](http://www.2manhua.com/) | ~~2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2018/2 "Too many connections" |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/10/19 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/10/19 未復原。 |
 
 ## Installation 安裝
 
-若是想要使用圖形介面，您可以 **[直接下載安裝包](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包並非最新的版本**。若是欲採用最新的版本，或者用作研究開發、想要使用命令行界面，請採用下列步驟。
+若是想要使用圖形介面，您可以 **[直接下載安裝包](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包並非最新的版本**，有些網站下載起來會出問題。若是欲採用最新的版本，或者用作研究開發、想要使用命令行界面，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
@@ -168,7 +168,7 @@
 ![小說 → epub](https://lh3.googleusercontent.com/JJ4SGDQF-HzQb0baRZ0mCio19jJTnNp3VnWutirYgZbYg5i--ufS_ElL8DEetP6x7uJ4HUv8szNqzVLbGlr84_OnxFxjIZCDsOEOEmKBubYC6PkpaE2xBYk9KIHzBR4YPwjQVM2FTA=w1366-h738-no)
 
 ## Note 附注
-* 目前不支援自動更新。
+* 目前本工具不支援自動更新。
 * 對於本工具已經包含的下載模式，熟練後一般約需2至4小時新增或更新下載工具，以達初步可用狀態。
 * 小說作品採用單線程下載，以避免對網站造成過度的負荷。漫畫作品則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
 * 歡迎熱心友人加入，以改進這個工具。

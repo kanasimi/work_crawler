@@ -18,6 +18,7 @@ download_sites_set = {
 		'733dm' : '733动漫网',
 		'733mh' : '733漫画网',
 		dmzj : '动漫之家',
+		dm5 : '动漫屋',
 		gufengmh : '古风漫画网',
 		hhcool : '汗汗酷漫',
 		kuaikanmanhua : '快看漫画',
