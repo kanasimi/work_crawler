@@ -121,6 +121,8 @@ PATTERN_START_SPACE = /^(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)+/i,
 PATTERN_START_QUOTE = /<div class="quote"><blockquote>([\s\S]*?)<\/blockquote><\/div>(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)*/i,
 //
 PATTERN_POST_STATUS = /^(<i class="pstatus">.+<\/i>)(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)*/i,
+// 正規的標題形式。 /g for 凡人修仙之仙界篇
+PATTERN_chapter_title = /^<(strong|font|b|h2)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>(?:<br\s*\/>|[\s\n]+)*/,
 //
 crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
@@ -290,7 +292,7 @@ crawler = new CeL.work_crawler({
 		//
 		function book_chapter_is_OK(matched, diff) {
 			if (false) {
-				console.log([ book_chapter, matched, diff,
+				console.log([ 888, book_chapter, matched, diff,
 						work_data.book_chapter_count ]);
 			}
 			if (matched === undefined || matched === null)
@@ -395,62 +397,73 @@ crawler = new CeL.work_crawler({
 			// ----------------------------------
 			// 嘗試解析章節號碼與章節標題。
 
-			var part_title = undefined, first_line, _part_title;
-
 			if (matched) {
+				// add <h2>...</h2>
 				text = matched[0].trimStart() + text;
 			}
 
-			text = text.replace(
-			// 正規的標題形式。
-			/^<(strong|font|b|h2)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>/,
-			//
-			function(all, tag_attributes, title) {
+			var chapter_title = [], first_line, _chapter_title;
+
+			text = text.replace_till_stable(PATTERN_chapter_title, function(
+					all, tag_attributes, title) {
 				first_line = all;
-				part_title = get_label(title);
+				chapter_title.push(get_label(title));
 				return '';
 			});
+			// console.log(chapter_title);
+			// console.log(text);
+			chapter_title = chapter_title.join(' ');
 
-			if (!part_title) {
+			if (!chapter_title) {
 				// 取第一行。
 				first_line = text.match(/^[^\n]*/)[0];
-				_part_title = get_label(first_line) || '';
+				_chapter_title = get_label(first_line) || '';
 			}
 
-			book_chapter = CeL.from_Chinese_numeral(part_title || _part_title)
-					.toString();
+			book_chapter = CeL.from_Chinese_numeral(
+					chapter_title || _chapter_title).toString();
 
 			var matched = book_chapter
-					.match(/(?:第 *|^) {0,2}(\d{1,2}) {0,2}[篇卷]/)
-					// e.g., 永夜君王
-					|| book_chapter.match(/(?:[\s《]|^)卷(\d{1,2})(?:[\s》]|$)/),
+			//
+			.match(/(?:第|^) {0,2}(\d{1,2}) {0,2}[篇卷](?:[^完]|$)/)
+			// e.g., 永夜君王, 特拉福買家俱樂部
+			|| book_chapter.match(/(?:[\s《]|^)卷(\d{1,2})(?:[\s》]|第\d|$)/),
 			// e.g., 雪鷹領主, 凡人修仙傳
-			has_part = matched && +matched[1] > 0;
+			has_part_title = matched && +matched[1] > 0;
 
-			matched = book_chapter.match(/(?:第 *|^) {0,2}(\d+) {0,2}章/);
-			if (book_chapter_is_OK(matched, has_part ? 200 : 40)
-			// ↑ 200, 40: 當格式明確的時候，可以容許比較大的跨度。
-			|| part_title && book_chapter_is_OK(book_chapter.match(/(\d+) *章/)
+			matched = book_chapter.match(/(?:第|^) {0,2}(\d{1,4}) {0,2}章/);
+			// console.log([ 333, has_part_title, matched ]);
+
+			if (matched
+			//
+			&& book_chapter_is_OK(matched, has_part_title ? 300 : 40)
+			// ↑ 300, 40: 當格式明確的時候，可以容許比較大的跨度。
+			|| chapter_title
+			//
+			&& book_chapter_is_OK(book_chapter.match(/(\d+) *章/)
 			// 先檢查"章"，預防有"第?卷 第?章"。
-			|| book_chapter.match(/第 *(\d+)/)
+			|| book_chapter.match(/第 *(\d{1,2})(?:[^篇卷]|$)/)
 			// e.g., 永夜君王
 			|| book_chapter.match(/(?:[\s《]|^)章(\d{1,4})(?:[\s》]|$)/),
 			//
-			has_part ? 40 : 4)
+			has_part_title ? 40 : 4)
 			//
-			|| book_chapter_is_OK(book_chapter.match(/(?:^|[^\d])(\d{1,4})章/)
+			|| book_chapter_is_OK(
 			//
-			|| book_chapter.match(/(?:第 *|^)(\d{1,4})(?:$|[^\d])/))) {
-				if (!part_title) {
-					// assert: !!part_title===false
-					// && !!first_line===true && !!_part_title===true
-					part_title = _part_title;
+			book_chapter.match(/(?:^|[^\d])(\d{1,4})章/)
+			//
+			|| book_chapter.match(/(?:第|^) *(\d{1,2})(?:$|[^篇卷\d])/))) {
+				// console.log([ 1, chapter_title ]);
+				if (!chapter_title) {
+					// assert: !!chapter_title===false
+					// && !!first_line===true && !!_chapter_title===true
+					chapter_title = _chapter_title;
 
 					// 去除章節標題: 第1行為章節標題。既然可以從第一行抽取出章節標題，那麼就應該要把這一行去掉。
 					text = text.replace(first_line, '').replace(
 							PATTERN_START_SPACE, '');
 				}
-				part_title = part_title
+				chapter_title = chapter_title
 				// 去除過多的空白字元。
 				.replace(/(\s){2,}/g, '$1')
 				// 去除書名: 有時第一行會包含書名。
@@ -459,12 +472,15 @@ crawler = new CeL.work_crawler({
 				.replace(/^\s*正文/, '').trim();
 
 			} else {
-				if (part_title) {
+				if (chapter_title) {
 					// 無法從第一行抽取出章節標題。回補第一行。
 					text = first_line + text;
 				}
-				part_title = '第' + work_data.book_chapter_count + '章';
+				chapter_title = '第' + work_data.book_chapter_count + '章';
 			}
+
+			// console.log(chapter_title);
+			// throw 14564164;
 
 			// ----------------------------------
 
@@ -488,7 +504,7 @@ crawler = new CeL.work_crawler({
 			}
 
 			this.add_ebook_chapter(work_data, work_data.book_chapter_count, {
-				title : part_title,
+				title : chapter_title,
 				text : text,
 				url : this.full_URL(this.chapter_URL(work_data, chapter_NO))
 						+ '#' + matched_list[index][1],
