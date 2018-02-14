@@ -36,8 +36,9 @@
 
 | Site | Tool file | Note |
 | --- | --- | --- |
+| [起点中文网](https://www.qidian.com/) | qidian.js | **本工具無法下載 VIP章节內容** |
 | [八一中文网](http://www.81xsw.com/) | 81xsw.js | [PTCMS](https://www.ptcms.com/)系统 |
-| [顶点小说](https://www.23us.cc) | 23us.js | PTCMS |
+| [顶点小说](https://www.23us.cc/) | 23us.js | PTCMS |
 | [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
 | [八八读书网](http://www.88dushu.com/) | 88dushu.js | 88读书网，PTCMS? |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | |
