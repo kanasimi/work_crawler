@@ -12,7 +12,7 @@
 ## Features 特點
 * 可自動下載小說封面以及章節中的插圖。
 * 自動檢核下載的圖片是否是否完整。若有破損將重新下載。
-* 採用 CeJS [線上作品程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
+* 採用 CeJS [線上作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
 
 ## Supported sites 已完成之網站工具
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：小說之下載必須先安裝 7Zip，這樣才能製作 .epub 電子書。
@@ -175,7 +175,7 @@
 * 歡迎熱心友人加入，以改進這個工具。
 
 ## Purpose 公開目的
-* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [線上作品程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
+* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [線上作品爬蟲程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
 * 展示程式撰寫當時，各線上小說漫畫網站之網站資料結構。
 * 提供離線瀏覽小說漫畫功能，以利個人化閱覽方式。增進閱覽體驗、掌控閱覽環境。
 * 增加對閱讀權的掌控能力，預防暫時無法連接網頁，或者數十年後找不到記憶中閱覽過的作品。

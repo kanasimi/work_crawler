@@ -28,6 +28,7 @@ download_sites_set = {
 		qq : '腾讯漫画'
 	},
 	'novel.cmn-Hans-CN' : {
+		qidian : '起点中文网',
 		'23us' : '顶点小说',
 		'81xsw' : '八一中文网',
 		'88dushu' : '八八读书网',

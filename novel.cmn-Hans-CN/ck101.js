@@ -132,6 +132,7 @@ crawler = new CeL.work_crawler({
 	// 'changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。
 	recheck : 'changed',
 
+	site_name : '卡提諾論壇',
 	base_URL : 'https://ck101.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -232,7 +233,6 @@ crawler = new CeL.work_crawler({
 			description : get_label(mainEntity.description),
 			chapter_count : mainEntity.pageEnd,
 			book_chapter_count : 0,
-			site_name : '卡提諾論壇',
 
 			raw : raw_data
 		} : CeL.null_Object();
@@ -245,26 +245,27 @@ crawler = new CeL.work_crawler({
 		//
 		.replace(/[\s\n]+/g, ' '), need_check_title && work_data);
 
-		if (!mainEntity) {
-			// 2018/2/9 改版: 從 HTML 取得資訊。
-			var matched = (html.between('<div class="pg">', '</div>') || html)
-					.match(/([^<>]+)<\/a>\s*<a [^<>]* class="nxt"/),
-			//
-			_work_data = {
-				last_update : html.between(
-						'<meta itemprop="dateModified" content="', '"')
-						|| html.between(
-						//
-						'<meta itemprop="dateCreated" content="', '"'),
-				chapter_count : matched ? +matched[1].trim().replace(/^[.\s]+/,
-						'') : 1,
-				book_chapter_count : 0
-			};
-			// 由 meta data 取得作品資訊。
-			exact_work_data(_work_data, html);
-			// 還是以原 work_data 的為重。
-			work_data = Object.assign(_work_data, work_data);
+		var matched = (html.between('<div class="pg">', '</div>') || html)
+				.match(/([^<>]+)<\/a>\s*<a [^<>]* class="nxt"/),
+		// 2018/2/9 改版: 從 HTML 取得資訊。
+		_work_data = {
+			last_update : html.between(
+					'<meta itemprop="dateModified" content="', '"')
+					|| html.between(
+					//
+					'<meta itemprop="dateCreated" content="', '"'),
+			chapter_count : matched ? +matched[1].trim().replace(/^[.\s]+/, '')
+					: 1,
+			book_chapter_count : 0
+		};
+		// 由 meta data 取得作品資訊。
+		exact_work_data(_work_data, html);
+		if (work_data.chapter_count < _work_data.chapter_count) {
+			// 有時會出現 mainEntity.pageEnd 比較小的情況。
+			work_data.chapter_count = _work_data.chapter_count;
 		}
+		// 還是以原 work_data 的為重。
+		work_data = Object.assign(_work_data, work_data);
 
 		var tags = [], matched, PATTERN = /<a [^<>]*title="([^<>"]+)"/g;
 		while (matched = PATTERN.exec(html.between('<div class="tagBox">',
@@ -292,12 +293,12 @@ crawler = new CeL.work_crawler({
 		//
 		function book_chapter_is_OK(matched, diff) {
 			if (false) {
-				console.log([ 888, book_chapter, matched, diff,
-						work_data.book_chapter_count ]);
+				console.log([ 'book_chapter_is_OK', book_chapter, matched,
+						diff, work_data.book_chapter_count ]);
 			}
 			if (matched === undefined || matched === null)
 				matched = book_chapter;
-			if (matched && (matched = +matched[1]) >= 1
+			if (matched && (matched = +matched[1]) > 0
 			// 4: 差距不大時才可算數。
 			&& Math.abs(matched - work_data.book_chapter_count)
 			//
@@ -425,35 +426,39 @@ crawler = new CeL.work_crawler({
 
 			var matched = book_chapter
 			//
-			.match(/(?:第|^) {0,2}(\d{1,2}) {0,2}[篇卷](?:[^完]|$)/)
+			.match(/(?:第|^) {0,2}(\d{1,2}) {0,2}[卷篇](?:[^完]|$)/)
 			// e.g., 永夜君王, 特拉福買家俱樂部
 			|| book_chapter.match(/(?:[\s《]|^)卷(\d{1,2})(?:[\s》]|第\d|$)/),
 			// e.g., 雪鷹領主, 凡人修仙傳
 			has_part_title = matched && +matched[1] > 0;
 
-			matched = book_chapter.match(/(?:第|^) {0,2}(\d{1,4}) {0,2}章/);
-			// console.log([ 333, has_part_title, matched ]);
+			// TODO: 序章
+			matched = book_chapter
+			// (?:\.\d+): 劍靈同居日記 第73.5章
+			// 唐磚 第一卷 \n 第一節
+			.match(/(?:第|^) {0,2}(\d{1,4}(?:\.\d+)?) {0,2}[章節]/);
+			// console.log([ 'before check', has_part_title, matched ]);
 
 			if (matched
-			//
-			&& book_chapter_is_OK(matched, has_part_title ? 300 : 40)
-			// ↑ 300, 40: 當格式明確的時候，可以容許比較大的跨度。
+			// 當格式明確的時候，可以容許比較大的跨度。
+			&& book_chapter_is_OK(matched, has_part_title ? 450 : 250)
+			// ↑ 250: 劍靈同居日記, 450: 一世之尊
 			|| chapter_title
 			//
-			&& book_chapter_is_OK(book_chapter.match(/(\d+) *章/)
+			&& book_chapter_is_OK(book_chapter.match(/(\d+) *[章節]/)
 			// 先檢查"章"，預防有"第?卷 第?章"。
-			|| book_chapter.match(/第 *(\d{1,2})(?:[^篇卷]|$)/)
+			|| book_chapter.match(/第 *(\d{1,2})(?:[^卷篇]|$)/)
 			// e.g., 永夜君王
-			|| book_chapter.match(/(?:[\s《]|^)章(\d{1,4})(?:[\s》]|$)/),
+			|| book_chapter.match(/(?:[\s《]|^)[章節](\d{1,4})(?:[\s》]|$)/),
 			//
 			has_part_title ? 40 : 4)
 			//
 			|| book_chapter_is_OK(
 			//
-			book_chapter.match(/(?:^|[^\d])(\d{1,4})章/)
+			book_chapter.match(/(?:^|[^\d])(\d{1,4})[章節]/)
 			//
-			|| book_chapter.match(/(?:第|^) *(\d{1,2})(?:$|[^篇卷\d])/))) {
-				// console.log([ 1, chapter_title ]);
+			|| book_chapter.match(/(?:第|^) *(\d{1,2})(?:$|[^卷篇\d])/))) {
+				// console.log([ 654, chapter_title, _chapter_title ]);
 				if (!chapter_title) {
 					// assert: !!chapter_title===false
 					// && !!first_line===true && !!_chapter_title===true
@@ -476,7 +481,8 @@ crawler = new CeL.work_crawler({
 					// 無法從第一行抽取出章節標題。回補第一行。
 					text = first_line + text;
 				}
-				chapter_title = '第' + work_data.book_chapter_count + '章';
+				chapter_title = '第' + work_data.book_chapter_count
+						+ (work_data.chapter_unit || this.chapter_unit);
 			}
 
 			// console.log(chapter_title);
