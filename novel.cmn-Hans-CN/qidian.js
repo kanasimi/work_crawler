@@ -91,9 +91,15 @@ var crawler = new CeL.work_crawler({
 			latest_chapter : text2.between(' title="', '"'),
 			description : get_label(html.between(' class="book-intro"',
 					'</div>').between('>')),
+			// 今日限免 限時免費 限时免费 limited time offer, free for a limited time
+			// free to download for a limited time
+			is_free : html.includes(' class="flag"'),
 			author_image : get_label(html.between(' id="authorId"', '</div>')
 					.between('<img src="', '"'))
 		};
+		if (work_data.is_free) {
+			work_data.status.push('限免');
+		}
 
 		// console.log(work_data);
 		return work_data;
@@ -111,7 +117,8 @@ var crawler = new CeL.work_crawler({
 		work_data.chapter_list = [];
 		data.data.vs.forEach(function(volume) {
 			work_data.last_update = volume.cs[volume.cs.length - 1].uT;
-			if (volume.vS && volume.cs.length > 200) {
+			CeL.debug(volume.vN + ': ' + (volume.vS ? 'VIP卷' : '免费卷'), 2);
+			if (volume.vS && !work_data.is_free && volume.cs.length > 10) {
 				// 跳過太多的 VIP卷。
 				return;
 			}
@@ -146,6 +153,10 @@ var crawler = new CeL.work_crawler({
 			date : chapter_data.uT
 					|| get_label(html.between('<span class="j_updateTime">',
 							'</span>')),
+			// word count
+			wc : chapter_data.cnt
+					|| +get_label(html.between(
+							'<span class="j_chapterWordCut">', '</span>')),
 			text : html
 			//
 			.between(' class="read-content', '</div>').between('>').trim()
