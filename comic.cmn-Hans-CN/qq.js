@@ -51,7 +51,7 @@ var crawler = new CeL.work_crawler({
 	convert_id : {
 		// 篩出今日限免 free today. 2017/8/15 起取消了今日限免
 		// e.g., `echo 今日限免： && node qq free`
-		free : function(callback) {
+		free : function(insert_id_list) {
 			var _this = this;
 			this.free_title = CeL.null_Object();
 
@@ -89,7 +89,7 @@ var crawler = new CeL.work_crawler({
 				}
 				// write cache
 				CeL.write_file(free_file, free);
-				callback(id_list);
+				insert_id_list(id_list);
 			}
 
 			// http://ac.qq.com/VIP

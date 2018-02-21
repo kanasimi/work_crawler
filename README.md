@@ -80,12 +80,14 @@
 2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可將之改名。
 3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，將此檔儲存到前面所提，本工具將安裝的標的目錄下。
 
-![本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
+![本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/5WwL_Ap4U1n6xL1qwqwb1kJ_ZWwsOI2xZev-h9RywwzLcxWNIkcPcpGT17HfmmuykQACIWjuBhWffr7C1mwCxlVaVS2sQ0ic0cHK1OttaYdCF-BJpPtJjbvtTRX2Ssfs1OoIMlscYA=w135-h266-no)
 
 4. 在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具安裝的目錄，執行命令以下載 CeJS 程式庫：
    ``` sh
    node _CeL.updater.node.js
    ```
+![執行命令以下載 CeJS 程式庫](https://lh3.googleusercontent.com/kriJ1gZRQF_QZ-Qbw4nsY5bOz39rhjd-IXVJPGfkTvZkrBir-bikBhu3qj3l5uIm7i3dFhDvV9_kyzDysQNKQYnKTTbiSdJXlutjCB9OAQBhug9Ogq7UxUDD5a-66iytQfwYrWV8dA=w377-h81-no)
+
 5. 然後就能[開始試用](#execution-執行)囉。
    ``` sh
    # sample commands to extract work_crawler + cejs
@@ -97,8 +99,12 @@
    wget --output-document=_CeL.updater.node.js https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js
    node _CeL.updater.node.js
    ```
-6. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
-7. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
+
+![下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
+
+6. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt)</code> 這個檔案來設定放置的路徑。
+7. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
+8. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
    ``` sh
    node _CeL.updater.node.js
    ```
@@ -140,6 +146,7 @@
    e.g.,
    ``` sh
    cd comic.cmn-Hans-CN && node qq.js 狐妖小红娘 skip_error=true
+   cd novel.cmn-Hans-CN && node qidian free && echo 下载 起点中文网限免作品
    cd novel.cmn-Hans-CN && node 23us 斗罗大陆Ⅲ龙王传说
    cd comic.cmn-Hans-CN && node 2manhua 大主宰 recheck=true
    cd comic.cmn-Hans-CN && node ikanman l=ikanman.txt recheck=true

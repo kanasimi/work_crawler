@@ -12,10 +12,15 @@ require('../work_crawler_loder.js');
 
 // core_9D227AD5A911B7758A332C9CA35C640C.js
 // 2017/3/11 20:6:35: core_33A91659E79CDC4A0F31ED884877F3EF.js
-// 2018/1/30與2/2之間改版: core_E95EAFDD32D7F97E369526C7AD9A8837.js
-var core_filename = 'core_E95EAFDD32D7F97E369526C7AD9A8837.js',
+// 2018/1/30與2/2之間改版:
+// http://c.3qfm.com/scripts/core_E95EAFDD32D7F97E369526C7AD9A8837.js
+// 2018/2/14:
+// http://cf.hamreus.com/scripts/core_6B1519CED0A3FA5ED82E8FBDA8F1AB90.js
+var core_filename = 'core_6B1519CED0A3FA5ED82E8FBDA8F1AB90.js',
 // 2017: main_3A454149B2D2500411BC344B15DB58A4.js'
-// 2018/2: config_25855B4C08F7A6545A30D049ABD0F9EE.js
+// 2018/2: http://c.3qfm.com/scripts/config_25855B4C08F7A6545A30D049ABD0F9EE.js
+// 2018/2/14:
+// http://cf.hamreus.com/scripts/config_25855B4C08F7A6545A30D049ABD0F9EE.js
 decode_filename = 'config_25855B4C08F7A6545A30D049ABD0F9EE.js',
 //
 crawler = new CeL.work_crawler({
@@ -25,7 +30,7 @@ crawler = new CeL.work_crawler({
 	// one_by_one : true,
 
 	base_URL : 'http://www.manhuagui.com/',
-	script_base_URL : 'http://c.3qfm.com/scripts/',
+	script_base_URL : 'http://cf.hamreus.com/scripts/',
 
 	// allow .jpg without EOI mark.
 	allow_EOI_error : true,
@@ -42,7 +47,7 @@ crawler = new CeL.work_crawler({
 		eval(html.between('var servs=', ',pfuncs=')).forEach(function(data) {
 			data.hosts.forEach(function(server_data) {
 				// @see SMH.utils.getPath() @ ((core_filename))
-				server_list.push(server_data.h + '.hamreus.com:8080');
+				server_list.push(server_data.h + '.hamreus.com');
 			});
 		});
 		return server_list;
