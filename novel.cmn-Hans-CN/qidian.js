@@ -51,6 +51,22 @@ var crawler = new CeL.work_crawler({
 		// console.log([ id_list, id_data ]);
 		return [ id_list, id_data ];
 	},
+	convert_id : {
+		// 篩出限时免费作品
+		free : {
+			url : 'free',
+			parser : function(html, get_label) {
+				html = html.between('limit-book-list', 'right-side-wrap');
+				var id_list = [], matched, PATTERN =
+				//
+				/<h4><a [^<>]+>([^<>]+)<\/a><\/h4>/g;
+				while (matched = PATTERN.exec(html)) {
+					id_list.push(get_label(matched[1]));
+				}
+				return id_list;
+			}
+		}
+	},
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
