@@ -279,7 +279,15 @@ crawler = new CeL.work_crawler({
 		}
 		work_data.status = work_data.status.append(tags).unique();
 
+		// 去掉預設的廣告圖片 "超過一百分・卡提諾不意外"
+		if (work_data.image && work_data.image.includes('ZMZHjmd')) {
+			// <meta property="og:image" itemprop="image"
+			// content="https://s1.imgs.cc/img/ZMZHjmd.jpg"/>
+			delete work_data.image;
+		}
+
 		// console.log(work_data);
+		// console.log(JSON.stringify(work_data));
 		return work_data;
 	},
 
