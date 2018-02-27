@@ -112,12 +112,11 @@ var crawler = new CeL.work_crawler({
 		return 'Comic/comicInfo/id/' + (work_id | 0);
 	},
 	parse_work_data : function(html, get_label) {
-		var title = get_label(html.between(
-				'<h2 class="works-intro-title ui-left">', '</h2>')),
 		// work_data={id,title,author,authors,chapter_count,last_update,last_download:{date,chapter}}
-		work_data = {
+		var work_data = {
 			// 必要屬性：須配合網站平台更改。
-			title : title,
+			title : get_label(html.between(
+					'<h2 class="works-intro-title ui-left">', '</h2>')),
 
 			// 選擇性屬性：須配合網站平台更改。
 			// e.g., "连载中"
@@ -134,17 +133,13 @@ var crawler = new CeL.work_crawler({
 					'<span class="ui-pl10 ui-text-gray6">', '</span>'))
 		};
 
-		if (this.free_title && (title in this.free_title)) {
-			var base = this.main_directory + 'free' + CeL.env.path_separator,
-			// 今日限免作品移至特殊目錄下。
-			id = html.between('<div class="works-cover ui-left">', '</a>')
-					.between('/ComicView/index/id/', '/cid/');
-			CeL.create_directory(base);
-			work_data.directory = base + CeL.to_file_name(
-			// 允許自訂作品目錄，但須自行escape並添加path_separator。
-			id + ' ' + title + '.' + (new Date).format('%Y%2m%2d'))
-					+ CeL.env.path_separator;
+		if (this.free_title && (work_data.title in this.free_title)) {
+			// 將今日限免作品移至特殊目錄下。
+			work_data.base_directory_name = 'free';
+			work_data.directory_name_extension = '.'
+					+ (new Date).format('%Y%2m%2d');
 		}
+
 		return work_data;
 	},
 	get_chapter_count : function(work_data, html) {

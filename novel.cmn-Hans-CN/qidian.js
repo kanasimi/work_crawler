@@ -113,8 +113,13 @@ var crawler = new CeL.work_crawler({
 			author_image : get_label(html.between(' id="authorId"', '</div>')
 					.between('<img src="', '"'))
 		};
+
 		if (work_data.is_free) {
 			work_data.status.push('限免');
+			// 將限免作品移至特殊目錄下。
+			work_data.base_directory_name = 'free';
+			work_data.directory_name_extension = '.'
+					+ (new Date).format('%Y%2m%2d');
 		}
 
 		// console.log(work_data);
