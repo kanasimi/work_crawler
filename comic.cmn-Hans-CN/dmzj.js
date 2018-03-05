@@ -153,7 +153,7 @@ var crawler = new CeL.work_crawler({
 				}
 				return {
 					// 指定圖片要儲存檔的檔名。
-					file : function(work_data, chapter, index) {
+					file_name : function(work_data, chapter, index) {
 						return (matched ? matched[1] : work_data.id)
 						// @see function process_images() @
 						// CeL.application.net.work_crawler

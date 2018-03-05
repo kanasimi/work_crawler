@@ -32,10 +32,11 @@ crawler = new CeL.work_crawler({
 	base_URL : 'http://www.manhuagui.com/',
 	script_base_URL : 'http://cf.hamreus.com/scripts/',
 
+	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.
-	allow_EOI_error : true,
+	// allow_EOI_error : true,
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
-	skip_error : true,
+	// skip_error : true,
 
 	// 取得伺服器列表。
 	// use_server_cache : true,
@@ -231,6 +232,7 @@ crawler = new CeL.work_crawler({
 		// 令牌 @see SMH.utils.getPicUrl() @ ((core_filename))
 		token = '?cid=' + chapter_data.cid + '&'
 				+ CeL.get_URL.parameters_to_String(chapter_data.sl);
+		// 漫畫櫃的webp圖像檔案可能是即時生成的?
 		chapter_data.image_list = chapter_data.files.map(function(url) {
 			return {
 				url : path + url + token
