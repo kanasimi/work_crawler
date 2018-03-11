@@ -124,6 +124,13 @@ var crawler = new CeL.work_crawler({
 		// decode chapter data
 		function decode(code) {
 			code = eval(code);
+
+			if (code.startsWith('eval(')) {
+				// e.g., 《家兄又在作死》- 第87话
+				// https://www.dmzj.com/view/jiaxiongyouzaizuosi/74718.html#@page=1
+				code = eval(code.slice('eval'.length));
+			}
+
 			var pages;
 			eval(code.replace('var ', ''));
 

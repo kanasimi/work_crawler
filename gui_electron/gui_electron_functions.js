@@ -52,6 +52,8 @@ download_options_set = {
 	regenerate : '章節數量無變化時依舊利用 cache 重建資料(如ebook)。',
 	reget_chapter : '重新取得每個所檢測的章節內容。',
 
+	archive_images : '漫畫下載完畢後壓縮圖像檔案。',
+
 	// 容許錯誤用的相關操作設定。
 	// MAX_ERROR_RETRY : '',
 	allow_EOI_error : '當圖像不存在 EOI (end of image) 標記，或是被偵測出非圖像時，依舊強制儲存檔案。',
@@ -60,7 +62,7 @@ download_options_set = {
 
 	// main_directory : '',
 	// user_agent : '',
-	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。'
+	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。'
 }, download_site_nodes = [], download_options_nodes = {};
 download_site_nodes.link_of_site = {};
 download_site_nodes.node_of_id = {};
