@@ -264,6 +264,8 @@ crawler = new CeL.work_crawler({
 			// 有時會出現 mainEntity.pageEnd 比較小的情況。
 			work_data.chapter_count = _work_data.chapter_count;
 		}
+		console.log(work_data)
+		console.log(_work_data)
 		// 還是以原 work_data 的為重。
 		work_data = Object.assign(_work_data, work_data);
 
@@ -277,7 +279,8 @@ crawler = new CeL.work_crawler({
 				tags.push(matched);
 			}
 		}
-		work_data.status = work_data.status.append(tags).unique();
+		// "|| []": e.g., 悟空傳
+		work_data.status = (work_data.status || []).append(tags).unique();
 
 		// 去掉預設的廣告圖片 "超過一百分・卡提諾不意外"
 		if (work_data.image && work_data.image.includes('ZMZHjmd')) {
@@ -307,9 +310,9 @@ crawler = new CeL.work_crawler({
 			if (matched === undefined || matched === null)
 				matched = book_chapter;
 			if (matched && (matched = +matched[1]) > 0
-			// 4: 差距不大時才可算數。
-			&& Math.abs(matched - work_data.book_chapter_count)
 			//
+			&& Math.abs(matched - work_data.book_chapter_count)
+			// 4: 差距不大時才可算數。
 			< (diff || 4)) {
 				work_data.book_chapter_count = matched;
 				return true;

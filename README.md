@@ -13,9 +13,10 @@
 * 可自動下載小說封面以及章節中的插圖。
 * 自動檢核下載的圖片是否是否完整。若有破損將重新下載。
 * 採用 CeJS [線上作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
+* 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料。（請注意：必須先安裝 7-Zip **18.01 以上的版本**）
 
 ## Supported sites 已完成之網站工具
-* For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：小說之下載必須先安裝 7-Zip **16.04 以上的版本**，這樣才能製作 .epub 電子書。
+* For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：小說之下載必須先安裝 7-Zip **18.01 以上的版本**，這樣才能製作 .epub 電子書。
 * 各線上作品網站往往不時改版（更改結構），同時造成本工具無法正常作動；因此若有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
 
 已撰寫完的各大小說漫畫網站工具包括：
@@ -76,7 +77,7 @@
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～（已經做過的步驟可以跳過）
-1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](http://7-zip.org/) 16.04 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->
+1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](http://7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->
 2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可將之改名。
 3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，將此檔儲存到前面所提，本工具將安裝的標的目錄下。
 

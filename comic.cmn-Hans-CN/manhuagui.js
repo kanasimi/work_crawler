@@ -16,12 +16,16 @@ require('../work_crawler_loder.js');
 // http://c.3qfm.com/scripts/core_E95EAFDD32D7F97E369526C7AD9A8837.js
 // 2018/2/14:
 // http://cf.hamreus.com/scripts/core_6B1519CED0A3FA5ED82E8FBDA8F1AB90.js
-var core_filename = 'core_6B1519CED0A3FA5ED82E8FBDA8F1AB90.js',
+// 2018/3/16 00:17:25 GMT: add https: for image files
+// https://cf.hamreus.com/scripts/core_ABBA2B6ADC1DABE325D505BE3314C273.js
+var core_filename = 'core_ABBA2B6ADC1DABE325D505BE3314C273.js',
 // 2017: main_3A454149B2D2500411BC344B15DB58A4.js'
 // 2018/2: http://c.3qfm.com/scripts/config_25855B4C08F7A6545A30D049ABD0F9EE.js
 // 2018/2/14:
 // http://cf.hamreus.com/scripts/config_25855B4C08F7A6545A30D049ABD0F9EE.js
-decode_filename = 'config_25855B4C08F7A6545A30D049ABD0F9EE.js',
+// 2018/3/11 15:59:14 GMT:
+// https://cf.hamreus.com/scripts/config_FAF1BF617BAF8A691A828F80672D3588.js
+decode_filename = 'config_FAF1BF617BAF8A691A828F80672D3588.js',
 //
 crawler = new CeL.work_crawler({
 	// 本站常常無法取得圖片，因此得多重新檢查。
@@ -30,7 +34,7 @@ crawler = new CeL.work_crawler({
 	// one_by_one : true,
 
 	base_URL : 'http://www.manhuagui.com/',
-	script_base_URL : 'http://cf.hamreus.com/scripts/',
+	script_base_URL : 'https://cf.hamreus.com/scripts/',
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.
@@ -55,7 +59,7 @@ crawler = new CeL.work_crawler({
 	},
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : '/support/word.ashx?key=',
+	search_URL : '/tools/word.ashx?key=',
 	parse_search_result : function(html) {
 		/**
 		 * e.g.,<code>
@@ -206,7 +210,10 @@ crawler = new CeL.work_crawler({
 		// String.prototype.splic: used in chapter
 		function decode(code) {
 			code = eval(code);
-			eval(code.replace('var cInfo=', 'code='));
+			// 2018/3/16 改版
+			eval(code.between(null, {
+				tail : ').preInit()'
+			}).replace('SMH.imgData(', 'code='));
 			return code;
 		}
 

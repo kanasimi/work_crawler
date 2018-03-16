@@ -146,9 +146,9 @@ var crawler = new CeL.work_crawler({
 				run_next();
 			}, {
 				get_URL_options : _this.get_URL_options,
-				reget : _this.recheck,
 				no_write_info : true,
-				file_name : save_to
+				file_name : save_to,
+				reget : _this.recheck
 			});
 		}, callback);
 	},

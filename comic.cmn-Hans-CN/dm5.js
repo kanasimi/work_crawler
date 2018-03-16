@@ -188,9 +188,10 @@ var crawler = new CeL.work_crawler({
 		/ id="dm5_key"[\s\S]{1,50}?<script[^<>]*>\s*eval([\s\S]+?)<\/script>/);
 		if (matched) {
 			text = eval(matched[1]).replace(
-			// var var123=''+'f'+'5'+....;$("#dm5_key").val(var123);
 			// 有時var123會以數字開頭，屬於網站bug。 e.g., 风云全集
-			/\$\("#dm5_key"\)\.val\(([a-z_][a-z_\d]*)\)/, 'DM5.mkey=$1');
+			/\$\("#dm5_key"\)\.val\(([a-z_\d]*)\)/, 'DM5.mkey=_$1')
+			// e.g., "var 161dfgdfg=''+" ... ";$("#dm5_key").val(161dfgdfg);"
+			.replace(/var ([a-z_\d]*)/g, 'var _$1');
 			eval(text);
 		}
 
