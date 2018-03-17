@@ -113,7 +113,7 @@ var crawler = new CeL.work_crawler({
 
 		return work_data;
 	},
-	get_chapter_count : function(work_data, html) {
+	get_chapter_list : function(work_data, html) {
 		work_data.chapter_list = [];
 		html = html.between('<div class="nav">', '<div class="freespace">')
 		//

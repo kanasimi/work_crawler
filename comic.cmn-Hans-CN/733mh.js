@@ -85,7 +85,7 @@ var crawler = new CeL.work_crawler({
 		work_data.last_update = work_data.更新时间;
 		return work_data;
 	},
-	get_chapter_count : function(work_data, html, get_label) {
+	get_chapter_list : function(work_data, html, get_label) {
 		html = html.between('<div class="w980_b1px mt10 clearfix">',
 				'<div class="introduction" id="intro1">').between('<ul>',
 				'</ul>');

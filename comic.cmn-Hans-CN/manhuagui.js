@@ -100,7 +100,7 @@ crawler = new CeL.work_crawler({
 		}
 		return work_data;
 	},
-	get_chapter_count : function(work_data, html) {
+	get_chapter_list : function(work_data, html) {
 		var data, chapter_list = [], matched,
 		/**
 		 * e.g., <code>
@@ -239,7 +239,7 @@ crawler = new CeL.work_crawler({
 		// 令牌 @see SMH.utils.getPicUrl() @ ((core_filename))
 		token = '?cid=' + chapter_data.cid + '&'
 				+ CeL.get_URL.parameters_to_String(chapter_data.sl);
-		// 漫畫櫃的webp圖像檔案可能是即時生成的?
+		// 漫畫櫃的webp圖像檔案可能是即時生成的? 大小常常不一樣。
 		chapter_data.image_list = chapter_data.files.map(function(url) {
 			return {
 				url : path + url + token

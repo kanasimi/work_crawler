@@ -44,9 +44,10 @@ crawler = new CeL.work_crawler({
 			return server.includes('mhpic') ? server : server + ':82';
 		});
 	},
+	// use cache of host list. 不每一次重新取得取得伺服器列表。
+	// use_server_cache : true,
 
 	// 解析 作品名稱 → 作品id get_work()
-	// use_server_cache : true,
 	search_URL : 'getjson.shtml?q=',
 	parse_search_result : function(html) {
 		// e.g.,
@@ -78,7 +79,7 @@ crawler = new CeL.work_crawler({
 			'"og:novel:update_time" content="', '"')
 		};
 	},
-	get_chapter_count : function(work_data, html) {
+	get_chapter_list : function(work_data, html) {
 		work_data.chapter_list = [];
 		var matched,
 		// [ , chapter_title, chapter_url, chapter_id, chapter_title_and_pages ]

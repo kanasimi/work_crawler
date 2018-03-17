@@ -131,7 +131,7 @@ var crawler = new CeL.work_crawler({
 		return 'https://book.qidian.com/ajax/book/category?_csrfToken='
 				+ this._csrfToken + '&bookId=' + work_id;
 	},
-	get_chapter_count : function(work_data, html, get_label) {
+	get_chapter_list : function(work_data, html, get_label) {
 		// console.log(html);
 		var data = JSON.parse(html);
 

@@ -35,7 +35,7 @@ var _37yue = new CeL.work_crawler({
 				/<dt>([^<>]+)<\/dt>[\s\n]*<dd>([^<>]+)<\/dd>/g);
 		return work_data;
 	},
-	get_chapter_count : function(work_data, html) {
+	get_chapter_list : function(work_data, html) {
 		work_data.chapter_list = [];
 		var matched,
 		/**

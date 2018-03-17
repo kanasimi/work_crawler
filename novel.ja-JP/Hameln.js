@@ -97,7 +97,7 @@ var crawler = new CeL.work_crawler({
 	chapter_list_URL : function(work_id) {
 		return 'https://novel.syosetu.org/' + work_id + '/';
 	},
-	get_chapter_count : function(work_data, html) {
+	get_chapter_list : function(work_data, html) {
 		// TODO: 對於單話，可能無目次。
 		// e.g., https://novel.syosetu.org/106514/
 

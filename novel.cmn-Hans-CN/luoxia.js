@@ -103,7 +103,7 @@ crawler = new CeL.work_crawler({
 		// console.log(work_data);
 		return work_data;
 	},
-	get_chapter_count : function(work_data, html, get_label) {
+	get_chapter_list : function(work_data, html, get_label) {
 		work_data.chapter_list = [];
 
 		html = html.between('id="tithook"', '<script>');

@@ -103,7 +103,7 @@ var crawler = new CeL.work_crawler({
 
 		return work_data;
 	},
-	get_chapter_count : function(work_data, html, get_label) {
+	get_chapter_list : function(work_data, html, get_label) {
 		// 1: 由舊至新
 		work_data.inverted_order = / DM5_COMIC_SORT\s*=\s*2/.test(html);
 
@@ -121,7 +121,7 @@ var crawler = new CeL.work_crawler({
 						&& (matched[2] = work_data.part_list[matched[2][1]])) {
 					this.set_part(work_data, matched[2]);
 				} else if (!matched[0].includes(' class="chapteritem">')) {
-					CeL.error('get_chapter_count: Invalid NO: ' + matched[0]);
+					CeL.error('get_chapter_list: Invalid NO: ' + matched[0]);
 				}
 				continue;
 			}

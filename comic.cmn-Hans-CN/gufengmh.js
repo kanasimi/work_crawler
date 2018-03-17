@@ -89,7 +89,7 @@ var crawler = new CeL.work_crawler({
 		// console.log(work_data);
 		return work_data;
 	},
-	get_chapter_count : function(work_data, html, get_label) {
+	get_chapter_list : function(work_data, html, get_label) {
 		var chapter_block, chapter_list = [], PATTERN_chapter_block =
 		//
 		/class="chapter-body[^<>]+>([\s\S]+?)<\/div>/g;

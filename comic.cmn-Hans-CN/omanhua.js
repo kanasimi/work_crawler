@@ -51,7 +51,7 @@ var crawler = new CeL.work_crawler({
 			work_data.last_update = work_data.更新时间;
 		return work_data;
 	},
-	get_chapter_count : function(work_data, html) {
+	get_chapter_list : function(work_data, html) {
 		var data, chapter_list = [], matched, PATTERN_chapter =
 		//
 		/<li><a href='([^'<>:]+)' title='([^'<>]+)'[^<>]*>(.+?)<\/a><\/li>/g;

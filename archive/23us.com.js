@@ -115,7 +115,7 @@ var _23us = new CeL.work_crawler({
 	chapter_list_URL : function(work_id) {
 		return 'html/' + work_id.slice(0, -3) + '/' + work_id + '/';
 	},
-	get_chapter_count : function(work_data, html, get_label) {
+	get_chapter_list : function(work_data, html, get_label) {
 		work_data.chapter_list = [];
 		html.between(' id="at">', '<div ')
 		//

@@ -82,7 +82,7 @@ var crawler = new CeL.work_crawler({
 		}
 		return work_data;
 	},
-	get_chapter_count : function(work_data, html, get_label) {
+	get_chapter_list : function(work_data, html, get_label) {
 		html = html.between('<ul class="list_con_li autoHeight">', '</ul>')
 				// is_manhua
 				|| html.between('<div class="middleright_mr">',

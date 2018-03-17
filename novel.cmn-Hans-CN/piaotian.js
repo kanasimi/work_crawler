@@ -117,7 +117,7 @@ crawler = new CeL.work_crawler({
 		return 'html/' + (work_id.slice(0, -3) || 0) + '/' + work_id
 				+ '/index.html';
 	},
-	get_chapter_count : function(work_data, html, get_label) {
+	get_chapter_list : function(work_data, html, get_label) {
 		html = html.between('<div class="centent">', '<div class="bottom">');
 		work_data.chapter_list = [];
 		var matched, part_title, base_url = work_data.base_url = this

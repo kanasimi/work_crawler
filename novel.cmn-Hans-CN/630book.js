@@ -46,7 +46,7 @@ var crawler = CeL.PTCMS({
 		return '/shu/' + work_id + '.html';
 	},
 	// 取得包含章節列表的文字範圍。
-	get_chapter_count_contents : function(html) {
+	get_chapter_list_contents : function(html) {
 		return html.between('<dl class="zjlist">', '</dl>');
 	}
 });

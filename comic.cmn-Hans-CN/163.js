@@ -74,7 +74,7 @@ var crawler = new CeL.work_crawler({
 	chapter_list_URL : function(work_id) {
 		return 'book/catalog/' + work_id + '.json';
 	},
-	get_chapter_count : function(work_data, html) {
+	get_chapter_list : function(work_data, html) {
 		var chapter_json = JSON.parse(html).catalog.sections;
 
 		if (chapter_json.length < 1) {

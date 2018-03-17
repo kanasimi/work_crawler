@@ -25,7 +25,7 @@ var crawler = CeL.PTCMS({
 	baidu_cse : '16095493717575840686',
 
 	// 取得包含章節列表的文字範圍。
-	get_chapter_count_contents : function(html) {
+	get_chapter_list_contents : function(html) {
 		return html.between('<div id="list">', '</div>');
 	}
 });
