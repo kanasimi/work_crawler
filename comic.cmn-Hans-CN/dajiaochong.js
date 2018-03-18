@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載 大角虫漫画_超有爱的日更原创国漫平台 的工具。 Download dajiaochong comics.
+ * 
+ * @since 2018/3/17 8:7:55
  */
 
 'use strict';
@@ -70,7 +72,8 @@ var crawler = new CeL.work_crawler({
 
 		return work_data;
 	},
-	pre_get_chapter_list : function(work_data, html, callback) {
+	pre_get_chapter_list_via_api : function(callback, work_data, html) {
+		// 用這個方法獲得的資訊比較完整。但是必須取得多個檔案。
 		var _this = this, last_list_NO = html.between(
 				'<div class="section-tag-list">', '</div>').match(
 				/<li index="(\d+)">[\s\S]+?<\/li>/g);
@@ -91,18 +94,49 @@ var crawler = new CeL.work_crawler({
 				error_retry : _this.MAX_ERROR_RETRY
 			}, _this.get_URL_options));
 
-		}, last_list_NO, 1, callback);
-	},
-	get_chapter_list : function(work_data, html) {
-		work_data.chapter_list.forEach(function(chapter_data) {
-			chapter_data.url = 'read/?cid=' + chapter_data.cid;
+		}, last_list_NO, 1, function() {
+			work_data.chapter_list.forEach(function(chapter_data) {
+				chapter_data.url = 'read/?cid=' + chapter_data.cid;
+			});
+			callback();
 		});
+	},
+	pre_get_chapter_list : function(callback, work_data, html, get_label) {
+		var PATTERN_chapter_url = / href="\/(read\/\?cid=\d+)"/,
+		//
+		first_cid = html.between('<div class="section-catalog">').match(
+				PATTERN_chapter_url);
+
+		PATTERN_chapter_url = / href="(\/read\/\?cid=\d+)"[^<>]*>([^<>]*)/g;
+		work_data.chapter_list = [];
+		// 直接取得第一章。章節內容中就有指向所有章節的連結。
+		CeL.get_URL(this.base_URL + first_cid[1], function(XMLHttp) {
+			var text = XMLHttp.responseText.between(' class="read-section',
+					'</ul>'), matched;
+			while (matched = PATTERN_chapter_url.exec(text)) {
+				work_data.chapter_list.push({
+					title : get_label(matched[2]),
+					url : matched[1]
+				});
+			}
+			callback();
+
+		}, this.charset, null, Object.assign({
+			error_retry : this.MAX_ERROR_RETRY
+		}, this.get_URL_options));
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
-		console.log(html)
-		throw 45456456
+		var chapter_data = work_data.chapter_list[chapter_NO - 1];
+		chapter_data.image_list = JSON.parse(
+				'[' + html.between(' urls: [', ']').replace(/'/g, '"') + ']')
+		//
+		.map(function(url) {
+			return {
+				url : url
+			}
+		});
 
 		return chapter_data;
 	}

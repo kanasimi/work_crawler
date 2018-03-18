@@ -16,7 +16,7 @@
 * 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料。（請注意：必須先安裝 7-Zip **18.01 以上的版本**）
 
 ## Supported sites 已完成之網站工具
-* For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：小說之下載必須先安裝 7-Zip **18.01 以上的版本**，這樣才能製作 .epub 電子書。
+* For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：必須先安裝 7-Zip **18.01 以上的版本**，這樣才能製作 .epub 小說電子書、壓縮漫畫章節。
 * 各線上作品網站往往不時改版（更改結構），同時造成本工具無法正常作動；因此若有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
 
 已撰寫完的各大小說漫畫網站工具包括：
@@ -41,7 +41,7 @@
 | [八一中文网](http://www.81xsw.com/) | 81xsw.js | [PTCMS](https://www.ptcms.com/)系统 |
 | [顶点小说](https://www.23us.cc/) | 23us.js | PTCMS |
 | [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
-| [八八读书网](http://www.88dushu.com/) | 88dushu.js | 88读书网，PTCMS? |
+| [八八读书网](http://www.88dus.com/) | 88dus.js | 88读书网(88dushu)，PTCMS? |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | |
 | [飘天文学](http://www.piaotian.com/) | piaotian.js | NOT PTCMS |
 | [落霞小说网](http://www.luoxia.com/) | luoxia.js | WordPress，數量少、速度較慢但品質較高，較少錯字和自我審查。 |
@@ -56,18 +56,19 @@
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** 2017/8/15 起取消了今日限免 |
+| [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
+| [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | |
+| [快看漫画](https://www.kuaikanmanhua.com/) | kuaikanmanhua.js | |
 | [看漫画](http://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/) |
-| [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
+| [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。 |
+| [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
+| [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。 |
+| [733漫画网](http://www.733mh.com/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
+| [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [爱漫画](http://www.2manhua.com/) | 2manhua.js | 許多作品似乎從2017/9/3起就沒有更新。 |
 | [汗汗酷漫](http://www.hhcool.com/) | hhcool.js | |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | |
-| [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
-| [快看漫画](https://www.kuaikanmanhua.com/) | kuaikanmanhua.js | |
-| [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。 |
-| [733漫画网](http://www.733mh.com/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
-| [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。 |
-| [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/10/19 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2017/10/19 未復原。 |
 
