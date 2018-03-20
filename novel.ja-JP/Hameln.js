@@ -151,6 +151,8 @@ var crawler = new CeL.work_crawler({
 			// 避免多章節時重複get。
 			// 不儲存在work_data，因為work_data會有cache，下次執行依然會保持舊的設定。
 			this.got_all[work_data.id] = work_data.title;
+			CeL.create_directory(this.main_directory
+					+ this.cache_directory_name);
 			CeL.get_URL(this.base_URL
 			// 放在這，是為了確保章節有變化時才重新取得。
 			+ '?mode=ss_view_all&nid=' + work_data.id,

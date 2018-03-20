@@ -264,8 +264,6 @@ crawler = new CeL.work_crawler({
 			// 有時會出現 mainEntity.pageEnd 比較小的情況。
 			work_data.chapter_count = _work_data.chapter_count;
 		}
-		console.log(work_data)
-		console.log(_work_data)
 		// 還是以原 work_data 的為重。
 		work_data = Object.assign(_work_data, work_data);
 
