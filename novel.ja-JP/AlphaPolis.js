@@ -74,6 +74,11 @@ var crawler = new CeL.work_crawler({
 
 		}, PATTERN = /<meta property="og:([^"]+)" content="([^"]+)"/g, matched;
 
+		if (work_data.title === 'Not Found' && !work_data.author) {
+			// 對於已經失效的作品，直接中斷下載。
+			throw work_data.title;
+		}
+
 		while (matched = PATTERN.exec(html)) {
 			work_data[matched[1]] = get_label(matched[2]);
 		}
