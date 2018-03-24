@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載 大角虫漫画_超有爱的日更原创国漫平台 的工具。 Download dajiaochong comics.
+ * 批量下載 大角虫漫画_超有爱的日更原创国漫平台 的工具。 Download dajiaochongmanhua comics.
  * 
  * @since 2018/3/17 8:7:55
  */
