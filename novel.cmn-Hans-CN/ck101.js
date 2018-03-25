@@ -113,8 +113,10 @@ function get_work_data_from_html(html, get_label) {
 }
 
 var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=4368fa9a9824ad4f837cbd399d21811d&cx=partner-pub-1630767461540427:6206348626&cse_tok=AOdTmaD-8P-9dqB_ihmfrf2DZk46lkl4rg:1514090169341&sort=&googlehost=www.google.com&q=',
-//
-PATTERN_search = /<a href="[^"<>]+?tid=(\d+)[^"<>]*"[^<>]*>([^<>]+)<\/a>[\s\S]+?<p class="xg1">([^<>]+)/g,
+// [ all, tid, title, 回覆 ]
+PATTERN_search_201802 = /<a href="[^"<>]+?tid=(\d+)[^"<>]*"[^<>]*>([^<>]+)<\/a>[\s\S]+?<p class="xg1">([^<>]+)/g,
+// [ all, tid, title ]
+PATTERN_search = /<h3 class="xs3">[\s\n]*<a href="[^"<>]+?tid=(\d+)[^"<>]*"[^<>]*>([^<>]+)<\/a>/g,
 // cf. .trimStart()
 PATTERN_START_SPACE = /^(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)+/i,
 //
@@ -169,18 +171,18 @@ crawler = new CeL.work_crawler({
 		return [];
 	},
 
-	search_URL : function(work_title) {
+	search_URL_201802 : function(work_title) {
 		return [ 'search.php?mod=forum', {
 			formhash : 'aa2d7d2d',
 			srchtxt : work_title,
 			searchsubmit : 'yes'
 		} ];
 	},
-	parse_search_result : function(html, get_label, work_title) {
+	parse_search_result_201802 : function(html, get_label, work_title) {
 		html = html.between('<h2>');
 		// console.log(html);
 		var matched, best_result;
-		while (matched = PATTERN_search.exec(html)) {
+		while (matched = PATTERN_search_201802.exec(html)) {
 			// delete matched.input;
 			// console.log(matched);
 			var work_data = parse_topic_title(get_label(matched[2]));
@@ -204,6 +206,35 @@ crawler = new CeL.work_crawler({
 		}
 		return [];
 	},
+
+	// 2018/3/25 之前搜尋功能改版
+	search_URL : function(work_title) {
+		return [ 'search.php?mod=forum', {
+			formhash : 'aa2d7d2d',
+			srchtab : 'novel',
+			srchtxt : work_title,
+			searchsubmit : 'yes'
+		} ];
+	},
+	parse_search_result : function(html, get_label, work_title) {
+		// html = html.between('id="threadlist"');
+		// console.log(html);
+		var matched, id_list = [], id_data = [];
+		while (matched = PATTERN_search.exec(html)) {
+			// delete matched.input;
+			// console.log(matched);
+			var work_data = parse_topic_title(get_label(matched[2]));
+			if (work_data) {
+				// console.log(work_data);
+				id_list.push(matched[1]);
+				id_data.push(work_data);
+			}
+		}
+		return [ id_list, id_data ];
+	},
+	title_of_search_result : 'title',
+
+	// ----------------------------------------------------
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
