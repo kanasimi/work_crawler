@@ -107,17 +107,23 @@ var crawler = new CeL.work_crawler({
 		first_cid = html.between('<div class="section-catalog">').match(
 				PATTERN_chapter_url);
 
-		PATTERN_chapter_url = / href="(\/read\/\?cid=\d+)"[^<>]*>([^<>]*)/g;
+		PATTERN_chapter_url
+		// [ , url, chapter title, additional information ]
+		= / href="(\/read\/\?cid=\d+)"[^<>]*>([^<>]*)<\/a>([\s\S]*?)<\/li>/g;
 		work_data.chapter_list = [];
 		// 直接取得第一章。章節內容中就有指向所有章節的連結。
 		CeL.get_URL(this.base_URL + first_cid[1], function(XMLHttp) {
 			var text = XMLHttp.responseText.between(' class="read-section',
 					'</ul>'), matched;
 			while (matched = PATTERN_chapter_url.exec(text)) {
-				work_data.chapter_list.push({
-					title : get_label(matched[2]),
-					url : matched[1]
-				});
+				// 跳過被鎖住的章節。
+				// assert: 應該只在最後的幾個章節。
+				if (!matched[3].includes('read-icon-locker')) {
+					work_data.chapter_list.push({
+						title : get_label(matched[2]),
+						url : matched[1]
+					});
+				}
 			}
 			callback();
 
