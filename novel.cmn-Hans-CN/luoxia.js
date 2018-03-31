@@ -142,8 +142,9 @@ crawler = new CeL.work_crawler({
 		if (/^\s*<div class="ggad/.test(text)) {
 			text = text.between('</div>');
 		}
-		// 去除掉結尾的廣告。
-		text = text.between(null, '<div class="ggad clearfix">')
+		// 去除掉結尾的廣告。 <div id="anchor" class="ggad clearfix">
+		text = text.between(null, ' class="ggad clearfix">').replace(/<[^<]+$/,
+				'')
 		// 去除掉中間插入的廣告。
 		.replace(/<!-- Luoxia-middle-random --><div[\s\S]*?<\/div>/, '')
 		// 去除掉中間插入的廣告連結。

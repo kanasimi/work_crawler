@@ -135,7 +135,9 @@ var crawler = new CeL.work_crawler({
 		var path = encodeURI(chapter_data.chapterPath);
 		chapter_data.image_list = chapter_data.chapterImages.map(function(url) {
 			return {
-				url : path + url
+				// e.g., 外挂仙尊 184 第76话
+				// 但是這還是沒辦法取得圖片...
+				url : /^https?:\/\//.test(url) ? url : path + url
 			}
 		});
 
