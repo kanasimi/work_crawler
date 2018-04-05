@@ -121,6 +121,8 @@ var crawler = new CeL.work_crawler({
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		var chapter_data = CeL.null_Object();
+		// 2018/3 古风漫画网改版。
+		html = html.between('<script>;phone.') || html;
 		eval(html.between('<script>', '</script>').replace(/;var /g,
 				';chapter_data.'));
 		if (!chapter_data) {
