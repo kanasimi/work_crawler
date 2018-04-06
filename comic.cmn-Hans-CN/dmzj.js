@@ -30,9 +30,8 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 解析 作品名稱 → 作品id get_work()
-	// TODO: https://www.dmzj.com/dynamic/o_search/index
-	search_URL : 'http://s.acg.dmzj.com/comicsum/search.php?s=',
-	parse_search_result : function(html) {
+	search_URL_2017 : 'http://s.acg.dmzj.com/comicsum/search.php?s=',
+	parse_search_result_2017 : function(html) {
 		// e.g.,
 		// var g_search_data =
 		// [{"id":"13318","name":"\u53cc\u661f\u4e4b\u9634\u9633\u5e08","alias_name":"\u53cc\u661f\u306e\u9634\u9633\u5e08","real_name":"","publish":null,"type":null,"zone":"\u65e5\u672c","zone_tag_id":"2304","language":"\u4e2d\u6587","status":"","status_tag_id":"2309","last_update_chapter_name":"\u7b2c10\u5377","last_update_chapter_id":"62693","last_updatetime":"1504067298","check":"0","chapters_tbl":"comics_chapter_3","description":"\u8981\u5b88\u62a4\u7684\u5c31\u8981\u632f\u594b\u8d77\u6765\uff01\u6211\u8981\u7528\u7684\u624b\u548c\u6211\u7684\u5251\u5b88\u62a4\u8fd9\u4e2a\u4e16\u754c\uff01","hidden":"0","cover":"http:\/\/images.dmzj.com\/webpic\/8\/160131shuangxing2fml.jpg","sum_chapters":"65","sum_source":"3202","hot_search":"1","hot_hits":"1810266","first_letter":"s","keywords":"","comic_py":"sxzyys","introduction":"\u8981\u5b88\u62a4\u7684\u5c31\u8981\u632f\u594b\u8d77\u6765\uff01\u6211\u8981\u7528\u7684\u624b\u548c\u6211\u7684\u5251\u5b88\u62a4\u8fd9\u4e2a\u4e16\u754c\uff01","addtime":null,"authors":"\u52a9\u91ce\u5609\u662d","types":"\u5192\u9669\/\u795e\u9b3c","series":"","need_update":"0","update_notice":"","readergroup":"\u5c11\u5e74\u6f2b\u753b","readergroup_tag_id":"3262","has_comment_id":"1","comment_key":"","day_click_count":"1211","week_click_count":"6371","month_click_count":"39610","page_show_flag":"0","token":"MxFF9s","source":"\u8f6c\u8f7d","grade":"0","copyright":"0","direction":"1","token32":"018857b0e318c1004deb94f5b083b32a","url":"","mobile":"1","w_link":"2","app_day_click_count":"2","app_week_click_count":"92","app_month_click_count":"2268","app_click_count":"1278044","islong":"2","alading":"1","uid":null,"week_add_num":"1","month_add_num":"1","total_add_num":"0","sogou":"2","baidu_assistant":"0","is_checked":"1","quality":"1","is_show_animation_list":"0","zone_link":"","is_dmzj":"0","device_show":"7","comic_name":"\u53cc\u661f\u4e4b\u9634\u9633\u5e08","comic_author":"\u52a9\u91ce\u5609\u662d","comic_cover":"http:\/\/images.dmzj.com\/webpic\/8\/160131shuangxing2fml.jpg","comic_url_raw":"http:\/\/manhua.dmzj.com\/sxzyys","comic_url":"http:\/\/manhua.dmzj.com\/sxzyys","chapter_url_raw":"http:\/\/manhua.dmzj.com\/sxzyys\/62693.shtml","chapter_url":"http:\/\/manhua.dmzj.com\/..\/sxzyys\/62693.shtml"}];
@@ -40,11 +39,44 @@ var crawler = new CeL.work_crawler({
 				';')) : [];
 		return [ id_data, id_data ];
 	},
-	id_of_search_result : function(data) {
+	id_of_search_result_2017 : function(data) {
 		return data.comic_url.includes('manhua.dmzj') ? 'manhua_'
 				+ data.comic_py : data.comic_py;
 	},
-	title_of_search_result : 'name',
+	title_of_search_result_2017 : 'name',
+
+	// TODO: https://manhua.dmzj.com/tags/search.shtml?s=
+	search_URL : function(work_title) {
+		return [ 'https://www.dmzj.com/dynamic/o_search/index', {
+			keywords : work_title
+		} ];
+	},
+	parse_search_result : function(html, get_label) {
+		html = html.between('wrap_list_con').between('<ul', '</ul>');
+		// console.log(html);
+
+		// @see luoxia.js, dmzj.js
+		var PATTERN = /<li(?:[^<>]*)>([\s\S]+?)<\/li>/g,
+		// {Array}id_list = [id,id,...]
+		id_list = [], id_data = [], matched;
+
+		while (matched = PATTERN.exec(html)) {
+			// console.log(matched);
+			matched = matched[1].match(/<a ([^<>]+)>([\s\S]+)<\/a>/i);
+			if (!matched)
+				continue;
+			var title = matched[1].match(/title="([^"<>]+)"/),
+			// dmzj.js: title=""href="" 中間沒有空格
+			id = matched[1]
+					.match(/href="[^"<>]+?\/([a-z\d\-_]+)(?:\/|\.html)?"/);
+			if (id) {
+				id_list.push(id[1]);
+				id_data.push(title[1] || get_label(matched[2]));
+			}
+		}
+
+		return [ id_list, id_data ];
+	},
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
@@ -123,7 +155,10 @@ var crawler = new CeL.work_crawler({
 	parse_chapter_data : function(html, work_data, get_label) {
 		// decode chapter data
 		function decode(code) {
+			// console.log(code);
+
 			code = eval(code);
+			// console.log(code);
 
 			if (code.startsWith('eval(')) {
 				// e.g., 《家兄又在作死》- 第87话
