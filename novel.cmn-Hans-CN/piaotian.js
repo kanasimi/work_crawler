@@ -87,6 +87,11 @@ crawler = new CeL.work_crawler({
 			image : html.between('<td width="80%" valign="top">').between(
 					'<img src="', '"')
 		};
+		// piaotian 有時會502，但是重新再擷取一次就可以了。
+		if (work_data.title === '502 Bad Gateway') {
+			return this.REGET_PAGE;
+		}
+
 		html.between('<h1>', '<div')
 		//
 		.each_between('<td', '</td>', function(text) {
@@ -109,6 +114,7 @@ crawler = new CeL.work_crawler({
 			last_update : work_data.最后更新
 		}, work_data);
 
+		// console.log(html);
 		// console.log(work_data);
 		return work_data;
 	},
