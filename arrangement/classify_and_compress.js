@@ -470,12 +470,6 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
-	if (/^週刊|\[雑誌|[^\d]20[12]\d[年\-][01]\d月|20[12]\d年\d{1,2}号|[^\d]20[12]\d[.\-][01]\d[^\d]/
-			.test(fso_name)) {
-		move_to('comic_magazine');
-		return;
-	}
-
 	if (/^(?:[\[(]?Pixiv|artist -|art -|アーティスト -)/i.test(fso_name)) {
 		move_to('CG_no_title');
 		return;
@@ -526,6 +520,15 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 	if (/中文|漢化|翻中|汉化|\[(?:中|CHT|ENG)\]|\(Eng\)|English|Español|Korean|Chinese|Spanish|Russian|翻訳|英訳|中国語/i
 			.test(fso_name)) {
 		move_to('_maybe_translated_adult_comic');
+		return;
+	}
+
+	// 必須放在 _maybe_translated_adult_comic 之後。
+	// NG: |[^\d]20[12]\d[.\-][01]\d[^\d]
+	// e.g., "[2018.01.17] Pastel＊Palettes - ゆら・ゆらRing-Dong-Dance"
+	// Devils were tempted by ballad of anima... Ver.2018-01-11
+	if (/^週刊|\[雑誌|[^\d]20[12]\d[年\-][01]\d月|20[12]\d年\d{1,2}号/.test(fso_name)) {
+		move_to('comic_magazine');
 		return;
 	}
 
