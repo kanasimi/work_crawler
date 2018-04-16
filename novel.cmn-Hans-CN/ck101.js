@@ -124,7 +124,7 @@ PATTERN_START_QUOTE = /<div class="quote"><blockquote>([\s\S]*?)<\/blockquote><\
 //
 PATTERN_POST_STATUS = /^(<i class="pstatus">.+<\/i>)(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)*/i,
 // 正規的標題形式。 /g for 凡人修仙之仙界篇
-PATTERN_chapter_title = /^<(strong|font|b|h2)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>(?:<br\s*\/>|[\s\n]+)*/,
+PATTERN_chapter_title = /^<(strong|font|b|h2)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>/g,
 //
 crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
@@ -455,11 +455,22 @@ crawler = new CeL.work_crawler({
 			// console.log(text);
 			chapter_title = chapter_title.join(' ');
 
-			if (!chapter_title) {
+			if (chapter_title) {
+				text = text
+				// for: https://ck101.com/thread-2676074-58-1.html#post_91016623
+				// <font size="4"><font color="RoyalBlue">...</font></font>
+				// <br />
+				.replace(/^(?:<\/[a-z]+>)+/, '')
+				// trimStart
+				.replace(PATTERN_START_SPACE, '');
+			} else {
 				// 取第一行。
 				first_line = text.match(/^[^\n]*/)[0];
 				_chapter_title = get_label(first_line) || '';
 			}
+
+			// assert: 所有 text 起頭的空白皆已被消除。
+			// TODO: 補上段落起頭的空白。
 
 			book_chapter = CeL.from_Chinese_numeral(
 					chapter_title || _chapter_title).toString();
@@ -513,8 +524,8 @@ crawler = new CeL.work_crawler({
 				.replace(/(\s){2,}/g, '$1')
 				// 去除書名: 有時第一行會包含書名。
 				.replace(work_data.title, '')
-				// e.g., 完美世界
-				.replace(/^\s*正文/, '').trim();
+				// e.g., "《奧術神座》正文 第六章 ..."
+				.replace(/《\s*》/g, '').replace(/^\s*正文/, '').trim();
 
 			} else {
 				if (chapter_title) {
