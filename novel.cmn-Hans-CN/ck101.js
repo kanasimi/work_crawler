@@ -525,7 +525,8 @@ crawler = new CeL.work_crawler({
 				// 去除書名: 有時第一行會包含書名。
 				.replace(work_data.title, '')
 				// e.g., "《奧術神座》正文 第六章 ..."
-				.replace(/《\s*》/g, '').replace(/^\s*正文/, '').trim();
+				// "奧術神座·正文 第時八十一章 時間飛逝"
+				.replace(/《\s*》/g, '').replace(/^[\s·]*正文/, '').trim();
 
 			} else {
 				if (chapter_title) {
