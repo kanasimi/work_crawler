@@ -87,7 +87,12 @@ var crawler = new CeL.work_crawler({
 
 			// 選擇性屬性：須配合網站平台更改。
 			image : text.between(' class="book-img"')
-					.between('<img src="', '"').trim(),
+					.between('<img src="', '"').trim()
+					// 用比較大的圖。
+					// 90 @ https://www.qidian.com/
+					// 180 @ https://book.qidian.com/info/
+					// 300 @ https://m.qidian.com//book/
+					.replace(/\/(?:180|90|300)$/, '/600'),
 			author : get_label(text.between(' class="writer"', '</a>').between(
 					'>')),
 			status : text.between('<p class="tag">', '</p>').split(
