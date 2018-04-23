@@ -476,7 +476,7 @@ crawler = new CeL.work_crawler({
 					chapter_title || _chapter_title).toString();
 
 			var matched = book_chapter
-			//
+			// 第一部 聖詠之城卷 第二十八章
 			.match(/(?:第|^) {0,2}(\d{1,2}) {0,2}[卷篇](?:[^完]|$)/)
 			// e.g., 永夜君王, 特拉福買家俱樂部
 			|| book_chapter.match(/(?:[\s《]|^)卷(\d{1,2})(?:[\s》]|第\d|$)/),
@@ -509,7 +509,7 @@ crawler = new CeL.work_crawler({
 			book_chapter.match(/(?:^|[^\d])(\d{1,4})[章節]/)
 			//
 			|| book_chapter.match(/(?:第|^) *(\d{1,2})(?:$|[^卷篇\d])/))) {
-				// console.log([ 654, chapter_title, _chapter_title ]);
+				// CeL.log('有章節標題: ' + chapter_title + '\n ' + _chapter_title);
 				if (!chapter_title) {
 					// assert: !!chapter_title===false
 					// && !!first_line===true && !!_chapter_title===true
@@ -530,14 +530,17 @@ crawler = new CeL.work_crawler({
 
 			} else {
 				if (chapter_title) {
-					// 無法從第一行抽取出章節標題。回補第一行。
+					// CeL.log('無法從第一行抽取出章節標題。回補第一行: ' + first_line);
 					text = first_line + text;
 				}
+				// TODO:
+				// 對一些無法辨識的標題，在這邊如此設定可能會與之前的章節重複，使得後面的章節直接消失。不過這通常是因為原先的章節安排就有錯誤了。
+				// e.g., "第一部 聖詠之城卷 第二十八章 條件" & "028 第一部 聖詠之城卷 第二十八章 測試（新年快樂）"
 				chapter_title = '第' + work_data.book_chapter_count
 						+ (work_data.chapter_unit || this.chapter_unit);
 			}
 
-			// console.log(chapter_title);
+			// CeL.log('chapter_title: ' + chapter_title);
 			// throw 14564164;
 
 			// ----------------------------------
