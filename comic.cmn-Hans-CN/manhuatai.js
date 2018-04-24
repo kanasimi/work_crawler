@@ -9,7 +9,7 @@ require('../work_crawler_loder.js');
 // ----------------------------------------------------------------------------
 
 var server_list_hash = CeL.null_Object(),
-//
+// [ , chapter_title, chapter_url, chapter_id, chapter_title_and_pages ]
 PATTERN_chapter_data = /<li><a title="([^"]+)" href="((\d{0,4})[^"]*)"><span>(.+?)<\/span><\/a><\/li>/g,
 //
 crawler = new CeL.work_crawler({
@@ -81,10 +81,8 @@ crawler = new CeL.work_crawler({
 	},
 	get_chapter_list : function(work_data, html) {
 		work_data.chapter_list = [];
-		var matched,
-		// [ , chapter_title, chapter_url, chapter_id, chapter_title_and_pages ]
-		PATTERN_chapter = new RegExp(PATTERN_chapter_data);
-		while (matched = PATTERN_chapter.exec(html)) {
+		var matched;
+		while (matched = PATTERN_chapter_data.exec(html)) {
 			work_data.chapter_list.push({
 				// 可能會有重複: 连载+番外+单行本
 				// NO : +matched[3],
@@ -110,10 +108,6 @@ crawler = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter_NO) {
-		return this.work_URL(work_data.id)
-				+ work_data.chapter_list[chapter_NO - 1].url;
-	},
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		if (work_data.trying) {
 			var matched = html.match(/<a( [^<>]+)>下一章<\/a>/);
