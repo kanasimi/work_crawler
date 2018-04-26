@@ -239,6 +239,8 @@ crawler = new CeL.work_crawler({
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
 		return 'thread-' + work_id + '-1-1.html';
+		return '/forum.php?mod=viewthread&tid=' + work_id
+				+ '&extra=page%3D1&page=1'
 	},
 	parse_work_data : function(html, get_label, exact_work_data) {
 		var error = html.between('<div id="messagetext" class="alert_error">',
@@ -325,9 +327,11 @@ crawler = new CeL.work_crawler({
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	chapter_URL : function(work_data, chapter_NO) {
-		// https://ck101.com/forum.php?mod=viewthread&tid=1848378&page=87
 		// https://ck101.com/thread-3397649-1-1.html
 		return 'thread-' + work_data.id + '-' + chapter_NO + '-1.html';
+		// https://ck101.com/forum.php?mod=viewthread&tid=1848378&page=87
+		return '/forum.php?mod=viewthread&tid=' + work_data.id
+				+ '&extra=page%3D1&page=' + chapter_NO;
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		//
@@ -533,9 +537,14 @@ crawler = new CeL.work_crawler({
 					// CeL.log('無法從第一行抽取出章節標題。回補第一行: ' + first_line);
 					text = first_line + text;
 				}
-				// TODO:
 				// 對一些無法辨識的標題，在這邊如此設定可能會與之前的章節重複，使得後面的章節直接消失。不過這通常是因為原先的章節安排就有錯誤了。
-				// e.g., "第一部 聖詠之城卷 第二十八章 條件" & "028 第一部 聖詠之城卷 第二十八章 測試（新年快樂）"
+				// e.g., "第一部 聖詠之城卷 第二十八章 條件" & "第一部 聖詠之城卷 第二十八章 測試（新年快樂）"
+				//
+				// 增加 MAX_ID_LENGTH @ encode_file_name()
+				// @ CeL.application.storage.EPUB 有時可以解決問題，卻非治本之道。
+				//
+				// 經由在 normalize_item() @ CeL.application.storage.EPUB
+				// 增加檢測，問題已經解決。
 				chapter_title = '第' + work_data.book_chapter_count
 						+ (work_data.chapter_unit || this.chapter_unit);
 			}
@@ -562,6 +571,21 @@ crawler = new CeL.work_crawler({
 			if (post_status) {
 				// recover post status
 				text = post_status + '<br />\n' + text;
+			}
+
+			if (index === matched_list.length - 2) {
+				this.last_chapter_title = chapter_title;
+				this.last_chapter_hash = matched_list[index][1];
+				this.last_chapter_text = text;
+			} else if (index === 0
+			//
+			&& this.last_chapter_title === chapter_title
+			//
+			&& this.last_chapter_hash === matched_list[index][1]
+			//
+			&& this.last_chapter_text === text) {
+				CeL.log('偵測到重複章節，將跳過: ' + chapter_title);
+				continue;
 			}
 
 			this.add_ebook_chapter(work_data, work_data.book_chapter_count, {
