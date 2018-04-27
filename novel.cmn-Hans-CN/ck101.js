@@ -115,8 +115,11 @@ function get_work_data_from_html(html, get_label) {
 var search_URL = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_TW&prettyPrint=false&source=gcsc&gss=.com&sig=4368fa9a9824ad4f837cbd399d21811d&cx=partner-pub-1630767461540427:6206348626&cse_tok=AOdTmaD-8P-9dqB_ihmfrf2DZk46lkl4rg:1514090169341&sort=&googlehost=www.google.com&q=',
 // [ all, tid, title, 回覆 ]
 PATTERN_search_201802 = /<a href="[^"<>]+?tid=(\d+)[^"<>]*"[^<>]*>([^<>]+)<\/a>[\s\S]+?<p class="xg1">([^<>]+)/g,
-// [ all, tid, title ]
-PATTERN_search = /<h3 class="xs3">[\s\n]*<a href="[^"<>]+?tid=(\d+)[^"<>]*"[^<>]*>([^<>]+)<\/a>/g,
+// [ all, tid, title, other data ]
+PATTERN_search = /<h3 class="xs3">[\s\n]*<a href="[^"<>]+?tid=(\d+)[^"<>]*"[^<>]*>([^<>]+)<\/a>([\s\S]+?)<\/div>/g,
+// [ all, forum name ]
+PATTERN_forum = /<a href="[^"<>]+?forum\.php?[^"<>]*"[^<>]*>([^<>]+)<\/a>/,
+
 // cf. .trimStart()
 PATTERN_START_SPACE = /^(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)+/i,
 //
@@ -207,7 +210,7 @@ crawler = new CeL.work_crawler({
 		return [];
 	},
 
-	// 2018/3/25 之前搜尋功能改版
+	// 搜尋功能改版: 在 2018/3/25 之前
 	search_URL : function(work_title) {
 		return [ 'search.php?mod=forum', {
 			formhash : 'aa2d7d2d',
@@ -224,9 +227,26 @@ crawler = new CeL.work_crawler({
 			// delete matched.input;
 			// console.log(matched);
 			var work_data = parse_topic_title(get_label(matched[2]));
-			if (work_data) {
-				// console.log(work_data);
-				id_list.push(matched[1]);
+			if (!work_data) {
+				continue;
+			}
+
+			var forum = matched[3].match(PATTERN_forum);
+			if (forum) {
+				forum = get_label(forum[1]);
+				work_data.forum = forum;
+			}
+
+			// console.log(work_data);
+			matched = matched[1];
+			// 全篇小說 長篇小說 短篇小說 NG: 小說討論
+			if (forum.includes('篇小說')) {
+				// 把小說放在第一搜索位置。
+				// e.g., 重生之賊行天下
+				id_list.unshift(matched);
+				id_data.unshift(work_data);
+			} else {
+				id_list.push(matched);
 				id_data.push(work_data);
 			}
 		}
@@ -464,9 +484,16 @@ crawler = new CeL.work_crawler({
 				// for: https://ck101.com/thread-2676074-58-1.html#post_91016623
 				// <font size="4"><font color="RoyalBlue">...</font></font>
 				// <br />
-				.replace(/^(?:<\/[a-z]+>)+/, '')
+				.replace(/^(?:<\/[a-z]+>)+/, function(all) {
+					// 預防回復的時候丟失東西。
+					first_line += all;
+					return '';
+				})
 				// trimStart
-				.replace(PATTERN_START_SPACE, '');
+				.replace(PATTERN_START_SPACE, function(all) {
+					first_line += all;
+					return '';
+				});
 			} else {
 				// 取第一行。
 				first_line = text.match(/^[^\n]*/)[0];
@@ -530,7 +557,9 @@ crawler = new CeL.work_crawler({
 				.replace(work_data.title, '')
 				// e.g., "《奧術神座》正文 第六章 ..."
 				// "奧術神座·正文 第時八十一章 時間飛逝"
-				.replace(/《\s*》/g, '').replace(/^[\s·]*正文/, '').trim();
+				.replace(/《\s*》/g, '')
+				// e.g., 《奧術神座》番外：【第一章】異世界的來客（上）
+				.replace(/^[\s·]*(?:正文)?[:：\s]*/, '').trim();
 
 			} else {
 				if (chapter_title) {
