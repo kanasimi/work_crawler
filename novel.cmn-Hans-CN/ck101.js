@@ -127,6 +127,7 @@ PATTERN_START_QUOTE = /<div class="quote"><blockquote>([\s\S]*?)<\/blockquote><\
 //
 PATTERN_POST_STATUS = /^(<i class="pstatus">.+<\/i>)(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)*/i,
 // 正規的標題形式。 /g for 凡人修仙之仙界篇
+// [ all, tag name, chapter_title ]
 PATTERN_chapter_title = /^<(strong|font|b|h2)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>/g,
 //
 crawler = new CeL.work_crawler({
@@ -382,6 +383,14 @@ crawler = new CeL.work_crawler({
 		//
 		matched, matched_list = [];
 
+		// 處理實際頁數與之前得到頁數不同的問題。
+		// 照理 ((raw_data.pagination === chapter_NO))
+		if (raw_data.pagination < chapter_NO && pageEnd < chapter_NO) {
+			CeL.warn('parse_chapter_data: 預計取得第' + chapter_NO + '頁，但實際得到第'
+					+ raw_data.pagination + '頁，跳過本頁。');
+			return;
+		}
+
 		html = html.between('<!--postlist-->', '<!--postlist end-->')
 		// e.g., ' src="https://ck101.com/static/image/common/none.gif"'
 		.replace(/ src="[^"]+?\/(?:none|nophoto|back)\.[a-z]+"/g, '')
@@ -477,7 +486,7 @@ crawler = new CeL.work_crawler({
 			});
 			// console.log(chapter_title);
 			// console.log(text);
-			chapter_title = chapter_title.join(' ');
+			chapter_title = chapter_title.join('\n');
 
 			if (chapter_title) {
 				text = text
@@ -508,9 +517,9 @@ crawler = new CeL.work_crawler({
 
 			var matched = book_chapter
 			// 第一部 聖詠之城卷 第二十八章
-			.match(/(?:第|^) {0,2}(\d{1,2}) {0,2}[卷篇](?:[^完]|$)/)
+			.match(/(?:^|[\n第]) {0,2}(\d{1,2}) {0,2}[卷篇](?:[^完]|$)/)
 			// e.g., 永夜君王, 特拉福買家俱樂部
-			|| book_chapter.match(/(?:[\s《]|^)卷(\d{1,2})(?:[\s》]|第\d|$)/),
+			|| book_chapter.match(/(?:^|[\n\s《])卷(\d{1,2})(?:[\s》]|第\d|$)/),
 			// e.g., 雪鷹領主, 凡人修仙傳
 			has_part_title = matched && +matched[1] > 0;
 
@@ -518,7 +527,7 @@ crawler = new CeL.work_crawler({
 			matched = book_chapter
 			// (?:\.\d+): 劍靈同居日記 第73.5章
 			// 唐磚 第一卷 \n 第一節
-			.match(/(?:第|^) {0,2}(\d{1,4}(?:\.\d+)?) {0,2}[章節]/);
+			.match(/(?:^|[\n第]) {0,2}(\d{1,4}(?:\.\d+)?) {0,2}[章節]/);
 			// console.log([ 'before check', has_part_title, matched ]);
 
 			if (matched
@@ -531,15 +540,16 @@ crawler = new CeL.work_crawler({
 			// 先檢查"章"，預防有"第?卷 第?章"。
 			|| book_chapter.match(/第 *(\d{1,2})(?:[^卷篇]|$)/)
 			// e.g., 永夜君王
-			|| book_chapter.match(/(?:[\s《]|^)[章節](\d{1,4})(?:[\s》]|$)/),
+			|| book_chapter.match(/(?:^|[\n\s《])[章節](\d{1,4})(?:[\s》]|$)/),
 			//
 			has_part_title ? 40 : 4)
 			//
 			|| book_chapter_is_OK(
+			// e.g., 史上最強師兄 "1836.無盡之道（大結局！）"
+			// "280 燕趙歌的三句話"
+			book_chapter.match(/(?:^|[^\d])(\d{1,4})[章節. ]/)
 			//
-			book_chapter.match(/(?:^|[^\d])(\d{1,4})[章節]/)
-			//
-			|| book_chapter.match(/(?:第|^) *(\d{1,2})(?:$|[^卷篇\d])/))) {
+			|| book_chapter.match(/(?:^|[\n第]) *(\d{1,2})(?:$|[^卷篇\d])/))) {
 				// CeL.log('有章節標題: ' + chapter_title + '\n ' + _chapter_title);
 				if (!chapter_title) {
 					// assert: !!chapter_title===false
@@ -601,21 +611,17 @@ crawler = new CeL.work_crawler({
 				// recover post status
 				text = post_status + '<br />\n' + text;
 			}
+			text = text.trim();
 
-			if (index === matched_list.length - 2) {
-				this.last_chapter_title = chapter_title;
-				this.last_chapter_hash = matched_list[index][1];
-				this.last_chapter_text = text;
-			} else if (index === 0
-			//
-			&& this.last_chapter_title === chapter_title
-			//
-			&& this.last_chapter_hash === matched_list[index][1]
-			//
+			if (this.last_chapter_title === chapter_title
+			// && this.last_chapter_hash === matched_list[index][1]
 			&& this.last_chapter_text === text) {
 				CeL.log('偵測到重複章節，將跳過: ' + chapter_title);
 				continue;
 			}
+			this.last_chapter_title = chapter_title;
+			// this.last_chapter_hash = matched_list[index][1];
+			this.last_chapter_text = text;
 
 			this.add_ebook_chapter(work_data, work_data.book_chapter_count, {
 				title : chapter_title,
