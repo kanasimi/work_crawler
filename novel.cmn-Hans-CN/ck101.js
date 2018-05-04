@@ -127,8 +127,8 @@ PATTERN_START_QUOTE = /<div class="quote"><blockquote>([\s\S]*?)<\/blockquote><\
 //
 PATTERN_POST_STATUS = /^(<i class="pstatus">.+<\/i>)(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)*/i,
 // 正規的標題形式。 /g for 凡人修仙之仙界篇
-// [ all, tag name, chapter_title ]
-PATTERN_chapter_title = /^<(strong|font|b|h2)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>/g,
+// [ all, tag name, chapter_title, space ]
+PATTERN_chapter_title = /^<(strong|font|b|h2)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>((?:[\s\n]|<br[^<>]*>)*)/g,
 //
 crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
@@ -479,14 +479,16 @@ crawler = new CeL.work_crawler({
 			var chapter_title = [], first_line, _chapter_title;
 
 			text = text.replace_till_stable(PATTERN_chapter_title, function(
-					all, tag_attributes, title) {
+					all, tag_name, _chapter_title, space) {
 				first_line = all;
-				chapter_title.push(get_label(title));
+				chapter_title.push(get_label(_chapter_title), space ? space
+						.includes('\n')
+						|| space.includes('<br') ? '\n' : ' ' : '');
 				return '';
 			});
 			// console.log(chapter_title);
 			// console.log(text);
-			chapter_title = chapter_title.join('\n');
+			chapter_title = chapter_title.join('');
 
 			if (chapter_title) {
 				text = text
