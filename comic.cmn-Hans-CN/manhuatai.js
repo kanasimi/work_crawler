@@ -92,16 +92,15 @@ crawler = new CeL.work_crawler({
 		}
 		if (work_data.chapter_list.length > 1) {
 			// 轉成由舊至新之順序。
-			work_data.chapter_list.reverse();
+			work_data.inverted_order = true;
 		} else {
-			// 嘗試用數字的方法一個一個try。
 			// e.g., http://www.manhuatai.com/faqishaonv/99.html
 			// http://www.kanman.com/27965/99.html
 			work_data.trying = true;
-			// 檢查到第300章都還沒有內容就放棄。
+			CeL.info('嘗試用數字遍歷的方法一個一個測試是否能讀取。檢查到第300章都還沒有內容就放棄。');
 			for (var i = 1; i < 300; i++) {
 				work_data.chapter_list.push({
-					url : i + '.html'
+					url : '/' + work_data.id + '/' + i + '.html'
 				});
 			}
 		}

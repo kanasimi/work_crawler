@@ -99,7 +99,7 @@ catalog_directory = {
 	// 一般コミック
 	comic : [ 'comic,一般コミック,画集', 'c' ],
 	comic_sub : {
-		// 少女漫画
+		// 少女漫画, Teens' Love 輕熟女漫畫
 		shojo_manga : '_Sho-comi,少女コミック,一般コミック・少女,百合姫',
 		artbook : '_イラスト,画集,Visual Book,Art Work,Artbook',
 		CG_no_title : '_イラスト,画集,Visual Book,Art Work,Artbook/_no title',

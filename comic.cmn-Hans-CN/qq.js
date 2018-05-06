@@ -49,7 +49,7 @@ var crawler = new CeL.work_crawler({
 		return [ id_list, id_data ];
 	},
 	convert_id : {
-		// 篩出今日限免 free today. 2017/8/15 起取消了今日限免
+		// 篩出今日限免 free today 本日免費. 2017/8/15 起取消了今日限免
 		// e.g., `echo 今日限免： && node qq free`
 		free : function(insert_id_list) {
 			var _this = this;
