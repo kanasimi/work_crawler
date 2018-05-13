@@ -128,7 +128,7 @@ PATTERN_START_QUOTE = /<div class="quote"><blockquote>([\s\S]*?)<\/blockquote><\
 PATTERN_POST_STATUS = /^(<i class="pstatus">.+<\/i>)(?:[\s\n]+|&nbsp;|<(?:br|hr)[^<>]*>)*/i,
 // 正規的標題形式。 /g for 凡人修仙之仙界篇
 // [ all, tag name, chapter_title, space ]
-PATTERN_chapter_title = /^<(strong|font|b|h2)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>((?:[\s\n]|<br[^<>]*>)*)/g,
+PATTERN_chapter_title = /^<(strong|font|b|h2)(?:\s[^<>]*)?>([\s\S]{1,120}?)<\/\1>((?:[\s\n]|<br(?:\s[^<>]*)?>)*)/g,
 //
 crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook

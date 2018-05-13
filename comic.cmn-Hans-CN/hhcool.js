@@ -26,7 +26,9 @@ var crawler = new CeL.work_crawler({
 	// skip_error : true,
 
 	// one_by_one : true,
-	base_URL : 'http://www.hhcool.com/',
+	// base_URL : 'http://www.hhcool.com/',
+	// 2018/4/27? 汗汗酷漫更改域名。最後一次存取: 2018/4/27 14:18
+	base_URL : 'http://www.hhimm.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'comic/?act=search&st=',
