@@ -39,6 +39,13 @@ crawler = new CeL.work_crawler({
 		} ];
 	},
 	parse_search_result : function(html, get_label) {
+		if (html.includes('<span class="hottext">最新章节：</span>')) {
+			// 只有一個作品完全符合，引導到了作品資訊頁面。
+			var matched = html.match(/ href="[^<>"]+?\/\d{1,2}\/(\d{1,5})\/"/);
+			return [ [ matched[1] ],
+					[ get_label(html.between('<h1>', '</h1>')) ] ];
+		}
+
 		html = html.between('<div id="centerm">', '</div>').between(
 				'<div id="content">');
 		// test: 吞噬星空,百煉成神,不存在作品
