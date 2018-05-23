@@ -120,21 +120,41 @@ var crawler = new CeL.work_crawler({
 	},
 
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
+		var part_title = [], sub_title,
 		// <div class="widget-episodeBody js-episode-body" ...>
-		var part_title = [];
+		header = html.between('<header id="contentMain-header">', '</header>'),
+		/**
+		 * 2018/5/15 kakuyomu 調整了標題的HTML原始碼格式
+		 * 
+		 * <code>
 
-		html.between('<p id="globalHeader-closeButton"', '</ul>')
-		//
-		.replace(/<li><span title="([^"]+)">/g, function(all, t) {
-			part_title.push(get_label(t));
-			return all;
-		});
+		<header id="contentMain-header">
+		<p id="contentMain-header-workTitle" class="js-vertical-composition-item">__workTitle__</p>
+		<p id="contentMain-header-author">__author__</p>
+
+		<p class="chapterTitle level1 js-vertical-composition-item"><span>__level1Title__</span></p>
+		<p class="chapterTitle level2 js-vertical-composition-item"><span>__level2Title__</span></p>
+		<p class="widget-episodeTitle js-vertical-composition-item">__episodeTitle__</p>
+		</header>
+
+		</code>
+		 */
+		PATTERN_title = /<p ([^<>]+)>([\s\S]+?)<\/p>/g, matched;
+
+		while (matched = PATTERN_title.exec(header)) {
+			if (matched[1].includes('Title')) {
+				var title = get_label(matched[2]);
+				if (matched[1].includes('episodeTitle')) {
+					sub_title = title;
+				} else {
+					part_title.push(title);
+				}
+			}
+		}
 
 		this.add_ebook_chapter(work_data, chapter, {
 			title : part_title,
-			sub_title : html
-			//
-			.between('<p class="widget-episodeTitle">', '</p>'),
+			sub_title : sub_title,
 			text : html.between('episodeBody', '</div>').between('>')
 		});
 	}
