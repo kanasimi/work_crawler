@@ -10,7 +10,11 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var crawler = new CeL.work_crawler({
+// e.g., <div class="book-info"> <span class="info-attr">状态</span>
+// <p class="info-text">一周三更</p> </div>
+var PATTERN_work_data = /<span class="info-attr"[^<>]*>([^<>]+)<\/span>[\s\n]*<p class="info-text">([^<>]+)<\/p>/g,
+//
+crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 
@@ -23,19 +27,21 @@ var crawler = new CeL.work_crawler({
 	base_URL : 'https://www.dajiaochongmanhua.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'search/index/search.html?str=',
+	search_URL : 'search/?str=',
 	parse_search_result : function(html, get_label) {
+		console.log(html)
 		var id_list = [], id_data = [];
-		html.each_between('<div class="ret_booktails">', '</div>',
+		html.each_between('<li class="sh-rt-list">', '</li>',
 		/**
 		 * e.g., <code>
-		<div class="ret_booktails"><div class="clearfix"><a href="/detail/?bookid=4052" target="_blank"><p class="ret_bkname">校花大作战</p></a>
+		<a href="/comic/248" target="_blank" search="title"> <i class="sh-rt-bn text-ignore">我的男神</i> </a>
 		</code>
 		 */
 		function(text) {
-			id_list.push(+text.between('<a href="/detail/?bookid=', '"'));
-			id_data.push(get_label(text.between('<p class="ret_bkname">',
-					'</p>')));
+			var matched = text
+					.match(/<a href="\/comic\/(\d+)"[^<>]*?>([\s\S]+?)<\/a>/);
+			id_list.push(+matched[1]);
+			id_data.push(get_label(matched[2]));
 		});
 		return [ id_list, id_data ];
 	},
@@ -45,47 +51,54 @@ var crawler = new CeL.work_crawler({
 		return 'detail/?bookid=' + work_id;
 	},
 	parse_work_data : function(html, get_label, exact_work_data) {
-		var data = html.between('<div class="detail-book-info">',
-				'<div class="book-section"'),
+		var data = html.between('<div class="wrapper detail-main">',
+				'<div class="book-chapter'),
 		//
 		work_data = {
 			// 必要屬性：須配合網站平台更改。
+			title : get_label(data.between('<h3 class="book-name">', '</h3>')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			status : get_label(data.between('<p class="detail-book-type">',
-					'</b>'))
+			last_update : html.between('<p class="chapter-date">', '</p>')
+					.replace(/ *更新/, ''),
+			星星 : data.between('<p class="star-number">', '</p>')
 		};
 		exact_work_data(work_data, html);
-		exact_work_data(work_data, data,
-		// e.g., "<p class="detail-book-author">作者</p>"
-		/<p class="detail-book-([^<>"]+)">([\s\S]*?)<\/p>/g);
-		exact_work_data(work_data, data.between('<p class="detail-book-type">',
-				'</p>'),
-		// e.g.,
-		// "<b>一周三更</b><i>上次更新</i><b>2018-03-16</b><i>点击</i><b>9.8亿</b><i>人气</i><b>5.2亿</b>"
-		/<i>(.+?)<\/i><b>(.*?)<\/b>/g);
+		exact_work_data(work_data, data, PATTERN_work_data);
 
 		Object.assign(work_data, {
-			title : work_data.name,
-			last_update : work_data.上次更新
+			status : work_data.状态,
+		// description : work_data.介绍,
+		// last_update : work_data.上次更新
 		});
 
 		return work_data;
 	},
-	pre_get_chapter_list_via_api : function(callback, work_data, html) {
+	// pre_get_chapter_list_via_api
+	pre_get_chapter_list : function(callback, work_data, html) {
+		if (html.startsWith('获取数据失败')) {
+			CeL.error(this.id + ': ' + (work_data.title || work_data.id) + ': '
+			// e.g., 三层世界
+			+ '作品不存在/已被刪除');
+			// delete old cache
+			// delete work_data.chapter_list;
+			callback();
+			return;
+		}
+
 		// 用這個方法獲得的資訊比較完整。但是必須取得多個檔案。
 		var _this = this, last_list_NO = html.between(
-				'<div class="section-tag-list">', '</div>').match(
-				/<li index="(\d+)">[\s\S]+?<\/li>/g);
-		last_list_NO = +last_list_NO.pop().match(
-				/<li index="(\d+)">[\s\S]+?<\/li>/)[1];
+				'<ul class="chapter-select"', '</ul>').match(
+				/<li index="(\d+)"[^<>]*?>[^<>]+?<\/li>[^<>]*?$/);
+		last_list_NO = last_list_NO ? +last_list_NO[1] : 1;
 
 		work_data.chapter_list = [];
 
 		CeL.run_serial(function(run_next, item, index, list) {
 			CeL.get_URL(_this.base_URL + 'chaptshow?bookid=' + work_data.id
-					+ '&start=' + item + '&userid=0&view_type=0&_='
-					+ Date.now(), function(XMLHttp) {
+					+ '&start=' + item + '&view_type=0&_=' + Date.now(),
+			//
+			function(XMLHttp) {
 				var chapter_list_token = JSON.parse(XMLHttp.responseText);
 				work_data.chapter_list.append(chapter_list_token.data.data);
 				run_next();
@@ -96,12 +109,24 @@ var crawler = new CeL.work_crawler({
 
 		}, last_list_NO, 1, function() {
 			work_data.chapter_list.forEach(function(chapter_data) {
-				chapter_data.url = 'read/?cid=' + chapter_data.cid;
+				chapter_data.url = 'chapter/' + chapter_data.cid;
+				chapter_data.title = chapter_data.name;
 			});
 			callback();
 		});
 	},
-	pre_get_chapter_list : function(callback, work_data, html, get_label) {
+	pre_get_chapter_list_201804 :
+	// 20180522 改版失效
+	function(callback, work_data, html, get_label) {
+		if (html.startsWith('{"error":')) {
+			html = JSON.parse(html);
+			CeL.error(this.id + ': ' + (work_data.title || work_data.id) + ': '
+			// e.g., 三层世界
+			+ (html.error === 5 ? '作品不存在/已被刪除' : html.messages || 'error'));
+			callback();
+			return;
+		}
+
 		var PATTERN_chapter_url = / href="\/(read\/\?cid=\d+)"/,
 		//
 		first_cid = html.between('<div class="section-catalog">').match(
@@ -135,14 +160,13 @@ var crawler = new CeL.work_crawler({
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
-		chapter_data.image_list = JSON.parse(
-				'[' + html.between(' urls: [', ']').replace(/'/g, '"') + ']')
-		//
-		.map(function(url) {
-			return {
-				url : url
-			}
-		});
+		try {
+			chapter_data.image_list = JSON.parse(html.between(
+					'var IMAGE_LIST_URL =', ';').replace(/'/g, '"'));
+		} catch (e) {
+			CeL.error(html.length < 200 ? html : e);
+			return;
+		}
 
 		return chapter_data;
 	}
