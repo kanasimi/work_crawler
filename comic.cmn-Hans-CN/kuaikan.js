@@ -90,7 +90,8 @@ var crawler = new CeL.work_crawler({
 			image_list : []
 		}, PATTERN_IMAGE = / data-kksrc="([^<>"]+)"([^<>]+)/g, matched;
 
-		html = html.between(' comic-imgs">', '</div>');
+		// 201805 快看漫画改版。
+		html = html.between(' comic-imgs"', '</div>');
 
 		while (matched = PATTERN_IMAGE.exec(html)) {
 			var title = matched[2].match(/title="([^<>"]+)"/), image_data = {
