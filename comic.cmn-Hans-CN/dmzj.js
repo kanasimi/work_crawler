@@ -169,7 +169,8 @@ var crawler = new CeL.work_crawler({
 			var pages;
 			eval(code.replace('var ', ''));
 
-			pages = JSON.parse(pages.replace(/\r\n/g, '|'));
+			pages = JSON.parse(pages.replace(/\r\n/g, '|')
+					.replace(/\t/g, '\\t'));
 			if (pages.page_url) {
 				// is_manhua===false
 				pages = pages.page_url.split('|');
