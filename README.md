@@ -45,6 +45,7 @@
 | [恋上你看书网](http://www.630book.la/) | 630book.js | |
 | [飘天文学](http://www.piaotian.com/) | piaotian.js | NOT PTCMS |
 | [落霞小说网](http://www.luoxia.com/) | luoxia.js | WordPress，數量少、速度較慢但品質較高，較少錯字和自我審查。 |
+| [稻草人书屋](http://www.daocaorenshuwu.com/) | daocaoren.js | 有些非網路小說的書 |
 | [卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180) | ck101.js | Discuz! X3 |
 
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
@@ -66,7 +67,7 @@
 | [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。 |
 | [733漫画网](http://www.733mh.com/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
-| [爱漫画](http://www.2manhua.com/) | 2manhua.js | 許多作品似乎從2017/9/3起就沒有更新。 |
+| [爱漫画](http://www.2manhua.com/) | 2manhua.js | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接。 |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2017/10/19 未復原。 |

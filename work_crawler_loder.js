@@ -106,10 +106,10 @@ if (is_CLI && !work_id && process.mainModule
 			+ options_arguments);
 	CeL.log('options:'
 	//
-	+ Object.keys(CeL.work_crawler.prototype.import_arg_hash)
+	+ Object.entries(CeL.work_crawler.prototype.import_arg_hash)
 	//
-	.map(function(key) {
-		return '\n	' + key;
+	.map(function(pair) {
+		return '\n	' + pair[0] + '	(' + pair[1] + ')';
 	}).join(''));
 	process.exit();
 }

@@ -132,7 +132,7 @@ crawler = new CeL.work_crawler({
 		}
 	},
 
-	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
+	// 取得每一個章節的內容與各個影像資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 在取得小說章節內容的時候，若發現有章節被目錄漏掉，則將之補上。
 		this.check_next_chapter(work_data, chapter_NO, html,
