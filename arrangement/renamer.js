@@ -194,12 +194,14 @@ function get_file_list(callback, id) {
 	this.id = id;
 	// console.log(this);
 	// console.log('get_file_list: ' + id);
+	var file_name = base_directory + id.replace(/\//g, '-') + '.html';
+	// console.log(file_name);
 	CeL.get_URL_cache(base_URL + id,
 	//
 	parse_file_list.bind(this), {
 		// reget : true,
 		get_URL_options : get_URL_options,
-		file_name : base_directory + id.replace(/\//g, '-') + '.html'
+		file_name : file_name
 	});
 }
 
@@ -211,12 +213,13 @@ function for_file_page(html) {
 	if (!matched) {
 		CeL.error(name + '\n' + html);
 	}
+	var file_name = base_directory + id.replace(/\//g, '-') + '.list.htm';
 	CeL.get_URL_cache(base_URL + '?page=view&tid=' + id + '&' + matched[0],
 	//
 	parse_file_list, {
 		// reget : true,
 		get_URL_options : get_URL_options,
-		file_name : base_directory + id.replace(/\//g, '-') + '.list.htm'
+		file_name : file_name
 	});
 }
 
@@ -257,10 +260,15 @@ function parse_file_list(html, is_cache, got_torrent) {
 			'>');
 	if (!file_list_html) {
 		// console.log(arguments[0]);
-		CeL.error('parse_file_list: It seems the shame was changed!');
-		CeL.log(html);
+		if (/<title>404 [^<>]*<\/title>/.test(html)) {
+			typeof this.callback === 'function' && this.callback();
+		} else {
+			CeL.error('parse_file_list: It seems the shame was changed!');
+			CeL.log(html);
+		}
 		return;
 	}
+
 	if (!is_cache) {
 		this.new_files++;
 	}
