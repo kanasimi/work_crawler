@@ -23,7 +23,10 @@ var crawler = new CeL.work_crawler({
 	skip_error : true,
 
 	// one_by_one : true,
-	base_URL : 'http://www.733mh.com/',
+
+	// 2018/6/4 6:34 最後一次成功存取 http://www.733mh.com/
+	// 之後更改域名
+	base_URL : 'http://www.733mh.net/',
 	charset : 'gb2312',
 
 	// 取得伺服器列表。
@@ -43,7 +46,7 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'http://www.733mh.com/e/search/'
+	search_URL : 'http://www.733mh.net/e/search/'
 			+ '?searchget=1&show=title,player,playadmin,pinyin&keyboard=',
 	parse_search_result : function(html) {
 		var id_list = [], id_data = [], matched, PATTERN =
@@ -95,6 +98,7 @@ var crawler = new CeL.work_crawler({
 		</code>
 		 */
 		work_data.chapter_list = [];
+		work_data.inverted_order = true;
 		var matched,
 		// [ , chapter_url, chapter_title ]
 		PATTERN_chapter = /<a href="(\/mh\/[^"]+)" title="([^"]+)"/g;
@@ -103,10 +107,6 @@ var crawler = new CeL.work_crawler({
 				url : matched[1],
 				title : get_label(matched[2])
 			});
-		}
-		if (work_data.chapter_list.length > 1) {
-			// 轉成由舊至新之順序。
-			work_data.chapter_list.reverse();
 		}
 	},
 
@@ -122,7 +122,18 @@ var crawler = new CeL.work_crawler({
 		}
 
 		var chapter_data = html.between('packed="', '"');
-		if (!chapter_data || !(chapter_data = decode(chapter_data))) {
+		if (chapter_data) {
+			chapter_data = decode(chapter_data);
+		} else if (chapter_data = html.between('photosr[1] ="',
+				'var maxpages=photosr.length-1;')) {
+			// e.g., http://www.733mh.net/mh/18102/465176.html
+			var photosr = [];
+			eval('photosr[1] ="' + chapter_data);
+			photosr.shift();
+			chapter_data = photosr;
+		}
+		if (!chapter_data) {
+			CeL.log('無法解析資料！');
 			return;
 		}
 		// console.log(JSON.stringify(chapter_data));
