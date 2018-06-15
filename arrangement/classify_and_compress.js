@@ -122,11 +122,11 @@ catalog_directory = {
 	},
 	game : [ '_game,ゲーム,同人', 'g' ],
 	game_sub : {
-		doujin : '_DOUJIN,同人',
-		cosplay : '_cosplay,コスプレ',
-		game_CG : '_CG,画集',
-		game_music : '_music',
-		general_game : '_一般ゲーム'
+		doujin : '!DOUJIN,同人',
+		cosplay : '!cosplay,コスプレ',
+		game_CG : '!CG,画集',
+		game_music : '!music',
+		general_game : '!一般ゲーム'
 	},
 	tool : [ 'Tools', 't' ],
 
@@ -250,7 +250,7 @@ function check_fso(fso_name) {
 	}
 	// TODO: 這會漏掉只有空目錄的情況。
 
-	var image_count = 0, exe_count = 0, iso_count = 0, music_count = 0, anime_count = 0, _____padding_file_count = 0, non_zero_size_count = 0,
+	var image_count = 0, exe_count = 0, iso_count = 0, music_count = 0, anime_count = 0, archive_count = 0, _____padding_file_count = 0, non_zero_size_count = 0,
 	//
 	sub_files = [], sub_directories = [], sub_sub_files_count = 0,
 	// 最大的檔案size
@@ -268,12 +268,14 @@ function check_fso(fso_name) {
 			image_count++;
 		} else if (PATTERN_executable_file.test(sub_fso_name)) {
 			exe_count++;
-		} else if (/\.(?:iso|mdf|mds)$/i.test(sub_fso_name)) {
+		} else if (/\.(?:cue|iso|mdf|mds|bin)$/i.test(sub_fso_name)) {
 			iso_count++;
-		} else if (/\.(?:mp3|flac|ape)$/i.test(sub_fso_name)) {
+		} else if (/\.(?:cue|mp3|flac|ape|wav)$/i.test(sub_fso_name)) {
 			music_count++;
 		} else if (/\.(?:avi|mp4|mkv|ass)$/i.test(sub_fso_name)) {
 			anime_count++;
+		} else if (/\.(?:zip|rar|7z|lzh)$/i.test(sub_fso_name)) {
+			archive_count++;
 		}
 	}
 
@@ -325,7 +327,8 @@ function check_fso(fso_name) {
 		music : music_count,
 		anime : anime_count,
 		zero_size : non_zero_size_count,
-		image : image_count
+		image : image_count,
+		archive : archive_count
 	};
 	// console.log(directory_path);
 	// console.log(fso_status.counter);
