@@ -22,6 +22,11 @@ var crawler = new CeL.work_crawler({
 
 	base_URL : 'http://www.daocaorenshuwu.com/',
 
+	// 規範 work id 的正規模式；提取出引數（如 URL）中的作品id 以回傳。
+	extract_work_id : function(work_information) {
+		return /^[a-z_\d]+$/.test(work_information) && work_information;
+	},
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'plus/search.php?q=',
 	parse_search_result : function(html, get_label) {
@@ -34,11 +39,6 @@ var crawler = new CeL.work_crawler({
 			}
 		});
 		return [ id_list, id_data ];
-	},
-
-	// 提取出引數（如 URL）中的作品ID 以回傳。
-	extract_work_id : function(work_information) {
-		return /^[a-z_\d]+$/.test(work_information) && work_information;
 	},
 
 	// 取得作品的章節資料。 get_work_data()

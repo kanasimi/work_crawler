@@ -13,7 +13,7 @@ site_type_description = {
 //
 download_sites_set = {
 	'comic.cmn-Hans-CN' : {
-		'2manhua' : '爱漫画',
+		// '2manhua' : '爱漫画',
 		'163' : '网易漫画',
 		'733dm' : '733动漫网',
 		'733mh' : '733漫画网',
@@ -36,6 +36,7 @@ download_sites_set = {
 		'630book' : '恋上你看书网',
 		ck101 : '卡提諾論壇 小說頻道',
 		luoxia : '落霞小说网',
+		kanunu : '努努书坊',
 		piaotian : '飘天文学'
 	},
 	'novel.ja-JP' : {

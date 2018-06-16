@@ -47,7 +47,7 @@ crawler = new CeL.work_crawler({
 	// site_name : '',
 	base_URL : 'http://www.luoxia.com/',
 
-	// 提取出引數（如 URL）中的作品ID 以回傳。
+	// 規範 work id 的正規模式；提取出引數（如 URL）中的作品id 以回傳。
 	extract_work_id : function(work_information) {
 		return /^[a-z\-]+$/.test(work_information) && work_information;
 	},
