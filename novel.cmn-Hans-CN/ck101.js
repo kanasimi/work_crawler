@@ -384,10 +384,12 @@ crawler = new CeL.work_crawler({
 		matched, matched_list = [];
 
 		// 處理實際頁數與之前得到頁數不同的問題。
+		if (raw_data.pagination < chapter_NO
 		// 照理 ((raw_data.pagination === chapter_NO))
-		if (raw_data.pagination < chapter_NO && pageEnd < chapter_NO) {
+		&& raw_data.pagination === raw_data.pageEnd) {
 			CeL.warn('parse_chapter_data: 預計取得第' + chapter_NO + '頁，但實際得到第'
-					+ raw_data.pagination + '頁，跳過本頁。');
+			//
+			+ raw_data.pagination + '/' + raw_data.pageEnd + '頁，跳過本頁。');
 			return;
 		}
 
