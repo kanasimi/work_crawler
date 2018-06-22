@@ -29,7 +29,6 @@ crawler = new CeL.work_crawler({
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search/?str=',
 	parse_search_result : function(html, get_label) {
-		console.log(html)
 		var id_list = [], id_data = [];
 		html.each_between('<li class="sh-rt-list">', '</li>',
 		/**

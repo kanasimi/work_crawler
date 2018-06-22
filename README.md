@@ -59,7 +59,7 @@
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** 2017/8/15 起取消了今日限免 |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
-| [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | |
+| [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | |
 | [看漫画](http://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/) |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
