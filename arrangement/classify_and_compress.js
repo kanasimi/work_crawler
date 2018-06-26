@@ -560,7 +560,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 	}
 
 	if (fso_status.counter.anime / fso_status.counter.sub_sub_files > .4) {
-		move_to('anime');
+		move_to('anime_OK');
 		return;
 	}
 
