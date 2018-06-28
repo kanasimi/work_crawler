@@ -521,7 +521,7 @@ crawler = new CeL.work_crawler({
 
 			var matched = book_chapter
 			// 第一部 聖詠之城卷 第二十八章
-			.match(/(?:^|[\n第]) {0,2}(\d{1,2}) {0,2}[卷篇](?:[^完]|$)/)
+			.match(/(?:^|[\n第]) {0,2}(\d{1,2}) {0,2}[卷篇集](?:[^完]|$)/)
 			// e.g., 永夜君王, 特拉福買家俱樂部
 			|| book_chapter.match(/(?:^|[\n\s《])卷(\d{1,2})(?:[\s》]|第\d|$)/),
 			// e.g., 雪鷹領主, 凡人修仙傳
@@ -542,7 +542,7 @@ crawler = new CeL.work_crawler({
 			//
 			&& book_chapter_is_OK(book_chapter.match(/(\d+) *[章節]/)
 			// 先檢查"章"，預防有"第?卷 第?章"。
-			|| book_chapter.match(/第 *(\d{1,2})(?:[^卷篇]|$)/)
+			|| book_chapter.match(/第 *(\d{1,2})(?:[^卷篇集]|$)/)
 			// e.g., 永夜君王
 			|| book_chapter.match(/(?:^|[\n\s《])[章節](\d{1,4})(?:[\s》]|$)/),
 			//
@@ -553,7 +553,7 @@ crawler = new CeL.work_crawler({
 			// "280 燕趙歌的三句話"
 			book_chapter.match(/(?:^|[^\d])(\d{1,4})[章節. ]/)
 			//
-			|| book_chapter.match(/(?:^|[\n第]) *(\d{1,2})(?:$|[^卷篇\d])/))) {
+			|| book_chapter.match(/(?:^|[\n第]) *(\d{1,2})(?:$|[^卷篇集\d])/))) {
 				// CeL.log('有章節標題: ' + chapter_title + '\n ' + _chapter_title);
 				if (!chapter_title) {
 					// assert: !!chapter_title===false
