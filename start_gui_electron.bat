@@ -1,1 +1,1 @@
-node_modules\.bin\electron . || %HOMEPATH%\node_modules\.bin\electron .
+node_modules\.bin\electron . || %USERPROFILE%\node_modules\.bin\electron .

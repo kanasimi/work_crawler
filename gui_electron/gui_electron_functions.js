@@ -32,7 +32,7 @@ download_sites_set = {
 		qidian : '起点中文网',
 		'23us' : '顶点小说',
 		'81xsw' : '八一中文网',
-		'88dushu' : '八八读书网',
+		'88dus' : '八八读书网',
 		'630book' : '恋上你看书网',
 		ck101 : '卡提諾論壇 小說頻道',
 		luoxia : '落霞小说网',
@@ -50,6 +50,7 @@ download_sites_set = {
 // 下載選項。有順序。常用的排前面。
 download_options_set = {
 	recheck : '從頭檢測所有作品之所有章節與所有圖片。',
+	start_chapter : '將開始/接續下載的章節編號。必須要配合 .recheck。',
 	// 重新擷取用的相關操作設定。
 	regenerate : '章節數量無變化時依舊利用 cache 重建資料(如ebook)。',
 	reget_chapter : '重新取得每個所檢測的章節內容。',
@@ -109,13 +110,43 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 
 	var options_nodes = [];
 	for ( var download_option in download_options_set) {
-		download_options_nodes[download_option] = CeL.new_node({
+		var arg_types = CeL.work_crawler.prototype
+		//
+		.import_arg_hash[download_option],
+		//
+		className = 'download_options', input_box = '';
+		if (arg_types === 'number' || arg_types === 'string') {
+			className += ' non_select';
+			input_box = {
+				input : null,
+				id : download_option + '_input',
+				C : 'type_' + arg_types,
+				type : arg_types,
+				onchange : function() {
+					var crawler = get_crawler();
+					if (!crawler) {
+						return;
+					}
+					if (this.type === 'number') {
+						if (this.value)
+							crawler[this.parentNode.title] = +this.value;
+					} else {
+						crawler[this.parentNode.title] = this.value;
+					}
+				}
+			};
+		}
+
+		var option_object = {
 			span : [ {
 				b : download_option
-			}, ':', download_options_set[download_option] ],
-			C : 'download_options',
-			title : download_option,
-			onclick : function() {
+			}, ':', input_box, download_options_set[download_option], ' (',
+					arg_types, ')' ],
+			C : className,
+			title : download_option
+		};
+		if (!input_box) {
+			option_object.onclick = function() {
 				var crawler = get_crawler();
 				if (!crawler) {
 					return;
@@ -124,8 +155,10 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 				CeL.set_class(this, 'selected', {
 					remove : !crawler[this.title]
 				});
-			}
-		});
+			};
+		}
+
+		download_options_nodes[download_option] = CeL.new_node(option_object);
 		options_nodes.push({
 			div : download_options_nodes[download_option],
 			C : 'click_item'
@@ -145,10 +178,20 @@ function reset_site_options() {
 	// re-draw download options
 	var crawler = get_crawler();
 	for ( var download_option in download_options_nodes) {
-		var download_options_node = download_options_nodes[download_option];
+		var download_options_node = download_options_nodes[download_option],
+		//
+		arg_types = CeL.work_crawler.prototype
+		//
+		.import_arg_hash[download_option];
 		CeL.set_class(download_options_node, 'selected', {
-			remove : !crawler[download_option]
+			remove : arg_types === 'number' || arg_types === 'string'
+					|| !crawler[download_option]
 		});
+		if (arg_types === 'number' || arg_types === 'string') {
+			document.getElementById(download_option + '_input').value = crawler[download_option]
+					|| crawler[download_option] === 0 ? crawler[download_option]
+					: '';
+		}
 	}
 }
 
@@ -159,6 +202,8 @@ function get_crawler(just_test) {
 		}
 		return;
 	}
+
+	CeL.toggle_display('download_options_panel', 'visible');
 
 	var site_id = site_used, crawler = base_directory + site_id + '.js';
 	CeL.debug('當前路徑: ' + process.cwd(), 'get_crawler');
