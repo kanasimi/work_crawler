@@ -48,6 +48,7 @@ download_sites_set = {
 	}
 },
 // 下載選項。有順序。常用的排前面。
+// @see CeL.application.net.work_crawler
 download_options_set = {
 	recheck : '從頭檢測所有作品之所有章節與所有圖片。',
 	start_chapter : '將開始/接續下載的章節編號。必須要配合 .recheck。',
@@ -58,14 +59,14 @@ download_options_set = {
 	archive_images : '漫畫下載完畢後壓縮圖像檔案。',
 
 	// 容許錯誤用的相關操作設定。
-	// MAX_ERROR_RETRY : '',
+	MAX_ERROR_RETRY : '可容許的錯誤次數。',
 	allow_EOI_error : '當圖像不存在 EOI (end of image) 標記，或是被偵測出非圖像時，依舊強制儲存檔案。',
 	skip_error : '忽略/跳過圖像錯誤。',
 	skip_chapter_data_error : '當無法取得 chapter 資料時，直接嘗試下一章節。',
 
-	// main_directory : '',
-	// user_agent : '',
-	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。'
+	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。',
+	main_directory : '下載檔案儲存目錄路徑。圖片檔+紀錄檔下載位置。',
+	user_agent : '瀏覽器識別'
 }, download_site_nodes = [], download_options_nodes = {};
 download_site_nodes.link_of_site = {};
 download_site_nodes.node_of_id = {};
@@ -78,6 +79,9 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	// CeL.set_debug();
 	// CeL.debug('Log panel setted.');
 	CeL.Log.clear();
+
+	CeL.work_crawler.prototype.user_agent = navigator.userAgent.replace(
+			/(?:work_crawler|Electron)[\/.\d ]*/ig, '');
 
 	var site_nodes = [];
 	for ( var site_type in download_sites_set) {
@@ -180,9 +184,7 @@ function reset_site_options() {
 	for ( var download_option in download_options_nodes) {
 		var download_options_node = download_options_nodes[download_option],
 		//
-		arg_types = CeL.work_crawler.prototype
-		//
-		.import_arg_hash[download_option];
+		arg_types = CeL.work_crawler.prototype.import_arg_hash[download_option];
 		CeL.set_class(download_options_node, 'selected', {
 			remove : arg_types === 'number' || arg_types === 'string'
 					|| !crawler[download_option]
