@@ -206,7 +206,7 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 // -----------------------------------------------------------------
 
 // 首先整個掃描一次，篩選出需要處理的目錄，放在process_queue。
-var process_queue = [], PATTERN_executable_file = /\.(?:exe)$/i;
+var process_queue = [], PATTERN_executable_file = /\.(?:exe|dll)$/i;
 fso_name_list.forEach(check_fso);
 
 function check_fso(fso_name) {

@@ -110,7 +110,11 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 			});
 		}
 	}
-	CeL.new_node(site_nodes, 'download_sites_panel');
+	CeL.new_node(site_nodes, 'download_sites_list');
+
+	CeL.add_listener('click', function() {
+		CeL.toggle_display('download_sites_list');
+	}, 'download_sites_trigger');
 
 	var options_nodes = [];
 	for ( var download_option in download_options_set) {
@@ -190,9 +194,11 @@ function reset_site_options() {
 					|| !crawler[download_option]
 		});
 		if (arg_types === 'number' || arg_types === 'string') {
-			document.getElementById(download_option + '_input').value = crawler[download_option]
-					|| crawler[download_option] === 0 ? crawler[download_option]
-					: '';
+			CeL.DOM.set_text(download_option + '_input',
+			//
+			crawler[download_option] || crawler[download_option] === 0
+			//
+			? crawler[download_option] : '');
 		}
 	}
 }

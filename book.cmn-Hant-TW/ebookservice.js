@@ -29,7 +29,6 @@ $("body").empty().css({
 	overflow : 'auto'
 }).append(html.join('<br />'));
 
-
 // ---------------------------------------------------------------------------------
 // for epub
 
@@ -81,7 +80,7 @@ $("body").empty().append(html.join('<br />'));
 
 // ======================================================================================
 
-// Waiting for the page loaded, save the page,
+// Waiting for the page loaded (check network), and save the page "Save as...",
 // and then run this tool. (e.g., `node ebookservice.js S:\b\台灣雲端書庫.html`)
 
 
