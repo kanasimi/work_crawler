@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載 WEBTOON 中文官網 韓國漫畫 的工具。 Download NAVER WEBTOON comics.
+ * 批量下載 WEBTOON 中文官網 韓國漫畫 的工具。 Download NAVER WEBTOON comics. (comic.cmn-Hant-TW)
  */
 
 'use strict';
@@ -80,10 +80,7 @@ crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	chapter_list_URL : function(work_id, work_data) {
-		// chapter_list_URL 不回傳函數就會在後面加上 work_id。
-		return function() {
-			return work_data.chapter_1_url;
-		};
+		return work_data.chapter_1_url;
 	},
 	get_chapter_list : function(work_data, html) {
 		var data = html.between('<div class="episode_lst">', '</ul>'), matched;
