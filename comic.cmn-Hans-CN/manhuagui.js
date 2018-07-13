@@ -251,6 +251,8 @@ crawler = new CeL.work_crawler({
 				url : path + url + token
 			}
 		});
+		// 當一次下載上百張相片的時候，就會被封鎖IP。
+		this.one_by_one = chapter_data.image_list.length > 30;
 
 		return chapter_data;
 	}
