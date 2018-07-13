@@ -70,6 +70,7 @@
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | |
+| [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoons.js | NAVER WEBTOON 中文官網 韓國漫畫 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |
@@ -86,7 +87,17 @@
 
 ![本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/5WwL_Ap4U1n6xL1qwqwb1kJ_ZWwsOI2xZev-h9RywwzLcxWNIkcPcpGT17HfmmuykQACIWjuBhWffr7C1mwCxlVaVS2sQ0ic0cHK1OttaYdCF-BJpPtJjbvtTRX2Ssfs1OoIMlscYA=w135-h266-no)
 
-4. 在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具安裝的目錄，執行命令以下載 CeJS 程式庫：
+4. 下載 CeJS 程式庫：
+   在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下（按下<kbd>[⊞ Windows鍵](https://zh.wikipedia.org/wiki/Windows%E9%94%AE)</kbd> + <kbd>X</kbd> → 選擇"命令提示字元"），
+
+![進入命令行界面](https://lh3.googleusercontent.com/yFKRG6LTfvbJhMljgIXrEUFivGl4LRYgs0FlNBCBZ1KmwUW2paSoubLhyWGhS7S9GsHe1ef7Bt3TRyf5IHWRLdFL_SqywkPikecwlSpYtPHM6KRlyEaFWsWZqrS7DF3JzzcycnfxfQ=w2400)
+
+   進到本工具安裝的目錄，
+
+![複製本工具安裝的目錄](https://lh3.googleusercontent.com/vhs7VNQLXT_VcoHIzOMrpUlX6VYIFUsCr9fM3Jbtf9NX1H2vSh2dtkGZVp-XJg6EntlkeqfRbZfU1_niNvPapSUdF-0iPXjJx0QdB3pTObUnYB_wIDiJ0eM7FVcJGOyBAlgfmTY3pw=w2400)
+![進到本工具安裝的目錄](https://lh3.googleusercontent.com/CLfiPu0HnK9ZG7pxqPmsohl3HVhVfjOMkYxnw83DCdXbrYb1KqIvj1WstuU4HLfW2_WDj7nWjyxSMzgJhJUQY5mjRv0xMshQIsT8ZefYHKzylCa3uDnTYynB2hbhdG5Z1USoWZe11w=w2400)
+
+   執行命令以下載 CeJS 程式庫：
    ``` sh
    node _CeL.updater.node.js
    ```
@@ -157,6 +168,7 @@
    cd novel.cmn-Hans-CN && echo "via id" && node 630book 267
    cd novel.ja-JP       && node yomou 転生したらスライムだった件
    ```
+![命令行界面下執行命令](https://lh3.googleusercontent.com/r1-jB1Cmaznb5kseN97xUQyGzrsJJgek25Ifyvey8scMm311WjnjIAy-FpmiTtIVupyimDTWrVL7aI2cI7i2FRllR_QWMiLsRgF-kzDJnYMRaTRMVXrG2XkfEhHPh5Qvns0XQjROcw=w2400)
 
 2. 下載的檔案將放在設定檔 <code>work_crawler_loder.configuration.js</code> 的 <code>global.data_directory</code> 所設定的目錄下。若採[懶人安裝法](#lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
 3. 若是下載出錯，**重新執行即可接續下載**。
