@@ -95,7 +95,9 @@
 
    進到本工具安裝的目錄。
    * 若是您視窗的背景為藍色，表示您使用的可能是 [PowerShell](https://zh.wikipedia.org/wiki/Windows_PowerShell)，您應該使用這種形式的指令來切換目錄：<code style="color:#888;background-color:#008b8b;">cd "本工具安裝的目錄"</code>。
-   * 若是您視窗的背景為黑色，您應該使用這種形式的指令來切換目錄：<code>cd/d "本工具安裝的目錄"</code>（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
+   * 若是您視窗的背景為黑色，表示您使用的可能是 [命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)，您應該使用這種形式的指令來切換目錄：<code>cd/d "本工具安裝的目錄"</code>（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
+
+   下圖中示範了用[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)切換到 <code>I:\work_crawler-master</code> 的情況：
 
 ![複製本工具安裝的目錄](https://lh3.googleusercontent.com/vhs7VNQLXT_VcoHIzOMrpUlX6VYIFUsCr9fM3Jbtf9NX1H2vSh2dtkGZVp-XJg6EntlkeqfRbZfU1_niNvPapSUdF-0iPXjJx0QdB3pTObUnYB_wIDiJ0eM7FVcJGOyBAlgfmTY3pw=w2400)
 ![進到本工具安裝的目錄](https://lh3.googleusercontent.com/CLfiPu0HnK9ZG7pxqPmsohl3HVhVfjOMkYxnw83DCdXbrYb1KqIvj1WstuU4HLfW2_WDj7nWjyxSMzgJhJUQY5mjRv0xMshQIsT8ZefYHKzylCa3uDnTYynB2hbhdG5Z1USoWZe11w=w2400)
