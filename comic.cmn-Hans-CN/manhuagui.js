@@ -33,13 +33,14 @@ crawler = new CeL.work_crawler({
 	// recheck : true,
 	// one_by_one : true,
 
-	base_URL : 'http://www.manhuagui.com/',
+	base_URL : 'https://www.manhuagui.com/',
 	script_base_URL : 'https://cf.hamreus.com/scripts/',
 
 	// 2018/4: manhuagui 不允許過於頻繁的 access，會直接 ban IP。
 	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
-	// 2018/7/12 22:29:18 9s: NG
-	chapter_time_interval : 10 * 1000,
+	// 2018/7/12 22:29:18 9s: NG, ban 2 hr.
+	// 10s 在下載過300章之後一樣會 ban。
+	chapter_time_interval : 12 * 1000,
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.
