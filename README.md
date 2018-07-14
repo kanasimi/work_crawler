@@ -83,19 +83,21 @@
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
 1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](http://7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->（已經安裝過的可以跳過）
 2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可將之改名。
-3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，將此檔儲存到前面所提，本工具將安裝的標的目錄下。
+3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，將此檔儲存到前面所提到的，本工具將安裝的標的目錄 <code>work_crawler-master</code> 下。
 
 ![本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/5WwL_Ap4U1n6xL1qwqwb1kJ_ZWwsOI2xZev-h9RywwzLcxWNIkcPcpGT17HfmmuykQACIWjuBhWffr7C1mwCxlVaVS2sQ0ic0cHK1OttaYdCF-BJpPtJjbvtTRX2Ssfs1OoIMlscYA=w135-h266-no)
 
-4. 下載 CeJS 程式庫：
+4. 下載 CeJS 程式庫。在命令行界面下執行 <code>_CeL.updater.node.js</code>，詳細如以下所述：
 
-   在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下（按下<kbd>[⊞ Windows鍵](https://zh.wikipedia.org/wiki/Windows%E9%94%AE)</kbd> + <kbd>X</kbd> → 選擇 **命令提示字元**），
+   在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下：
+   * Windows 10 下，請按下<kbd>[⊞ Windows鍵](https://zh.wikipedia.org/wiki/Windows%E9%94%AE)</kbd> + <kbd>X</kbd> → 選擇 **命令提示字元**。（如下圖的示範）
+   * Windows 7 下[打開命令行介面](https://carolhsu.gitbooks.io/django-girls-tutorial-traditional-chiness/content/intro_to_command_line/README.html)，請從  開始 → 所有程式 → 附屬應用程式 → 選擇 **命令提示字元**
 
-![進入命令行界面](https://lh3.googleusercontent.com/yFKRG6LTfvbJhMljgIXrEUFivGl4LRYgs0FlNBCBZ1KmwUW2paSoubLhyWGhS7S9GsHe1ef7Bt3TRyf5IHWRLdFL_SqywkPikecwlSpYtPHM6KRlyEaFWsWZqrS7DF3JzzcycnfxfQ=w2400)
+![Windows 10 下，進入命令行界面](https://lh3.googleusercontent.com/yFKRG6LTfvbJhMljgIXrEUFivGl4LRYgs0FlNBCBZ1KmwUW2paSoubLhyWGhS7S9GsHe1ef7Bt3TRyf5IHWRLdFL_SqywkPikecwlSpYtPHM6KRlyEaFWsWZqrS7DF3JzzcycnfxfQ=w2400)
 
-   進到本工具安裝的目錄。
-   * 若是您視窗的 *背景為藍色*，表示您使用的可能是 [PowerShell](https://zh.wikipedia.org/wiki/Windows_PowerShell)，您應該使用這種形式的指令來切換目錄：<code style="color:#888;background-color:#008b8b;">cd "本工具安裝的目錄"</code>。
-   * 若是您視窗的 *背景為黑色*，表示您使用的可能是 [命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)，您應該使用這種形式的指令來切換目錄：<code>cd/d "本工具安裝的目錄"</code>（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
+   進到本工具安裝的目錄：
+   * 若是您視窗的 **背景為藍色**，表示您使用的可能是 [PowerShell](https://zh.wikipedia.org/wiki/Windows_PowerShell)，您應該使用這種形式的指令來切換目錄：<code style="color:#888;background-color:#008b8b;">cd "本工具安裝的目錄"</code>。
+   * 若是您視窗的 **背景為黑色**，表示您使用的可能是 [命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)，您應該使用這種形式的指令來切換目錄：<code>cd/d "本工具安裝的目錄"</code>（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
 
    下圖中示範了用[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)切換到 <code>I:\work_crawler-master</code> 的情況：
 
@@ -214,7 +216,7 @@
 * 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容版權屬原作者所有，請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
 
 ## Uninstallation 移除
-* 要移除本工具，只需將解壓縮後工具檔所在的目錄整個刪除即可。
+* 若是您採用安裝包，請利用系統的移除介面。否族要移除本工具，只需將解壓縮後工具檔所在的目錄整個刪除即可。
 * 作品下載的標的目錄（存放圖片檔與紀錄檔的目錄）需另外手動刪除。
 
 <!--
