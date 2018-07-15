@@ -86,7 +86,7 @@ var crawler = new CeL.work_crawler({
 		return matched ? this.base_URL_manhua + matched[1] : 'info/' + work_id
 				+ '.html';
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between('<h1>', '</h1>'))
@@ -97,11 +97,11 @@ var crawler = new CeL.work_crawler({
 		// <meta property="og:novel:status" content="已完结"/>
 		};
 		// 由 meta data 取得作品資訊。
-		exact_work_data(work_data, html);
-		exact_work_data(work_data, html.between('<ul class="comic_deCon_liO">',
+		extract_work_data(work_data, html);
+		extract_work_data(work_data, html.between('<ul class="comic_deCon_liO">',
 				'</ul>'), /<li>([^<>：]+)(.+?)<\/li>/g);
 		// is_manhua
-		exact_work_data(work_data, html.between('<div class="anim-main_list">',
+		extract_work_data(work_data, html.between('<div class="anim-main_list">',
 				'</div>'), /<th>([^<>]+?)<\/th>[\s\n]*<td>(.+?)<\/td>/g);
 		work_data.status = work_data.状态;
 		if (work_data.最新收录) {

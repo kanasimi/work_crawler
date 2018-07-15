@@ -40,7 +40,7 @@ var crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'web/topic/' + work_id;
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 
@@ -48,7 +48,7 @@ var crawler = new CeL.work_crawler({
 			总热度 : get_label(html.between('<span class="hot-num">', '</span>'))
 					.replace(//, ''),
 		};
-		exact_work_data(work_data, html);
+		extract_work_data(work_data, html);
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {

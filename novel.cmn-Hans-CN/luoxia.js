@@ -79,7 +79,7 @@ crawler = new CeL.work_crawler({
 	},
 
 	// 取得作品的章節資料。 get_work_data()
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var data = html.between('<div class="book-describe">', '</div>'),
 		//
 		work_data = {
@@ -93,7 +93,7 @@ crawler = new CeL.work_crawler({
 					'<img ').between(' src="', '"'),
 			site_name : get_label(html.between('<h1 id="logo">', '</h1>'))
 		};
-		exact_work_data(work_data, data,
+		extract_work_data(work_data, data,
 		// e.g., "<p>状态：已完结</p>"
 		/<p>([^：]+)：(.+)<\/p>/g);
 

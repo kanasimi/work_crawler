@@ -40,7 +40,7 @@ crawler = new CeL.work_crawler({
 	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
 	// 2018/7/12 22:29:18 9s: NG, ban 2 hr.
 	// 10s 在下載過300章之後一樣會 ban。
-	chapter_time_interval : 12 * 1000,
+	chapter_time_interval : 15 * 1000,
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.
@@ -85,7 +85,7 @@ crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'comic/' + work_id + '/';
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between('<h1>', '</h1>')),
@@ -98,7 +98,7 @@ crawler = new CeL.work_crawler({
 			description : get_label(html.between('intro-all', '</div>')
 					.between('>'))
 		}, data = html.between('detail-list', '</ul>');
-		exact_work_data(work_data, data,
+		extract_work_data(work_data, data,
 		// e.g., "<strong>漫画别名：</strong>暂无</span>"
 		/<strong[^<>]*>([^<>]+)<\/strong>(.+?)<\/span>/g);
 		if (data = get_label(data.between('<li class="status">', '</li>'))) {

@@ -27,7 +27,8 @@ download_sites_set = {
 		manhuatai : '漫画台',
 		omanhua : '哦漫画',
 		qq : '腾讯漫画',
-		webtoons : 'WEBTOON'
+		webtoons : 'WEBTOON',
+		manganew : 'Manga New'
 	},
 	'novel.cmn-Hans-CN' : {
 		qidian : '起点中文网',

@@ -68,7 +68,7 @@ var crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'manhua/' + work_id + '/';
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between('<h1>', '</h1>')),
@@ -77,7 +77,7 @@ var crawler = new CeL.work_crawler({
 			description : get_label(html.between('intro-all', '</div>')
 					.between('>'))
 		}, data = html.between('detail-list', '</ul>');
-		exact_work_data(work_data, data,
+		extract_work_data(work_data, data,
 		// e.g., "<strong>漫画别名：</strong>暂无</span>"
 		/<strong[^<>]*>([^<>]+)<\/strong>(.+?)<\/span>/g);
 

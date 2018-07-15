@@ -21,7 +21,7 @@ var _37yue = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return this.base_URL + 'manhua/' + work_id + '/';
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between('<h1 class="title">', '</h1>')),
@@ -30,7 +30,7 @@ var _37yue = new CeL.work_crawler({
 			description : get_label(html.between('<div class="summary">')
 					.between('<div class="bd">', '</div>'))
 		};
-		exact_work_data(work_data,
+		extract_work_data(work_data,
 				html.between('<div class="info">', '</div>'),
 				/<dt>([^<>]+)<\/dt>[\s\n]*<dd>([^<>]+)<\/dd>/g);
 		return work_data;

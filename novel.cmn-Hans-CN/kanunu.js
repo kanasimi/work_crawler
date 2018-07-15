@@ -58,7 +58,7 @@ crawler = new CeL.work_crawler({
 		}
 		return work_id;
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		// console.log(html);
 
 		var text = html.match(PATTERN_work), matched = text[3].match(
@@ -82,7 +82,7 @@ crawler = new CeL.work_crawler({
 		};
 
 		// 由 meta data 取得作品資訊。
-		exact_work_data(work_data, html);
+		extract_work_data(work_data, html);
 
 		matched = text[3].between('<tr align="left">', '</tr>').trim().match(
 		//

@@ -53,7 +53,7 @@ crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'https://www.webtoons.com/episodeList?titleNo=' + work_id;
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var matched = html.match(/<a href="([^<>"]+)"[^<>]+id="_btnEpisode">/),
 		//
 		text = html.between('<div class="info">', '</div>'),

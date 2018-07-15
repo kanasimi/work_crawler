@@ -16,7 +16,6 @@ var crawler = new CeL.work_crawler({
 
 	// 規範 work id 的正規模式；提取出引數（如 URL）中的作品id 以回傳。
 	extract_work_id : function(work_information) {
-		// default: accept numerals only
 		return /^[a-z_\-\d]+$/.test(work_information) && work_information;
 	},
 
@@ -44,12 +43,11 @@ var crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return work_id + '/';
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = JSON.parse(html.between(
 				'<script type="application/ld+json">', '</script>'));
-
-		exact_work_data(work_data, html);
-		exact_work_data(work_data, html.between(
+		extract_work_data(work_data, html);
+		extract_work_data(work_data, html.between(
 				'<ul class="dl hidden-xs hidden-sm">', '</ul>'),
 				/<li><span>([^<>]+)<\/span>([\s\S]+?)<\/li>/g);
 		Object.assign(work_data, {
@@ -73,7 +71,7 @@ var crawler = new CeL.work_crawler({
 		var chapter_data = {
 			// 設定必要的屬性。
 			title : get_label(html.between(' selected>', '</option>').replace(
-					/🔹/g, '')),
+					/^\s*🔹/, '')),
 			image_list : []
 		}, matched, PATTERN_image =
 		//

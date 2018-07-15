@@ -263,7 +263,7 @@ crawler = new CeL.work_crawler({
 		return '/forum.php?mod=viewthread&tid=' + work_id
 				+ '&extra=page%3D1&page=1'
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var error = html.between('<div id="messagetext" class="alert_error">',
 				'</div>')
 		if (error) {
@@ -313,7 +313,7 @@ crawler = new CeL.work_crawler({
 			book_chapter_count : 0
 		};
 		// 由 meta data 取得作品資訊。
-		exact_work_data(_work_data, html);
+		extract_work_data(_work_data, html);
 		if (work_data.chapter_count < _work_data.chapter_count) {
 			// 有時會出現 mainEntity.pageEnd 比較小的情況。
 			work_data.chapter_count = _work_data.chapter_count;

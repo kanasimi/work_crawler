@@ -55,7 +55,7 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 取得作品的章節資料。 get_work_data()
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var part_list = [], matched,
 		//
 		text = html.between('<div class="detail-list-title">', '</div>'),

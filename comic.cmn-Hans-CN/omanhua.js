@@ -32,7 +32,7 @@ var crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'comic/' + work_id + '/';
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between("<h2 class='fleft blue'>", '漫画')),
@@ -44,7 +44,7 @@ var crawler = new CeL.work_crawler({
 					"<div class='cartoon_infos line_height'>", '</p>'))
 		}, data = html.between("<div class='main01-title01 font_a_1'>",
 				'</div>');
-		exact_work_data(work_data, data,
+		extract_work_data(work_data, data,
 		// e.g., "<li><span class='gray'>作者：</span>...</li>"
 		/<li><span class='gray'>([^<>]+)<\/span>(.+?)<\/li>/g);
 		if (work_data.更新时间)

@@ -53,7 +53,7 @@ var crawler = new CeL.work_crawler({
 		// e.g., http://www.hhcool.com/manhua/32449.html
 		return 'manhua/' + work_id + '.html';
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		html = html.between('<div id="about_kit">', '<div class="cVolList">');
 		html = html.between(null, '<div class="cInfoAct">') || html;
 
@@ -64,7 +64,7 @@ var crawler = new CeL.work_crawler({
 		// 選擇性屬性：須配合網站平台更改。
 		// <meta property="og:novel:status" content="已完结"/>
 		};
-		exact_work_data(work_data, html, /<li>([^:]+)(.+?)<\/li>/g);
+		extract_work_data(work_data, html, /<li>([^:]+)(.+?)<\/li>/g);
 		work_data.status = work_data.状态;
 		work_data.last_update = work_data.更新;
 		return work_data;

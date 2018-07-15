@@ -49,7 +49,7 @@ crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'detail/?bookid=' + work_id;
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var data = html.between('<div class="wrapper detail-main">',
 				'<div class="book-chapter'),
 		//
@@ -62,8 +62,8 @@ crawler = new CeL.work_crawler({
 					.replace(/ *更新/, ''),
 			星星 : data.between('<p class="star-number">', '</p>')
 		};
-		exact_work_data(work_data, html);
-		exact_work_data(work_data, data, PATTERN_work_data);
+		extract_work_data(work_data, html);
+		extract_work_data(work_data, data, PATTERN_work_data);
 
 		Object.assign(work_data, {
 			status : work_data.状态,

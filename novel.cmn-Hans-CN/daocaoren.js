@@ -45,7 +45,7 @@ var crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'book/' + work_id + '/';
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var data = html.between('<div class="book-info">',
 				'<div class="chapter">'),
 		//
@@ -65,7 +65,7 @@ var crawler = new CeL.work_crawler({
 			site_name : get_label(html.between('<div class="logo fl">',
 					'</div>'))
 		};
-		exact_work_data(work_data, data,
+		extract_work_data(work_data, data,
 		// e.g., "<p>状态：已完结</p>"
 		/<div class="[^<>"]*?col-sm-6 dark[^<>"]*?">([^：]+)：(.+?)<\/div>/g);
 

@@ -62,7 +62,7 @@ var crawler = new CeL.work_crawler({
 		// e.g., http://www.2manhua.com/comic/25652.html
 		return 'comic/' + work_id + '.html';
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : html.between('og:novel:title" content="', '"')
@@ -76,8 +76,8 @@ var crawler = new CeL.work_crawler({
 					.between('>'))
 		};
 		// 由 meta data 取得作品資訊。
-		exact_work_data(work_data, html);
-		exact_work_data(work_data, html.between('book-detail', 'intro-act'),
+		extract_work_data(work_data, html);
+		extract_work_data(work_data, html.between('book-detail', 'intro-act'),
 				/<strong>([^<>]+?)<\/strong>(.+?)<\/span>/g);
 		return work_data;
 	},

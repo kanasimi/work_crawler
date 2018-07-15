@@ -67,7 +67,7 @@ var crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'mh/' + work_id + '/';
 	},
-	parse_work_data : function(html, get_label, exact_work_data) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(
@@ -79,8 +79,8 @@ var crawler = new CeL.work_crawler({
 					'<div class="introduction" id="intro1">', '</div>'))
 		};
 		// 由 meta data 取得作品資訊。
-		exact_work_data(work_data, html);
-		exact_work_data(work_data, html.between('<div class="info">',
+		extract_work_data(work_data, html);
+		extract_work_data(work_data, html.between('<div class="info">',
 				'<div class="info_cover">'),
 				/<em>([^<>]+?)<\/em>([\s\S]*?)<\/p>/g);
 
