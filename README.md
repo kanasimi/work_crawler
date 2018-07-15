@@ -89,7 +89,7 @@
 
 4. 下載 CeJS 程式庫。在命令行界面下執行 <code>_CeL.updater.node.js</code>，詳細如以下所述：
 
-   在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下：
+   進入[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下：
    * Windows 10 下，請按下<kbd>[⊞ Windows鍵](https://zh.wikipedia.org/wiki/Windows%E9%94%AE)</kbd> + <kbd>X</kbd> → 選擇 **命令提示字元**。（如下圖的示範）
    * Windows 7 下[打開命令行介面](https://carolhsu.gitbooks.io/django-girls-tutorial-traditional-chiness/content/intro_to_command_line/README.html)，請從  開始 → 所有程式 → 附屬應用程式 → 選擇 **命令提示字元**
 
