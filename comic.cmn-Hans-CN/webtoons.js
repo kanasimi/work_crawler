@@ -104,7 +104,8 @@ crawler = new CeL.work_crawler({
 			image_list : []
 		}, PATTERN_image = /<img [^<>]+?data-url="([^<>"]+)"/g, matched;
 
-		html = html.between('<div class="viewer_lst">', '</div>');
+		html = html.between('<div class="viewer_lst">',
+				'<div class="episode_area"');
 
 		while (matched = PATTERN_image.exec(html)) {
 			chapter_data.image_list.push({
