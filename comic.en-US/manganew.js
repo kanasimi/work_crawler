@@ -47,9 +47,8 @@ var crawler = new CeL.work_crawler({
 		var work_data = JSON.parse(html.between(
 				'<script type="application/ld+json">', '</script>'));
 		extract_work_data(work_data, html);
-		extract_work_data(work_data, html.between(
-				'<ul class="dl hidden-xs hidden-sm">', '</ul>'),
-				/<li><span>([^<>]+)<\/span>([\s\S]+?)<\/li>/g);
+		extract_work_data(work_data, html.between('<ul class="dl', '</ul>'),
+				/<li>\s*<span>([^<>]+)<\/span>([\s\S]+?)<\/li>/g);
 		Object.assign(work_data, {
 			title : work_data.mainEntity.name,
 			last_update : (work_data.Pubdate.between('-') || work_data.Pubdate)
