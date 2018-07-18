@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載 Manga Mew 的工具。 Download mangamew comics. (comic.en-US)
+ * 批量下載 Manga Mew 的工具。 Download mangamew comics.
  */
 
 'use strict';
@@ -12,6 +12,9 @@ var PATTERN_search_item = /<div class="item">\s*<a href="([^<>"]+)" title="([^<>
 //
 crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
+
+	// Manga Mew 一些圖片在檔案最後會多加個字元 0A，因此被判別為非正規圖片檔。似無缺損。
+	allow_EOI_error : true,
 
 	// one_by_one : true,
 	base_URL : 'https://www1.mangamew.com/',
@@ -92,11 +95,6 @@ crawler = new CeL.work_crawler({
 			chapter_data.image_list.push({
 				url : matched[1]
 			});
-			if (matched[1].includes('.blogspot.com/')
-					&& /\.jpg$/i.test(matched[1])) {
-				// 下載 blogspot 的圖片會報錯，但似無缺損。或許需要加強圖片檢測機制？
-				this.allow_EOI_error = true;
-			}
 		}
 
 		return chapter_data;
