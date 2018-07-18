@@ -1,7 +1,7 @@
 ﻿# CeJS 線上小說漫畫下載工具 online novels / comics downloader
 - [en] Download novels → epub and comics with [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) and [command-line interface](https://en.wikipedia.org/wiki/Command-line_interface).
 - [TW] 批量下載小說 → epub、漫畫網站的工具。視窗+命令行介面。
-- [CN] 批量下载小说 → epub、漫画网站的工具。图形+命令行界面。
+- [CN] 批量下载小说 → epub、漫画网站的网络爬虫。图形+命令行界面。
 - [ja] ウェブ小説 → epub、ウェブ漫画作品を一括ダウンロードツール。グラフィカル+コマンドラインインターフェース。
 
 ## TOC 快速瀏覽
@@ -52,7 +52,7 @@
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
 ### Chinese webcomics 中国内地漫画 中国のウェブコミック
-[comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, web pages → epub
+[comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, images → zip
 * 本工具無法下載需VIP付費、已屏蔽或刪除的內容。
 
 | Site | Tool file | Note |
@@ -70,15 +70,22 @@
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | |
-| [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoons.js | NAVER WEBTOON 中文官網 韓國漫畫 |
-| [Manga New](http://manganew.net/) | manganew.js | 英語漫畫 |
+| [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoons.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |
 
+### English webcomics 英語網路漫畫 英語のウェブコミック
+[comic.en-US/](comic.en-US/)*.js, images → zip
+
+| Site | Tool file | Note |
+| --- | --- | --- |
+| [Manga Mew](https://www1.mangamew.com/) | mangamew.js | 下載 blogspot 的圖片會報錯，但似無缺損。 |
+| [Manga New](http://manganew.net/) | manganew.js |  |
+
 ## Installation 安裝
 
-若是想要使用圖形介面，您可以 **[直接下載安裝包](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包並非最新的版本**，有些網站下載起來會出問題。若是欲採用最新的版本，或者用作研究開發、想要使用命令行界面作批次處理，請採用下列步驟。
+若是想要使用圖形介面，您可以 **[直接下載安裝包](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包並非最新的版本**，有些網站下載起來會出問題。若是欲採用最新的版本，或者用作研究開發、想要使用命令行介面作批次處理，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
@@ -86,32 +93,39 @@
 2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可將之改名。
 3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，將此檔儲存到前面所提到的，本工具將安裝的標的目錄 <code>work_crawler-master</code> 下。
 
-![本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/5WwL_Ap4U1n6xL1qwqwb1kJ_ZWwsOI2xZev-h9RywwzLcxWNIkcPcpGT17HfmmuykQACIWjuBhWffr7C1mwCxlVaVS2sQ0ic0cHK1OttaYdCF-BJpPtJjbvtTRX2Ssfs1OoIMlscYA=w135-h266-no)
+   ![本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/5WwL_Ap4U1n6xL1qwqwb1kJ_ZWwsOI2xZev-h9RywwzLcxWNIkcPcpGT17HfmmuykQACIWjuBhWffr7C1mwCxlVaVS2sQ0ic0cHK1OttaYdCF-BJpPtJjbvtTRX2Ssfs1OoIMlscYA=w135-h266-no)
 
-4. 下載 CeJS 程式庫。在命令行界面下執行 <code>_CeL.updater.node.js</code>，詳細如以下所述：
+4. <details><summary>下載 CeJS 程式庫：在命令行介面下執行 <code>_CeL.updater.node.js</code>。（點擊本行可獲得更詳細的說明）</summary>
 
-   進入[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下：
-   * Windows 10 下，請按下<kbd>[⊞ Windows鍵](https://zh.wikipedia.org/wiki/Windows%E9%94%AE)</kbd> + <kbd>X</kbd> → 選擇 **命令提示字元**。（如下圖的示範）
-   * Windows 7 下[打開命令行介面](https://carolhsu.gitbooks.io/django-girls-tutorial-traditional-chiness/content/intro_to_command_line/README.html)，請從  開始 → 所有程式 → 附屬應用程式 → 選擇 **命令提示字元**
+   1. **進入[命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下**：
+      * Windows 10 下，請按下<kbd>[⊞ Windows鍵](https://zh.wikipedia.org/wiki/Windows%E9%94%AE)</kbd> + <kbd>X</kbd> → 選擇 **命令提示字元**。（如下圖的示範）
+      * Windows 7 下[打開命令行介面](https://carolhsu.gitbooks.io/django-girls-tutorial-traditional-chiness/content/intro_to_command_line/README.html)，請從  開始 → 所有程式 → 附屬應用程式 → 選擇 **命令提示字元**
 
-![Windows 10 下，進入命令行界面](https://lh3.googleusercontent.com/yFKRG6LTfvbJhMljgIXrEUFivGl4LRYgs0FlNBCBZ1KmwUW2paSoubLhyWGhS7S9GsHe1ef7Bt3TRyf5IHWRLdFL_SqywkPikecwlSpYtPHM6KRlyEaFWsWZqrS7DF3JzzcycnfxfQ=w2400)
+      ![Windows 10 下，進入命令行介面](https://lh3.googleusercontent.com/yFKRG6LTfvbJhMljgIXrEUFivGl4LRYgs0FlNBCBZ1KmwUW2paSoubLhyWGhS7S9GsHe1ef7Bt3TRyf5IHWRLdFL_SqywkPikecwlSpYtPHM6KRlyEaFWsWZqrS7DF3JzzcycnfxfQ=w2400)
 
-   進到本工具安裝的目錄：
-   * 若是您視窗的 **背景為藍色**，表示您使用的可能是 [PowerShell](https://zh.wikipedia.org/wiki/Windows_PowerShell)，您應該使用這種形式的指令來切換目錄：<code style="color:#888;background-color:#008b8b;">cd "本工具安裝的目錄"</code>。
-   * 若是您視窗的 **背景為黑色**，表示您使用的可能是 [命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)，您應該使用這種形式的指令來切換目錄：<code>cd/d "本工具安裝的目錄"</code>（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
+   2. **進到本工具安裝的目錄**：
+      * 若是您視窗的 **背景為藍色**，表示您使用的可能是 [PowerShell](https://zh.wikipedia.org/wiki/Windows_PowerShell)，您應該使用這種形式的指令來切換目錄：<code style="color:#888;background-color:#008b8b;">cd "本工具安裝的目錄"</code>。
+      * 若是您視窗的 **背景為黑色**，表示您使用的可能是 [命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)，您應該使用這種形式的指令來切換目錄：<code>cd/d "本工具安裝的目錄"</code>（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
 
-   下圖中示範了用[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)切換到 <code>I:\work_crawler-master</code> 的情況：
+      下圖中示範了用[命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)切換到 <code>I:\work_crawler-master</code> 的情況：
 
-![複製本工具安裝的目錄](https://lh3.googleusercontent.com/vhs7VNQLXT_VcoHIzOMrpUlX6VYIFUsCr9fM3Jbtf9NX1H2vSh2dtkGZVp-XJg6EntlkeqfRbZfU1_niNvPapSUdF-0iPXjJx0QdB3pTObUnYB_wIDiJ0eM7FVcJGOyBAlgfmTY3pw=w2400)
-![進到本工具安裝的目錄](https://lh3.googleusercontent.com/CLfiPu0HnK9ZG7pxqPmsohl3HVhVfjOMkYxnw83DCdXbrYb1KqIvj1WstuU4HLfW2_WDj7nWjyxSMzgJhJUQY5mjRv0xMshQIsT8ZefYHKzylCa3uDnTYynB2hbhdG5Z1USoWZe11w=w2400)
+      ![複製本工具安裝的目錄](https://lh3.googleusercontent.com/vhs7VNQLXT_VcoHIzOMrpUlX6VYIFUsCr9fM3Jbtf9NX1H2vSh2dtkGZVp-XJg6EntlkeqfRbZfU1_niNvPapSUdF-0iPXjJx0QdB3pTObUnYB_wIDiJ0eM7FVcJGOyBAlgfmTY3pw=w2400)
+      ![進到本工具安裝的目錄](https://lh3.googleusercontent.com/CLfiPu0HnK9ZG7pxqPmsohl3HVhVfjOMkYxnw83DCdXbrYb1KqIvj1WstuU4HLfW2_WDj7nWjyxSMzgJhJUQY5mjRv0xMshQIsT8ZefYHKzylCa3uDnTYynB2hbhdG5Z1USoWZe11w=w2400)
 
-   執行命令以下載 CeJS 程式庫：
-   ``` sh
-   node _CeL.updater.node.js
-   ```
-![執行命令以下載 CeJS 程式庫](https://lh3.googleusercontent.com/kriJ1gZRQF_QZ-Qbw4nsY5bOz39rhjd-IXVJPGfkTvZkrBir-bikBhu3qj3l5uIm7i3dFhDvV9_kyzDysQNKQYnKTTbiSdJXlutjCB9OAQBhug9Ogq7UxUDD5a-66iytQfwYrWV8dA=w377-h81-no)
+   3. **執行命令以下載 CeJS 程式庫**：
+      ``` sh
+      node _CeL.updater.node.js
+      ```
+      ![執行命令以下載 CeJS 程式庫](https://lh3.googleusercontent.com/kriJ1gZRQF_QZ-Qbw4nsY5bOz39rhjd-IXVJPGfkTvZkrBir-bikBhu3qj3l5uIm7i3dFhDvV9_kyzDysQNKQYnKTTbiSdJXlutjCB9OAQBhug9Ogq7UxUDD5a-66iytQfwYrWV8dA=w377-h81-no)
+</details>
 
 5. 然後就能[開始試用](#execution-執行)囉。
+
+   下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子：
+
+   ![下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
+
+   以下是在linux下直接操作上述作業時的指令，Windows用戶可以跳過，直接[開始試用](#execution-執行)。
    ``` sh
    # sample commands to extract work_crawler + cejs
    mkdir work_crawler
@@ -123,8 +137,6 @@
    node _CeL.updater.node.js
    ```
 
-![下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
-
 6. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt)</code> 這個檔案來設定放置的路徑。
 7. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
 8. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
@@ -134,7 +146,7 @@
    通常您還需要 **重新下載本工具壓縮檔並解壓縮**。由於本工具會 cache 作品資訊，更新幅度較大的時候您可能需要刪除作品目錄的 cache，重新下載作品。
 
 <!-- use npm:
-3. 在命令行界面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
+3. 在命令行介面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
    ``` sh
    npm install cejs
    ```
@@ -144,13 +156,13 @@
 
 ### Setup GUI 設定視窗型態介面
 若是您在作研究開發時，希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，那麼您還需要安裝 [Electron](https://electronjs.org/)。
-1. 請在[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具安裝的目錄，執行命令以安裝 Electron 程式庫：
+1. 請在[命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具安裝的目錄，執行命令以安裝 Electron 程式庫：
    ``` sh
    npm i -D electron@latest
    ```
 2. 在本工具安裝的目錄下，執行 <code>start_gui_electron.sh</code> 或 <code>start_gui_electron.bat</code>。
 
-![視窗型態介面](https://lh3.googleusercontent.com/3dGaOZnsMNrCr6OrYdSg_Ia6dgQBZHBbwplgbOAaQn4RQkLcxGJbly3IDRicw6PbZFwG97TfJuHl3EeAqc3Nl34Tc6LmntqrxwCZl6djLfOqfZnnlo_6aCwUGS0rraGf8xBTd8JEYg=w852-h896-no)
+   ![視窗型態介面](https://lh3.googleusercontent.com/3dGaOZnsMNrCr6OrYdSg_Ia6dgQBZHBbwplgbOAaQn4RQkLcxGJbly3IDRicw6PbZFwG97TfJuHl3EeAqc3Nl34Tc6LmntqrxwCZl6djLfOqfZnnlo_6aCwUGS0rraGf8xBTd8JEYg=w852-h896-no)
 
 ### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
@@ -158,8 +170,8 @@
 3. Setup <code>work_crawler_loder.configuration.js</code> (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js)). 最後設定好設定檔 <code>work_crawler_loder.configuration.js</code>。例如指定 <code>global.data_directory</code>。
 
 ## Execution 執行
-所有操作都必須進到工具檔所在的目錄，在命令行界面下執行。
-1. 確認要下載的網站名與作品名。之後在命令行界面下，執行：
+所有操作都必須進到工具檔所在的目錄，在命令行介面下執行。
+1. 確認要下載的網站名與作品名。之後在命令行介面下，執行：
 
    ``` sh
    node 工具檔名.js "作品名" [option=true] [option=value]
@@ -176,34 +188,57 @@
    cd novel.cmn-Hans-CN && echo "via id" && node 630book 267
    cd novel.ja-JP       && node yomou 転生したらスライムだった件
    ```
-![命令行界面下執行命令](https://lh3.googleusercontent.com/r1-jB1Cmaznb5kseN97xUQyGzrsJJgek25Ifyvey8scMm311WjnjIAy-FpmiTtIVupyimDTWrVL7aI2cI7i2FRllR_QWMiLsRgF-kzDJnYMRaTRMVXrG2XkfEhHPh5Qvns0XQjROcw=w2400)
+
+   ![命令行介面下執行命令](https://lh3.googleusercontent.com/r1-jB1Cmaznb5kseN97xUQyGzrsJJgek25Ifyvey8scMm311WjnjIAy-FpmiTtIVupyimDTWrVL7aI2cI7i2FRllR_QWMiLsRgF-kzDJnYMRaTRMVXrG2XkfEhHPh5Qvns0XQjROcw=w2400)
 
 2. 下載的檔案將放在設定檔 <code>work_crawler_loder.configuration.js</code> 的 <code>global.data_directory</code> 所設定的目錄下。若採[懶人安裝法](#lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
 3. 若是下載出錯，**重新執行即可接續下載**。
 
 ## Workflow 工作流程
-本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 <code>manhuatai</code>），每套漫畫一個目錄。
-![folder](https://lh3.googleusercontent.com/-Gu8klHdiKfm9c3IKkYLVLd26Wc5W2Fz2QX7--7QNgjewXZRoRDf3uCNxTqRqmYfdzZxly7BRFPhdYWE2bZXKweer_QaC5T2Wxv5fVGuVC2vGxMtG2szUqFgHKx7n9uMaRKCOfWU7A=w589-h386-no)
+* 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 <code>manhuatai</code>），每套漫畫一個目錄。
 
-![folder inside work](https://lh3.googleusercontent.com/qEzhnefvmuTdt1o3jR68uhJOkkGafSPiov1QwfuMyDp2AJesQ6sSpBQnUdT_T5-3qbb-u_R48gm_biNWvNT8NNIb-UtvbsUnF02_ADoTXdy-YjhlFCWr4QYigeZ0fGBmv7swnb8GXA=w225-h343-no)
+   ![folder](https://lh3.googleusercontent.com/-Gu8klHdiKfm9c3IKkYLVLd26Wc5W2Fz2QX7--7QNgjewXZRoRDf3uCNxTqRqmYfdzZxly7BRFPhdYWE2bZXKweer_QaC5T2Wxv5fVGuVC2vGxMtG2szUqFgHKx7n9uMaRKCOfWU7A=w589-h386-no)
 
-![folder inside chapter](https://lh3.googleusercontent.com/DsQ4d1Px6WXJWrARFQhnVz5DfCAYkJleDsbeku4LVSJjJuvHjAncDccoqq9ML45KtLgkmOzjhJlaUYyy7C6Sg2KwMRx56yxK1fp9wJTJlAciH8ybkYLcSz05LtbJyrHxv50PZIsrSg=w333-h265-no)
+   ![folder inside work](https://lh3.googleusercontent.com/qEzhnefvmuTdt1o3jR68uhJOkkGafSPiov1QwfuMyDp2AJesQ6sSpBQnUdT_T5-3qbb-u_R48gm_biNWvNT8NNIb-UtvbsUnF02_ADoTXdy-YjhlFCWr4QYigeZ0fGBmv7swnb8GXA=w225-h343-no)
 
-接續下載時，將從上次的進度（最後下載的章節）接著下載。
+   ![folder inside chapter](https://lh3.googleusercontent.com/DsQ4d1Px6WXJWrARFQhnVz5DfCAYkJleDsbeku4LVSJjJuvHjAncDccoqq9ML45KtLgkmOzjhJlaUYyy7C6Sg2KwMRx56yxK1fp9wJTJlAciH8ybkYLcSz05LtbJyrHxv50PZIsrSg=w333-h265-no)
 
-![接續下載](https://lh3.googleusercontent.com/PpNidzWOTdQe0VMxIfgXrCJVVJ_g5dXENCPMM7OMX7vdlTywcCqN5fKtTxNT8Fm9hTG3-2H5mdHfgFPDpHzP2yeSRQ8ObuabMGnFnatDId5UvSXC9BOk_94O2CxCAkSLTov6KU-qSA=w732-h463-no)
+* 接續下載時，將從上次的進度（最後下載的章節）接著下載。
 
-若是下載小說，最後將包裝成可匯入 calibre 的 epub。
+   ![接續下載](https://lh3.googleusercontent.com/PpNidzWOTdQe0VMxIfgXrCJVVJ_g5dXENCPMM7OMX7vdlTywcCqN5fKtTxNT8Fm9hTG3-2H5mdHfgFPDpHzP2yeSRQ8ObuabMGnFnatDId5UvSXC9BOk_94O2CxCAkSLTov6KU-qSA=w732-h463-no)
 
-![小說 → epub list](https://lh3.googleusercontent.com/fYB5zhGgw8Thh5mGzR_5PVSCWDqWxOUHxQRaiqDOx0VS0BdsIlNMNCkxvjl1RpNWI5IBfYMZ_LgHTkiuFZvDPOqMRa-6JHsTN3Od3LgD4DPMDy6Lk4ccbZlTB-w4cLjYweEExYJehg=w1366-h738-no)
+* 若是下載小說，最後將包裝成可匯入 calibre 的 epub。
 
-![小說 → epub](https://lh3.googleusercontent.com/JJ4SGDQF-HzQb0baRZ0mCio19jJTnNp3VnWutirYgZbYg5i--ufS_ElL8DEetP6x7uJ4HUv8szNqzVLbGlr84_OnxFxjIZCDsOEOEmKBubYC6PkpaE2xBYk9KIHzBR4YPwjQVM2FTA=w1366-h738-no)
+   ![小說 → epub list](https://lh3.googleusercontent.com/fYB5zhGgw8Thh5mGzR_5PVSCWDqWxOUHxQRaiqDOx0VS0BdsIlNMNCkxvjl1RpNWI5IBfYMZ_LgHTkiuFZvDPOqMRa-6JHsTN3Od3LgD4DPMDy6Lk4ccbZlTB-w4cLjYweEExYJehg=w1366-h738-no)
+
+   ![小說 → epub](https://lh3.googleusercontent.com/JJ4SGDQF-HzQb0baRZ0mCio19jJTnNp3VnWutirYgZbYg5i--ufS_ElL8DEetP6x7uJ4HUv8szNqzVLbGlr84_OnxFxjIZCDsOEOEmKBubYC6PkpaE2xBYk9KIHzBR4YPwjQVM2FTA=w1366-h738-no)
+
+## Uninstallation 移除
+* 若是您採用安裝包，請利用系統的移除介面。否族要移除本工具，只需將解壓縮後工具檔所在的目錄整個刪除即可。
+* 作品下載的標的目錄（存放圖片檔與紀錄檔的目錄）需另外手動刪除。
+
+## FAQ 常見問題集
+<details><summary>如何從某個章節開始下載</summary>
+
+* 若是使用命令列介面，您可以採用 start_chapter 這個參數與 recheck 參數，就可以挑選開始下載的章節。
+
+   範例指令:
+   ``node qq 作品名 start_chapter=20 recheck``
+
+* 圖形介面在右手邊的 **下載選項** 應該可以看到有一個 **start_chapter: 將開始/接續下載的章節編號。必須要配合 .recheck。 (number)**。
+
+   請輸入章節的數字，之後指定 start_chapter 上面的 recheck，點擊開始下載就可以接續下載了。
+</details>
+
+<details><summary>掃毒軟體報錯！</summary>
+應該是因為使用的 CeJS 函式庫包山包海，裡面有一些專門用於檔案操作的函數、FileSystemObject 物件、WScript 物件，所以掃毒軟體以為有問題。不過這個程式天天都在測試，漫畫小說下載並不會用到這些功能，您大可放心。
+</details>
 
 ## Notes 附注
 * 目前本工具不支援自動更新。
 * 對於本工具已經包含的下載模式，熟練後一般約需2至4小時新增或更新下載工具，以達初步可用狀態。
 * 小說作品採用單線程下載，以避免對網站造成過度的負荷。漫畫作品則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
-* 歡迎熱心友人加入，以改進這個工具。
+* 歡迎熱心友人參與開發，以改進這個工具。
 
 ## Purpose 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [線上作品爬蟲程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
@@ -215,10 +250,6 @@
 
 ## Announce 聲明
 * 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容版權屬原作者所有，請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
-
-## Uninstallation 移除
-* 若是您採用安裝包，請利用系統的移除介面。否族要移除本工具，只需將解壓縮後工具檔所在的目錄整個刪除即可。
-* 作品下載的標的目錄（存放圖片檔與紀錄檔的目錄）需另外手動刪除。
 
 <!--
 TODO:
