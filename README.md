@@ -13,7 +13,7 @@
 * 可自動下載小說封面以及章節中的插圖。
 * 自動檢核下載的圖片是否是否完整。若有破損將重新下載。
 * 採用 CeJS [線上作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
-* 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料。（請注意：必須先安裝 7-Zip **18.01 以上的版本**）
+* 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料，僅更新有問題的圖檔。（請注意：必須先安裝 7-Zip **18.01 以上的版本**）
 
 ## Supported sites 已完成之網站工具
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：必須先安裝 7-Zip **18.01 以上的版本**，這樣才能製作 .epub 小說電子書、壓縮漫畫章節。
@@ -80,7 +80,7 @@
 
 | Site | Tool file | Note |
 | --- | --- | --- |
-| [Manga Mew](https://www1.mangamew.com/) | mangamew.js | 下載 blogspot 的圖片會報錯，但似無缺損。 |
+| [Manga Mew](https://www1.mangamew.com/) | mangamew.js | 一些圖片在檔案最後會多加個字元 0A，因此被判別為非正規圖片檔。 |
 | [Manga New](http://manganew.net/) | manganew.js |  |
 
 ## Installation 安裝
@@ -91,9 +91,10 @@
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
 1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](http://7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->（已經安裝過的可以跳過）
 2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可將之改名。
-3. 下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，將此檔儲存到前面所提到的，本工具將安裝的標的目錄 <code>work_crawler-master</code> 下。
+3. <details><summary>下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，將此檔儲存到前面所提到的，本工具將安裝的標的目錄 <code>work_crawler-master</code> 下。</summary>
 
    ![本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/5WwL_Ap4U1n6xL1qwqwb1kJ_ZWwsOI2xZev-h9RywwzLcxWNIkcPcpGT17HfmmuykQACIWjuBhWffr7C1mwCxlVaVS2sQ0ic0cHK1OttaYdCF-BJpPtJjbvtTRX2Ssfs1OoIMlscYA=w135-h266-no)
+</details>
 
 4. <details><summary>下載 CeJS 程式庫：在命令行介面下執行 <code>_CeL.updater.node.js</code>。（點擊本行可獲得更詳細的說明）</summary>
 
@@ -119,7 +120,7 @@
       ![執行命令以下載 CeJS 程式庫](https://lh3.googleusercontent.com/kriJ1gZRQF_QZ-Qbw4nsY5bOz39rhjd-IXVJPGfkTvZkrBir-bikBhu3qj3l5uIm7i3dFhDvV9_kyzDysQNKQYnKTTbiSdJXlutjCB9OAQBhug9Ogq7UxUDD5a-66iytQfwYrWV8dA=w377-h81-no)
 </details>
 
-5. 然後就能[開始試用](#execution-執行)囉。
+5. <details><summary>然後就能[開始試用](#execution-執行)囉。</summary>
 
    下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子：
 
@@ -136,6 +137,7 @@
    wget --output-document=_CeL.updater.node.js https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js
    node _CeL.updater.node.js
    ```
+</details>
 
 6. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt)</code> 這個檔案來設定放置的路徑。
 7. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
@@ -171,7 +173,7 @@
 
 ## Execution 執行
 所有操作都必須進到工具檔所在的目錄，在命令行介面下執行。
-1. 確認要下載的網站名與作品名。之後在命令行介面下，執行：
+1. 確認要下載的網站名與作品名。之後在命令行介面下，執行：（請在作品的名稱外面加上引號）
 
    ``` sh
    node 工具檔名.js "作品名" [option=true] [option=value]
@@ -180,13 +182,13 @@
 
    e.g.,
    ``` sh
-   cd comic.cmn-Hans-CN && node qq.js 狐妖小红娘 skip_error=true
+   cd comic.cmn-Hans-CN && node qq.js "狐妖小红娘" skip_error=true
    cd novel.cmn-Hans-CN && node qidian free && echo 下载 起点中文网限免作品
-   cd novel.cmn-Hans-CN && node 23us 斗罗大陆Ⅲ龙王传说
-   cd comic.cmn-Hans-CN && node 2manhua 大主宰 recheck=true
-   cd comic.cmn-Hans-CN && node ikanman l=ikanman.txt recheck=true
-   cd novel.cmn-Hans-CN && echo "via id" && node 630book 267
-   cd novel.ja-JP       && node yomou 転生したらスライムだった件
+   cd novel.cmn-Hans-CN && node 23us "斗罗大陆Ⅲ龙王传说"
+   cd comic.cmn-Hans-CN && node 2manhua "大主宰" recheck=true
+   cd comic.cmn-Hans-CN && node ikanman "l=ikanman.txt" recheck=true
+   cd novel.cmn-Hans-CN && echo "via id" && node 630book "267"
+   cd novel.ja-JP       && node yomou "転生したらスライムだった件"
    ```
 
    ![命令行介面下執行命令](https://lh3.googleusercontent.com/r1-jB1Cmaznb5kseN97xUQyGzrsJJgek25Ifyvey8scMm311WjnjIAy-FpmiTtIVupyimDTWrVL7aI2cI7i2FRllR_QWMiLsRgF-kzDJnYMRaTRMVXrG2XkfEhHPh5Qvns0XQjROcw=w2400)
@@ -231,7 +233,8 @@
 </details>
 
 <details><summary>掃毒軟體報錯！</summary>
-應該是因為使用的 CeJS 函式庫包山包海，裡面有一些專門用於檔案操作的函數、FileSystemObject 物件、WScript 物件，所以掃毒軟體以為有問題。不過這個程式天天都在測試，漫畫小說下載並不會用到這些功能，您大可放心。
+
+* 應該是因為使用的 CeJS 函式庫包山包海，裡面有一些專門用於檔案操作的函數、FileSystemObject 物件、WScript 物件，所以掃毒軟體以為有問題。這個程式天天都在測試，漫畫小說下載並不會用到這些功能，您大可放心。
 </details>
 
 ## Notes 附注
