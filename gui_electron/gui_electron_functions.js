@@ -7,6 +7,7 @@ var base_directory = '../', site_used,
 //
 site_type_description = {
 	'comic.cmn-Hans-CN' : '中国内地漫画',
+	'comic.en-US' : 'English webcomics',
 	'novel.cmn-Hans-CN' : '中国内地小说',
 	'novel.ja-JP' : '日本のオンライン小説'
 },
@@ -27,7 +28,10 @@ download_sites_set = {
 		manhuatai : '漫画台',
 		omanhua : '哦漫画',
 		qq : '腾讯漫画',
-		webtoons : 'WEBTOON',
+		webtoons : 'WEBTOON'
+	},
+	'comic.en-US' : {
+		mangamew : 'Manga Mew',
 		manganew : 'Manga New'
 	},
 	'novel.cmn-Hans-CN' : {
@@ -174,6 +178,12 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 			C : 'click_item'
 		});
 	}
+
+	CeL.log([ '<span style="font-size:2em; color:#f88;">',
+			'<a href="https://support.microsoft.com/zh-tw/',
+			'help/12445/windows-keyboard-shortcuts" target="_blank">',
+			'複製貼上快速鍵</a>: Ctrl + C 複製選取的項目,', ' Ctrl + V 貼上選取的項目</span>' ]
+			.join(''));
 
 	CeL.new_node(options_nodes, 'download_options_panel');
 });

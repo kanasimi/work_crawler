@@ -122,9 +122,8 @@
       ![執行命令以下載 CeJS 程式庫](https://lh3.googleusercontent.com/kriJ1gZRQF_QZ-Qbw4nsY5bOz39rhjd-IXVJPGfkTvZkrBir-bikBhu3qj3l5uIm7i3dFhDvV9_kyzDysQNKQYnKTTbiSdJXlutjCB9OAQBhug9Ogq7UxUDD5a-66iytQfwYrWV8dA=w377-h81-no)
 </details>
 
-5. <details><summary>然後就能[開始試用](#execution-執行)囉。</summary>
-
-   下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子：
+5. 然後就能[開始試用](#execution-執行)囉。
+   <details><summary>下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子：</summary>
 
    ![下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
 
