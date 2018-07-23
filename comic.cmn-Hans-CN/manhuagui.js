@@ -39,8 +39,9 @@ crawler = new CeL.work_crawler({
 	// 2018/4: manhuagui 不允許過於頻繁的 access，會直接 ban IP。
 	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
 	// 2018/7/12 22:29:18 9s: NG, ban 2 hr.
-	// 10s 在下載過300章之後一樣會 ban。
-	chapter_time_interval : 15 * 1000,
+	// 10s, 15s 在下載過100章(1 hr)之後一樣會 ban 5hr。
+	// 20s, 30s 在下載過200章(~2 hr)之後一樣會 ban。
+	chapter_time_interval : 60 * 1000,
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.
@@ -264,9 +265,10 @@ crawler = new CeL.work_crawler({
 
 setup_crawler(crawler, typeof module === 'object' && module);
 
-var LZString;
 // 創建 main directory。
 CeL.create_directory(crawler.main_directory);
+
+var LZString;
 CeL.get_URL_cache(crawler.script_base_URL + decode_filename,
 // 2017/3/3? ikanman 改版
 function(contents) {
