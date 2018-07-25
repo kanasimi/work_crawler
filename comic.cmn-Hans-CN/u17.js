@@ -8,8 +8,8 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-// [ all, url, title + date, short title, page count ]
-var PATTERN_chapter = /<a id="cpt_\d+" href="([^<>"]+)"[\n\s]+title="([^<>"]+)"[^<>]*>([\s\S]+?)<\/a>([\s\S]*?)<\/li>/g,
+// [ all, chapter id, url, title + date, short title, page count ]
+var PATTERN_chapter = /<a id="cpt_(\d+)" href="([^<>"]+)"[\n\s]+title="([^<>"]+)"[^<>]*>([\s\S]+?)<\/a>([\s\S]*?)<\/li>/g,
 //
 crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
@@ -18,8 +18,7 @@ crawler = new CeL.work_crawler({
 	base_URL : 'http://www.u17.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'http://www.u17.com/www/ajax.php'
-			+ '?mod=comic&act=comic_suggest&q=',
+	search_URL : 'www/ajax.php?mod=comic&act=comic_suggest&q=',
 	parse_search_result : function(html) {
 		var id_list = [], id_data = [];
 		html = JSON.parse(html);
@@ -89,17 +88,21 @@ crawler = new CeL.work_crawler({
 		work_data.chapter_list = [];
 
 		var matched;
-		// [ all, url, title + date, short title, page count ]
+		// [ all, chapter id, url, title + date, short title, page count ]
 		while (matched = PATTERN_chapter.exec(html)) {
-			matched[2] = get_label(matched[2]);
-			matched[4] = get_label(matched[4]);
-			var title_date = matched[2].match(/^(.+)\s(\d{4}-\d{2}-\d{2})$/),
+			matched[3] = get_label(matched[3]);
+			matched[5] = get_label(matched[5]);
+			var title_date = matched[3].match(/^(.+)\s(\d{4}-\d{2}-\d{2})$/),
 			//
 			chapter_data = {
-				url : matched[1],
-				title : (title_date ? title_date[1].trim() : matched[2])
+				// 採用呼叫網頁的方法，有些頁面無圖片資料。
+				// url : matched[2],
+				// 採用呼叫API的方法。
+				url : 'comic/ajax.php?mod=chapter'
+						+ '&act=get_chapter_v5&chapter_id=' + matched[1],
+				title : (title_date ? title_date[1].trim() : matched[3])
 				// e.g., "(9p)"
-				+ (matched[4] ? ' ' + matched[4] : '')
+				+ (matched[5] ? ' ' + matched[5] : '')
 			};
 			if (title_date) {
 				chapter_data.date = title_date[2];
@@ -109,14 +112,28 @@ crawler = new CeL.work_crawler({
 	},
 
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
-		var chapter_data = html.between('image_config =', '\nvar');
-		eval('chapter_data=' + chapter_data);
+		var chapter_data;
 
-		(chapter_data.image_list = Object.values(chapter_data.image_list))
-		//
-		.forEach(function(image_data) {
-			image_data.url = atob(image_data.src);
-		});
+		if (html.startsWith('{')) {
+			// 採用呼叫API的方法。
+			chapter_data = JSON.parse(html);
+			chapter_data.image_list.forEach(function(image_data) {
+				image_data.url = image_data.src;
+			});
+
+		} else if (chapter_data = html.between('image_config =', '\nvar')) {
+			// 採用呼叫網頁的方法，有些頁面無圖片資料。
+			eval('chapter_data=' + chapter_data);
+
+			(chapter_data.image_list = Object.values(chapter_data.image_list))
+			//
+			.forEach(function(image_data) {
+				image_data.url = atob(image_data.src);
+			});
+
+		} else {
+			throw '網站結構改變，無法取得資料！';
+		}
 
 		return chapter_data;
 	}
