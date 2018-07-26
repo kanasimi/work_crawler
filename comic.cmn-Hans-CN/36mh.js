@@ -1,7 +1,7 @@
 ﻿/**
- * 批量下載古风漫画网的工具。 Download GuFengMH.Com comics.
+ * 批量下載 36漫画网 的工具。 Download 36mh comics.
  * 
- * @see 36mh.js
+ * modify from gufengmh.js
  */
 
 'use strict';
@@ -16,7 +16,7 @@ var crawler = new CeL.work_crawler({
 	// recheck : true,
 	// one_by_one : true,
 
-	base_URL : 'http://www.gufengmh.com/',
+	base_URL : 'https://www.36mh.com/',
 
 	// 嘗試取得被屏蔽的作品。
 	// 對於被屏蔽的作品，將會每次都從頭檢查。若連內容被屏蔽，就可能從頭檢查到尾都沒有成果。
@@ -50,12 +50,7 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : function(work_title) {
-		// SinConf.apiHost
-		return [ 'http://api.gufengmh.com/comic/search', {
-			keywords : work_title
-		} ];
-	},
+	search_URL : 'search/?keywords=',
 	parse_search_result : function(html, get_label) {
 		if (html.startsWith('{')) {
 			// 使用API取得搜尋所得的作品資料。
