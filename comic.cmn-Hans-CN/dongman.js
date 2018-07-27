@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載 咚漫中文官网 韓國漫畫 的工具。 Download dongmanmanhua comics.
+ * 
+ * modify from webtoon.js
  */
 
 'use strict';
@@ -14,10 +16,11 @@ crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// one_by_one : true,
+	// https://www.webtoons.com/zh-hans/
 	base_URL : 'https://www.dongmanmanhua.cn/',
 
 	// 最小容許圖案檔案大小 (bytes)。
-	// MIN_LENGTH : 500,
+	MIN_LENGTH : 300,
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search/autoComplete?keyword=',
@@ -51,6 +54,7 @@ crawler = new CeL.work_crawler({
 			':webtoon:author" content="', '"')),
 
 			// 選擇性屬性：須配合網站平台更改。
+			// 看第一集, 阅读第一话
 			chapter_1_url : matched[1],
 			status : [
 					get_label(text.between('<h2 class="genre ', '</h2>')
@@ -63,7 +67,7 @@ crawler = new CeL.work_crawler({
 			last_update : get_label(html.between('<span class="date">',
 					'</span>'))
 		};
-		// console.log(work_data)
+		// console.log(work_data);
 		return work_data;
 	},
 	chapter_list_URL : function(work_id, work_data) {

@@ -1,6 +1,8 @@
 ﻿/**
  * 批量下載 WEBTOON 中文官網 韓國漫畫 的工具。 Download NAVER WEBTOON comics.
  * (comic.cmn-Hant-TW)
+ * 
+ * @see dongman.js
  */
 
 'use strict';
@@ -18,7 +20,7 @@ crawler = new CeL.work_crawler({
 	base_URL : 'https://www.webtoons.com/zh-hant/',
 
 	// 最小容許圖案檔案大小 (bytes)。
-	MIN_LENGTH : 500,
+	MIN_LENGTH : 300,
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
@@ -50,9 +52,7 @@ crawler = new CeL.work_crawler({
 	},
 
 	// 取得作品的章節資料。 get_work_data()
-	work_URL : function(work_id) {
-		return 'https://www.webtoons.com/episodeList?titleNo=' + work_id;
-	},
+	work_URL : 'episodeList?titleNo=',
 	parse_work_data : function(html, get_label, extract_work_data) {
 		var matched = html.match(/<a href="([^<>"]+)"[^<>]+id="_btnEpisode">/),
 		//
@@ -62,14 +62,17 @@ crawler = new CeL.work_crawler({
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(text.between('<h1 class="subj">', '</h1>')),
 			author : get_label(html.between(
-			//
-			'<meta property="com-linewebtoon:webtoon:author" content="', '"')),
+			// <meta property="com-linewebtoon:webtoon:author" content="A / B"
+			// />
+			':webtoon:author" content="', '"')),
 
 			// 選擇性屬性：須配合網站平台更改。
+			// 看第一集, 阅读第一话
 			chapter_1_url : matched[1],
 			status : [
 					get_label(text.between('<h2 class="genre ', '</h2>')
 							.between('>')),
+					// 更新頻率 update_frequency
 					get_label(html.between('<p class="day_info">', '</p>')) ],
 			description : get_label(html.between(
 			// ('<p class="summary">', '</p>')
@@ -77,7 +80,7 @@ crawler = new CeL.work_crawler({
 			last_update : get_label(html.between('<span class="date">',
 					'</span>'))
 		};
-		// console.log(work_data)
+		// console.log(work_data);
 		return work_data;
 	},
 	chapter_list_URL : function(work_id, work_data) {
