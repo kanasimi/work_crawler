@@ -1,4 +1,13 @@
-﻿# CeJS 線上小說漫畫下載工具 online novels / comics downloader
+﻿![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)
+![GitHub Release Date](https://img.shields.io/github/release-date/kanasimi/work_crawler.svg)
+![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)
+![GitHub commit activity the past week, 4 weeks, year](https://img.shields.io/github/commit-activity/y/kanasimi/work_crawler.svg)
+![Github All Releases](https://img.shields.io/github/downloads/kanasimi/work_crawler/total.svg)
+<!--
+![Github Releases](https://img.shields.io/github/downloads/kanasimi/work_crawler/latest/total.svg)
+-->
+
+# CeJS 線上小說漫畫下載工具 online novels / comics downloader
 - [en] Download novels → epub and comics with [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) and [command-line interface](https://en.wikipedia.org/wiki/Command-line_interface).
 - [TW] 批量下載小說 → epub、漫畫網站的工具。視窗+命令行介面。
 - [CN] 批量下载小说 → epub、漫画网站的网络爬虫。图形+命令行界面。
@@ -24,7 +33,7 @@
 ### Japanese web fictions / Japanese light novels ライトノベル 日本輕小說 日本のオンライン小説
 [novel.ja-JP/](novel.ja-JP/)*.js, web pages → epub
 
-| Site | Tool file | Note |
+| Site 平台名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
 | [アルファポリス](https://www.alphapolis.co.jp/) | AlphaPolis.js | レンタルする話は取得できません |
 | [カクヨム](https://kakuyomu.jp/) | kakuyomu.js | |
@@ -35,7 +44,7 @@
 ### Chinese web fictions / novels 中国内地小说 中国のオンライン小説
 [novel.cmn-Hans-CN/](novel.cmn-Hans-CN/)*.js, web pages → epub
 
-| Site | Tool file | Note |
+| Site 平台名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
 | [起点中文网](https://www.qidian.com/) | qidian.js | **本工具無法下載 VIP章节內容** |
 | [八一中文网](http://www.81xsw.com/) | 81xsw.js | [PTCMS](https://www.ptcms.com/)系统 |
@@ -55,25 +64,29 @@
 [comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, images → zip
 * 本工具無法下載需VIP付費、已屏蔽或刪除的內容。
 
-| Site | Tool file | Note |
+| Site 平台名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** 2017/8/15 起取消了今日限免 |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
+| [有妖气](http://www.u17.com/) | u17.js | **本工具無法下載VIP付費內容** |
 | [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | |
-| [看漫画](http://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/) |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
-| [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。 |
+| [看漫画](http://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/)<br />[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板? |
+| [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
+| [36漫画网](https://www.36mh.com/) | 36mh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
+| [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。  [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
 | [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。 |
 | [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
-| [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | |
-| [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoons.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
+| [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
+| [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |
+| [OVERLAP](https://over-lap.co.jp/gardo/) | OVERLAP.js | オーバーラップ コミックガルド |
 
 ### English webcomics 英語網路漫畫 英語のウェブコミック
 [comic.en-US/](comic.en-US/)*.js, images → zip
@@ -82,6 +95,7 @@
 | --- | --- | --- |
 | [Manga Mew](https://www1.mangamew.com/) | mangamew.js | 一些圖片在檔案最後會多加個字元 0A，因此被判別為非正規圖片檔。 |
 | [Manga New](http://manganew.net/) | manganew.js |  |
+| [Rocaca](http://www.rocaca.com/) | rocaca.js |  |
 
 ## Installation 安裝
 
