@@ -15,24 +15,41 @@ site_type_description = {
 download_sites_set = {
 	'comic.cmn-Hans-CN' : {
 		// '2manhua' : '爱漫画',
+		qq : '腾讯漫画',
 		'163' : '网易漫画',
-		'733dm' : '733动漫网',
-		'733mh' : '733漫画网',
-		dmzj : '动漫之家',
-		dm5 : '动漫屋',
-		gufengmh : '古风漫画网',
-		hhcool : '汗汗酷漫',
+		u17 : '有妖气',
 		dajiaochong : '大角虫漫画',
 		kuaikan : '快看漫画',
-		manhuagui : '看漫画/漫画柜',
+
+		'733dm' : '733动漫网',
+		'733mh' : '733漫画网',
+		mh160 : '漫画160',
+
+		dmzj : '动漫之家',
+		dm5 : '动漫屋',
+
 		manhuatai : '漫画台',
+
+		manhuagui : '看漫画/漫画柜',
+		gufengmh : '古风漫画网',
+		'36mh' : '36漫画网',
+
+		hhcool : '汗汗酷漫',
 		omanhua : '哦漫画',
-		qq : '腾讯漫画',
-		webtoons : 'WEBTOON'
+
+		webtoon : 'WEBTOON',
+		dongman : '咚漫',
+		XOY : 'WEBTOON ja',
+
+		OVERLAP : 'OVERLAP'
 	},
 	'comic.en-US' : {
+		webtoon : 'WEBTOON en',
+
 		mangamew : 'Manga Mew',
-		manganew : 'Manga New'
+		manganew : 'Manga New',
+
+		Rocaca : 'rocaca'
 	},
 	'novel.cmn-Hans-CN' : {
 		qidian : '起点中文网',
@@ -58,6 +75,7 @@ download_sites_set = {
 download_options_set = {
 	recheck : '從頭檢測所有作品之所有章節與所有圖片。',
 	start_chapter : '將開始/接續下載的章節編號。必須要配合 .recheck。',
+	chapter_filter : '篩選想要下載的章節標題關鍵字。例如"單行本"。',
 	// 重新擷取用的相關操作設定。
 	regenerate : '章節數量無變化時依舊利用 cache 重建資料(如ebook)。',
 	reget_chapter : '重新取得每個所檢測的章節內容。',
@@ -65,7 +83,7 @@ download_options_set = {
 	archive_images : '漫畫下載完畢後壓縮圖像檔案。',
 
 	// 容許錯誤用的相關操作設定。
-	MAX_ERROR_RETRY : '可容許的錯誤次數。',
+	MAX_ERROR_RETRY : '出錯時重新嘗試的次數。',
 	allow_EOI_error : '當圖像不存在 EOI (end of image) 標記，或是被偵測出非圖像時，依舊強制儲存檔案。',
 	skip_error : '忽略/跳過圖像錯誤。',
 	skip_chapter_data_error : '當無法取得 chapter 資料時，直接嘗試下一章節。',
