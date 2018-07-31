@@ -101,15 +101,12 @@ crawler = new CeL.work_crawler({
 			chapter_data.title = chapter_data.chapter_name;
 		} else {
 			if (!chapter_data.title) {
-				var title = get_label(html.between(' selected>', '</option>'));
-				if (title) {
-					chapter_data.title = title;
-				}
+				chapter_data.title = get_label(html.between(' selected>',
+						'</option>'));
 			}
-			if (chapter_data.title) {
-				chapter_data.title = chapter_data.title.replace(
-						work_data.title, '');
-			}
+			// assert: !!chapter_data.title === true
+			chapter_data.title = chapter_data.title
+					.replace(work_data.title, '');
 		}
 
 		var imgsrcs = html.match(/var\s+imgsrcs\s*=\s*'([^']+)'/);
@@ -137,8 +134,7 @@ CeL.create_directory(crawler.main_directory);
 var chapter_init_filename = 'js/chapter_init.js?47', chapter_filename = 'js/chapter.js?47',
 //
 decode_function = 'decode_function=function(imgsrcs){'
-		+ 'var window={},navigator={},jQuery={},current_page=1,_a,__micro,__renderedImg,$j,$i,$temp,_eu;'
-		+ 'function atob(a){return new Buffer.from(a,"base64").toString("binary");}';
+		+ 'var window={},navigator={},jQuery={},current_page=1,_a,__micro,__renderedImg,$j,$i,$temp,_eu;';
 
 CeL.get_URL_cache(crawler.base_URL + chapter_init_filename,
 		get_chapter_filename, crawler.main_directory
