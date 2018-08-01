@@ -25,9 +25,16 @@ var crawler = new CeL.work_crawler({
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	// skip_error : true,
 
+	// 最小容許圖案檔案大小 (bytes)。
+	// 對於極少出現錯誤的網站，可以設定一個比較小的數值，並且設定.allow_EOI_error=false。因為這類型的網站要不是無法取得檔案，要不就是能夠取得完整的檔案；要取得破損檔案，並且已通過EOI測試的機會比較少。
+	// 對於有些圖片只有一條細橫桿的情況。
+	MIN_LENGTH : 400,
+
 	// one_by_one : true,
 	// base_URL : 'http://www.hhcool.com/',
 	// 2018/4/27? 汗汗酷漫更改域名。最後一次存取: 2018/4/27 14:18
+	// http://www.hheehh.com/
+	// http://www.huhumh.com/
 	base_URL : 'http://www.hhimm.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -199,9 +206,10 @@ function unsuan(s) {
 
 setup_crawler(crawler, typeof module === 'object' && module);
 
-var decode_filename = 'script/view.js', unsuan;
-// 創建 main directory。 C
+// 創建 main directory。
 CeL.create_directory(crawler.main_directory);
+
+var decode_filename = 'script/view.js', unsuan;
 CeL.get_URL_cache(crawler.base_URL + decode_filename, function(contents) {
 	// eval('unsuan=function' + contents.between('function unsuan', '\nvar'));
 	start_crawler(crawler, typeof module === 'object' && module);
