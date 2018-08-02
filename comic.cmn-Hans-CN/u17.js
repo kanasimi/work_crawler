@@ -117,9 +117,15 @@ crawler = new CeL.work_crawler({
 		if (html.startsWith('{')) {
 			// 採用呼叫API的方法。
 			chapter_data = JSON.parse(html);
-			chapter_data.image_list.forEach(function(image_data) {
-				image_data.url = image_data.src;
-			});
+			if (!chapter_data.image_list && chapter_data.message) {
+				CeL.error(work_data.title + ' #' + chapter_NO + ': '
+				// e.g., "没有阅读权限"
+				+ chapter_data.message);
+			} else {
+				chapter_data.image_list.forEach(function(image_data) {
+					image_data.url = image_data.src;
+				});
+			}
 
 		} else if (chapter_data = html.between('image_config =', '\nvar')) {
 			// 採用呼叫網頁的方法，有些頁面無圖片資料。

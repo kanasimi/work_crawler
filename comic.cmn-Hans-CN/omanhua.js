@@ -105,9 +105,10 @@ var crawler = new CeL.work_crawler({
 
 setup_crawler(crawler, typeof module === 'object' && module);
 
-var decode_filename = 'scripts/show/ssncore.js';
 // 創建 main directory。
 CeL.create_directory(crawler.main_directory);
+
+var decode_filename = 'scripts/show/ssncore.js';
 CeL.get_URL_cache(crawler.base_URL + decode_filename, function(contents) {
 	// var servs = [{...
 	start_crawler(crawler, typeof module === 'object' && module);

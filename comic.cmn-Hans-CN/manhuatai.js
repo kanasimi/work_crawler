@@ -44,7 +44,7 @@ crawler = new CeL.work_crawler({
 			return server.includes('mhpic') ? server : server + ':82';
 		});
 	},
-	// use cache of host list. 不每一次重新取得取得伺服器列表。
+	// use cache of host list. 不每一次重新取得伺服器列表。
 	// use_server_cache : true,
 
 	// 解析 作品名稱 → 作品id get_work()

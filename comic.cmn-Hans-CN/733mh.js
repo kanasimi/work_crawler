@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載733漫画网的工具。 Download 733mh comics.
+ * 
+ * @see qTcms 晴天漫画程序 晴天漫画系统 http://manhua.qingtiancms.com/
  */
 
 'use strict';
@@ -46,7 +48,7 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'http://www.733mh.net/e/search/'
+	search_URL : 'e/search/'
 			+ '?searchget=1&show=title,player,playadmin,pinyin&keyboard=',
 	parse_search_result : function(html) {
 		var id_list = [], id_data = [], matched, PATTERN =
@@ -55,7 +57,7 @@ var crawler = new CeL.work_crawler({
 		<dt><a href="/mh/27576" title="时空使徒">时空使徒</a></dt>
 		</code>
 		 */
-		/<a href="\/mh\/(\d+)" title="([^"<>]+)">/g;
+		/<a href="\/mh\/(\d+)\/?" title="([^"<>]+)">/g;
 		while (matched = PATTERN.exec(html)) {
 			id_list.push(+matched[1]);
 			id_data.push(matched[2]);
@@ -99,9 +101,9 @@ var crawler = new CeL.work_crawler({
 		 */
 		work_data.chapter_list = [];
 		work_data.inverted_order = true;
-		var matched,
+		var matched, PATTERN_chapter =
 		// [ , chapter_url, chapter_title ]
-		PATTERN_chapter = /<a href="(\/mh\/[^"]+)" title="([^"]+)"/g;
+		/<a href="(\/mh\/[^<>"]+)" title="([^<>"]+)"/g;
 		while (matched = PATTERN_chapter.exec(html)) {
 			work_data.chapter_list.push({
 				url : matched[1],
@@ -117,7 +119,7 @@ var crawler = new CeL.work_crawler({
 			eval(eval(Buffer.from(packed, 'base64').toString().slice(4)));
 			// 通常[0]===undefined
 			return photosr.filter(function(url) {
-				return url;
+				return !!url;
 			});
 		}
 
