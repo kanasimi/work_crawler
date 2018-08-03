@@ -2,6 +2,8 @@
  * 批量下載漫画柜的工具。 Download manhuagui comics.
  * 
  * 2017/10: 爱看漫/看漫画改名(DNS被導引到)漫画柜
+ * 
+ * @see qTcms 晴天漫画程序 晴天漫画系统 http://manhua.qingtiancms.com/
  */
 
 'use strict';
@@ -38,6 +40,7 @@ crawler = new CeL.work_crawler({
 
 	// 2018/4: manhuagui 不允許過於頻繁的 access，會直接 ban IP。
 	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
+	// 模仿實際人工請求。
 	// 2018/7/12 22:29:18 9s: NG, ban 2 hr.
 	// 10s, 15s 在下載過100章(1 hr)之後一樣會 ban 5hr。
 	// 20s, 30s 在下載過200章(~2 hr)之後一樣會 ban。
