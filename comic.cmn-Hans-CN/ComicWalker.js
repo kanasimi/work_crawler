@@ -122,6 +122,10 @@ var crawler = new CeL.work_crawler({
 
 		extract_work_data(work_data, html);
 
+		// 一年沒更新就不再檢查
+		this.recheck = !((Date.now() - Date.parse(work_data.last_update))
+				/ (24 * 60 * 60 * 1000) > 365);
+
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
@@ -149,6 +153,8 @@ var crawler = new CeL.work_crawler({
 		html = JSON.parse(html);
 
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
+		// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
+		this.set_chapter_NO_via_title(chapter_data);
 		chapter_data.image_list = html.data.result;
 		chapter_data.image_list.forEach(function(image_data) {
 			image_data.url = image_data.meta.source_url;
@@ -157,15 +163,15 @@ var crawler = new CeL.work_crawler({
 		return chapter_data;
 	},
 	image_pre_process : function(contents, image_data) {
-		var decode_key = new Uint8Array(image_data.meta.drm_hash.slice(0, 16)
-		//
+		var decode_key = image_data.meta.drm_hash.slice(0, 16)
+		// decode image 用的關鍵 key
 		.match(/[\da-f]{2}/gi).map(function(t) {
 			return parseInt(t, 16);
-		}));
-		contents.forEach(function(char, index) {
-			// 8 === decode_key.length
-			contents[index] = char ^ decode_key[index % 8];
 		});
+		for (var index = 0, length = contents.length; index < length; index++) {
+			// 8 === decode_key.length
+			contents[index] ^= decode_key[index % 8];
+		}
 	}
 });
 

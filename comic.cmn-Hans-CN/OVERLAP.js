@@ -72,6 +72,8 @@ var crawler = new CeL.work_crawler({
 				url : base_URL + 'iPhone/ibook.xml',
 				title : get_label(matched[1].between('<h2>', '</h2>'))
 			};
+			// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
+			this.set_chapter_NO_via_title(chapter_data);
 			work_data.chapter_list.push(chapter_data);
 		}
 		work_data.chapter_list.reverse();
