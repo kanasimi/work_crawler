@@ -23,6 +23,8 @@ global.completed_directory = [ '', '' ];
 // 檔案分類完後要放置的標的目錄。
 global.catalog_directory = '';
 
+global.account_data = {};
+
 // ------------------------------------
 
 try {

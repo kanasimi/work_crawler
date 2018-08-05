@@ -90,6 +90,7 @@
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |
 | [OVERLAP](https://over-lap.co.jp/gardo/) | OVERLAP.js | オーバーラップ コミックガルド |
+| [ComicWalker](https://comic-walker.com/) | ComicWalker.js | KADOKAWAの無料漫画（マンガ） コミックウォーカー |
 
 ### English webcomics 英語網路漫畫 英語のウェブコミック
 [comic.en-US/](comic.en-US/)*.js, images → zip
@@ -103,7 +104,7 @@
 
 ## Installation 安裝
 
-若是想要使用圖形介面，您可以 **[直接下載安裝包](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包並非最新的版本**，有些網站下載起來會出問題。若是欲採用最新的版本，或者用作研究開發、想要使用命令行介面作批次處理，請採用下列步驟。
+若是想要使用圖形介面，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。若是欲採用最新的版本，或者用作研究開發、想要使用命令行介面作批次處理，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->

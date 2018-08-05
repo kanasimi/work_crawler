@@ -25,7 +25,7 @@ crawler = new CeL.work_crawler({
 	need_create_ebook : true,
 	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。default:false
 	// recheck='changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。否則只會自上次下載過的章節接續下載。
-	recheck : 'changed',
+	// recheck : 'changed',
 
 	site_name : '飘天文学',
 	base_URL : 'http://www.piaotian.com/',

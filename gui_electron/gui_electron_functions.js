@@ -41,7 +41,8 @@ download_sites_set = {
 		dongman : '咚漫',
 		XOY : 'WEBTOON ja',
 
-		OVERLAP : 'OVERLAP'
+		OVERLAP : 'OVERLAP',
+		ComicWalker : 'ComicWalker'
 	},
 	'comic.en-US' : {
 		webtoon : 'WEBTOON en',
@@ -74,7 +75,7 @@ download_sites_set = {
 // @see CeL.application.net.work_crawler
 download_options_set = {
 	recheck : '從頭檢測所有作品之所有章節與所有圖片。',
-	start_chapter : '將開始/接續下載的章節編號。必須要配合 .recheck。',
+	start_chapter : '將開始/接續下載的章節編號。對已下載過的章節，必須配合 .recheck。',
 	chapter_filter : '篩選想要下載的章節標題關鍵字。例如"單行本"。',
 	// 重新擷取用的相關操作設定。
 	regenerate : '章節數量無變化時依舊利用 cache 重建資料(如ebook)。',
@@ -204,6 +205,21 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 			.join(''));
 
 	CeL.new_node(options_nodes, 'download_options_panel');
+
+	// https://developer.mozilla.org/en-US/docs/Web/API/Notification/permission
+	// https://electronjs.org/docs/tutorial/desktop-environment-integration
+	// https://electronjs.org/docs/api/notification
+	if (true || !window.Notification) {
+	} else if (Notification.permission === 'granted') {
+	} else if (Notification.permission !== 'denied') {
+		// assert: Notification.permission === 'default' ||
+		// Notification.permission === 'undefined'
+		Notification.requestPermission(function(permission) {
+			if (permission === 'granted') {
+				var notification = new Notification('');
+			}
+		});
+	}
 });
 
 function reset_site_options() {

@@ -28,6 +28,7 @@ CeL.run(
 CeL.get_URL.default_user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 		+ Math.random();
 
+// 自動下載 torrent 檔案。
 var torrent_directory// = 'torrent' + CeL.env.path_separator
 ,
 /** {String}下載完成、要處理的檔案/目錄所放置的目錄。 e.g., "node renamer.js C target_directory" */
@@ -166,12 +167,13 @@ function for_menu_list(html, callback) {
 	// console.log(html);
 
 	var matched,
-	// [ all, id ]
-	PATTERN_id = /<a href="\/(view\/\d+)"/g, id_list = [];
+	// [ all, id, title, torrent_url ]
+	PATTERN_item = /<a href="\/(view\/\d+)" title="([^"<>]+)"[\s\S]+?<a href="([^"<>]+\.torrent)">/g, id_list = [];
 
-	while (matched = PATTERN_id.exec(html)) {
+	while (matched = PATTERN_item.exec(html)) {
 		id_list.push(matched[1]);
 	}
+
 	// console.log(id_list);
 	// console.log(id_list.length);
 

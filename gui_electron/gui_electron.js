@@ -13,6 +13,7 @@ var win;
 
 function create_window() {
 	// Create the browser window.
+	// https://electronjs.org/docs/api/browser-window
 	win = new BrowserWindow(Object.assign({
 		// https://github.com/electron-userland/electron-builder/issues/2269#issuecomment-342168989
 		icon : path.join(__dirname, '/icon/rasen1.png')
@@ -22,6 +23,9 @@ function create_window() {
 
 	// https://electronjs.org/docs/api/browser-window
 	win.maximize();
+
+	// https://electronjs.org/docs/tutorial/progress-bar
+	// win.setProgressBar(0.5);
 
 	// and load the gui_electron.html of the app.
 	win.loadURL(url.format({

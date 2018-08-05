@@ -1,5 +1,7 @@
 ﻿/**
- * 批量下載 Manga New 的工具。 Download manganew comics. (comic.en-US)
+ * 批量下載 Manga New 的工具。 Download manganew comics.
+ * 
+ * @see mangamew.js
  */
 
 'use strict';
@@ -27,7 +29,7 @@ var crawler = new CeL.work_crawler({
 		PATTERN = /<li>([\s\S]+?)<\/li>/g, matched;
 
 		while (matched = PATTERN.exec(html)) {
-			var id = matched[1].match(/<a href="([^<>"]+)">/),
+			var id = matched[1].match(/<a [^<>]*?href="([^<>"]+)">/),
 			//
 			title = get_label(matched[1].between('<h3>', '</h3>'));
 			if (title && id && (id = id[1].between(this.base_URL))) {

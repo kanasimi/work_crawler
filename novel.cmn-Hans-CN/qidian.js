@@ -14,7 +14,6 @@ CeL.run([ 'application.storage.EPUB'
 
 // ----------------------------------------------------------------------------
 
-// 章節以及篇章連結的模式。
 var crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!

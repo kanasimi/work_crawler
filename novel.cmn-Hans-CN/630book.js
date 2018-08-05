@@ -18,7 +18,7 @@ var crawler = CeL.PTCMS({
 
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck=false:明確指定自上次下載過的章節接續下載。
-	// recheck : false,
+	recheck : false,
 
 	// 解析 作品名稱 → 作品id get_work()
 	// 2017/7/24: 630book 這兩天(之前)開始採用百度搜索。
