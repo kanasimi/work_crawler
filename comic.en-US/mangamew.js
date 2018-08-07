@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載 Manga Mew 的工具。 Download mangamew comics.
+ * 
+ * @see manganew.js
  */
 
 'use strict';
@@ -15,6 +17,9 @@ crawler = new CeL.work_crawler({
 
 	// Manga Mew 一些圖片在檔案最後會多加個字元 0A，因此被判別為非正規圖片檔。似無缺損。
 	allow_EOI_error : true,
+	// 最小容許圖案檔案大小 (bytes)。
+	// e.g., Tower of God Chapter 390
+	MIN_LENGTH : 3e3,
 
 	// one_by_one : true,
 	base_URL : 'https://www1.mangamew.com/',
@@ -72,11 +77,11 @@ crawler = new CeL.work_crawler({
 		work_data.chapter_list = [];
 
 		while (matched = PATTERN_chapter.exec(html)) {
-			var chapter_date = {
+			var chapter_data = {
 				title : get_label(matched[2]),
 				url : matched[1]
 			};
-			work_data.chapter_list.push(chapter_date);
+			work_data.chapter_list.push(chapter_data);
 		}
 	},
 

@@ -387,7 +387,7 @@ crawler = new CeL.work_crawler({
 		if (raw_data.pagination < chapter_NO
 		// 照理 ((raw_data.pagination === chapter_NO))
 		&& raw_data.pagination === raw_data.pageEnd) {
-			CeL.warn('parse_chapter_data: 預計取得第' + chapter_NO + '頁，但實際得到第'
+			CeL.warn('parse_chapter_data: 預期取得第' + chapter_NO + '頁，但實際得到第'
 			//
 			+ raw_data.pagination + '/' + raw_data.pageEnd + '頁，跳過本頁。');
 			return;
