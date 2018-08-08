@@ -71,13 +71,13 @@
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
 | [有妖气](http://www.u17.com/) | u17.js | **本工具無法下載VIP付費內容** |
 | [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
+| [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [看漫画](http://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/)<br />[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板?<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。  [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 |
-| [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
 | [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。 |
 | [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
 | [漫画160](http://www.mh160.com/) | mh160.js | 與 733漫画网 相同系統 |
@@ -98,7 +98,7 @@
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [Manga Mew](https://www1.mangamew.com/) | mangamew.js | 一些圖片在檔案最後會多加個字元 0A，因此被判別為非正規圖片檔。 |
-| [Manga New](http://manganew.net/) | manganew.js |  |
+| [Manga New](http://manganew.net/) | manganew.js | Using Microsoft IIS? |
 | [Rocaca](http://www.rocaca.com/) | rocaca.js |  |
 | [WEBTOON](https://www.webtoons.com/en/) | webtoon.js | NAVER LINE WEBTOON |
 
@@ -108,8 +108,8 @@
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
-1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](http://7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->（已經安裝過的可以跳過）
-2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這將是本工具將安裝的標的目錄，若有需要亦可將之改名。
+1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->（已經安裝過的可以跳過）
+2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這是本工具將安裝的標的目錄，若有需要亦可將之改名。
 3. <details><summary>下載 CeJS 安裝檔 <code>_CeL.updater.node.js</code>。（點擊本行可獲得更詳細的說明）</summary>
 
    下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，將此檔儲存到前面所提到的，本工具將安裝的標的目錄 <code>work_crawler-master</code> 下。
