@@ -10,24 +10,24 @@ ComicWalker 對圖片的處理:
 
 ComicWalker 會將圖片存在像是這樣子路徑的檔案:
 https://drm.nicoseiga.jp/image/78c60478495c13061ecccd6a493c6317f9485fed_17746/8371673p
-每個檔案代表一個圖片
+每個檔案代表一張圖片
 
 解碼機制全部都放在
 https://cdn.comic-walker.com/viewer/cw-viewer.min.js?20180424
 
 
-從圖片檔案路徑的 drm_hash 可以生成 decode image 用的關鍵 key:
+從圖片檔案 URL 的 drm_hash 可以生成 decode image 用的關鍵 key:
 
 this.generateKey(n)
-//this.generateKey("78c60478495c13061ecccd6a493c6317f9485fed_17746")
+// this.generateKey("78c60478495c13061ecccd6a493c6317f9485fed_17746")
 key: "generateKey",
 value: function(t) {
-    var e = t.slice(0, 16).match(/[\da-f]{2}/gi);
-    if (null != e)
-        return new Uint8Array(e.map(function(t) {
-            return parseInt(t, 16)
-        }));
-    throw new Error("failed generate key.")
+	var e = t.slice(0, 16).match(/[\da-f]{2}/gi);
+	if (null != e)
+		return new Uint8Array(e.map(function(t) {
+			return parseInt(t, 16)
+		}));
+	throw new Error("failed generate key.")
 }
 
 
@@ -36,9 +36,9 @@ xor({Blob}圖片資料 → {ArrayBuffer}, {Uint8Array(8)} 關鍵 key)
 
 key: "xor",
 value: function(t, e) {
-    for (var n = new Uint8Array(t), r = n.length, i = e.length, o = new Uint8Array(r), a = 0; a < r; a += 1)
-        o[a] = n[a] ^ e[a % i];
-    return o
+	for (var n = new Uint8Array(t), r = n.length, i = e.length, o = new Uint8Array(r), a = 0; a < r; a += 1)
+		o[a] = n[a] ^ e[a % i];
+	return o
 }
 
 
@@ -75,7 +75,7 @@ var crawler = new CeL.work_crawler({
 	// 日本的線上漫畫網站習慣刪掉舊章節，因此每一次都必須從頭檢查。
 	recheck : true,
 
-	one_by_one : true,
+	// one_by_one : true,
 	base_URL : 'https://comic-walker.com/',
 
 	// 解析 作品名稱 → 作品id get_work()

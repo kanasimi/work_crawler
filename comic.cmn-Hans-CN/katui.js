@@ -51,7 +51,7 @@ var crawler = new CeL.work_crawler({
 			// myorder : 1,
 			tbname : 'mh',
 			tempid : 3,
-			show : 'title',
+			show : 'title,player,playadmin,bieming,pinyin',
 			keyboard : work_title
 		} ];
 	},

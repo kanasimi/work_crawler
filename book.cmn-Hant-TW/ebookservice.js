@@ -1,11 +1,13 @@
 ﻿/**
- * 批量下載遠流出版公司台灣雲端書庫的方法。 Download lib.ebookservice.tw books.
+ * 批量下載遠流出版公司台灣雲端書庫的工具。 Download lib.ebookservice.tw books.
  * 
  * <code>
 
 // Using chrome, doing the work below, 在完全載入完之前就執行:
 
 // ======================================================================================
+// step: save pages
+
 // for PDF
 
 // document.title = '[] ';
@@ -28,6 +30,8 @@ for (; page <= page_to; page++) {
 $("body").empty().css({
 	overflow : 'auto'
 }).append(html.join('<br />'));
+
+// go to step: converting pages
 
 // ---------------------------------------------------------------------------------
 // for epub
@@ -79,6 +83,7 @@ $("body").empty().append(html.join('<br />'));
 
 
 // ======================================================================================
+// step: converting pages
 
 // Waiting for the page loaded (check network), and save the page "Save as...",
 // and then run this tool. (e.g., `node ebookservice.js S:\b\台灣雲端書庫.html`)
@@ -92,14 +97,27 @@ $("body").empty().append(html.join('<br />'));
 // node ebookservice.js S:\b\台灣雲端書庫.html
 'use strict';
 
-require('../work_crawler_loder.js');
+require('../_CeL.loader.nodejs.js');
 
-var target_html_file = process.argv[2], source_directory = target_html_file
-		.replace(/[^\\\/]+$/, '');
+CeL.run([ 'application.storage.archive',
+// Add color to console messages. 添加主控端報告的顏色。
+'interact.console',
+// CeL.HTML_to_Unicode()
+'interact.DOM',
+// CeL.write_file()
+'application.platform.nodejs', 'application.storage' ]);
 
-var html = CeL.read_file(target_html_file).toString(), matched;
+var target_html_file = process.argv[2];
 
-var target_directory;
+if (!target_html_file) {
+	var main_script = process.mainModule.filename.match(/[^\\\/]+$/)[0];
+	CeL.log('批量下載遠流出版公司台灣雲端書庫的工具。\n\n' + 'Usage:\n	node ' + main_script
+			+ ' "saved webpage.html"');
+	process.exit();
+}
+
+var source_directory = target_html_file.replace(/[^\\\/]+$/, ''), html = CeL
+		.read_file(target_html_file).toString(), matched, target_directory;
 
 if (html.includes('<iframe id="')) {
 	// for epub
@@ -255,7 +273,7 @@ if (html.includes('<iframe id="')) {
 		}
 	}
 
-	CeL.info(source_file + ': '
+	CeL.info(target_directory + ': '
 			+ (start_empty_NO > 0 ? start_empty_NO - 1 : image_NO)
 			+ ' images get.');
 }

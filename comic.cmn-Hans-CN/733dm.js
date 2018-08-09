@@ -28,7 +28,7 @@ var crawler = new CeL.work_crawler({
 
 	// 取得伺服器列表。
 	// use_server_cache : true,
-	// http://www.733dm.net/skin/2014mh/global.js
+	// /skin/2014mh/global.js
 	server_URL : 'skin/2014mh/global.js',
 	parse_server_list : function(html) {
 		var server_list = [],
