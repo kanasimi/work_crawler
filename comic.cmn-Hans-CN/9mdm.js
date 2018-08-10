@@ -112,7 +112,8 @@ var crawler = new CeL.work_crawler({
 
 		if (work_data.image_list) {
 			chapter_data.image_list = work_data.image_list[chapter_NO - 1];
-			if (chapter_data.image_list.length === totalpage) {
+			if (chapter_data.image_list
+					&& chapter_data.image_list.length === totalpage) {
 				CeL.debug(work_data.title + ' #' + chapter_NO + ' '
 						+ chapter_data.title + ': Already got ' + totalpage
 						+ ' images.');
