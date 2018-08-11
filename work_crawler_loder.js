@@ -30,6 +30,9 @@ global.account_data = {
 	}
 };
 
+// 各個網站獨特的設定/特別的個人化設定
+global.site_configuration = {};
+
 // ------------------------------------
 
 try {
@@ -131,6 +134,10 @@ function setup_crawler(crawler, crawler_module) {
 	// main_directory 必須以 path separator 作結。
 	crawler.main_directory = data_directory + crawler.id
 			+ CeL.env.path_separator;
+
+	if (site_configuration[crawler.id]) {
+		Object.assign(crawler, site_configuration[crawler.id]);
+	}
 
 	CeL.debug('setup_crawler: ' + crawler.id + ', ' + crawler.main_directory);
 }

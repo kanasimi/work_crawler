@@ -25,7 +25,7 @@ var crawler = new CeL.work_crawler({
 	// skip_error : true,
 
 	// 單行本圖片較多且大，因此採用一個圖一個圖取得的方式。
-	// one_by_one : true,
+	one_by_one : true,
 	timeout : 90 * 1000,
 	base_URL : 'http://www.manhuadb.com/',
 
@@ -73,9 +73,10 @@ var crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
-		// <div class="comic-pub-data-section
-		html = html.between('<div class="comic-toc-section',
-				'<div class="comic-');
+		html = html.between('<div class="comic-toc-section', '<script ')
+				.between(null, {
+					tail : '</ol>'
+				});
 
 		var matched, PATTERN_chapter =
 		//
