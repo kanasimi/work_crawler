@@ -12,11 +12,26 @@ require('../work_crawler_loder.js');
 var crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
+	// e.g., 821 冥婚警戒中/0005 第四日 青梅竹馬的義氣/821-5-027.jpg
+	MIN_LENGTH : 800,
+
 	// one_by_one : true,
 	base_URL : 'http://www.comico.com.tw/',
 
+	convert_id : {
+		adult : function(insert_id_list, get_label) {
+			// 此前被當作是一般作品。
+			CeL.info(this.id + ': 此後的作品標題都被當作是網頁限定作品。');
+			this.adult = true;
+			insert_id_list();
+		}
+	},
+
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'webonly/search/index.nhn?searchWord=',
+	search_URL : function(work_title) {
+		return (this.adult ? 'webonly/' : '') + 'search/index.nhn?searchWord='
+				+ encodeURIComponent(work_title.replace(/\s+\d+$/, ''));
+	},
 	parse_search_result : function(html, get_label) {
 		html = html.between(' id="officialList">', '</ul>');
 		var id_list = [], id_data = [];
@@ -87,10 +102,10 @@ var crawler = new CeL.work_crawler({
 		eval('cmnData=' + html.between('var cmnData =', '</script>'));
 		var first_image_url = html.between(' _comicImage">', '</div>').between(
 				'src="', '"');
-		if (!first_image_url) {
-			first_image_url = html.between(
-					'<div class="locked-episode__kv _lockedEpisodeKv"',
-					'</div>').between("url('", "'");
+		if (!first_image_url
+				&& (first_image_url = html.between(
+						'<div class="locked-episode__kv _lockedEpisodeKv"',
+						'</div>').between("url('", "'"))) {
 			chapter_data.limited = true;
 		}
 		cmnData.imageData.unshift(first_image_url);
@@ -98,16 +113,13 @@ var crawler = new CeL.work_crawler({
 		Object.assign(chapter_data, JSON.parse(html.between(
 				'<script type="application/ld+json">', '</script>')), {
 			// 設定必要的屬性。
-			title : get_label(html.between('<title>', '</title>')),
-			image_count : html.between('<total>', '</total>') | 0,
-			image_list : []
+			title : chapter_data.subtitle,
+			image_list : cmnData.imageData.map(function(url) {
+				return {
+					url : url
+				};
+			})
 		}, cmnData);
-
-		chapter_data.image_list = chapter_data.imageData.map(function(url) {
-			return {
-				url : url
-			};
-		});
 
 		return chapter_data;
 	}
@@ -120,23 +132,19 @@ var crawler = new CeL.work_crawler({
 // for 年齡確認您是否已滿18歲？
 crawler.get_URL_options.cookie = 'islt18age=' + Date.now();
 
-if (!crawler.password) {
-	start_crawler(crawler, typeof module === 'object' && module);
+setup_crawler(crawler, typeof module === 'object' && module);
 
-} else {
+if (crawler.password && crawler.loginid) {
+	CeL.log(crawler.id + ': login [' + crawler.loginid + ']...');
 	CeL.get_URL('https://id.comico.com.tw/login/login.nhn', function(XMLHttp) {
-		// start_crawler(crawler, typeof module === 'object' && module);
-
-		// console.log(crawler.get_URL_options);
-		CeL.get_URL('http://www.comico.com.tw/2286/', function(XMLHttp) {
-			console.log(XMLHttp);
-			console.log(XMLHttp.responseText);
-		}, crawler.charset, null, crawler.get_URL_options);
-
+		start_crawler(crawler, typeof module === 'object' && module);
 	}, crawler.charset, {
 		autoLoginChk : 'Y',
 		loginid : crawler.loginid,
 		password : crawler.password,
 		nexturl : ''
 	}, crawler.get_URL_options);
+
+} else {
+	start_crawler(crawler, typeof module === 'object' && module);
 }
