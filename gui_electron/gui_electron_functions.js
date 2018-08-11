@@ -21,9 +21,12 @@ download_sites_set = {
 		dajiaochong : '大角虫漫画',
 		kuaikan : '快看漫画',
 
+		katui : '卡推漫画',
 		'733dm' : '733动漫网',
 		'733mh' : '733漫画网',
 		mh160 : '漫画160',
+		'9mdm' : '9妹漫画网',
+		manhuadb : '漫画DB',
 
 		dmzj : '动漫之家',
 		dm5 : '动漫屋',

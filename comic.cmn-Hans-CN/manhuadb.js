@@ -24,8 +24,9 @@ var crawler = new CeL.work_crawler({
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	// skip_error : true,
 
-	// 圖片較多且大，因此採用一個圖一個圖取得的方式。
-	one_by_one : true,
+	// 單行本圖片較多且大，因此採用一個圖一個圖取得的方式。
+	// one_by_one : true,
+	timeout : 90 * 1000,
 	base_URL : 'http://www.manhuadb.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -72,8 +73,9 @@ var crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
-		html = html.between('<div class="tab-content"',
-				'<div class="comic-detail-section');
+		// <div class="comic-pub-data-section
+		html = html.between('<div class="comic-toc-section',
+				'<div class="comic-');
 
 		var matched, PATTERN_chapter =
 		//
@@ -149,8 +151,8 @@ var crawler = new CeL.work_crawler({
 			//
 			= _this.full_URL(image_page_list[index - 1].url);
 			// console.log('Get #' + index + ': ' + image_page_url);
-			process.stdout.write('Get image page ' + NO + '/' + image_count
-					+ '...\r');
+			process.stdout.write('Get image pages of #' + chapter_NO + ': '
+					+ NO + '/' + image_count + '...\r');
 			CeL.get_URL(image_page_url, function(XMLHttp) {
 				extract_image(XMLHttp);
 				run_next();
