@@ -22,8 +22,12 @@ var crawler = new CeL.work_crawler({
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	skip_error : true,
 
-	// one_by_one : true,
-	base_URL : 'https://www.733dm.net/',
+	// 最小容許圖案檔案大小 (bytes)。
+
+	// 因為要經過轉址，所以一個圖一個圖來。
+	one_by_one : true,
+	// 2018/3: https://www.733dm.net/
+	base_URL : 'https://www.733.so/',
 	charset : 'gb2312',
 
 	// 取得伺服器列表。
@@ -52,7 +56,7 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return 'mh/' + work_id + '/';
+		return '/mh/' + work_id + '/';
 	},
 	parse_work_data : function(html, get_label) {
 		var text = html
@@ -93,13 +97,14 @@ var crawler = new CeL.work_crawler({
 			// 轉成由舊至新之順序。
 			work_data.chapter_list.reverse();
 		}
+		// console.log(work_data);
 	},
 
 	parse_chapter_data : function(html, work_data) {
 		function decode(packed) {
 			var photosr = [];
 			// decode chapter data @ every picture page
-			eval(eval(Buffer.from(packed, 'base64').toString().slice(4)));
+			eval(eval(atob(packed).slice(4)));
 			// 通常[0]===undefined
 			return photosr.filter(function(url) {
 				return url;
@@ -116,16 +121,34 @@ var crawler = new CeL.work_crawler({
 
 		// 設定必要的屬性。
 		chapter_data = {
-			image_list : chapter_data.map(function(url) {
+			image_list : chapter_data.map(function(url, index) {
+				// @see https://www.733.so/skin/2014mh/global.js?v=003 line 434
+				// https://www.733.so/skin/2014mh/view.js line 97
+				var chapter_URL = this.chapter_URL(work_data, index + 1);
 				return {
-					url : url
+					// 此 URL 會再轉址至圖片真實網址。
+					url : chapter_URL + "&mode=pc&hash="
+					// create md5 hash from string, hex_md5()
+					+ require('crypto').createHash('md5')
+					//
+					.update(chapter_URL + url).digest("hex") + "&file=" + url
 				};
-			})
+			}, this)
 		};
 		// console.log(JSON.stringify(chapter_data));
+		// console.log(chapter_data);
 
 		return chapter_data;
+	},
+	image_pre_process : function(contents, image_data) {
+		if (contents.length === 99242) {
+			if (contents.slice(99000, 99020).toString('hex') ===
+			// 99242: @see #19
+			'5a925a19be65b31fac5555a73155540555501555')
+				throw this.id + ' 改版了!';
+		}
 	}
+
 });
 
 // ----------------------------------------------------------------------------
