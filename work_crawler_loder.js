@@ -23,15 +23,13 @@ global.completed_directory = [ '', '' ];
 // 檔案分類完後要放置的標的目錄。
 global.catalog_directory = '';
 
-global.account_data = {
+// 各個網站獨特的設定/特別的個人化設定。
+global.site_configuration = {
 	comico : {
 		loginid : '',
 		password : ''
 	}
 };
-
-// 各個網站獨特的設定/特別的個人化設定
-global.site_configuration = {};
 
 // ------------------------------------
 
