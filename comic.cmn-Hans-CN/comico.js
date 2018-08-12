@@ -107,7 +107,8 @@ crawler = new CeL.work_crawler({
 			// 更新日期：每週連載時間/是否為完結作品。 e.g., 完結作品, 每週六, 隔週週日
 			status : get_label(html.between('__info-value">', '</dd>')
 			// コミコ e.g., 完結作品, 毎週金曜日
-			|| html.between('<span class="o-txt-bold">', '</span>')),
+			|| html.between('<span class="o-txt-bold">', '</span>')).replace(
+					/[\s\n]{2,}/g, '  '),
 			// 可用的閱讀券數量。
 			ticket_left : (cmnData.eventRentalTicket || 0)
 			// 若是不用等的話，表示已收到閱讀券，還有一張可用。
@@ -187,12 +188,14 @@ crawler = new CeL.work_crawler({
 			// TODO: 應該檢查是不是真的有圖片檔案存在。
 		}
 		if (!skip_chapter && chapter_data.freeFlg !== 'W') {
-			if (chapter_data.freeFlg === 'N')
-				// 本章節需要錢(coin)來閱讀。
+			// N: TW: 本章節需要錢(coin)來閱讀。
+			// P: JP: 本章節需要錢(30コイン) or point(15ポイント)來閱讀。
+			if (chapter_data.freeFlg === 'N' || chapter_data.freeFlg === 'P') {
 				skip_chapter = true;
-			else
+			} else {
 				skip_chapter = '本章節狀況不明(' + chapter_data.freeFlg + ')。跳過 '
 						+ chapter_title + '，不採用閱讀卷。';
+			}
 		}
 		if (!skip_chapter && !(work_data.ticket_left > 0)) {
 			if (work_data.ticket_left !== NO_ticket_notified) {
@@ -221,7 +224,7 @@ crawler = new CeL.work_crawler({
 		// http://www.comico.com.tw/notice/detail.nhn?no=751
 		CeL.info(work_data.title + ': 用閱讀券閱讀 ' + chapter_title);
 		var _this = this, html = XMLHttp.responseText;
-		this.get_URL('consume/index.nhn', function(XMLHttp) {
+		this.get_URL(this.consume_url, function(XMLHttp) {
 			work_data.ticket_left--;
 			// XMLHttp 只是一個轉址網頁，必須重新擷取網頁。
 			_this.get_URL(chapter_data.url, callback);
@@ -252,41 +255,61 @@ crawler = new CeL.work_crawler({
 		var chapter_data = work_data.chapter_list[chapter_NO - 1], cmnData;
 		eval('cmnData=' + html.between('var cmnData =', '</script>'));
 
-		// コミコ 日文版將所有圖片放在這之間，無 cmnData.imageData。
-		// 中文版將除第一張外所有圖片網址放在 cmnData.imageData 裡面。
-		var image_url_list = html.between(' _comicImage">', '</div>');
-		// 去除 placeholder。 <div class="comic-image__blank-layer">
-		if (image_url_list = image_url_list.between(null, '<div ')
-				|| image_url_list) {
-			image_url_list = image_url_list.all_between(' src="', '"');
-		}
-
-		if (image_url_list && image_url_list.length > 0) {
-			// assert: {Array}image_url_list
-			if (cmnData.imageData)
-				Array.prototype.unshift
-						.apply(cmnData.imageData, image_url_list);
-			else
-				cmnData.imageData = image_url_list;
-
-		} else if ((image_url_list = html.between(
+		var image_url_list = html.between(
 		// TW: <div class="locked-episode__kv _lockedEpisodeKv"
 		// コミコ: <div class="locked-episode locked-episode--show-kv">
-		'<div class="locked-episode', '</div>'))
-		// TW: style="background-image: url('...');">
-		&& (image_url_list = image_url_list.between("url('", "'")
-		// コミコ: <img src=".jpg" width="88" height="88" alt="" />
-		|| image_url_list.between(' src="', '"'))) {
+		'<div class="locked-episode', '</div>');
+		if (image_url_list) {
 			chapter_data.limited = true;
-			if (cmnData.imageData)
+			// TW: style="background-image: url('...');">
+			image_url_list = image_url_list.between("url('", "'")
+			// コミコ: <img src=".jpg" width="88" height="88" alt="" />
+			|| image_url_list.between(' src="', '"');
+			// 日文版plus.comico 此時雖然有 {Array}cmnData.imageData
+			// 但缺少hash而不能取得。
+			if (/\.jpg$/.test(image_url_list)) {
+				// 日文版plus.comico 此時僅有一個縮圖可用，跳過不取。
+				cmnData.imageData = [];
+			} else if (cmnData.imageData
+					&& cmnData.imageData.filter(function(url) {
+						return url && !/\.jpg$/.test(url);
+					}).length > 0) {
+				// 應該不會到這裡來了。
 				cmnData.imageData.unshift(image_url_list);
-			else
+			} else {
+				// 中文版的狀況。
 				cmnData.imageData = [ image_url_list ];
+			}
+
+		} else if (image_url_list = html.between(' _comicImage">', '</div>')) {
+			// 一般正常可取得圖片的情況。
+			// 去除 placeholder。 <div class="comic-image__blank-layer">
+			image_url_list = image_url_list.between(null, '<div ')
+					|| image_url_list;
+			image_url_list = image_url_list.all_between(' src="', '"');
+			// assert: {Array}image_url_list
+			if (cmnData.imageData) {
+				// 中文版, 日文版plus.comico 將除第一張外所有圖片網址放在
+				// {Array}cmnData.imageData 裡面。
+				if (image_url_list.length === 1) {
+					cmnData.imageData.unshift(image_url_list[0]);
+				} else {
+					throw work_data.title
+					// 網頁改版? 不能解析!
+					+ ' #' + chapter_NO + ': 網頁改版? 不能解析!';
+					Array.prototype.unshift.apply(cmnData.imageData,
+							image_url_list);
+				}
+
+			} else {
+				// コミコ 日文版一般漫畫將所有圖片放在這之間，無 cmnData.imageData。
+				cmnData.imageData = image_url_list;
+			}
 
 		} else {
 			console.log(html);
 			throw work_data.title
-			//
+			// 網頁改版? 不能解析!
 			+ ' #' + chapter_NO + ': Can not parse data!';
 		}
 
@@ -296,11 +319,11 @@ crawler = new CeL.work_crawler({
 			image_list : cmnData.imageData.map(function(url) {
 				if (chapter_data.limited
 				// http://comicimg.comico.jp/tmb/00000/1/hexhex_hexhexhex.jpg"
-				&& url.includes('.jp/tmb/') && /.jpg$/.test(url))
+				&& url.includes('.jp/tmb/') && /\.jpg$/.test(url))
 					return;
 				// 付費章節: 中文版提供第一張的完整版，日文版只提供縮圖。
 				// 圖片都應該要有hash，且不該是縮圖。
-				if (url.includes('.jp/tmb/') || /.jpg$/.test(url)) {
+				if (url.includes('.jp/tmb/') || /\.jpg$/.test(url)) {
 					throw work_data.title
 					//
 					+ ' #' + chapter_NO + ': Invalid image: ' + url;
@@ -327,7 +350,7 @@ if (crawler.password && crawler.loginid) {
 	CeL.log(crawler.id + ': Login as [' + crawler.loginid + ']');
 	// https://id.comico.com.tw/login/login.nhn
 	// https://id.comico.jp/login/login.nhn
-	crawler.get_URL(crawler.base_URL.replace(/^.+?[a-z]+./, 'https://id.')
+	crawler.get_URL(crawler.base_URL.replace(/^.+?[a-z]+\./, 'https://id.')
 			+ 'login/login.nhn', function(XMLHttp) {
 		// XMLHttp 只是一個轉址網頁。
 		start_crawler(crawler, typeof module === 'object' && module);

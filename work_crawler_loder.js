@@ -26,8 +26,11 @@ global.catalog_directory = '';
 // 各個網站獨特的設定/特別的個人化設定。
 global.site_configuration = {
 	comico : {
+		// 警告:帳號資訊是用明碼存放在檔案中。
 		loginid : '',
-		password : ''
+		password : '',
+		// 讓本工具自動使用閱讀卷。警告:閱讀券使用完就沒了。不可回復。
+		auto_use_ticket : false
 	}
 };
 
@@ -123,6 +126,11 @@ if (is_CLI && !work_id && process.mainModule
 }
 
 function setup_crawler(crawler, crawler_module) {
+	// 不重複設定。
+	if (crawler.already_settled)
+		return;
+	crawler.already_settled = true;
+
 	if (crawler_module) {
 		crawler_module.exports = crawler;
 		crawler.id = crawler_module.filename.match(/([^\\\/]+)\.js$/)[1];
@@ -137,7 +145,7 @@ function setup_crawler(crawler, crawler_module) {
 		Object.assign(crawler, site_configuration[crawler.id]);
 	}
 
-	CeL.debug('setup_crawler: ' + crawler.id + ', ' + crawler.main_directory);
+	CeL.debug(crawler.id + ', ' + crawler.main_directory, 1, 'setup_crawler');
 }
 
 global.setup_crawler = setup_crawler;
