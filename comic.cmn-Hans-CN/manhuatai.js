@@ -136,7 +136,7 @@ crawler = new CeL.work_crawler({
 						% 10)
 			});
 			CeL.debug(mh_info.mhname + ' ' + mh_info.pagename + ': '
-					+ decodeURIComponent(mh_info.imgpath));
+					+ decodeURIComponent(mh_info.imgpath), 1, 'decode');
 			return mh_info;
 		}
 
@@ -147,7 +147,12 @@ crawler = new CeL.work_crawler({
 
 		// 設定必要的屬性。
 		chapter_data.title = chapter_data.pagename;
-		chapter_data.postfix = '.jpg' + (chapter_data.comic_size || '');
+		chapter_data.postfix = '.jpg'
+		// http://static.321mh.com/js/comic.read.min.js?20180731163120
+		+ (/-\d+x\d+/gi.test(chapter_data.imgpath) ? ''
+		// @see __cr.switchWebp
+		: chapter_data.comic_size || '-noresize');
+
 		// chapter_data.image_count = chapter_data.totalimg;
 		chapter_data.image_list = new Array(chapter_data.totalimg).fill(null)
 		// modify from n.getPicUrl @
