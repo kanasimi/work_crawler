@@ -31,6 +31,10 @@ var crawler = new CeL.work_crawler({
 
 	// one_by_one : true,
 	base_URL : 'http://www.nokiacn.net/',
+	// fs.readdirSync('.').forEach(function(d){if(/^\d+\s/.test(d))fs.renameSync(d,'manhua-'+d);})
+	// fs.readdirSync('.').forEach(function(d){if(/^manhua-/.test(d))fs.renameSync(d,d.replace(/^manhua-/,''));})
+	// 所有作品都使用這種作品類別前綴。
+	// use_work_id_prefix : 'manhua',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'statics/search.aspx?key=',
@@ -44,15 +48,24 @@ var crawler = new CeL.work_crawler({
 			//
 			/<a href="\/([a-z]+\/[a-z_\-\d]+)\/"[^<>]*?>([^<>]+)/);
 			// console.log(matched);
-			id_list.push(matched[1].replace('/', '-'));
+			if (this.use_work_id_prefix
+			// 去掉所有不包含作品類別前綴者。
+			&& !matched[1].startsWith(this.use_work_id_prefix + '/'))
+				return;
+			id_list.push(this.use_work_id_prefix
+			//
+			? matched[1].slice((this.use_work_id_prefix + '/').length)
+					: matched[1].replace('/', '-'));
 			id_data.push(get_label(matched[2]));
-		});
+		}, this);
 		return [ id_list, id_data ];
 	},
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return work_id.replace('-', '/') + '/';
+		return (this.use_work_id_prefix ? this.use_work_id_prefix + '/'
+				+ work_id : work_id.replace('-', '/'))
+				+ '/';
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
 		// console.log(html);
@@ -116,10 +129,14 @@ var crawler = new CeL.work_crawler({
 		// 設定必要的屬性。
 		chapter_data = {
 			image_list : chapter_data.map(function(url) {
-				return {
+				url = encodeURI(url);
+				if (!url.includes('://')) {
 					// f_qTcms_Pic_curUrl() @
 					// http://www.nokiacn.net/template/skin2/css/d7s/js/show.20170501.js?20180805095630
-					url : 'http://n.aiwenwo.net:55888' + encodeURI(url)
+					url = 'http://n.aiwenwo.net:55888' + url;
+				}
+				return {
+					url : url
 				};
 			}, this)
 		};
