@@ -24,14 +24,15 @@ global.completed_directory = [ '', '' ];
 global.catalog_directory = '';
 
 // 各個網站獨特的設定/特別的個人化設定。
-global.site_configuration = {
-	comico : {
-		// 警告:帳號資訊是用明碼存放在檔案中。
-		loginid : '',
-		password : '',
-		// 讓本工具自動使用閱讀卷。警告:閱讀券使用完就沒了。不可回復。
-		auto_use_ticket : false
-	}
+global.site_configuration = {};
+
+// comico 搭配閱讀卷示範
+site_configuration.comico = site_configuration.comico_jp = site_configuration.comico_jp_plus = {
+	// 讓本工具自動使用閱讀卷。警告:閱讀券使用完就沒了。不可回復。
+	// auto_use_ticket : true,
+	// 警告:帳號資訊是用明碼存放在檔案中。
+	loginid : '',
+	password : ''
 };
 
 // ------------------------------------
@@ -154,7 +155,7 @@ function start_crawler(crawler, crawler_module) {
 	setup_crawler(crawler, crawler_module);
 	// console.log(crawler_module);
 	if (is_CLI) {
-		crawler.start(work_id);
+		crawler.start(work_id, crawler.after_download);
 	}
 }
 
