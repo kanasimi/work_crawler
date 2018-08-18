@@ -60,16 +60,15 @@ crawler = new CeL.work_crawler({
 		}
 		return url;
 	},
+	search_head_token : '<li class="list-article02__item">',
+	// title 不能用 [^<>"]+ : for case of "薔薇的嘆息 <薔薇色的疑雲 I>"
+	PATTERN_search : /<a href="[^<>"]*?\/(\d+)\/"[^<>]*? title="([^"]+)"/,
 	parse_search_result : function(html, get_label) {
 		html = html.between(' id="officialList">') || html;
-		var id_list = [], id_data = [];
-		html.each_between('<li class="list-article02__item">', '</li>',
-		//
-		function(token) {
+		var _this = this, id_list = [], id_data = [];
+		html.each_between(this.search_head_token, '</li>', function(token) {
 			// console.log(token);
-			var matched = token.match(
-			// title 不能用 [^<>"]+ : for case of "薔薇的嘆息 <薔薇色的疑雲 I>"
-			/<a href="[^<>"]*?\/(\d+)\/"[^<>]*? title="([^"]+)"/);
+			var matched = token.match(_this.PATTERN_search);
 			if (matched) {
 				// コミコ有些整本賣的作品，而非一話一話。
 				id_list.push(matched[1]);
@@ -90,9 +89,9 @@ crawler = new CeL.work_crawler({
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between('<h1', '</h1>').between('>'))
 		// 選擇性屬性：須配合網站平台更改。
-		}, cmnData, matched;
+		}, cmnData = html.between('var cmnData =', '</script>'), matched;
 
-		eval('cmnData=' + html.between('var cmnData =', '</script>'));
+		eval('cmnData=' + cmnData);
 
 		extract_work_data(work_data, html);
 
@@ -112,7 +111,8 @@ crawler = new CeL.work_crawler({
 			// 可用的閱讀券數量。
 			ticket_left : (cmnData.eventRentalTicket || 0)
 			// 若是不用等的話，表示已收到閱讀券，還有一張可用。
-			+ (cmnData.time.leftTime === 0 ? 1 : 0)
+			+ (cmnData.time.leftTime === 0 ? 1 : 0),
+			last_checked : null
 		});
 		if (cmnData.time.leftTime > 0) {
 			CeL.info('下次收到閱讀券還要 '
@@ -152,6 +152,9 @@ crawler = new CeL.work_crawler({
 								+ work_data.ticket_left + '張閱讀卷，且第 ' + index
 								+ '/' + work_data.chapter_list.length
 								+ ' 章還有沒讀過，從此章開始檢查。');
+						work_data.last_checked
+						// 記錄最後檢查過的章節。
+						= work_data.last_download.chapter;
 						work_data.last_download.chapter = index;
 						return true;
 					}
@@ -209,7 +212,7 @@ crawler = new CeL.work_crawler({
 		if (!skip_chapter && !this.auto_use_ticket) {
 			skip_chapter = auto_use_ticket_notified ? true : '未設定讓本工具自動使用閱讀卷。'
 					+ '若想要讓本工具自動使用閱讀卷，請在 work_crawler_loder.configuration.js'
-					+ ' 這個檔案中設定  "auto_use_ticket:true"。'
+					+ ' 這個檔案中設定好帳號密碼資料，以及 "auto_use_ticket:true"。'
 					+ '您可以參考 work_crawler_loder.js 這個檔案來做設定。';
 			auto_use_ticket_notified = true;
 		}
@@ -225,7 +228,11 @@ crawler = new CeL.work_crawler({
 		CeL.info(work_data.title + ': 用閱讀券閱讀 ' + chapter_title);
 		var _this = this, html = XMLHttp.responseText;
 		this.get_URL(this.consume_url, function(XMLHttp) {
-			work_data.ticket_left--;
+			if (--work_data.ticket_left === 0 && work_data.last_checked > 0) {
+				// 回到原先應該檢查的章節號碼。
+				work_data.jump_to_chapter = work_data.last_checked;
+				delete work_data.last_checked;
+			}
 			// XMLHttp 只是一個轉址網頁，必須重新擷取網頁。
 			_this.get_URL(chapter_data.url, callback);
 		}, {
@@ -252,8 +259,22 @@ crawler = new CeL.work_crawler({
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// http://static.comico.com.tw/tw/syn/spn/js/manga/article/plusMangaDetailApp/app.1.12.0.js
-		var chapter_data = work_data.chapter_list[chapter_NO - 1], cmnData;
-		eval('cmnData=' + html.between('var cmnData =', '</script>'));
+		var chapter_data = work_data.chapter_list[chapter_NO - 1],
+		//
+		cmnData = html.between('var cmnData =', '</script>');
+		if (cmnData) {
+			eval('cmnData=' + cmnData);
+		} else if (cmnData = html.between(
+		// e.g., http://plus.comico.jp/manga/24517/8/
+		'<p class="m-section-error__heading">', '</p>')) {
+			cmnData = work_data.title + ' #' + chapter_NO + ' '
+					+ chapter_data.subtitle + ': ' + cmnData;
+			if (cmnData !== 'お探しのページは存在しません') {
+				throw cmnData;
+			}
+			CeL.error(cmnData);
+			return chapter_data;
+		}
 
 		var image_url_list = html.between(
 		// TW: <div class="locked-episode__kv _lockedEpisodeKv"
@@ -335,6 +356,10 @@ crawler = new CeL.work_crawler({
 		}, cmnData);
 
 		return chapter_data;
+	},
+
+	after_download : function() {
+		// logout
 	}
 });
 
@@ -353,6 +378,13 @@ if (crawler.password && crawler.loginid) {
 	crawler.get_URL(crawler.base_URL.replace(/^.+?[a-z]+\./, 'https://id.')
 			+ 'login/login.nhn', function(XMLHttp) {
 		// XMLHttp 只是一個轉址網頁。
+
+		// TODO: 僅僅下載有閱讀券的章節，然後就回到最後讀取的章節。
+		// 收件箱: 全部接收 有期限的物品
+		// https://id.comico.com.tw/api/incentiveall/index.nhn
+		// 最新消息
+		// http://www.comico.com.tw/notice/
+
 		start_crawler(crawler, typeof module === 'object' && module);
 	}, {
 		autoLoginChk : 'Y',
