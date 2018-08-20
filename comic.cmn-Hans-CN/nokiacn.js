@@ -130,10 +130,22 @@ var crawler = new CeL.work_crawler({
 		chapter_data = {
 			image_list : chapter_data.map(function(url) {
 				url = encodeURI(url);
-				if (!url.includes('://')) {
-					// f_qTcms_Pic_curUrl() @
-					// http://www.nokiacn.net/template/skin2/css/d7s/js/show.20170501.js?20180805095630
+				// f_qTcms_Pic_curUrl() → f_qTcms_Pic_curUrl_realpic(v) @
+				// http://www.nokiacn.net/template/skin2/css/d7s/js/show.20170501.js?20180805095630
+				if (url.startsWith('/')) {
 					url = 'http://n.aiwenwo.net:55888' + url;
+				} else if (html.between('qTcms_Pic_m_if="', '"') !== '2') {
+					// e.g., http://www.nokiacn.net/lianai/caozuo100/134257.html
+					url.replace(/\?/gi, "a1a1").replace(/&/gi, "b1b1").replace(
+							/%/gi, "c1c1");
+					url = (html.between('qTcms_m_indexurl="', '"') || '/')
+							+ "statics/pic/?p="
+							+ encodeURIComponent(url)
+							+ "&picid="
+							+ html.between('qTcms_S_m_id="', '"')
+							+ "&m_httpurl="
+							+ encodeURIComponent(atob(html.between(
+									'qTcms_S_m_mhttpurl="', '"')));
 				}
 				return {
 					url : url
