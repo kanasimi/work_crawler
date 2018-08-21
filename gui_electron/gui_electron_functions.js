@@ -25,6 +25,7 @@ download_sites_set = {
 		'733dm' : '733动漫网',
 		'733mh' : '733漫画网',
 		mh160 : '漫画160',
+		nokiacn : '乙女漫画',
 		'9mdm' : '9妹漫画网',
 		manhuadb : '漫画DB',
 
@@ -39,6 +40,10 @@ download_sites_set = {
 
 		hhcool : '汗汗酷漫',
 		omanhua : '哦漫画',
+
+		comico : 'comico',
+		comico_jp : 'コミコ',
+		comico_jp_plus : 'オトナ限定 コミコ',
 
 		webtoon : 'WEBTOON',
 		dongman : '咚漫',

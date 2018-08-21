@@ -1,8 +1,8 @@
 {
 	"name" : "work_crawler",
-	"version" : "1.4.20180714",
+	"version" : "1.5.20180821",
 	"main" : "gui_electron/gui_electron.js",
-	"description" : "CeJS online novels / comics downloader, CeJS 線�??小說漫畫下�??工具.",
+	"description" : "CeJS online novels / comics downloader, CeJS 線上小說漫畫下載工具.",
 	"author" : {
 		"name" : "vimunci",
 		"email" : "vimunci@gmail.com",
@@ -23,9 +23,9 @@
 			"output" : "build"
 		},
 		"files" : [ "package.json", "node_modules/*", "_CeL.loader.nodejs.js",
-				"_CeL.path.txt", "gui_electron/**/*", "work_crawler_loder.js",
-				"comic.cmn-Hans-CN/**/*", "novel.cmn-Hans-CN/**/*",
-				"novel.ja-JP/**/*" ],
+				"_repository_path_list.txt", "gui_electron/**/*",
+				"work_crawler_loder.js", "comic.cmn-Hans-CN/**/*",
+				"novel.cmn-Hans-CN/**/*", "novel.ja-JP/**/*" ],
 		"mac" : {
 			"target" : "dmg"
 		},
