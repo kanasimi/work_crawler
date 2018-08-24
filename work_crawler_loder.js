@@ -16,6 +16,8 @@ global.data_directory = '';
 // ------------------------------------
 // configuration for arrangement/*.js
 
+// ** 請別直接改變這邊的設定。在每次更新時，本檔案可能會被覆寫為預設設定。
+
 // default directory to place completed files
 // 將會被指定為第一個存在的目錄。
 global.completed_directory = [ '', '' ];

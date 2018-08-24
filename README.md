@@ -3,6 +3,7 @@
 ![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)
 ![GitHub commit activity the past week, 4 weeks, year](https://img.shields.io/github/commit-activity/y/kanasimi/work_crawler.svg)
 ![Github All Releases Downloads](https://img.shields.io/github/downloads/kanasimi/work_crawler/total.svg)
+[![Known Vulnerabilities](https://snyk.io/test/github/kanasimi/work_crawler/badge.svg?targetFile=package.json)](https://snyk.io/test/github/kanasimi/work_crawler?targetFile=package.json)
 <!--
 ![Github Release Downloads](https://img.shields.io/github/downloads/kanasimi/work_crawler/v1.4/total.svg)
 ![Github Release Downloads](https://img.shields.io/github/downloads/kanasimi/work_crawler/latest/total.svg)
@@ -74,6 +75,8 @@
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
+| [9妹漫画网](http://www.9mdm.com/) | 9mdm.js | |
+| [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |
 | [看漫画](http://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/)<br />[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板?<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
@@ -81,11 +84,11 @@
 | [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。 |
 | [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
 | [卡推漫画](http://www.katui.net/) | katui.js | 系統同 733dm.js |
-| [9妹漫画网](http://www.9mdm.com/) | 9mdm.js | |
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
 | [漫画160](http://www.mh160.com/) | mh160.js | 與 733漫画网 相同系統 |
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
+| [comico](http://www.comico.com.tw/)<br />[コミコ](https://www.comico.jp/)<br />[オトナ限定 コミコ](http://plus.comico.jp/) | comico.js<br />comico_jp.js<br />comico_jp_plus.js | 本工具經設定可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | [XOY](https://xoy.webtoons.com/) | XOY.js | NAVER WEBTOON ja |
@@ -107,7 +110,7 @@
 
 ## Installation 安裝
 
-若是想要使用圖形介面，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。若是欲採用最新的版本，或者用作研究開發、想要使用命令行介面作批次處理，請採用下列步驟。
+若是想要使用圖形介面，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，現在落後最新測試版：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)，有些網站下載起來會出問題。若是欲採用最新的版本，或者用作研究開發、想要使用命令行介面作批次處理，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
@@ -162,7 +165,7 @@
    ```
 </details>
 
-6. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt)</code> 這個檔案來設定放置的路徑。
+6. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
 7. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
 8. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
    ``` sh
@@ -191,7 +194,7 @@
 
 ### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage) for detail.
-2. Setup [_CeL.path.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_CeL.path.sample.txt) if necessary.
+2. Setup [_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt) if necessary.
 3. Setup <code>work_crawler_loder.configuration.js</code> (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js)). 最後設定好設定檔 <code>work_crawler_loder.configuration.js</code>。例如指定 <code>global.data_directory</code>。
 
 ## Execution 執行
@@ -253,6 +256,11 @@
 * 圖形介面在右手邊的 **下載選項** 應該可以看到有一個 **start_chapter: 將開始/接續下載的章節編號。必須要配合 .recheck。 (number)**。
 
    請輸入章節的數字，之後指定 start_chapter 上面的 recheck，點擊開始下載就可以接續下載了。
+</details>
+
+<details><summary>下載圖片或電子書的資料夾內，有些不是圖片或電子書的檔案</summary>
+
+* 這些json檔是用來記錄程式執行的狀態。可以刪除，但若常常接續下載，可能會受影響。例如必須重新搜尋作品、重新檢查下載狀況等等。
 </details>
 
 <details><summary>掃毒軟體報錯！</summary>

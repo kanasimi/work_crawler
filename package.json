@@ -23,9 +23,9 @@
 			"output" : "build"
 		},
 		"files" : [ "package.json", "node_modules/*", "_CeL.loader.nodejs.js",
-				"_repository_path_list.txt", "gui_electron/**/*",
-				"work_crawler_loder.js", "comic.cmn-Hans-CN/**/*",
-				"novel.cmn-Hans-CN/**/*", "novel.ja-JP/**/*" ],
+				"gui_electron/**/*", "work_crawler_loder.js",
+				"comic.cmn-Hans-CN/**/*", "novel.cmn-Hans-CN/**/*",
+				"novel.ja-JP/**/*" ],
 		"mac" : {
 			"target" : "dmg"
 		},

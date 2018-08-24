@@ -1,6 +1,4 @@
 ﻿<!--
-Thank you for reporting an issue.
-Plese fill the template when you reporting a new issue, thanks!
 
 感謝您的愛用並回報問題。 **回報問題時請將標題填詳細完整一些。**
 有些問題在最新版本已修復完畢，您可能得要確認使用的是最新版本的工具。
@@ -12,6 +10,10 @@ Plese fill the template when you reporting a new issue, thanks!
 本工具以修正錯誤為主，新增網站僅在行有餘力時為之，請見諒。另外增加網站往往需要耗費時間、作許多考量，請附個其他網站未揭載之作品。
 
 請在提交問題的同時，附帶如下信息，方便我們盡快幫您解決問題，謝謝。
+
+Thank you for reporting an issue.
+Plese fill the template when you reporting a new issue, thanks!
+
 -->
 
 * **Version**: <!-- 您使用的 work_crawler 為哪個版本: 安裝包, 懶人安裝法 -->
