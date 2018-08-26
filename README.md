@@ -1,4 +1,4 @@
-﻿![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)
+﻿[![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)
 ![GitHub Release Date](https://img.shields.io/github/release-date/kanasimi/work_crawler.svg)
 ![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)
 ![GitHub commit activity the past week, 4 weeks, year](https://img.shields.io/github/commit-activity/y/kanasimi/work_crawler.svg)
@@ -88,7 +88,7 @@
 | [漫画160](http://www.mh160.com/) | mh160.js | 與 733漫画网 相同系統 |
 | [哦漫画](http://www.omanhua.com/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
-| [comico](http://www.comico.com.tw/)<br />[コミコ](https://www.comico.jp/)<br />[オトナ限定 コミコ](http://plus.comico.jp/) | comico.js<br />comico_jp.js<br />comico_jp_plus.js | 本工具經設定可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
+| [comico](http://www.comico.com.tw/)<br />[コミコ](https://www.comico.jp/)<br />[オトナ限定 コミコ](http://plus.comico.jp/) | comico.js<br />comico_jp.js<br />comico_jp_plus.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | [XOY](https://xoy.webtoons.com/) | XOY.js | NAVER WEBTOON ja |
