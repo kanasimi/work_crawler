@@ -18,6 +18,7 @@ download_sites_set = {
 		qq : '腾讯漫画',
 		'163' : '网易漫画',
 		u17 : '有妖气',
+		zymk : '知音漫客',
 		dajiaochong : '大角虫漫画',
 		kuaikan : '快看漫画',
 
