@@ -71,6 +71,7 @@
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** 2017/8/15 起取消了今日限免 |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
 | [有妖气](http://www.u17.com/) | u17.js | **本工具無法下載VIP付費內容** |
+| [知音漫客](https://www.zymk.cn/) | zymk.js | |
 | [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | |
@@ -110,44 +111,29 @@
 
 ## Installation 安裝
 
-若是想要使用圖形介面，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，現在落後最新測試版：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)，有些網站下載起來會出問題。若是欲採用最新的版本，或者用作研究開發、想要使用命令行介面作批次處理，請採用下列步驟。
+若是想要使用圖形介面，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。若是欲採用最新的版本，或者用作研究開發、想要使用命令行介面作批次處理，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
 1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->（已經安裝過的可以跳過）
-2. 下載[本工具壓縮檔](https://github.com/kanasimi/work_crawler/archive/master.zip)並解壓縮，應能得到 <code>work_crawler-master</code> 目錄；這是本工具將安裝的標的目錄，若有需要亦可將之改名。
-3. <details><summary>下載 CeJS 安裝檔 <code>_CeL.updater.node.js</code>。（點擊本行可獲得更詳細的說明）</summary>
-
-   下載 CeJS 安裝檔 [_CeL.updater.node.js](https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js)，將此檔儲存到前面所提到的，本工具將安裝的標的目錄 <code>work_crawler-master</code> 下。
-
-   ![本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/5WwL_Ap4U1n6xL1qwqwb1kJ_ZWwsOI2xZev-h9RywwzLcxWNIkcPcpGT17HfmmuykQACIWjuBhWffr7C1mwCxlVaVS2sQ0ic0cHK1OttaYdCF-BJpPtJjbvtTRX2Ssfs1OoIMlscYA=w135-h266-no)
-</details>
-
-4. <details><summary>下載 CeJS 程式庫：在命令行介面下執行 <code>_CeL.updater.node.js</code>。</summary>
+2. 下載本工具安裝檔 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)
+3. <details><summary>在命令行介面下執行安裝檔 <code>work_crawler.updater.js</code>。</summary>
 
    1. **進入[命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下**：
       * Windows 10 下，請按下<kbd>[⊞ Windows鍵](https://zh.wikipedia.org/wiki/Windows%E9%94%AE)</kbd> + <kbd>X</kbd> → 選擇 **命令提示字元**。（如下圖的示範）
       * Windows 7 下[打開命令行介面](https://carolhsu.gitbooks.io/django-girls-tutorial-traditional-chiness/content/intro_to_command_line/README.html)，請從  開始 → 所有程式 → 附屬應用程式 → 選擇 **命令提示字元**
 
-      ![Windows 10 下，進入命令行介面](https://lh3.googleusercontent.com/yFKRG6LTfvbJhMljgIXrEUFivGl4LRYgs0FlNBCBZ1KmwUW2paSoubLhyWGhS7S9GsHe1ef7Bt3TRyf5IHWRLdFL_SqywkPikecwlSpYtPHM6KRlyEaFWsWZqrS7DF3JzzcycnfxfQ=w2400)
-
    2. **進到本工具安裝的目錄**：
-      * 若是您視窗的 **背景為藍色**，表示您使用的可能是 [PowerShell](https://zh.wikipedia.org/wiki/Windows_PowerShell)，您應該使用這種形式的指令來切換目錄：<code style="color:#888;background-color:#008b8b;">cd "本工具安裝的目錄"</code>。
-      * 若是您視窗的 **背景為黑色**，表示您使用的可能是 [命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)，您應該使用這種形式的指令來切換目錄：<code>cd/d "本工具安裝的目錄"</code>（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
-
-      下圖中示範了用[命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)切換到 <code>I:\work_crawler-master</code> 的情況：
-
-      ![複製本工具安裝的目錄](https://lh3.googleusercontent.com/vhs7VNQLXT_VcoHIzOMrpUlX6VYIFUsCr9fM3Jbtf9NX1H2vSh2dtkGZVp-XJg6EntlkeqfRbZfU1_niNvPapSUdF-0iPXjJx0QdB3pTObUnYB_wIDiJ0eM7FVcJGOyBAlgfmTY3pw=w2400)
-      ![進到本工具安裝的目錄](https://lh3.googleusercontent.com/CLfiPu0HnK9ZG7pxqPmsohl3HVhVfjOMkYxnw83DCdXbrYb1KqIvj1WstuU4HLfW2_WDj7nWjyxSMzgJhJUQY5mjRv0xMshQIsT8ZefYHKzylCa3uDnTYynB2hbhdG5Z1USoWZe11w=w2400)
+      * 若是您視窗的 **背景為藍色**，表示您使用的可能是 [PowerShell](https://zh.wikipedia.org/wiki/Windows_PowerShell)，您應該使用這種形式的指令來切換目錄：<code style="color:#888;background-color:#008b8b;">cd "本工具安裝檔所在的目錄"</code>。
+      * 若是您視窗的 **背景為黑色**，表示您使用的可能是 [命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)，您應該使用這種形式的指令來切換目錄：<code>cd/d "本工具安裝檔所在的目錄"</code>（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
 
    3. **執行命令以下載 CeJS 程式庫**：
       ``` sh
-      node _CeL.updater.node.js
+      node work_crawler.updater.js
       ```
-      ![執行命令以下載 CeJS 程式庫](https://lh3.googleusercontent.com/kriJ1gZRQF_QZ-Qbw4nsY5bOz39rhjd-IXVJPGfkTvZkrBir-bikBhu3qj3l5uIm7i3dFhDvV9_kyzDysQNKQYnKTTbiSdJXlutjCB9OAQBhug9Ogq7UxUDD5a-66iytQfwYrWV8dA=w377-h81-no)
 </details>
 
-5. 然後就能[開始試用](#execution-執行)囉。
+4. 然後就能[開始試用](#execution-執行)囉。若是您希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，請執行 <code>work_crawler-master</code> 下面的 <code>start_gui_electron.bat</code> 或 <code>start_gui_electron.sh</code>。
    <details><summary>下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子：</summary>
 
    ![下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
@@ -165,9 +151,9 @@
    ```
 </details>
 
-6. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
-7. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
-8. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
+5. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
+6. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的檔案要放置的標的目錄。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
+7. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次 CeJS 安裝檔即可。
    ``` sh
    node _CeL.updater.node.js
    ```
@@ -220,7 +206,8 @@
    ![命令行介面下執行命令](https://lh3.googleusercontent.com/r1-jB1Cmaznb5kseN97xUQyGzrsJJgek25Ifyvey8scMm311WjnjIAy-FpmiTtIVupyimDTWrVL7aI2cI7i2FRllR_QWMiLsRgF-kzDJnYMRaTRMVXrG2XkfEhHPh5Qvns0XQjROcw=w2400)
 
 2. 下載的檔案將放在設定檔 <code>work_crawler_loder.configuration.js</code> 的 <code>global.data_directory</code> 所設定的目錄下。若採[懶人安裝法](#lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
-3. 若是下載出錯，**重新執行即可接續下載**。
+3. 本工具會循序下載每個章節，對於漫畫基本上每個章節的圖片會並行下載。不可並行下載同一個網站的同一個作品，否則會出現衝突。若是想要並行下載不同網站或是不同的作品，那麼您就需要再開一個命令行介面，
+4. 若是下載出錯，**重新執行即可接續下載**。
 
 ## Workflow 工作流程
 * 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 <code>manhuatai</code>），每套漫畫一個目錄。
