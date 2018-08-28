@@ -116,7 +116,7 @@
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
 1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->（已經安裝過的可以跳過）
-2. 下載本工具安裝檔 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)
+2. 下載本工具安裝檔 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>。
 3. <details><summary>在命令行介面下執行安裝檔 <code>work_crawler.updater.js</code>。</summary>
 
    1. **進入[命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下**：
