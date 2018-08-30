@@ -116,7 +116,7 @@
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
 1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->（已經安裝過的可以跳過）
-2. 下載並儲存本工具安裝檔 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>（按右鍵另存新檔）。安裝檔 **預設會將所有組件放在 <code>work_crawler-master</code> 目錄下**。
+2. 下載並儲存本工具安裝檔 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>（按右鍵另存新檔）。本工具安裝檔 **預設會將所有組件放在 <code>work_crawler-master</code> 目錄下**。
 3. <details><summary>在命令行介面下執行安裝檔 <code>work_crawler.updater.js</code>。（點擊本行可獲得更詳細的說明）</summary>
 
    1. **進入[命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下**：
@@ -153,7 +153,7 @@
 
 5. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
 6. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的作品檔案要放到哪個目錄底下。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
-7. 每次要更新到最新 CeJS 程式庫時，只要重新執行一次本工具安裝檔即可。
+7. 每次要更新到最新版本時，只要重新執行一次本工具安裝檔即可。
    ``` sh
    node work_crawler.updater.js
    ```
