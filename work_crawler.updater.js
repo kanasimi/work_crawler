@@ -48,11 +48,10 @@ function download_update_tool(update_script_url, callback) {
 }
 
 function update_components(update_script_name) {
-	// 似乎在 CeJS 線上小說漫畫下載工具的工作目錄下，直接執行升級工具。
 	var executing_at_tool_directory = node_fs
 			.existsSync('work_crawler_loder.js');
 
-	show_info('下載/更新 Colorless echo JavaScript kit 組件...');
+	show_info('下載/更新 CeJS 線上小說漫畫下載工具...');
 	child_process.execSync('node ' + update_script_name + ' '
 			+ 'kanasimi/work_crawler'
 			// 解開到當前目錄下。
@@ -60,16 +59,21 @@ function update_components(update_script_name) {
 		stdio : 'inherit'
 	});
 
-	if (!executing_at_tool_directory) {
+	if (executing_at_tool_directory) {
+		// console.log('似乎在 CeJS 線上小說漫畫下載工具的工作目錄下，直接執行升級工具。');
+		// console.log(process.cwd());
+	} else {
 		process.chdir('work_crawler-master');
 	}
 
-	show_info('下載/更新 CeJS 線上小說漫畫下載工具...');
-	child_process.execSync('node ' + '../' + update_script_name, {
+	show_info('下載/更新 Colorless echo JavaScript kit 組件...');
+	child_process.execSync('node ' + (executing_at_tool_directory ? '' : '../')
+			+ update_script_name, {
 		stdio : 'inherit'
 	});
 
-	show_info('下載/更新圖形使用者介面需要用到的組件...');
+	// 圖形使用者介面
+	show_info('下載/更新圖形介面需要用到的組件...');
 	if (!node_fs.existsSync('node_modules'))
 		node_fs.mkdirSync('node_modules');
 	child_process.execSync('npm i -D electron@latest', {

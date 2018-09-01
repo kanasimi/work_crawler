@@ -212,6 +212,7 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 			'help/12445/windows-keyboard-shortcuts" target="_blank">',
 			'複製貼上快速鍵</a>: Ctrl + C 複製選取的項目,', ' Ctrl + V 貼上選取的項目</span>' ]
 			.join(''));
+	CeL.log('當前目錄: ' + process.cwd());
 
 	CeL.new_node(options_nodes, 'download_options_panel');
 
@@ -229,6 +230,11 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 			}
 		});
 	}
+
+	if (false)
+		require('electron').ipcRenderer.on('send_message', function(event,
+				message) {
+		});
 });
 
 function reset_site_options() {
@@ -258,6 +264,10 @@ function reset_site_options() {
 	}
 }
 
+function after_download_chapter(work_data, chapter_NO) {
+	set_taskbar_progress(chapter_NO / work_data.chapter_count);
+}
+
 function get_crawler(just_test) {
 	if (!site_used) {
 		if (!just_test) {
@@ -273,6 +283,8 @@ function get_crawler(just_test) {
 	CeL.debug('Load ' + crawler, 'get_crawler');
 	crawler = require(crawler);
 	if (!(site_id in download_site_nodes.link_of_site)) {
+		// 初始化 initialization
+		crawler.after_download_chapter = after_download_chapter;
 		download_site_nodes.link_of_site[site_id] = crawler.base_URL;
 		// add link to site
 		CeL.new_node([ ' ', {
@@ -292,6 +304,7 @@ function get_crawler(just_test) {
 // ----------------------------------------------
 
 function start_gui_crawler() {
+	set_taskbar_progress(NONE_TASKBAR_PROGRESS);
 	var crawler = get_crawler();
 	if (!crawler) {
 		return;
@@ -318,6 +331,7 @@ function continue_task() {
 }
 
 function cancel_task() {
+	set_taskbar_progress(NONE_TASKBAR_PROGRESS);
 	var crawler = get_crawler();
 	crawler && crawler.stop_task(true);
 }
@@ -332,4 +346,15 @@ function open_download_directory() {
 	}
 
 	require('electron').shell.openExternal(crawler.main_directory);
+}
+
+// ----------------------------------------------
+
+var NONE_TASKBAR_PROGRESS = -1,
+// 不定量的進度
+INDETERMINATE_TASKBAR_PROGRESS = 2;
+
+// GUI progress bar
+function set_taskbar_progress(progress) {
+	require('electron').ipcRenderer.send('set_progress', progress);
 }

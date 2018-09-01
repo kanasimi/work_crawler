@@ -24,9 +24,6 @@ function create_window() {
 	// https://electronjs.org/docs/api/browser-window
 	win.maximize();
 
-	// https://electronjs.org/docs/tutorial/progress-bar
-	// win.setProgressBar(0.5);
-
 	// and load the gui_electron.html of the app.
 	win.loadURL(url.format({
 		pathname : path.join(__dirname, 'gui_electron.html'),
@@ -38,6 +35,19 @@ function create_window() {
 		// Open the DevTools.
 		win.webContents.openDevTools();
 	}
+
+	if (false)
+		// https://electronjs.org/docs/api/web-contents#contentssendchannel-arg1-arg2-
+		win.webContents.on('did-finish-load', function() {
+			win.webContents.send('send_message', 'message');
+		});
+
+	require('electron').ipcMain.on('set_progress', function(event, progress) {
+		// https://electronjs.org/docs/tutorial/progress-bar
+		// progress indicator:
+		// https://docs.microsoft.com/en-us/dotnet/api/system.windows.shell.taskbariteminfo.progressvalue
+		win.setProgressBar(progress);
+	});
 
 	// Emitted when the window is closed.
 	win.on('closed', function() {
