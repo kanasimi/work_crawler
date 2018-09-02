@@ -32,7 +32,7 @@
 
 已撰寫完的各大小說漫畫網站工具包括：
 
-### Japanese web fictions / Japanese light novels ライトノベル 日本輕小說 日本のオンライン小説
+### Japanese web fictions / Japanese light novels ライトノベル 日本輕小說 日本語のオンライン小説
 [novel.ja-JP/](novel.ja-JP/)*.js, web pages → epub
 
 | Site 平台名稱 | Tool file | Note 說明 |
@@ -89,15 +89,23 @@
 | [漫画160](http://www.mh160.com/) | mh160.js | 與 733漫画网 相同系統 |
 | [哦漫画](http://www.omanhua.net/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
-| [comico](http://www.comico.com.tw/)<br />[コミコ](https://www.comico.jp/)<br />[オトナ限定 コミコ](http://plus.comico.jp/) | comico.js<br />comico_jp.js<br />comico_jp_plus.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
+| [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
-| [XOY](https://xoy.webtoons.com/) | XOY.js | NAVER WEBTOON ja |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |
-| [OVERLAP](https://over-lap.co.jp/gardo/) | OVERLAP.js | オーバーラップ コミックガルド |
+
+### Japanese webcomics 日語網路漫畫 日本語のウェブコミック
+[comic.ja-JP/](comic.ja-JP/)*.js, images → zip
+
+| Site | Tool file | Note |
+| --- | --- | --- |
 | [ComicWalker](https://comic-walker.com/) | ComicWalker.js | KADOKAWAの無料漫画（マンガ） コミックウォーカー |
+| [pixivコミック](https://comic.pixiv.net/) | pixivcomic.js | pixivコミック(ぴくしぶこみっく) |
+| [OVERLAP](https://over-lap.co.jp/gardo/) | OVERLAP.js | オーバーラップ コミックガルド |
+| [XOY](https://xoy.webtoons.com/) | XOY.js | NAVER WEBTOON ja |
+| [コミコ](https://www.comico.jp/)<br />[オトナ限定 コミコ](http://plus.comico.jp/) | comico_jp.js<br />comico_jp_plus.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 
 ### English webcomics 英語網路漫畫 英語のウェブコミック
 [comic.en-US/](comic.en-US/)*.js, images → zip

@@ -1,6 +1,6 @@
 ﻿/**
  * 批量下載 KADOKAWAの無料漫画（マンガ） コミックウォーカー ComicWalker 的工具。 Download comic-walker
- * comics. (comic.ja-JP)
+ * comics.
  * 
  * @see ニコニコ静画 http://www.nicoseiga.jp/
  * 
@@ -122,9 +122,8 @@ var crawler = new CeL.work_crawler({
 
 		extract_work_data(work_data, html);
 
-		// 一年沒更新就不再檢查
-		this.recheck = !((Date.now() - Date.parse(work_data.last_update))
-				/ (24 * 60 * 60 * 1000) > 365);
+		// 因為沒有明確記載作品是否完結，一年沒更新就不再檢查。
+		work_data.recheck_days = 400;
 
 		return work_data;
 	},
@@ -142,6 +141,9 @@ var crawler = new CeL.work_crawler({
 			});
 		});
 		work_data.chapter_list.reverse();
+
+		// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
+		this.set_chapter_NO_via_title(work_data);
 	},
 
 	chapter_URL : function(work_data, chapter_NO) {
@@ -153,8 +155,6 @@ var crawler = new CeL.work_crawler({
 		html = JSON.parse(html);
 
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
-		// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
-		this.set_chapter_NO_via_title(chapter_data);
 		chapter_data.image_list = html.data.result;
 		chapter_data.image_list.forEach(function(image_data) {
 			image_data.url = image_data.meta.source_url;
@@ -163,6 +163,8 @@ var crawler = new CeL.work_crawler({
 		return chapter_data;
 	},
 	image_pre_process : function(contents, image_data) {
+		if (!contents)
+			return;
 		var decode_key = image_data.meta.drm_hash.slice(0, 16)
 		// decode image 用的關鍵 key
 		.match(/[\da-f]{2}/gi).map(function(t) {

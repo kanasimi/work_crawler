@@ -7,9 +7,10 @@ var base_directory = '../', site_used,
 //
 site_type_description = {
 	'comic.cmn-Hans-CN' : '中国内地漫画',
+	'comic.ja-JP' : '日本語のウェブコミック',
 	'comic.en-US' : 'English webcomics',
 	'novel.cmn-Hans-CN' : '中国内地小说',
-	'novel.ja-JP' : '日本のオンライン小説'
+	'novel.ja-JP' : '日本語のオンライン小説'
 },
 //
 download_sites_set = {
@@ -43,15 +44,19 @@ download_sites_set = {
 		omanhua : '哦漫画',
 
 		comico : 'comico',
-		comico_jp : 'コミコ',
-		comico_jp_plus : 'オトナ限定 コミコ',
 
 		webtoon : 'WEBTOON',
-		dongman : '咚漫',
+		dongman : '咚漫'
+	},
+	'comic.ja-JP' : {
+		ComicWalker : 'ComicWalker',
+		pixivcomic : 'pixivコミック',
+		OVERLAP : 'OVERLAP',
+
 		XOY : 'WEBTOON ja',
 
-		OVERLAP : 'OVERLAP',
-		ComicWalker : 'ComicWalker'
+		comico_jp : 'コミコ',
+		comico_jp_plus : 'オトナ限定 コミコ'
 	},
 	'comic.en-US' : {
 		webtoon : 'WEBTOON en',

@@ -1,6 +1,5 @@
 ﻿/**
  * 批量下載 OVERLAP - オーバーラップ コミックガルド 的工具。 Download OVERLAP GARDO comics.
- * (comic.ja-JP)
  * 
  * @see ActiBook https://ebook.digitalink.ne.jp/
  */
@@ -72,11 +71,12 @@ var crawler = new CeL.work_crawler({
 				url : base_URL + 'iPhone/ibook.xml',
 				title : get_label(matched[1].between('<h2>', '</h2>'))
 			};
-			// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
-			this.set_chapter_NO_via_title(chapter_data);
 			work_data.chapter_list.push(chapter_data);
 		}
 		work_data.chapter_list.reverse();
+
+		// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
+		this.set_chapter_NO_via_title(work_data);
 	},
 
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
