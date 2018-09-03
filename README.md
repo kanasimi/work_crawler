@@ -86,7 +86,7 @@
 | [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
 | [卡推漫画](http://www.katui.net/) | katui.js | 系統同 733dm.js |
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
-| [漫画160](http://www.mh160.com/) | mh160.js | 與 733漫画网 相同系統 |
+| [漫画160](http://www.mh160.com/) | mh160.js | 與 733mh.js 相同系統 |
 | [哦漫画](http://www.omanhua.net/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
