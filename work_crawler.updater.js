@@ -72,13 +72,17 @@ function update_components(update_script_name) {
 		stdio : 'inherit'
 	});
 
-	// 圖形使用者介面
-	show_info('下載/更新圖形介面需要用到的組件...');
-	if (!node_fs.existsSync('node_modules'))
-		node_fs.mkdirSync('node_modules');
-	child_process.execSync('npm i -D electron@latest', {
-		stdio : 'inherit'
-	});
+	// 配置圖形使用者介面。
+	try {
+		require('electron');
+	} catch (e) {
+		show_info('下載/更新圖形介面需要用到的組件...');
+		if (!node_fs.existsSync('node_modules'))
+			node_fs.mkdirSync('node_modules');
+		child_process.execSync('npm i -D electron@latest', {
+			stdio : 'inherit'
+		});
+	}
 
 	show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
 }

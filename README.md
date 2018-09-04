@@ -151,8 +151,6 @@
    以下是在linux下直接操作上述作業時的指令，Windows用戶可以跳過，直接[開始試用](#execution-執行)。
    ``` sh
    # sample commands to extract work_crawler + cejs
-   mkdir work_crawler
-   cd work_crawler
    curl -O https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js
    # wget https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js
    node work_crawler.updater.js
