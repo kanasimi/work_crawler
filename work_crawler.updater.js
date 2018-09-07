@@ -67,8 +67,9 @@ function update_components(update_script_name) {
 	}
 
 	show_info('下載/更新 Colorless echo JavaScript kit 組件...');
-	child_process.execSync('node ' + (executing_at_tool_directory ? '' : '../')
-			+ update_script_name, {
+	child_process.execSync('node '
+			+ (executing_at_tool_directory ? update_script_name + ' .' : '../'
+					+ update_script_name), {
 		stdio : 'inherit'
 	});
 
