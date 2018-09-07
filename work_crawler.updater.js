@@ -68,8 +68,9 @@ function update_components(update_script_name) {
 
 	show_info('下載/更新 Colorless echo JavaScript kit 組件...');
 	child_process.execSync('node '
-			+ (executing_at_tool_directory ? update_script_name + ' .' : '../'
-					+ update_script_name), {
+			+ (executing_at_tool_directory ? update_script_name
+			// @see default_repository_path @ update_script_name
+			+ ' kanasimi/CeJS .' : '../' + update_script_name), {
 		stdio : 'inherit'
 	});
 
