@@ -119,8 +119,10 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	// CeL.debug('Log panel setted.');
 	CeL.Log.clear();
 
-	CeL.work_crawler.prototype.user_agent = navigator.userAgent.replace(
+	var user_agent = navigator.userAgent.replace(
 			/(?:work_crawler|Electron)[\/.\d ]*/ig, '');
+	if (user_agent)
+		CeL.work_crawler.prototype.user_agent = user_agent;
 
 	var site_nodes = [];
 	for ( var site_type in download_sites_set) {
@@ -212,12 +214,16 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 		});
 	}
 
-	CeL.log([ '<span style="font-size:2em; color:#f88;">',
+	CeL.log([
+			'<span style="font-size:2em; color:#f88;">',
 			'<a href="https://support.microsoft.com/zh-tw/',
-			'help/12445/windows-keyboard-shortcuts" target="_blank">',
+			'help/12445/windows-keyboard-shortcuts"'
+					+ ' onclick="return open_external(this.href);">',
 			'複製貼上快速鍵</a>: Ctrl + C 複製選取的項目,', ' Ctrl + V 貼上選取的項目</span>' ]
 			.join(''));
 	CeL.log('當前目錄: ' + process.cwd());
+	CeL.log('環境變數: ' + JSON.stringify(process.env));
+	CeL.log('<a href="#" onclick="return open_DevTools();">open DevTools</a>');
 
 	CeL.new_node(options_nodes, 'download_options_panel');
 
@@ -241,6 +247,11 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 				message) {
 		});
 });
+
+function open_external(URL) {
+	require('electron').shell.openExternal(URL || this.href);
+	return false;
+}
 
 function reset_site_options() {
 	download_site_nodes.forEach(function(site_node) {
@@ -296,10 +307,7 @@ function get_crawler(just_test) {
 			a : '🔗 link',
 			href : crawler.base_URL,
 			target : '_blank',
-			onclick : function() {
-				require('electron').shell.openExternal(this.href);
-				return false;
-			}
+			onclick : open_external
 		} ], download_site_nodes.node_of_id[site_id].parentNode);
 	}
 
@@ -350,7 +358,7 @@ function open_download_directory() {
 		return;
 	}
 
-	require('electron').shell.openExternal(crawler.main_directory);
+	open_external(crawler.main_directory);
 }
 
 // ----------------------------------------------
@@ -362,4 +370,9 @@ INDETERMINATE_TASKBAR_PROGRESS = 2;
 // GUI progress bar
 function set_taskbar_progress(progress) {
 	require('electron').ipcRenderer.send('set_progress', progress);
+}
+
+function open_DevTools() {
+	require('electron').ipcRenderer.send('open_DevTools', true);
+	return false;
 }

@@ -31,11 +31,6 @@ function create_window() {
 		slashes : true
 	}));
 
-	if (false) {
-		// Open the DevTools.
-		win.webContents.openDevTools();
-	}
-
 	if (false)
 		// https://electronjs.org/docs/api/web-contents#contentssendchannel-arg1-arg2-
 		win.webContents.on('did-finish-load', function() {
@@ -47,6 +42,12 @@ function create_window() {
 		// progress indicator:
 		// https://docs.microsoft.com/en-us/dotnet/api/system.windows.shell.taskbariteminfo.progressvalue
 		win.setProgressBar(progress);
+	});
+
+	require('electron').ipcMain.on('open_DevTools', function(event, open) {
+		if (open)
+			// Open the DevTools.
+			win.webContents.openDevTools();
 	});
 
 	// Emitted when the window is closed.
