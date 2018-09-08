@@ -71,6 +71,7 @@
 		"electron-builder" : "latest"
 	},
 	"dependencies" : {
-		"cejs" : "latest"
+		"cejs" : "latest",
+		"gh-updater" : "latest"
 	}
 }

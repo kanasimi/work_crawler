@@ -85,6 +85,10 @@ if (typeof CeL !== 'function') {
 	throw 'No CeJS library';
 }
 
+// 判別是否運行了多個 CeL 實體使用。
+if (!CeL.random_id)
+	CeL.random_id = Math.random();
+
 // ----------------------------------------------------------------------------
 // Load modules.
 
@@ -100,6 +104,7 @@ CeL.run([
 
 // console.log(process.argv);
 
+// GUI: CeL.platform.browser === 'electron'
 var is_CLI = CeL.platform.browser === 'node';
 
 global.work_id = is_CLI

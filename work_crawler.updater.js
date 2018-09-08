@@ -6,12 +6,12 @@
 
 'use strict';
 
-var update_script_url = 'https://raw.githubusercontent.com/kanasimi/CeJS/master/_for%20include/_CeL.updater.node.js';
+var update_script_url = 'https://raw.githubusercontent.com/kanasimi/gh-updater/master/GitHub.updater.node.js';
 
 // ----------------------------------------------------------------------------
 
 // const
-var node_https = require('https'), node_fs = require('fs'), child_process = require('child_process');
+var node_https = require('https'), node_fs = require('fs');
 
 download_update_tool(update_script_url, update_components);
 
@@ -47,42 +47,43 @@ function download_update_tool(update_script_url, callback) {
 	});
 }
 
-function update_components(update_script_name) {
-	var executing_at_tool_directory = node_fs
-			.existsSync('work_crawler_loder.js');
-
-	show_info('下載/更新 CeJS 線上小說漫畫下載工具...');
-	child_process.execSync('node ' + update_script_name + ' '
-			+ 'kanasimi/work_crawler'
-			// 解開到當前目錄下。
-			+ (executing_at_tool_directory ? ' .' : ''), {
-		stdio : 'inherit'
-	});
-
-	if (executing_at_tool_directory) {
-		// console.log('似乎在 CeJS 線上小說漫畫下載工具的工作目錄下，直接執行升級工具。');
-		// console.log(process.cwd());
-	} else {
-		process.chdir('work_crawler-master');
-	}
-
-	show_info('下載/更新 Colorless echo JavaScript kit 組件...');
-	child_process.execSync('node ' + (executing_at_tool_directory ? '' : '../')
-			+ update_script_name, {
-		stdio : 'inherit'
-	});
-
-	// 配置圖形使用者介面。
+function install_npm(package_name, message) {
 	try {
-		require('electron');
+		require(package_name);
 	} catch (e) {
-		show_info('下載/更新圖形介面需要用到的組件...');
+		show_info(message || '安裝需要用到的組件 [' + package_name + ']...');
 		if (!node_fs.existsSync('node_modules'))
 			node_fs.mkdirSync('node_modules');
-		child_process.execSync('npm i -D electron@latest', {
-			stdio : 'inherit'
-		});
+		require('child_process').execSync(
+				'npm i -D ' + package_name + '@latest', {
+					stdio : 'inherit'
+				});
 	}
+}
 
-	show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
+function update_components(update_script_name) {
+	var executing_at_tool_directory = node_fs
+			.existsSync('work_crawler_loder.js'), updater = require('./'
+			+ update_script_name);
+
+	show_info('下載/更新 CeJS 線上小說漫畫下載工具...');
+	updater.update('kanasimi/work_crawler', executing_at_tool_directory
+	// 解開到當前目錄下。
+	? '.' : '', function() {
+		if (executing_at_tool_directory) {
+			// console.log('似乎在 CeJS 線上小說漫畫下載工具的工作目錄下，直接執行升級工具。');
+			// console.log(process.cwd());
+		} else {
+			process.chdir('work_crawler-master');
+		}
+
+		show_info('下載/更新 Colorless echo JavaScript kit 組件...');
+		updater.update(null, null, function() {
+			// 配置圖形使用者介面。
+			install_npm('electron', '下載/更新圖形介面需要用到的組件...');
+			// install_npm('electron-builder');
+
+			show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
+		});
+	});
 }
