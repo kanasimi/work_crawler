@@ -87,6 +87,7 @@ function update_components(update_script_name) {
 			// 配置圖形使用者介面。
 			install_npm('electron', '下載/更新圖形介面需要用到的組件 electron...');
 			// install_npm('electron-builder');
+			install_npm('gh-updater');
 
 			show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
 		});
