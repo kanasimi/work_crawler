@@ -28,10 +28,10 @@
 		"mac" : {
 			"category" : "Network",
 			"target" : "dmg",
-			"icon" : "gui_electron/icon/rasen1.icns"
+			"icon" : "gui_electron/icon/rasen2.png"
 		},
 		"dmg" : {
-			"icon" : "gui_electron/icon/rasen1.icns",
+			"icon" : "gui_electron/icon/rasen2.png",
 			"contents" : [ {
 				"x" : 110,
 				"y" : 150
@@ -51,14 +51,14 @@
 				"arch" : [ "x64", "ia32" ]
 			} ],
 			"category" : "Network",
-			"icon" : "gui_electron/icon/rasen1.png"
+			"icon" : "gui_electron/icon/rasen2.png"
 		},
 		"win" : {
 			"target" : [ {
 				"target" : "nsis",
 				"arch" : [ "x64", "ia32" ]
 			} ],
-			"icon" : "gui_electron/icon/rasen1.ico"
+			"icon" : "gui_electron/icon/rasen2.ico"
 		},
 		"nsis" : {
 			"oneClick" : false,

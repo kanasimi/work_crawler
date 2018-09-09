@@ -16,7 +16,8 @@ function create_window() {
 	// https://electronjs.org/docs/api/browser-window
 	win = new BrowserWindow(Object.assign({
 		// https://github.com/electron-userland/electron-builder/issues/2269#issuecomment-342168989
-		icon : path.join(__dirname, '/icon/rasen1.png')
+		// Mac OS icon: at least 512x512
+		icon : path.join(__dirname, '/icon/rasen2.png')
 	},
 	// https://github.com/electron/electron/blob/master/docs/api/screen.md
 	require('electron').screen.getPrimaryDisplay().workAreaSize));
