@@ -34,9 +34,11 @@ function download_update_tool(update_script_url, callback) {
 			var contents = Buffer.concat(buffer_array, sum_size).toString(),
 			//
 			update_script_name = update_script_url.match(/[^\\\/]+$/)[0];
+			console.info(update_script_name + ': ' + sum_size + ' bytes.');
 			node_fs.writeFileSync(update_script_name, contents);
 
-			typeof callback === 'function' && callback(update_script_name);
+			if (typeof callback === 'function')
+				callback(update_script_name);
 		});
 	})
 	//
