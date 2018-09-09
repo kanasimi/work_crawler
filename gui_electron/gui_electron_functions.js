@@ -244,6 +244,20 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 		});
 	}
 
+	// macOS APP 中無法將檔案儲存在APP目錄下
+	// @see determin_default_main_directory() @ CeL.work_crawler
+	if (process.env.Apple_PubSub_Socket_Render && !global.data_directory) {
+		data_directory = CeL.env('home');
+		var user_download_directory = data_directory + CeL.env.path_separator
+				+ 'Downloads';
+		if (CeL.directory_exists(user_download_directory)) {
+			CeL.info('預設的主要下載目錄設置於用戶預設之下載目錄下: ' + user_download_directory);
+			data_directory = user_download_directory;
+		} else {
+			CeL.info('預設的主要下載目錄設置於用戶個人文件夾  home directory 下: ' + data_directory);
+		}
+	}
+
 	if (false)
 		require('electron').ipcRenderer.on('send_message', function(event,
 				message) {
