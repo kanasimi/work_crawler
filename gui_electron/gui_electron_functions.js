@@ -221,8 +221,8 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 					+ ' onclick="return open_external(this.href);">',
 			'複製貼上快速鍵</a>: Ctrl + C 複製選取的項目,', ' Ctrl + V 貼上選取的項目</span>' ]
 			.join(''));
-	CeL.debug('當前目錄: ' + process.cwd(), 0);
-	CeL.debug('環境變數: ' + JSON.stringify(process.env), 0);
+	CeL.debug('當前目錄: ' + process.cwd(), 1);
+	CeL.debug('環境變數: ' + JSON.stringify(process.env), 1);
 	CeL.debug(
 			'<a href="#" onclick="return open_DevTools();">open DevTools</a>',
 			0);
@@ -244,18 +244,22 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 		});
 	}
 
-	// macOS APP 中無法將檔案儲存在APP目錄下
 	// @see determin_default_main_directory() @ CeL.work_crawler
 	if (process.env.Apple_PubSub_Socket_Render && !global.data_directory) {
-		data_directory = CeL.env('home');
-		var user_download_directory = data_directory + CeL.env.path_separator
-				+ 'Downloads';
+		// macOS APP 中無法將檔案儲存在APP目錄下。
+		data_directory = CeL.env('home') + CeL.env.path_separator;
+		var user_download_directory = data_directory + 'Downloads'
+				+ CeL.env.path_separator;
 		if (CeL.directory_exists(user_download_directory)) {
 			CeL.info('預設的主要下載目錄設置於用戶預設之下載目錄下: ' + user_download_directory);
 			data_directory = user_download_directory;
 		} else {
-			CeL.info('預設的主要下載目錄設置於用戶個人文件夾  home directory 下: ' + data_directory);
+			CeL
+					.info('預設的主要下載目錄設置於用戶個人文件夾  home directory 下: '
+							+ data_directory);
 		}
+	} else {
+		CeL.info('預設的主要下載目錄: ' + data_directory);
 	}
 
 	if (false)

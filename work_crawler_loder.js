@@ -145,9 +145,9 @@ function setup_crawler(crawler, crawler_module) {
 	}
 
 	// 儲存路徑。圖片檔+紀錄檔下載位置。
-	// main_directory 必須以 path separator 作結。
 	crawler.main_directory = data_directory + crawler.id
-			+ CeL.env.path_separator;
+	// main_directory 必須以 path separator 作結。
+	+ CeL.env.path_separator;
 
 	if (site_configuration[crawler.id]) {
 		Object.assign(crawler, site_configuration[crawler.id]);
