@@ -41,13 +41,7 @@ function create_window() {
 		// https://electronjs.org/docs/tutorial/progress-bar
 		// progress indicator:
 		// https://docs.microsoft.com/en-us/dotnet/api/system.windows.shell.taskbariteminfo.progressvalue
-
-		// macOS APP 中 .setProgressBar() 會造成 crash?
-		try {
-			win.setProgressBar(progress);
-		} catch (e) {
-			// TODO: handle exception
-		}
+		win.setProgressBar(progress);
 	});
 
 	require('electron').ipcMain.on('open_DevTools', function(event, open) {

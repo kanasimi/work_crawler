@@ -371,8 +371,11 @@ INDETERMINATE_TASKBAR_PROGRESS = 2;
 
 // GUI progress bar
 function set_taskbar_progress(progress) {
-	// if (CeL.platform.OS !== 'darwin')
-	require('electron').ipcRenderer.send('set_progress', progress);
+	if (// CeL.platform.OS !== 'darwin' ||
+	!process.env.Apple_PubSub_Socket_Render) {
+		// macOS APP 中 win.setProgressBar() 會造成 crash?
+		require('electron').ipcRenderer.send('set_progress', progress);
+	}
 }
 
 function open_DevTools() {
