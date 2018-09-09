@@ -24,12 +24,14 @@
 		},
 		"files" : [ "package.json", "node_modules/*", "_CeL.loader.nodejs.js",
 				"gui_electron/**/*", "work_crawler_loder.js",
-				"comic.cmn-Hans-CN/**/*", "novel.cmn-Hans-CN/**/*",
-				"novel.ja-JP/**/*" ],
+				"comic.*/**/*", "novel.*/**/*" ],
 		"mac" : {
-			"target" : "dmg"
+			"category" : "Network",
+			"target" : "dmg",
+			"icon" : "gui_electron/icon/rasen1.icns"
 		},
 		"dmg" : {
+			"icon" : "gui_electron/icon/rasen1.icns",
 			"contents" : [ {
 				"x" : 110,
 				"y" : 150
@@ -49,7 +51,7 @@
 				"arch" : [ "x64", "ia32" ]
 			} ],
 			"category" : "Network",
-			"icon" : "gui_electron/icon/"
+			"icon" : "gui_electron/icon/rasen1.png"
 		},
 		"win" : {
 			"target" : [ {

@@ -53,7 +53,10 @@ function install_npm(package_name, message) {
 	try {
 		require(package_name);
 	} catch (e) {
-		show_info(message || '安裝需要用到的組件 [' + package_name + ']...');
+		// e.code: 'MODULE_NOT_FOUND'
+		// console.error(e);
+
+		show_info(message || ('安裝需要用到的組件 [' + package_name + ']...'));
 		if (!node_fs.existsSync('node_modules'))
 			node_fs.mkdirSync('node_modules');
 		require('child_process').execSync(
@@ -82,7 +85,7 @@ function update_components(update_script_name) {
 		show_info('下載/更新 Colorless echo JavaScript kit 組件...');
 		updater.update(null, null, function() {
 			// 配置圖形使用者介面。
-			install_npm('electron', '下載/更新圖形介面需要用到的組件...');
+			install_npm('electron', '下載/更新圖形介面需要用到的組件 electron...');
 			// install_npm('electron-builder');
 
 			show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
