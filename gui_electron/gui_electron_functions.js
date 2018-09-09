@@ -221,9 +221,11 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 					+ ' onclick="return open_external(this.href);">',
 			'複製貼上快速鍵</a>: Ctrl + C 複製選取的項目,', ' Ctrl + V 貼上選取的項目</span>' ]
 			.join(''));
-	CeL.log('當前目錄: ' + process.cwd());
-	CeL.log('環境變數: ' + JSON.stringify(process.env));
-	CeL.log('<a href="#" onclick="return open_DevTools();">open DevTools</a>');
+	CeL.debug('當前目錄: ' + process.cwd(), 0);
+	CeL.debug('環境變數: ' + JSON.stringify(process.env), 0);
+	CeL.debug(
+			'<a href="#" onclick="return open_DevTools();">open DevTools</a>',
+			0);
 
 	CeL.new_node(options_nodes, 'download_options_panel');
 
@@ -369,6 +371,7 @@ INDETERMINATE_TASKBAR_PROGRESS = 2;
 
 // GUI progress bar
 function set_taskbar_progress(progress) {
+	// if (CeL.platform.OS !== 'darwin')
 	require('electron').ipcRenderer.send('set_progress', progress);
 }
 
