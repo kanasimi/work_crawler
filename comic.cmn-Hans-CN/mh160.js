@@ -106,10 +106,13 @@ var crawler = new CeL.work_crawler({
 		} else {
 			chapter_data = html.between('picTree ="', '"');
 		}
+		// console.log(chapter_data);
 		if (chapter_data) {
 			// getUrlpics() @
 			// http://www.mh160.com/template/skin4_20110501/js/mh160style/base64.js
-			chapter_data = (chapter_data.includes('mh160tuku') ? chapter_data
+			chapter_data = (chapter_data.includes('mh160tuku')
+			// e.g., https://www.mh160.com/kanmanhua/203/248562.html
+			|| chapter_data.includes('$qingtiandy$') ? chapter_data
 			// 對於非utf-8編碼之中文，不能使用 atob()
 			: base64_decode(chapter_data)).split("$qingtiandy$");
 		}
@@ -124,10 +127,14 @@ var crawler = new CeL.work_crawler({
 		// 設定必要的屬性。
 		chapter_data = {
 			image_list : chapter_data.map(function(url) {
+				// console.log(url);
+				url = encodeURI(url);
 				return {
-					url : getpicdamin(work_data.id, html.between(
-							"currentChapterid = '", "'"))
-							+ encodeURI(url)
+					// url.includes('://'):
+					// e.g., https://www.mh160.com/kanmanhua/203/248562.html
+					url : url.includes('://') ? url : getpicdamin(work_data.id,
+							html.between("currentChapterid = '", "'"))
+							+ url
 				};
 			}, this)
 		};
