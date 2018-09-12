@@ -33,7 +33,7 @@ crawler = new CeL.work_crawler({
 	// 本站常常無法取得圖片，因此得多重新檢查。
 	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
 	// recheck : true,
-	// one_by_one : true,
+	one_by_one : true,
 
 	base_URL : 'https://www.manhuagui.com/',
 	script_base_URL : 'https://cf.hamreus.com/scripts/',
@@ -44,7 +44,8 @@ crawler = new CeL.work_crawler({
 	// 2018/7/12 22:29:18 9s: NG, ban 2 hr.
 	// 10s, 15s 在下載過100章(1 hr)之後一樣會 ban 5hr。
 	// 20s, 30s 在下載過200章(~2 hr)之後一樣會 ban。
-	chapter_time_interval : 60 * 1000,
+	// 60s 大致OK
+	chapter_time_interval : 20 * 1000,
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.
@@ -187,8 +188,8 @@ crawler = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	_pre_chapter_URL : function(work_data, chapter, callback) {
-		var chapter_data = work_data.chapter_list[chapter - 1],
+	_pre_chapter_URL : function(work_data, chapter_NO, callback) {
+		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		// e.g., "/comic/8772/86612.html"
 		chapter_id = +chapter_data.url.match(/^\/comic\/\d+\/(\d+)\.html$/)[1];
 		CeL.get_URL(this.base_URL + 'support/chapter.ashx?bid=' + work_data.id
@@ -196,7 +197,7 @@ crawler = new CeL.work_crawler({
 			// console.log(XMLHttp.responseText);
 			chapter_data.sibling = JSON.parse(XMLHttp.responseText);
 			if (chapter_data.sibling.n > 0
-					&& work_data.chapter_count === chapter) {
+					&& work_data.chapter_count === chapter_NO) {
 				// 還有下一chapter。
 				work_data.chapter_list.push({
 					url : chapter_data.url.replace(/(\d+)\.html$/,
