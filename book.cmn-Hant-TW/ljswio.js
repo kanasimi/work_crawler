@@ -173,13 +173,13 @@ var crawler = new CeL.work_crawler({
 		}
 
 		if (!work_data.author) {
-			var author = html.between('<p class="post-byline">', '</p>');
-			if (author && (author = author.match(
-			//
-			/<a href="[^<>"]+?\/people\/[^<>"]+?"[^<>]+? title="([^<>"]+?)">/
+			matched = html.between('<p class="post-byline">', '</p>');
+			if (matched && (matched = matched.match(
+			// PATTERN_author
+			/<a href="[^<>"]+?\/people\/[^<>"]+?"[^<>]*? title="([^<>"]+)">/
 			//
 			))) {
-				work_data.author = get_label(author[1]);
+				work_data.author = get_label(matched[1]);
 			}
 		}
 
