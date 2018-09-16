@@ -3,9 +3,9 @@
  */
 
 // work_crawler/
-var base_directory = '../', site_used,
-//
-site_type_description = {
+var base_directory = '../',
+// 為安裝包
+is_installation_package, site_used, site_type_description = {
 	'comic.cmn-Hans-CN' : '中国内地漫画',
 	'comic.ja-JP' : '日本語のウェブコミック',
 	'comic.en-US' : 'English webcomics',
@@ -116,7 +116,8 @@ require(base_directory + 'work_crawler_loder.js');
 CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	CeL.Log.set_board('log_panel');
 	// CeL.set_debug();
-	// CeL.debug('Log panel setted.');
+	// 設置完成
+	// CeL.debug('Log panel has been set.');
 	CeL.Log.clear();
 
 	var user_agent = navigator.userAgent.replace(
@@ -262,10 +263,14 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 		CeL.info('預設的主要下載目錄: ' + data_directory);
 	}
 
+	check_update();
+
 	if (false)
 		require('electron').ipcRenderer.on('send_message', function(event,
 				message) {
 		});
+
+	process.title = 'CeJS 線上小說漫畫下載工具';
 });
 
 function open_external(URL) {
@@ -379,6 +384,59 @@ function open_download_directory() {
 	}
 
 	open_external(crawler.main_directory);
+}
+
+// ----------------------------------------------
+
+function check_update() {
+	try {
+		if (!is_installation_package) {
+			// 非安裝包圖形介面自動更新功能
+			var child_process = require('child_process');
+			child_process.execSync('node work_crawler.updater.js', {
+				// pass I/O to the child process
+				// https://nodejs.org/api/child_process.html#child_process_options_stdio
+				stdio : 'inherit'
+			});
+			return;
+		}
+
+		CeL.debug('Checking update...');
+		var GitHub_repository_path = 'kanasimi/work_crawler', node = CeL
+				.new_node({
+					div : 'Checking update...',
+					id : 'update_panel',
+					C : 'waiting'
+				}, [ document.body, 1 ]);
+
+		var updater = require('gh-updater');
+		updater.check_version(GitHub_repository_path,
+		// 必須手動上網站把檔案下載下來執行更新。
+		function(version_data) {
+			console.log(version_data);
+			if (version_data.has_new_version) {
+				CeL.new_node({
+					a : 'Update available: '
+					//
+					+ (version_data.has_version ? version_data.has_version
+					//
+					+ ' → ' : '') + version_data.latest_version,
+					href : 'https://github.com/' + GitHub_repository_path,
+					target : '_blank',
+					onclick : open_external
+				}, [ node, null ]);
+			} else
+				CeL.toggle_display(node, false);
+		});
+
+	} catch (e) {
+		CeL.error('Update failed: ' + e);
+		CeL.node_value(node, 'Update failed!');
+		CeL.set_class(node, 'check_failed', {
+			reset : true
+		});
+		node.title = e;
+	}
 }
 
 // ----------------------------------------------
