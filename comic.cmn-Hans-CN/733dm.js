@@ -100,7 +100,7 @@ var crawler = new CeL.work_crawler({
 		// console.log(work_data);
 	},
 
-	parse_chapter_data : function(html, work_data) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		function decode(packed) {
 			var photosr = [];
 			// decode chapter data @ every picture page
@@ -119,29 +119,31 @@ var crawler = new CeL.work_crawler({
 		// console.log(chapter_data.length);
 		// CeL.set_debug(6);
 
+		var chapter_URL = this.chapter_URL(work_data, chapter_NO);
+
 		// 設定必要的屬性。
 		chapter_data = {
 			image_list : chapter_data.map(function(url, index) {
 				// @see https://www.733.so/skin/2014mh/global.js?v=003 line 434
 				// https://www.733.so/skin/2014mh/view.js line 97
-				var chapter_URL = this.chapter_URL(work_data, index + 1);
 				return {
 					// 此 URL 會再轉址至圖片真實網址。
 					url : chapter_URL + "&mode=pc&hash="
 					// create md5 hash from string, hex_md5()
 					+ require('crypto').createHash('md5')
-					//
-					.update(chapter_URL + url).digest("hex") + "&file=" + url
+					// 就算給一個錯誤的雜湊值似乎也可以獲得正確的檔案？
+					.update(chapter_URL + url).digest('hex') + "&file=" + url
 				};
-			}, this)
+			})
 		};
 		// console.log(JSON.stringify(chapter_data));
 		// console.log(chapter_data);
 
 		return chapter_data;
 	},
+	// 檢測用，不應該有實際作用。
 	image_pre_process : function(contents, image_data) {
-		if (contents.length === 99242) {
+		if (contents && contents.length === 99242) {
 			if (contents.slice(99000, 99020).toString('hex') ===
 			// 99242: @see #19
 			'5a925a19be65b31fac5555a73155540555501555')
