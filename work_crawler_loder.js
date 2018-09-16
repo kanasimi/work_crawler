@@ -13,6 +13,9 @@ global.use_cejs_mudule = true;
 // '': the same directory as the .js running
 global.data_directory = '';
 
+// 自動更新功能。
+global.auto_update = true;
+
 // ------------------------------------
 // configuration for arrangement/*.js
 
