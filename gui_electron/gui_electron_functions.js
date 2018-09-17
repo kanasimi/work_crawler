@@ -106,7 +106,12 @@ download_options_set = {
 	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。',
 	main_directory : '下載檔案儲存目錄路徑。圖片檔+紀錄檔下載位置。',
 	user_agent : '瀏覽器識別'
-}, download_site_nodes = [], download_options_nodes = {};
+}, download_site_nodes = [], download_options_nodes = {}, old_Unicode_support = navigator.appVersion
+		.match(/Windows NT (\d+(?:\.\d))/);
+if (old_Unicode_support) {
+	// 舊版本的Windows不支援"⬚ "之類符號。
+	old_Unicode_support = +old_Unicode_support[1] < 10;
+}
 download_site_nodes.link_of_site = {};
 download_site_nodes.node_of_id = {};
 
@@ -136,7 +141,8 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 		for ( var site_id in sites) {
 			var site_node = CeL.new_node({
 				T : sites[site_id],
-				C : 'download_sites',
+				C : 'download_sites'
+						+ (old_Unicode_support ? ' old_Unicode_support' : ''),
 				title : site_type + '/' + site_id,
 				onclick : function() {
 					site_used = this.title;
@@ -379,20 +385,22 @@ function Download_job(crawler, work_id, site_id) {
 			div : this.progress_layer,
 			S : 'flex-grow: 1; background-color: #888;'
 		}, {
-			T : '⏸暫停',
-			R : '⏯ 暫停/恢復下載',
+			T : (old_Unicode_support ? '' : '⏸') + '暫停',
+			R : (old_Unicode_support ? '' : '⏯ ') + '暫停/恢復下載',
 			C : 'task_controller',
 			onclick : function() {
 				if (this.stopped) {
 					this.stopped = false;
 					continue_task(crawler);
+					CeL.DOM.set_text(this,
 					// pause
-					CeL.DOM.set_text(this, CeL.gettext('⏸暫停'));
+					CeL.gettext((old_Unicode_support ? '' : '⏸') + '暫停'));
 				} else {
 					this.stopped = true
 					stop_task(crawler);
+					CeL.DOM.set_text(this,
 					// resume ⏯
-					CeL.DOM.set_text(this, CeL.gettext('▶️繼續'));
+					CeL.gettext((old_Unicode_support ? '' : '▶️') + '繼續'));
 				}
 				return false;
 			}
@@ -403,7 +411,7 @@ function Download_job(crawler, work_id, site_id) {
 			onclick : cancel_task.bind(null, crawler)
 		}, {
 			T : '📂',
-			R : '🗁 開啓下載目錄',
+			R : (old_Unicode_support ? '' : '🗁 ') + '開啓下載目錄',
 			C : 'task_controller',
 			onclick : open_download_directory.bind(null, crawler)
 		} ],
@@ -545,6 +553,7 @@ function check_update() {
 		}
 
 		if (!is_installation_package) {
+			CeL.log('自動更新檢測並執行中。');
 			// 非安裝包圖形介面自動更新功能
 			var child_process = require('child_process');
 			child_process.execSync('node work_crawler.updater.js', {
