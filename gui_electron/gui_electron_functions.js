@@ -380,7 +380,7 @@ function Download_job(crawler, work_id, site_id) {
 			S : 'flex-grow: 1; background-color: #888;'
 		}, {
 			T : '⏸暫停',
-			R : '⏯ 暫停/繼續下載',
+			R : '⏯ 暫停/恢復下載',
 			C : 'task_controller',
 			onclick : function() {
 				if (this.stopped) {
@@ -392,7 +392,7 @@ function Download_job(crawler, work_id, site_id) {
 					this.stopped = true
 					stop_task(crawler);
 					// resume ⏯
-					CeL.DOM.set_text(this, CeL.gettext('⏵繼續'));
+					CeL.DOM.set_text(this, CeL.gettext('▶️繼續'));
 				}
 				return false;
 			}
@@ -402,9 +402,8 @@ function Download_job(crawler, work_id, site_id) {
 			C : 'task_controller',
 			onclick : cancel_task.bind(null, crawler)
 		}, {
-			// 🗁
 			T : '📂',
-			R : '開啓下載目錄',
+			R : '🗁 開啓下載目錄',
 			C : 'task_controller',
 			onclick : open_download_directory.bind(null, crawler)
 		} ],
@@ -543,8 +542,9 @@ function check_update() {
 		if (!global.auto_update) {
 			CeL.log('已設定不自動更新。');
 			return;
+		}
 
-		} else if (!is_installation_package) {
+		if (!is_installation_package) {
 			// 非安裝包圖形介面自動更新功能
 			var child_process = require('child_process');
 			child_process.execSync('node work_crawler.updater.js', {

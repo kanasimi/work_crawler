@@ -22,12 +22,18 @@
 		"directories" : {
 			"output" : "build"
 		},
+		"publish" : [ {
+			"provider" : "github",
+			"owner" : "kanasimi",
+			"repo" : "work_crawler"
+		} ],
 		"files" : [ "package.json", "node_modules/*", "_CeL.loader.nodejs.js",
-				"gui_electron/**/*", "work_crawler_loder.js",
-				"comic.*/**/*", "novel.*/**/*" ],
+				"gui_electron/**/*", "work_crawler_loder.js", "comic.*/**/*",
+				"novel.*/**/*" ],
+
 		"mac" : {
 			"category" : "Network",
-			"target" : "dmg",
+			"target" : [ "dmg", "mas", "pkg", "zip" ],
 			"icon" : "gui_electron/icon/rasen2.png"
 		},
 		"dmg" : {
@@ -42,6 +48,14 @@
 				"path" : "/Applications"
 			} ]
 		},
+		"mas" : {
+			"icon" : "gui_electron/icon/rasen2.png",
+			"extendInfo" : {
+				"ElectronTeamID" : "TEAMID"
+			},
+			"category" : "public.app-category.entertainment"
+		},
+
 		"linux" : {
 			"target" : [ {
 				"target" : "AppImage",
@@ -53,6 +67,7 @@
 			"category" : "Network",
 			"icon" : "gui_electron/icon/rasen2.png"
 		},
+
 		"win" : {
 			"target" : [ {
 				"target" : "nsis",
@@ -73,7 +88,9 @@
 		"electron-builder" : "latest"
 	},
 	"dependencies" : {
-		"cejs" : "latest",
-		"gh-updater" : "latest"
+		"electron" : "latest",
+		"electron-updater" : "latest",
+		"gh-updater" : "latest",
+		"cejs" : "latest"
 	}
 }

@@ -84,3 +84,21 @@ app.on('activate', function() {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+try {
+	// https://github.com/iffy/electron-updater-example/blob/master/main.js
+	// https://nicholaslee119.github.io/2018/01/11/electronBuilder%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/
+	var updater = require("electron-updater"), autoUpdater = updater.autoUpdater;
+	if (false)
+		autoUpdater
+				.setFeedURL({
+					provider : "gitlab",
+					url : "https://gitlab.com/_example_repo_/-/jobs/artifacts/master/raw/dist?job=build"
+				});
+
+	autoUpdater.on('update-available', function(info) {
+		console.log('Update available.');
+	});
+} catch (e) {
+	console.error(e);
+}
