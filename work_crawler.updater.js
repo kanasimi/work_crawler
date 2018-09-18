@@ -84,10 +84,12 @@ function update_components(update_script_name) {
 
 		show_info('下載/更新 Colorless echo JavaScript kit 組件...');
 		updater.update(null, null, function() {
+			// @see "dependencies" @ package.json
+			install_npm('gh-updater');
 			// 配置圖形使用者介面。
 			install_npm('electron', '下載/更新圖形介面需要用到的組件 electron...');
 			// install_npm('electron-builder');
-			install_npm('gh-updater');
+			install_npm('electron-updater');
 
 			show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
 		});

@@ -85,11 +85,10 @@
 	},
 	"devDependencies" : {
 		"electron" : "latest",
-		"electron-builder" : "latest"
+		"electron-builder" : "latest",
+		"electron-updater" : "latest"
 	},
 	"dependencies" : {
-		"electron" : "latest",
-		"electron-updater" : "latest",
 		"gh-updater" : "latest",
 		"cejs" : "latest"
 	}
