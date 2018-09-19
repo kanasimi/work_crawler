@@ -163,7 +163,7 @@
    ``` sh
    node work_crawler.updater.js
    ```
-   由於本工具會 cache 作品資訊，更新幅度較大的時候您可能需要刪除作品目錄的 cache，重新下載作品。
+   由於本工具會 cache 作品資訊，更新幅度較大的時候您可能需要刪除下載目錄中所有的 cache，重新下載作品。例如 search.json, servers.json 以及作品目錄下面，以作品名稱為名的 .json 檔案。
 
 <!-- use npm:
 3. 在命令行介面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）

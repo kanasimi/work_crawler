@@ -85,20 +85,59 @@ app.on('activate', function() {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-try {
-	// https://github.com/iffy/electron-updater-example/blob/master/main.js
-	// https://nicholaslee119.github.io/2018/01/11/electronBuilder%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/
-	var updater = require("electron-updater"), autoUpdater = updater.autoUpdater;
-	if (false)
-		autoUpdater
-				.setFeedURL({
-					provider : "gitlab",
-					url : "https://gitlab.com/_example_repo_/-/jobs/artifacts/master/raw/dist?job=build"
-				});
+require('electron').ipcMain.on('send_message', function(event, message) {
+	if (message === 'loaded')
+		start_update(event.sender);
+});
 
-	autoUpdater.on('update-available', function(info) {
-		require('electron').ipcRenderer.send('Update available.' + info);
-	});
-} catch (e) {
-	console.error(e);
+// for update
+function start_update(event_sender) {
+	try {
+		event_sender.send('send_message', 'Start updating...');
+
+		// https://github.com/iffy/electron-updater-example/blob/master/main.js
+		// https://nicholaslee119.github.io/2018/01/11/electronBuilder%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/
+		var updater = require("electron-updater"), autoUpdater = updater.autoUpdater;
+		autoUpdater.checkForUpdatesAndNotify();
+
+		if (false)
+			autoUpdater
+					.setFeedURL({
+						provider : "gitlab",
+						url : "https://gitlab.com/_example_repo_/-/jobs/artifacts/master/raw/dist?job=build"
+					});
+
+		autoUpdater.on('checking-for-update',
+				function() {
+					event_sender.send('send_message',
+							'Checking for release update...');
+				});
+		autoUpdater.on('update-available', function(info) {
+			event_sender.send('send_message', 'Release update available: '
+					+ info);
+		});
+		autoUpdater.on('update-not-available', function(info) {
+			event_sender.send('send_message', 'Release update not available: '
+					+ info);
+		});
+		autoUpdater.on('error', function(err) {
+			event_sender.send('send_message', 'Error in auto-updater: ' + err);
+		});
+		autoUpdater.on('download-progress', function(progressObj) {
+			var log_message = "Download speed: " + progressObj.bytesPerSecond;
+			log_message = log_message + ' - Downloaded ' + progressObj.percent
+					+ '%';
+			log_message = log_message + ' (' + progressObj.transferred + "/"
+					+ progressObj.total + ')';
+			event_sender.send('send_message', log_message);
+		});
+		autoUpdater.on('update-downloaded', function(info) {
+			event_sender.send('send_message', 'Release update downloaded: '
+					+ info);
+		});
+
+	} catch (e) {
+		// win.webContents.send()
+		event_sender.send('send_message', 'Release update failed: ' + e);
+	}
 }

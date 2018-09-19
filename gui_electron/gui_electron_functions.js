@@ -7,7 +7,7 @@ var base_directory = '../',
 // 為安裝包
 is_installation_package = process.env.Apple_PubSub_Socket_Render
 		// @ Windows
-		|| process.mainModule.filename.replace(/\\app\.asar.+/, '') === process.resourcesPath, site_used, site_type_description = {
+		|| process.mainModule.filename.replace(/[\\\/]app\.asar.+/, '') === process.resourcesPath, site_used, site_type_description = {
 	'comic.cmn-Hans-CN' : '中国内地漫画',
 	'comic.ja-JP' : '日本語のウェブコミック',
 	'comic.en-US' : 'English webcomics',
@@ -285,6 +285,8 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 				CeL.log(message);
 			});
 
+	require('electron').ipcRenderer.send('send_message', 'loaded');
+
 	process.title = 'CeJS 線上小說漫畫下載工具';
 });
 
@@ -550,6 +552,30 @@ function open_download_directory(crawler) {
 // ----------------------------------------------
 
 function check_update() {
+	var update_panel;
+
+	function update_process(version_data) {
+		console.log(version_data);
+		var package_data = JSON.parse(CeL.read_file(
+				process.resourcesPath + '\\app.asar\\package.json').toString());
+
+		if (version_data.has_new_version) {
+			CeL.new_node({
+				a : 'Update available: '
+				//
+				+ (version_data.has_version ? version_data.has_version
+				//
+				+ ' → ' : '') + version_data.latest_version,
+				href : 'https://github.com/' + GitHub_repository_path,
+				target : '_blank',
+				onclick : open_external
+			}, [ update_panel, 'clean' ]);
+		} else {
+			// check completed
+			CeL.toggle_display(update_panel, false);
+		}
+	}
+
 	try {
 		if (!global.auto_update) {
 			CeL.log('已設定不自動更新。');
@@ -569,42 +595,27 @@ function check_update() {
 		}
 
 		CeL.debug('Checking update...');
-		var GitHub_repository_path = 'kanasimi/work_crawler', node = CeL
-				.new_node({
-					div : 'Checking update...',
-					id : 'update_panel',
-					C : 'waiting'
-				}, [ document.body, 'first' ]);
+		var GitHub_repository_path = 'kanasimi/work_crawler';
+		update_panel = CeL.new_node({
+			div : {
+				T : 'Checking update...',
+				C : 'waiting'
+			},
+			id : 'update_panel'
+		}, [ document.body, 'first' ]);
 
 		var updater = require('gh-updater');
 		updater.check_version(GitHub_repository_path,
 		// 必須手動上網站把檔案下載下來執行更新。
-		function(version_data) {
-			console.log(version_data);
-			if (version_data.has_new_version) {
-				CeL.new_node({
-					a : 'Update available: '
-					//
-					+ (version_data.has_version ? version_data.has_version
-					//
-					+ ' → ' : '') + version_data.latest_version,
-					href : 'https://github.com/' + GitHub_repository_path,
-					target : '_blank',
-					onclick : open_external
-				}, [ node, 'clean' ]);
-			} else {
-				// check completed
-				CeL.toggle_display(node, false);
-			}
-		});
+		update_process);
 
 	} catch (e) {
 		CeL.error('Update checking failed: ' + e);
-		CeL.node_value(node, 'Update failed!');
-		CeL.set_class(node, 'check_failed', {
+		CeL.node_value(update_panel, 'Update failed!');
+		CeL.set_class(update_panel, 'check_failed', {
 			reset : true
 		});
-		node.title = e;
+		update_panel.title = e;
 	}
 }
 
