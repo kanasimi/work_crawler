@@ -97,7 +97,7 @@ try {
 				});
 
 	autoUpdater.on('update-available', function(info) {
-		console.log('Update available.');
+		require('electron').ipcRenderer.send('Update available.' + info);
 	});
 } catch (e) {
 	console.error(e);

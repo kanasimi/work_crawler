@@ -4,7 +4,7 @@
 	"main" : "gui_electron/gui_electron.js",
 	"description" : "CeJS online novels / comics downloader, CeJS 線上小說漫畫下載工具.",
 	"author" : {
-		"name" : "vimunci",
+		"name" : "Colorless echo",
 		"email" : "vimunci@gmail.com",
 		"url" : "https://github.com/kanasimi/work_crawler"
 	},
@@ -85,10 +85,10 @@
 	},
 	"devDependencies" : {
 		"electron" : "latest",
-		"electron-builder" : "latest",
-		"electron-updater" : "latest"
+		"electron-builder" : "latest"
 	},
 	"dependencies" : {
+		"electron-updater" : "^3.1.2",
 		"gh-updater" : "latest",
 		"cejs" : "latest"
 	}

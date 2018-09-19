@@ -5,7 +5,9 @@
 // work_crawler/
 var base_directory = '../',
 // 為安裝包
-is_installation_package, site_used, site_type_description = {
+is_installation_package = process.env.Apple_PubSub_Socket_Render
+		// @ Windows
+		|| process.mainModule.filename.replace(/\\app\.asar.+/, '') === process.resourcesPath, site_used, site_type_description = {
 	'comic.cmn-Hans-CN' : '中国内地漫画',
 	'comic.ja-JP' : '日本語のウェブコミック',
 	'comic.en-US' : 'English webcomics',
@@ -258,8 +260,9 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	}
 
 	// @see determin_default_main_directory() @ CeL.work_crawler
-	if (process.env.Apple_PubSub_Socket_Render && !global.data_directory) {
+	if (is_installation_package && !global.data_directory) {
 		// macOS APP 中無法將檔案儲存在APP目錄下。
+		// 另外安裝包也比較適合放在 home directory 之下。
 		data_directory = CeL.env('home') + CeL.env.path_separator;
 		var user_download_directory = data_directory + 'Downloads'
 				+ CeL.env.path_separator;
@@ -267,9 +270,9 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 			CeL.info('預設的主要下載目錄設置於用戶預設之下載目錄下: ' + user_download_directory);
 			data_directory = user_download_directory;
 		} else {
-			CeL
-					.info('預設的主要下載目錄設置於用戶個人文件夾  home directory 下: '
-							+ data_directory);
+			CeL.info(
+			// 家目錄
+			'預設的主要下載目錄設置於用戶個人文件夾  home directory 下: ' + data_directory);
 		}
 	} else {
 		CeL.info('預設的主要下載目錄: ' + (global.data_directory || process.cwd()));
@@ -277,10 +280,10 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 
 	check_update();
 
-	if (false)
-		require('electron').ipcRenderer.on('send_message', function(event,
-				message) {
-		});
+	require('electron').ipcRenderer.on('send_message',
+			function(event, message) {
+				CeL.log(message);
+			});
 
 	process.title = 'CeJS 線上小說漫畫下載工具';
 });
@@ -298,7 +301,8 @@ function set_click_trigger(trigger, panel) {
 // ----------------------------------------------
 
 function open_external(URL) {
-	require('electron').shell.openExternal(URL || this.href);
+	require('electron').shell.openExternal(typeof URL === 'string' ? URL
+			: this.href);
 	return false;
 }
 
@@ -405,7 +409,7 @@ function Download_job(crawler, work_id, site_id) {
 				return false;
 			}
 		}, {
-			T : '🗙取消',
+			T : '✗取消',
 			R : '取消下載',
 			C : 'task_controller',
 			onclick : cancel_task.bind(null, crawler)
