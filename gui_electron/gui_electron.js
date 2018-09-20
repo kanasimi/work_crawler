@@ -93,10 +93,12 @@ require('electron').ipcMain.on('send_message', function(event, message) {
 // for update
 function start_update(event_sender) {
 	try {
-		event_sender.send('send_message', 'Start updating...');
+		event_sender.send('send_message', 'Start release updating...');
 
 		// https://github.com/iffy/electron-updater-example/blob/master/main.js
 		// https://nicholaslee119.github.io/2018/01/11/electronBuilder%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/
+		// https://electronjs.org/docs/tutorial/updates
+		// https://www.electron.build/auto-update
 		var updater = require("electron-updater"), autoUpdater = updater.autoUpdater;
 		autoUpdater.checkForUpdatesAndNotify();
 
@@ -137,6 +139,7 @@ function start_update(event_sender) {
 		});
 
 	} catch (e) {
+		// e.g., Error: Cannot find module 'electron-updater'
 		// win.webContents.send()
 		event_sender.send('send_message', 'Release update failed: ' + e);
 	}

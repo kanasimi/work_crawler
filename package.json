@@ -1,6 +1,6 @@
 {
 	"name" : "work_crawler",
-	"version" : "1.5.20180909",
+	"version" : "1.6.20180920",
 	"main" : "gui_electron/gui_electron.js",
 	"description" : "CeJS online novels / comics downloader, CeJS 線上小說漫畫下載工具.",
 	"author" : {

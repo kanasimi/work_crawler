@@ -622,7 +622,7 @@ function check_update() {
 // ----------------------------------------------
 
 var NONE_TASKBAR_PROGRESS = -1,
-// 不定量的進度
+// 不定量的進度，沒有細細的進度條。
 INDETERMINATE_TASKBAR_PROGRESS = 2;
 
 // GUI progress bar
