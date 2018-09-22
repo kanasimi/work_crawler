@@ -29,7 +29,7 @@
 
 		<div id="right_panel">
 			<div id="download_options_panel" class="panel">
-				<h3>下載選項</h3>
+				<h3 id="download_options_trigger">下載選項</h3>
 			</div>
 
 			<div id="download_job_panel" class="panel">
@@ -40,6 +40,11 @@
 	</div>
 
 	<hr />
+	<a href="#" onclick="CeL.Log.clear();return false;" title="清除訊息">clear
+		log</a> |
+	<a href="#" onclick="CeL.Log.toggle();return false;" title="顯示/隱藏訊息">show/hidden
+		log</a>
+
 	<div id="log_panel"></div>
 </body>
 </html>

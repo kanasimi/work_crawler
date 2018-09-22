@@ -33,7 +33,7 @@
 
 		"mac" : {
 			"category" : "Network",
-			"target" : [ "dmg", "mas", "pkg", "zip" ],
+			"target" : [ "dmg", "pkg", "zip" ],
 			"icon" : "gui_electron/icon/rasen2.png"
 		},
 		"dmg" : {

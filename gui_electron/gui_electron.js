@@ -85,15 +85,17 @@ app.on('activate', function() {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+// --------------------------------------------------------------------------------------------------------------------
+
 require('electron').ipcMain.on('send_message', function(event, message) {
-	if (message === 'loaded')
+	if (message === 'did-finish-load')
 		start_update(event.sender);
 });
 
 // for update
 function start_update(event_sender) {
 	try {
-		event_sender.send('send_message', 'Start release updating...');
+		event_sender.send('send_message_debug', 'Start release updating...');
 
 		// https://github.com/iffy/electron-updater-example/blob/master/main.js
 		// https://nicholaslee119.github.io/2018/01/11/electronBuilder%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/
@@ -109,21 +111,21 @@ function start_update(event_sender) {
 						url : "https://gitlab.com/_example_repo_/-/jobs/artifacts/master/raw/dist?job=build"
 					});
 
-		autoUpdater.on('checking-for-update',
-				function() {
-					event_sender.send('send_message',
-							'Checking for release update...');
-				});
+		autoUpdater.on('checking-for-update', function() {
+			event_sender.send('send_message_log',
+					'Checking for release update...');
+		});
 		autoUpdater.on('update-available', function(info) {
-			event_sender.send('send_message', 'Release update available: '
-					+ info);
+			event_sender.send('send_message_info', 'Release update available: '
+					+ JSON.stringify(info));
 		});
 		autoUpdater.on('update-not-available', function(info) {
-			event_sender.send('send_message', 'Release update not available: '
-					+ info);
+			event_sender.send('send_message_log',
+					'Release update not available: ' + JSON.stringify(info));
 		});
 		autoUpdater.on('error', function(err) {
-			event_sender.send('send_message', 'Error in auto-updater: ' + err);
+			event_sender.send('send_message_warn', 'Error in auto-updater: '
+					+ err);
 		});
 		autoUpdater.on('download-progress', function(progressObj) {
 			var log_message = "Download speed: " + progressObj.bytesPerSecond;
@@ -131,16 +133,16 @@ function start_update(event_sender) {
 					+ '%';
 			log_message = log_message + ' (' + progressObj.transferred + "/"
 					+ progressObj.total + ')';
-			event_sender.send('send_message', log_message);
+			event_sender.send('send_message_debug', log_message);
 		});
 		autoUpdater.on('update-downloaded', function(info) {
-			event_sender.send('send_message', 'Release update downloaded: '
-					+ info);
+			event_sender.send('send_message_log', 'Release update downloaded: '
+					+ JSON.stringify(info));
 		});
 
 	} catch (e) {
 		// e.g., Error: Cannot find module 'electron-updater'
 		// win.webContents.send()
-		event_sender.send('send_message', 'Release update failed: ' + e);
+		event_sender.send('send_message_warn', 'Release update failed: ' + e);
 	}
 }
