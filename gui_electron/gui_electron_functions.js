@@ -117,7 +117,7 @@ save_to_preference = {
 	allow_EOI_error : true,
 	skip_error : true,
 	one_by_one : true,
-}, default_configuration, download_site_nodes = [], download_options_nodes = {}, old_Unicode_support = navigator.appVersion
+}, default_configuration, default_configuration_file_name = 'work_crawler.configuration.json', download_site_nodes = [], download_options_nodes = {}, old_Unicode_support = navigator.appVersion
 		.match(/Windows NT (\d+(?:\.\d))/);
 if (old_Unicode_support) {
 	// 舊版本的Windows不支援"⬚ "之類符號。
@@ -157,7 +157,7 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	CeL.info('預設的主要下載目錄: ' + global.data_directory);
 	// read default configuration
 	default_configuration = CeL.get_JSON(global.data_directory
-			+ 'work_crawler_loder.configuration.json')
+			+ default_configuration_file_name)
 			|| {};
 
 	// --------------------------------
@@ -352,8 +352,8 @@ function open_external(URL) {
 }
 
 function save_default_configuration() {
-	CeL.write_file(global.data_directory
-			+ 'work_crawler_loder.configuration.json', default_configuration);
+	CeL.write_file(global.data_directory + default_configuration_file_name,
+			default_configuration);
 }
 
 // @private
@@ -406,7 +406,7 @@ function reset_favorites(crawler) {
 	if (!crawler)
 		crawler = get_crawler();
 
-	var favorites = crawler.preference.favorites;
+	var favorites = crawler.preference.favorites || [];
 
 	var favorites_nodes = favorites.map(function(work_title) {
 		return {
@@ -417,7 +417,7 @@ function reset_favorites(crawler) {
 	favorites_nodes = [ {
 		ol : favorites_nodes
 	}, {
-		div : [ {
+		div : [ favorites.length > 0 ? {
 			b : '檢查並下載所有最愛作品之更新',
 			onclick : function() {
 				favorites.forEach(function(work_title) {
@@ -425,7 +425,7 @@ function reset_favorites(crawler) {
 				});
 			},
 			C : 'favorites_button'
-		}, {
+		} : '現無最愛作品。', {
 			// 我的最愛
 			b : '編輯最愛作品清單',
 			onclick : function() {
