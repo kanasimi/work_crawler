@@ -137,7 +137,7 @@
       * 若是您視窗的 **背景為藍色**，表示您使用的可能是 [PowerShell](https://zh.wikipedia.org/wiki/Windows_PowerShell)，您應該使用這種形式的指令來切換目錄：<code style="color:#888;background-color:#008b8b;">cd "本工具安裝檔所在的目錄"</code>。
       * 若是您視窗的 **背景為黑色**，表示您使用的可能是 [命令行介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)，您應該使用這種形式的指令來切換目錄：<code>cd/d "本工具安裝檔所在的目錄"</code>（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
 
-   3. **執行命令以下載 CeJS 程式庫**：
+   3. **執行命令以下載最新版本組件**：
       ``` sh
       node work_crawler.updater.js
       ```

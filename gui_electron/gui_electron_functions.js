@@ -108,7 +108,16 @@ download_options_set = {
 	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。',
 	main_directory : '下載檔案儲存目錄路徑。圖片檔+紀錄檔下載位置。',
 	user_agent : '瀏覽器識別'
-}, download_site_nodes = [], download_options_nodes = {}, old_Unicode_support = navigator.appVersion
+},
+// 會儲存到 crawler.preference 的選項。
+save_to_preference = {
+	// 不可包含 main_directory，因為已來不及，且會二次改變 main_directory。
+	archive_images : true,
+	MIN_LENGTH : true,
+	allow_EOI_error : true,
+	skip_error : true,
+	one_by_one : true,
+}, default_configuration, download_site_nodes = [], download_options_nodes = {}, old_Unicode_support = navigator.appVersion
 		.match(/Windows NT (\d+(?:\.\d))/);
 if (old_Unicode_support) {
 	// 舊版本的Windows不支援"⬚ "之類符號。
@@ -146,6 +155,10 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 		global.data_directory = CeL.determin_download_directory();
 	}
 	CeL.info('預設的主要下載目錄: ' + global.data_directory);
+	// read default configuration
+	default_configuration = CeL.get_JSON(global.data_directory
+			+ 'work_crawler_loder.configuration.json')
+			|| {};
 
 	// --------------------------------
 
@@ -216,11 +229,24 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 					if (!crawler) {
 						return;
 					}
+					var key = this.parentNode.title;
 					if (this.type === 'number') {
 						if (this.value)
-							crawler[this.parentNode.title] = +this.value;
+							crawler[key] = +this.value;
 					} else {
-						crawler[this.parentNode.title] = this.value;
+						crawler[key] = this.value;
+					}
+					if (key in save_to_preference) {
+						crawler.preference[key] = crawler[key];
+						save_preference(crawler);
+					} else if (key = 'main_directory') {
+						if (!default_configuration[crawler.site_id]) {
+							default_configuration[crawler.site_id] = {};
+						}
+						default_configuration[crawler.site_id]
+						//
+						.main_directory = crawler[key];
+						save_default_configuration();
 					}
 				}
 			};
@@ -325,6 +351,17 @@ function open_external(URL) {
 	return false;
 }
 
+function save_default_configuration() {
+	CeL.write_file(global.data_directory
+			+ 'work_crawler_loder.configuration.json', default_configuration);
+}
+
+// @private
+function save_preference(crawler) {
+	CeL.write_file(crawler.main_directory + 'preference.json',
+			crawler.preference);
+}
+
 function edit_favorites(crawler) {
 	var favorites = crawler.preference.favorites, favorites_node = CeL
 			.new_node({
@@ -351,18 +388,16 @@ function edit_favorites(crawler) {
 					return !!work_title;
 				}).unique();
 
-				CeL.write_file(crawler.main_directory
-				//
-				+ 'preference.json', crawler.preference);
+				save_preference(crawler);
 				reset_favorites(crawler);
 			},
-			S : 'cursor: pointer;'
-		}, '|', {
+			C : 'favorites_button'
+		}, {
 			b : '放棄編輯',
 			onclick : function() {
 				reset_favorites(crawler);
 			},
-			S : 'cursor: pointer;'
+			C : 'favorites_button cancel'
 		} ]
 	} ], [ 'favorites_list', 'clean' ]);
 }
@@ -375,28 +410,30 @@ function reset_favorites(crawler) {
 
 	var favorites_nodes = favorites.map(function(work_title) {
 		return {
-			div : work_title
+			li : work_title
 		};
-	}), site_id = site_used;
+	});
 
-	favorites_nodes.push({
+	favorites_nodes = [ {
+		ol : favorites_nodes
+	}, {
 		div : [ {
 			b : '檢查並下載所有最愛作品之更新',
 			onclick : function() {
 				favorites.forEach(function(work_title) {
-					add_new_download_job(crawler, work_title, site_id, true);
+					add_new_download_job(crawler, work_title, true);
 				});
 			},
-			S : 'cursor: pointer;'
-		}, ' | ', {
+			C : 'favorites_button'
+		}, {
 			// 我的最愛
 			b : '編輯最愛作品清單',
 			onclick : function() {
 				edit_favorites(crawler);
 			},
-			S : 'cursor: pointer;'
+			C : 'favorites_button'
 		} ]
-	});
+	} ];
 
 	// console.log(favorites_nodes);
 	CeL.new_node(favorites_nodes, [ 'favorites_list', 'clean' ]);
@@ -448,12 +485,30 @@ function get_crawler(just_test) {
 
 	if (!(site_id in download_site_nodes.link_of_site)) {
 		// 初始化 initialization
+		crawler.site_id = site_id;
+		if (default_configuration[site_id]) {
+			// e.g., crawler.main_directory
+			CeL.info('import configuration of ' + site_id + ': '
+					+ JSON.stringify(default_configuration[site_id]));
+			Object.assign(crawler, default_configuration[site_id]);
+		}
+
 		crawler.preference = CeL
 		//
 		.get_JSON(crawler.main_directory + 'preference.json') || {
 			// 我的最愛 my favorite
 			favorites : []
 		};
+		// import crawler.preference
+		Object.keys(save_to_preference).forEach(function(key) {
+			if (key in crawler.preference) {
+				CeL.info('import preference of ' + site_id + ': '
+				//
+				+ key + '=' + crawler.preference[key] + '←' + crawler[key]);
+				crawler[key] = crawler.preference[key];
+			}
+		});
+
 		crawler.download_queue = [];
 		if (!crawler.site_name) {
 			crawler.site_name = CeL.DOM_data(
@@ -473,10 +528,10 @@ function get_crawler(just_test) {
 }
 
 // 一個 {Download_job} 只會配上一個作品。不同作品會用到不同的 {Download_job}。
-function Download_job(crawler, work_id, site_id) {
+function Download_job(crawler, work_id) {
 	// and is crawler id
-	this.id = site_id;
 	this.crawler = crawler;
+	this.id = crawler.site_id;
 	this.work_id = work_id;
 	// 顯示下載進度條。
 	this.progress_layer = CeL.new_node({
@@ -488,7 +543,7 @@ function Download_job(crawler, work_id, site_id) {
 		div : [ {
 			b : [ {
 				T : crawler.site_name,
-				R : site_id
+				R : crawler.site_id
 			}, ' ', work_id ],
 			C : 'task_label'
 		}, {
@@ -547,7 +602,7 @@ function is_Download_job(value) {
 	return value instanceof Download_job;
 }
 
-function add_new_download_job(crawler, work_id, site_id, no_message) {
+function add_new_download_job(crawler, work_id, no_message) {
 	if (crawler.downloading_work_data) {
 		work_id = work_id.trim();
 		if (work_id && crawler.downloading_work_data.id !== work_id
@@ -564,7 +619,7 @@ function add_new_download_job(crawler, work_id, site_id, no_message) {
 		return;
 	}
 
-	var job = new Download_job(crawler, work_id, site_id);
+	var job = new Download_job(crawler, work_id);
 	crawler.downloading_work_data = {
 		id : work_id,
 		job_index : Download_job.job_list.length
