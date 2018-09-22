@@ -172,6 +172,7 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 				title : site_type + '/' + site_id,
 				onclick : function() {
 					site_used = this.title;
+					reset_favorites();
 					reset_site_options();
 				}
 			});
@@ -259,6 +260,8 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 
 	// --------------------------------
 
+	set_click_trigger('favorites_trigger', 'favorites_list');
+
 	set_click_trigger('download_job_trigger', 'download_job_queue');
 
 	// --------------------------------
@@ -322,6 +325,83 @@ function open_external(URL) {
 	return false;
 }
 
+function edit_favorites(crawler) {
+	var favorites = crawler.preference.favorites, favorites_node = CeL
+			.new_node({
+				textarea : '',
+				S : 'width: 99%; height: 20em;'
+			});
+	favorites_node.value = favorites.join('\n');
+
+	CeL.new_node([ {
+		div : '請在每一行鍵入一個作品標題：'
+	}, favorites_node, {
+		br : null
+	}, {
+		div : [ {
+			b : '儲存最愛作品清單',
+			onclick : function() {
+				crawler.preference.favorites
+				// verify work titles
+				= favorites_node.value.trim().split(/\n/)
+
+				.map(function(work_title) {
+					return work_title.trim();
+				}).filter(function(work_title) {
+					return !!work_title;
+				}).unique();
+
+				CeL.write_file(crawler.main_directory
+				//
+				+ 'preference.json', crawler.preference);
+				reset_favorites(crawler);
+			},
+			S : 'cursor: pointer;'
+		}, '|', {
+			b : '放棄編輯',
+			onclick : function() {
+				reset_favorites(crawler);
+			},
+			S : 'cursor: pointer;'
+		} ]
+	} ], [ 'favorites_list', 'clean' ]);
+}
+
+function reset_favorites(crawler) {
+	if (!crawler)
+		crawler = get_crawler();
+
+	var favorites = crawler.preference.favorites;
+
+	var favorites_nodes = favorites.map(function(work_title) {
+		return {
+			div : work_title
+		};
+	}), site_id = site_used;
+
+	favorites_nodes.push({
+		div : [ {
+			b : '檢查並下載所有最愛作品之更新',
+			onclick : function() {
+				favorites.forEach(function(work_title) {
+					add_new_download_job(crawler, work_title, site_id, true);
+				});
+			},
+			S : 'cursor: pointer;'
+		}, ' | ', {
+			// 我的最愛
+			b : '編輯最愛作品清單',
+			onclick : function() {
+				edit_favorites(crawler);
+			},
+			S : 'cursor: pointer;'
+		} ]
+	});
+
+	// console.log(favorites_nodes);
+	CeL.new_node(favorites_nodes, [ 'favorites_list', 'clean' ]);
+}
+
 function reset_site_options() {
 	download_site_nodes.forEach(function(site_node) {
 		CeL.set_class(site_node, 'selected', {
@@ -357,6 +437,8 @@ function get_crawler(just_test) {
 		return;
 	}
 
+	CeL.toggle_display('favorites_panel', true);
+
 	CeL.toggle_display('download_options_panel', true);
 
 	var site_id = site_used, crawler = base_directory + site_id + '.js';
@@ -366,6 +448,12 @@ function get_crawler(just_test) {
 
 	if (!(site_id in download_site_nodes.link_of_site)) {
 		// 初始化 initialization
+		crawler.preference = CeL
+		//
+		.get_JSON(crawler.main_directory + 'preference.json') || {
+			// 我的最愛 my favorite
+			favorites : []
+		};
 		crawler.download_queue = [];
 		if (!crawler.site_name) {
 			crawler.site_name = CeL.DOM_data(
@@ -459,18 +547,19 @@ function is_Download_job(value) {
 	return value instanceof Download_job;
 }
 
-function add_new_download_job(crawler, work_id, site_id) {
+function add_new_download_job(crawler, work_id, site_id, no_message) {
 	if (crawler.downloading_work_data) {
 		work_id = work_id.trim();
 		if (work_id && crawler.downloading_work_data.id !== work_id
 				&& crawler.downloading_work_data.title !== work_id
 				&& !crawler.download_queue.includes(work_id)) {
 			crawler.download_queue.push(work_id);
-			CeL.info('正在從' + crawler.site_name + '下載 "'
-					+ (crawler.downloading_work_data.title
-					//
-					|| crawler.downloading_work_data.id)
-					+ '" 這個作品。將等到這個作品下載完畢，或者取消下載後，再下載 ' + work_id + '。');
+			if (!no_message)
+				CeL.info('正在從' + crawler.site_name + '下載 "'
+						+ (crawler.downloading_work_data.title
+						//
+						|| crawler.downloading_work_data.id)
+						+ '" 這個作品。將等到這個作品下載完畢，或者取消下載後，再下載 ' + work_id + '。');
 		}
 		return;
 	}
@@ -562,7 +651,7 @@ function start_gui_crawler() {
 	if (work_id) {
 		add_new_download_job(crawler, work_id, site_used);
 	} else {
-		CeL.info('請輸入作品名稱。');
+		CeL.info('請輸入作品名稱或 id。');
 	}
 }
 
