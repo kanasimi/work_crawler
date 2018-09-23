@@ -306,8 +306,16 @@ var crawler = new CeL.work_crawler({
 					run_next();
 					return;
 				}
-				html = eval(html.replace(/^eval/, ''));
-				// console.log(html);
+				try {
+					// https://github.com/kanasimi/work_crawler/issues/81
+					html = eval(html.replace(/^eval/, ''));
+				} catch (e) {
+					CeL.error(e);
+					console.trace(e);
+					console.log(html);
+					run_next();
+					return;
+				}
 				var image_list = eval(html);
 				// console.log(image_list);
 				this_image_list.append(image_list);
