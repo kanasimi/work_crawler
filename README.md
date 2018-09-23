@@ -23,6 +23,7 @@
 ## Features 特點
 * 可自動下載小說封面以及章節中的插圖。
 * 自動檢核下載的圖片是否是否完整。若有破損將重新下載。
+* 跨平台支援：支援 Windows, Linux, Mac。
 * 採用 CeJS [線上作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
 * 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料，僅更新有問題的圖檔。（請注意：必須先安裝 7-Zip **18.01 以上的版本**）
 

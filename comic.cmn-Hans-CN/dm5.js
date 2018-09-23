@@ -307,7 +307,7 @@ var crawler = new CeL.work_crawler({
 				if (html === '错误的请求') {
 					var warning = work_data.title + ' #' + chapter_NO + '-'
 							+ image_index + ': ' + html;
-					_this.error(warning);
+					_this.onerror(warning);
 					CeL.warn(warning);
 					run_next();
 					return;
@@ -316,7 +316,7 @@ var crawler = new CeL.work_crawler({
 					// https://github.com/kanasimi/work_crawler/issues/81
 					html = eval(html.replace(/^eval/, ''));
 				} catch (e) {
-					_this.error(work_data.title + ' #' + chapter_NO + '-'
+					_this.onerror(work_data.title + ' #' + chapter_NO + '-'
 							+ image_index + ': 無法從dm5網站獲得token: ' + e);
 					CeL.error(e);
 					console.trace(e);
@@ -340,7 +340,7 @@ var crawler = new CeL.work_crawler({
 						var warning = work_data.title + ' #' + chapter_NO + '-'
 								+ image_index + ': url:\n	  ' + previous_url
 								+ '	→' + url;
-						_this.error(warning);
+						_this.onerror(warning);
 					}
 					this_image_list[index] = url;
 				});
