@@ -235,7 +235,7 @@
    ![小說 → epub](https://lh3.googleusercontent.com/JJ4SGDQF-HzQb0baRZ0mCio19jJTnNp3VnWutirYgZbYg5i--ufS_ElL8DEetP6x7uJ4HUv8szNqzVLbGlr84_OnxFxjIZCDsOEOEmKBubYC6PkpaE2xBYk9KIHzBR4YPwjQVM2FTA=w1366-h738-no)
 
 ## Uninstallation 移除
-* 若是您採用安裝包，請利用系統的移除介面。否族要移除本工具，只需將解壓縮後工具檔所在的目錄整個刪除即可。
+* 若是您採用安裝包，請利用系統的移除介面。否則要移除本工具，只需將解壓縮後工具檔所在的目錄整個刪除即可。
 * 作品下載的標的目錄（存放圖片檔與紀錄檔的目錄）需另外手動刪除。
 
 ## FAQ 常見問題集
@@ -258,7 +258,7 @@
 
 <details><summary>掃毒軟體報錯！</summary>
 
-* 應該是因為使用的 CeJS 函式庫包山包海，裡面有一些專門用於檔案操作的函數、FileSystemObject 物件、WScript 物件，所以掃毒軟體以為有問題。這個程式天天都在測試，漫畫小說下載並不會用到這些功能，您大可放心。
+* 應該是因為使用的 CeJS 函式庫包山包海，裡面用到一些專門用於檔案操作的函數、FileSystemObject 物件、WScript 物件，所以掃毒軟體以為有問題。這個程式天天都在測試，漫畫小說下載並不會用到這些功能，您大可放心。
 </details>
 
 ## Notes 附注

@@ -320,6 +320,16 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	Object.assign(CeL.work_crawler.prototype, {
 		after_download_chapter : after_download_chapter,
 		onerror : function onerror(error, work_data) {
+			if (work_data !== this.downloading_work_data
+					&& this.downloading_work_data.chapter_count > 0) {
+				// work_data is image_data
+				work_data = this.downloading_work_data;
+			}
+			if (!work_data.error_list) {
+				work_data.error_list = [];
+			}
+			work_data.error_list.push(error);
+
 			console.trace(error);
 			// 會在 .finish_up() 執行。
 			// destruct_download_job(this);
@@ -371,7 +381,7 @@ function edit_favorites(crawler) {
 	favorites_node.value = favorites.join('\n');
 
 	CeL.new_node([ {
-		div : '請在每一行鍵入一個作品標題：'
+		div : '請在每一行鍵入一個作品名稱或 id：'
 	}, favorites_node, {
 		br : null
 	}, {
@@ -414,9 +424,9 @@ function reset_favorites(crawler) {
 		};
 	});
 
-	favorites_nodes = [ {
+	favorites_nodes = [ favorites.length > 0 ? {
 		ol : favorites_nodes
-	}, {
+	} : '', {
 		div : [ favorites.length > 0 ? {
 			b : '檢查並下載所有最愛作品之更新',
 			onclick : function() {
@@ -659,6 +669,8 @@ function after_download_chapter(work_data, chapter_NO) {
 	if (this.downloading_work_data !== work_data) {
 		// 初始化 initialization
 		delete this.downloading_work_data.id;
+		// reset error list
+		delete work_data.error_list;
 		this.downloading_work_data = Object.assign(work_data,
 				this.downloading_work_data);
 
@@ -670,6 +682,9 @@ function after_download_chapter(work_data, chapter_NO) {
 	var percent = Math.round(1000 * chapter_NO / work_data.chapter_count) / 10
 			+ '%', job = Download_job.job_list[work_data.job_index];
 	job.progress_layer.style.width = percent;
+	if (work_data.error_list) {
+		job.progress_layer.style.backgroundColor = '#f88';
+	}
 	// CeL.DOM.set_text(job.progress_layer, percent);
 	CeL.new_node([ percent + ' ', {
 		span : chapter_NO + '/' + work_data.chapter_count,
