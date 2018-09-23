@@ -162,11 +162,6 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 
 	// --------------------------------
 
-	var user_agent = navigator.userAgent.replace(
-			/(?:work_crawler|Electron)[\/.\d ]*/ig, '');
-	if (user_agent)
-		CeL.work_crawler.prototype.user_agent = user_agent;
-
 	is_installation_package = CeL.is_installation_package();
 
 	var site_nodes = [];
@@ -207,6 +202,19 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	CeL.new_node(site_nodes, 'download_sites_list');
 
 	set_click_trigger('download_sites_trigger', 'download_sites_list');
+
+	// --------------------------------
+
+	var user_agent = navigator.userAgent.replace(
+			/(?:work_crawler|Electron)[\/.\d ]*/ig, '');
+	if (user_agent)
+		CeL.work_crawler.prototype.user_agent = user_agent;
+
+	Object.assign(CeL.work_crawler.prototype, {
+		after_download_chapter : after_download_chapter,
+		onwarning : onerror,
+		onerror : onerror
+	});
 
 	// --------------------------------
 
@@ -317,26 +325,6 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 		});
 	});
 
-	Object.assign(CeL.work_crawler.prototype, {
-		after_download_chapter : after_download_chapter,
-		onerror : function onerror(error, work_data) {
-			if (work_data !== this.downloading_work_data
-					&& this.downloading_work_data.chapter_count > 0) {
-				// work_data is image_data
-				work_data = this.downloading_work_data;
-			}
-			if (!work_data.error_list) {
-				work_data.error_list = [];
-			}
-			work_data.error_list.push(error);
-
-			console.trace(error);
-			// 會在 .finish_up() 執行。
-			// destruct_download_job(this);
-			return CeL.work_crawler.THROWED;
-		}
-	});
-
 	process.title = 'CeJS 線上小說漫畫下載工具';
 
 	// --------------------------------
@@ -420,7 +408,13 @@ function reset_favorites(crawler) {
 
 	var favorites_nodes = favorites.map(function(work_title) {
 		return {
-			li : work_title
+			li : {
+				a : work_title,
+				href : '#',
+				onclick : function() {
+					add_new_download_job(crawler, work_title, true);
+				}
+			}
 		};
 	});
 
@@ -638,6 +632,17 @@ function add_new_download_job(crawler, work_id, no_message) {
 	return job;
 }
 
+function toggle_download_job_panel() {
+	if (Download_job.job_list.every(function(job) {
+		return !job;
+	})) {
+		// 已經沒有任何工作正在處理中。
+		set_taskbar_progress(NONE_TASKBAR_PROGRESS);
+		CeL.toggle_display('download_job_panel', false);
+	}
+}
+
+var preserve_download_work_layer = false;
 function destruct_download_job(crawler) {
 	var work_data = crawler.downloading_work_data;
 	if (!work_data) {
@@ -648,28 +653,50 @@ function destruct_download_job(crawler) {
 	var job_index = work_data.job_index, job = Download_job.job_list[job_index];
 	// free
 	delete crawler.downloading_work_data;
-	delete Download_job.job_list[job_index];
 	delete work_data.job_index;
-	CeL.DOM.remove_node(job.layer);
+	function remove_download_work_layer() {
+		delete Download_job.job_list[job_index];
+		CeL.DOM.remove_node(job.layer);
+	}
+	if (preserve_download_work_layer || work_data.error_list) {
+		CeL.new_node({
+			T : '🗙',
+			R : '清除本下載紀錄',
+			C : 'task_controller',
+			onclick : function() {
+				remove_download_work_layer();
+				toggle_download_job_panel();
+			},
+			S : 'color: red;'
+		}, job.layer);
+		// job.layer === job.progress_layer.parentNode.parentNode
+		if (work_data.error_list) {
+			// 在進度條顯現出這個作品下載失敗
+			job.progress_layer.parentNode.style.backgroundColor = '#f44';
+			job.layer.title = work_data.error_list.join('\n');
+			if (false)
+				CeL.new_node([ {
+					br : null
+				}, {
+					ul : work_data.error_list
+				} ], job.layer);
+		}
+	} else {
+		remove_download_work_layer();
+	}
 
 	if (Array.isArray(crawler.download_queue)
 			&& crawler.download_queue.length > 0) {
 		add_new_download_job(crawler, crawler.download_queue.pop(), job.id);
-
-	} else if (Download_job.job_list.every(function(job) {
-		return !job;
-	})) {
-		// 已經沒有任何工作正在處理中。
-		set_taskbar_progress(NONE_TASKBAR_PROGRESS);
-		CeL.toggle_display('download_job_panel', false);
-	}
+	} else
+		toggle_download_job_panel();
 }
 
 function after_download_chapter(work_data, chapter_NO) {
 	if (this.downloading_work_data !== work_data) {
 		// 初始化 initialization
 		delete this.downloading_work_data.id;
-		// reset error list
+		// reset error list 下載出錯的作品
 		delete work_data.error_list;
 		this.downloading_work_data = Object.assign(work_data,
 				this.downloading_work_data);
@@ -703,6 +730,23 @@ function after_download_chapter(work_data, chapter_NO) {
 	});
 
 	set_taskbar_progress(all_downloaded_chapters / all_chapters);
+}
+
+function onerror(error, work_data) {
+	if (!work_data || work_data !== this.downloading_work_data
+			&& this.downloading_work_data.chapter_count > 0) {
+		// work_data is image_data
+		work_data = this.downloading_work_data;
+	}
+	if (!work_data.error_list) {
+		work_data.error_list = [];
+	}
+	work_data.error_list.push(error);
+
+	console.trace(error);
+	// 會在 .finish_up() 執行。
+	// destruct_download_job(this);
+	return CeL.work_crawler.THROWED;
 }
 
 // ----------------------------------------------
