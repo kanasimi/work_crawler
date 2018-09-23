@@ -264,7 +264,7 @@ var crawler = new CeL.work_crawler({
 			get_token(image_index, run_next);
 			return;
 
-			// Skip: 可以不用取得 history.ashx。
+			// Skip codes below: 可以不用取得 history.ashx。
 			history_parameters.page = image_index;
 			CeL.get_URL(
 					_this.base_URL + _this.chapter_URL(work_data, chapter_NO)
@@ -275,12 +275,14 @@ var crawler = new CeL.work_crawler({
 						get_token(image_index, run_next);
 
 					}, null, history_parameters, Object.assign({
-						error_retry : 0,
+						error_retry : _this.MAX_ERROR_RETRY,
 						no_warning : true
 					}, _this.get_URL_options));
 
 		}, DM5.IMAGE_COUNT, 1, function() {
-			this_image_list = this_image_list.unique();
+			// .unique() 應該會過得相同的結果
+			// this_image_list = this_image_list.unique();
+
 			work_data.image_list[chapter_NO] = this_image_list;
 			// _this.save_work_data(work_data);
 			// console.log(this_image_list);
@@ -290,6 +292,7 @@ var crawler = new CeL.work_crawler({
 
 		// --------------------------------------
 
+		// 從dm5網站獲得通行碼
 		function get_token(image_index, run_next) {
 			parameters.page = image_index;
 			// CeL.set_debug(6);
@@ -302,7 +305,10 @@ var crawler = new CeL.work_crawler({
 				var html = XMLHttp.responseText;
 				// console.log(html);
 				if (html === '错误的请求') {
-					CeL.info(work_data.title + ': ' + html);
+					var warning = work_data.title + ' #' + chapter_NO + '-'
+							+ image_index + ': ' + html;
+					_this.error(warning);
+					CeL.warn(warning);
 					run_next();
 					return;
 				}
@@ -310,15 +316,34 @@ var crawler = new CeL.work_crawler({
 					// https://github.com/kanasimi/work_crawler/issues/81
 					html = eval(html.replace(/^eval/, ''));
 				} catch (e) {
+					_this.error(work_data.title + ' #' + chapter_NO + '-'
+							+ image_index + ': 無法從dm5網站獲得token: ' + e);
 					CeL.error(e);
 					console.trace(e);
-					console.log(html);
+					// console.log(html);
 					run_next();
 					return;
 				}
+				// console.log(html);
 				var image_list = eval(html);
-				// console.log(image_list);
-				this_image_list.append(image_list);
+				if (false) {
+					console.log(work_data.title + ' #' + chapter_NO + '-'
+							+ image_index + ':');
+					console.log(image_list);
+				}
+				// image_list=[本圖url,下一張圖url]
+				image_list.forEach(function(url, index) {
+					var previous_url
+					//
+					= this_image_list[index += image_index - 1];
+					if (previous_url && previous_url !== url) {
+						var warning = work_data.title + ' #' + chapter_NO + '-'
+								+ image_index + ': url:\n	  ' + previous_url
+								+ '	→' + url;
+						_this.error(warning);
+					}
+					this_image_list[index] = url;
+				});
 				get_image_file(image_index, image_list, run_next);
 
 			}, null, parameters, _this.get_URL_options);
