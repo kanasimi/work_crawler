@@ -107,7 +107,9 @@ download_options_set = {
 
 	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。',
 	main_directory : '下載檔案儲存目錄路徑。圖片檔+紀錄檔下載位置。',
-	user_agent : '瀏覽器識別'
+	user_agent : '瀏覽器識別',
+
+	preserve_download_work_layer : '下載完成後保留下載進度條'
 },
 // 會儲存到 crawler.preference 的選項。
 save_to_preference = {
@@ -117,7 +119,9 @@ save_to_preference = {
 	allow_EOI_error : true,
 	skip_error : true,
 	one_by_one : true,
-}, default_configuration, default_configuration_file_name = 'work_crawler.configuration.json', download_site_nodes = [], download_options_nodes = {}, old_Unicode_support = navigator.appVersion
+}, preserve_download_work_layer,
+
+default_configuration, default_configuration_file_name = 'work_crawler.configuration.json', download_site_nodes = [], download_options_nodes = {}, old_Unicode_support = navigator.appVersion
 		.match(/Windows NT (\d+(?:\.\d))/);
 if (old_Unicode_support) {
 	// 舊版本的Windows不支援"⬚ "之類符號。
@@ -136,18 +140,8 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	// CeL.debug('Log panel has been set.');
 	CeL.Log.clear();
 
-	CeL.log([
-			'<span style="font-size:2em; color:#f88;">',
-			'<a href="https://support.microsoft.com/zh-tw/',
-			'help/12445/windows-keyboard-shortcuts"'
-					+ ' onclick="return open_external(this.href);">',
-			'複製貼上快速鍵</a>: Ctrl + C 複製選取的項目,', ' Ctrl + V 貼上選取的項目</span>' ]
-			.join(''));
 	CeL.debug('當前目錄: ' + CeL.storage.working_directory(), 1);
 	CeL.debug('環境變數: ' + JSON.stringify(process.env), 1);
-	CeL.debug(
-			'<a href="#" onclick="return open_DevTools();">open DevTools</a>',
-			0);
 
 	// --------------------------------
 
@@ -300,6 +294,12 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 
 	// --------------------------------
 
+	CeL.get_element('input_work_id').onkeypress = function(this_event) {
+		if (this_event.keyCode === 13) {
+			start_gui_crawler();
+		}
+	};
+
 	// https://developer.mozilla.org/en-US/docs/Web/API/Notification/permission
 	// https://electronjs.org/docs/tutorial/desktop-environment-integration
 	// https://electronjs.org/docs/api/notification
@@ -412,7 +412,7 @@ function reset_favorites(crawler) {
 				a : work_title,
 				href : '#',
 				onclick : function() {
-					add_new_download_job(crawler, work_title, true);
+					add_new_download_job(crawler, work_title);
 				}
 			}
 		};
@@ -490,6 +490,14 @@ function get_crawler(just_test) {
 	if (!(site_id in download_site_nodes.link_of_site)) {
 		// 初始化 initialization
 		crawler.site_id = site_id;
+
+		// 會從以下檔案匯入使用者 preference:
+		// work_crawler_loder.js
+		// work_crawler_loder.configuration.js
+		// global.data_directory + default_configuration_file_name
+		// site script .js
+		// crawler.main_directory + 'preference.json'
+
 		if (default_configuration[site_id]) {
 			// e.g., crawler.main_directory
 			CeL.info('import configuration of ' + site_id + ': '
@@ -624,6 +632,7 @@ function add_new_download_job(crawler, work_id, no_message) {
 	}
 
 	var job = new Download_job(crawler, work_id);
+	// embryonic
 	crawler.downloading_work_data = {
 		id : work_id,
 		job_index : Download_job.job_list.length
@@ -642,7 +651,6 @@ function toggle_download_job_panel() {
 	}
 }
 
-var preserve_download_work_layer = false;
 function destruct_download_job(crawler) {
 	var work_data = crawler.downloading_work_data;
 	if (!work_data) {
@@ -659,7 +667,16 @@ function destruct_download_job(crawler) {
 		CeL.DOM.remove_node(job.layer);
 	}
 	if (preserve_download_work_layer || work_data.error_list) {
-		CeL.new_node({
+		CeL.new_node([ {
+			T : '↻',
+			R : '重新下載',
+			C : 'task_controller',
+			onclick : function() {
+				remove_download_work_layer();
+				add_new_download_job(crawler, work_data.title || work_data.id);
+			},
+			S : 'color: blue; font-weight: bold;'
+		}, {
 			T : '🗙',
 			R : '清除本下載紀錄',
 			C : 'task_controller',
@@ -668,9 +685,11 @@ function destruct_download_job(crawler) {
 				toggle_download_job_panel();
 			},
 			S : 'color: red;'
-		}, job.layer);
+		} ], job.layer);
 		// job.layer === job.progress_layer.parentNode.parentNode
+
 		if (work_data.error_list) {
+			work_data.error_list = work_data.error_list.unique();
 			// 在進度條顯現出這個作品下載失敗
 			job.progress_layer.parentNode.style.backgroundColor = '#f44';
 			job.layer.title = work_data.error_list.join('\n');
@@ -687,23 +706,40 @@ function destruct_download_job(crawler) {
 
 	if (Array.isArray(crawler.download_queue)
 			&& crawler.download_queue.length > 0) {
-		add_new_download_job(crawler, crawler.download_queue.pop(), job.id);
+		add_new_download_job(crawler, crawler.download_queue.pop());
 	} else
 		toggle_download_job_panel();
 }
 
-function after_download_chapter(work_data, chapter_NO) {
-	if (this.downloading_work_data !== work_data) {
-		// 初始化 initialization
-		delete this.downloading_work_data.id;
-		// reset error list 下載出錯的作品
-		delete work_data.error_list;
-		this.downloading_work_data = Object.assign(work_data,
-				this.downloading_work_data);
-
-		var job = Download_job.job_list[work_data.job_index];
-		job.work_data = work_data;
+function initialize_work_data(crawler, work_data) {
+	if (crawler.downloading_work_data === work_data) {
+		return work_data;
 	}
+
+	if ((!work_data
+	// e.g., work_data is image_data
+	|| !work_data.chapter_count) && ('title' in crawler.downloading_work_data)
+			&& crawler.downloading_work_data.chapter_count > 0) {
+		return crawler.downloading_work_data;
+	}
+
+	// 初始化 initialization
+
+	// 這裡的 .id 可能是作品標題，因此不應該覆蓋 work_data.id
+	delete crawler.downloading_work_data.id;
+	// reset error list 下載出錯的作品
+	delete work_data.error_list;
+	crawler.downloading_work_data = Object.assign(work_data,
+			crawler.downloading_work_data);
+
+	var job = Download_job.job_list[work_data.job_index];
+	job.work_data = work_data;
+
+	return work_data;
+}
+
+function after_download_chapter(work_data, chapter_NO) {
+	initialize_work_data(this, work_data);
 
 	work_data.downloaded_chapters = chapter_NO;
 	var percent = Math.round(1000 * chapter_NO / work_data.chapter_count) / 10
@@ -733,11 +769,9 @@ function after_download_chapter(work_data, chapter_NO) {
 }
 
 function onerror(error, work_data) {
-	if (!work_data || work_data !== this.downloading_work_data
-			&& this.downloading_work_data.chapter_count > 0) {
-		// work_data is image_data
-		work_data = this.downloading_work_data;
-	}
+	// e.g., work_data is image_data
+	work_data = initialize_work_data(this, work_data);
+
 	if (!work_data.error_list) {
 		work_data.error_list = [];
 	}
@@ -763,7 +797,7 @@ function start_gui_crawler() {
 	// or work_title
 	var work_id = CeL.node_value('#input_work_id');
 	if (work_id) {
-		add_new_download_job(crawler, work_id, site_used);
+		add_new_download_job(crawler, work_id);
 	} else {
 		CeL.info('請輸入作品名稱或 id。');
 	}
