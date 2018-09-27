@@ -87,8 +87,9 @@ app.on('activate', function() {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// 接收訊息
 require('electron').ipcMain.on('send_message', function(event, message) {
-	if (message === 'did-finish-load')
+	if (message === 'check-for-updates')
 		start_update(event.sender);
 });
 
@@ -101,6 +102,12 @@ function start_update(event_sender) {
 		// https://nicholaslee119.github.io/2018/01/11/electronBuilder%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/
 		// https://electronjs.org/docs/tutorial/updates
 		// https://www.electron.build/auto-update
+
+		// https://segmentfault.com/a/1190000012904543
+		// 配置了publish才會生成latest.yml文件，用於自動更新的配置信息；
+		// 打包後禁止對latest.yml文件做任何修改。
+		// nsis可允許用戶自定義安裝位置、添加桌面快捷方式、安裝完成立即啟動、配置安裝圖標等。
+
 		var updater = require("electron-updater"), autoUpdater = updater.autoUpdater;
 		autoUpdater.checkForUpdatesAndNotify();
 
@@ -133,11 +140,20 @@ function start_update(event_sender) {
 					+ '%';
 			log_message = log_message + ' (' + progressObj.transferred + "/"
 					+ progressObj.total + ')';
-			event_sender.send('send_message_debug', log_message);
+			progressObj.message = log_message;
+			event_sender.send('send_message_debug', progressObj.log_message);
 		});
-		autoUpdater.on('update-downloaded', function(info) {
+		autoUpdater.on('update-downloaded', function(event, releaseNotes,
+				releaseName, releaseDate, updateUrl, quitAndUpdate) {
 			event_sender.send('send_message_log', 'Release update downloaded: '
-					+ JSON.stringify(info));
+					+ JSON.stringify(event));
+
+			require('electron').ipcMain.on('start-install-now', function(e, arg) {
+				console.log(arguments);
+				console.log("開始更新");
+				// some code here to handle event
+				autoUpdater.quitAndInstall();
+			});
 		});
 
 	} catch (e) {

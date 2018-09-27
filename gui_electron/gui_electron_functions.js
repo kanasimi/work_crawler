@@ -99,7 +99,7 @@ download_options_set = {
 	archive_images : '漫畫下載完畢後壓縮圖像檔案。',
 
 	// 容許錯誤用的相關操作設定。
-	MAX_ERROR_RETRY : '出錯時重新嘗試的次數。',
+	MAX_ERROR_RETRY : '出錯時重新嘗試的次數。若值太小，傳輸到一半壞掉的圖片可能被當作正常圖片而不會出現錯誤。',
 	allow_EOI_error : '當圖像不存在 EOI (end of image) 標記，或是被偵測出非圖像時，依舊強制儲存檔案。',
 	MIN_LENGTH : '最小容許圖案檔案大小 (bytes)。',
 	skip_error : '忽略/跳過圖像錯誤。',
@@ -120,9 +120,10 @@ save_to_preference = {
 	skip_error : true,
 	one_by_one : true,
 }, preserve_download_work_layer,
-
-default_configuration, default_configuration_file_name = 'work_crawler.configuration.json', download_site_nodes = [], download_options_nodes = {}, old_Unicode_support = navigator.appVersion
-		.match(/Windows NT (\d+(?:\.\d))/);
+//
+default_configuration_file_name = 'work_crawler.configuration.json', default_configuration, download_site_nodes = [], download_options_nodes = {},
+// Windows 10: Windows NT 10.0; Win64; x64
+old_Unicode_support = navigator.appVersion.match(/Windows NT (\d+(?:\.\d))/);
 if (old_Unicode_support) {
 	// 舊版本的Windows不支援"⬚ "之類符號。
 	old_Unicode_support = +old_Unicode_support[1] < 10;
@@ -257,8 +258,8 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 		var option_object = {
 			label : [ {
 				b : download_option
-			}, ':', input_box, download_options_set[download_option], ' (',
-					arg_types, ')' ],
+			}, ':', input_box, download_options_set[download_option],
+					arg_types ? ' (' + arg_types + ')' : '' ],
 			C : className,
 			title : download_option
 		};
@@ -330,6 +331,7 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	// --------------------------------
 
 	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
+	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
 });
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -577,7 +579,7 @@ function Download_job(crawler, work_id) {
 					stop_task(this_job);
 					CeL.DOM.set_text(this,
 					// resume ⏯
-					CeL.gettext((old_Unicode_support ? '' : '▶️') + '繼續'));
+					CeL.gettext('▶️' + '繼續'));
 				}
 				return false;
 			}
@@ -666,7 +668,9 @@ function destruct_download_job(crawler) {
 		delete Download_job.job_list[job_index];
 		CeL.DOM.remove_node(job.layer);
 	}
-	if (preserve_download_work_layer || work_data.error_list) {
+	if (work_data.error_list
+			|| ('preserve_download_work_layer' in crawler ? crawler.preserve_download_work_layer
+					: preserve_download_work_layer)) {
 		CeL.new_node([ {
 			T : '↻',
 			R : '重新下載',
@@ -677,7 +681,7 @@ function destruct_download_job(crawler) {
 			},
 			S : 'color: blue; font-weight: bold;'
 		}, {
-			T : '🗙',
+			T : old_Unicode_support ? '❌' : '🗙',
 			R : '清除本下載紀錄',
 			C : 'task_controller',
 			onclick : function() {
