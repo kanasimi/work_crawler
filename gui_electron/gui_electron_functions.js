@@ -2,18 +2,19 @@
  * 新增或更新網站的時候，除了.js功能寫完之外，還必須要更改 README.md 以及本檔案中的 download_sites_set。
  */
 
+// const
 var node_electron = require('electron'),
-// work_crawler/
+// const: work_crawler/
 base_directory = '../',
-// 為安裝包
-is_installation_package, site_used, site_type_description = {
+// const
+site_type_description = {
 	'comic.cmn-Hans-CN' : '中国内地漫画',
 	'comic.ja-JP' : '日本語のウェブコミック',
 	'comic.en-US' : 'English webcomics',
 	'novel.cmn-Hans-CN' : '中国内地小说',
 	'novel.ja-JP' : '日本語のオンライン小説'
 },
-//
+// const
 download_sites_set = {
 	'comic.cmn-Hans-CN' : {
 		// '2manhua' : '爱漫画',
@@ -86,7 +87,7 @@ download_sites_set = {
 		yomou : '小説を読もう！'
 	}
 },
-// 下載選項。有順序。常用的排前面。
+// const 下載選項。有順序。常用的排前面。
 // @see CeL.application.net.work_crawler
 download_options_set = {
 	recheck : '從頭檢測所有作品之所有章節與所有圖片。',
@@ -111,25 +112,23 @@ download_options_set = {
 
 	preserve_download_work_layer : '下載完成後保留下載進度條'
 },
-// 會儲存到 crawler.preference 的選項。
-save_to_preference = {
-	// 不可包含 main_directory，因為已來不及，且會二次改變 main_directory。
-	archive_images : true,
-	MIN_LENGTH : true,
-	allow_EOI_error : true,
-	skip_error : true,
-	one_by_one : true,
-}, preserve_download_work_layer,
-//
-default_configuration_file_name = 'work_crawler.configuration.json', default_configuration, download_site_nodes = [], download_options_nodes = {},
+// const
+default_configuration_file_name = 'work_crawler.configuration.json';
+
+var site_used, default_configuration, download_site_nodes = [], download_options_nodes = {},
+// 為安裝包
+is_installation_package,
+// 會儲存到 crawler.preference.crawler_configuration 的選項。
+save_to_preference = Object.assign({}, download_options_set), preserve_download_work_layer,
 // Windows 10: Windows NT 10.0; Win64; x64
 old_Unicode_support = navigator.appVersion.match(/Windows NT (\d+(?:\.\d))/);
 if (old_Unicode_support) {
 	// 舊版本的Windows不支援"⬚ "之類符號。
 	old_Unicode_support = +old_Unicode_support[1] < 10;
 }
-download_site_nodes.link_of_site = {};
-download_site_nodes.node_of_id = {};
+
+// save_to_preference 不可包含 main_directory，因為已來不及，且會二次改變 main_directory。
+delete save_to_preference.main_directory;
 
 require(base_directory + 'work_crawler_loder.js');
 
@@ -153,11 +152,17 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	// read default configuration
 	default_configuration = CeL.get_JSON(global.data_directory
 			+ default_configuration_file_name)
-			|| {};
+			|| CeL.null_Object();
 
 	// --------------------------------
 
 	is_installation_package = CeL.is_installation_package();
+
+	// 初始化 initialization: download_site_nodes
+	Object.assign(download_site_nodes, {
+		link_of_site : CeL.null_Object(),
+		node_of_id : CeL.null_Object()
+	});
 
 	var site_nodes = [];
 	for ( var site_type in download_sites_set) {
@@ -239,16 +244,21 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 					} else {
 						crawler[key] = this.value;
 					}
+
 					if (key in save_to_preference) {
-						crawler.preference[key] = crawler[key];
-						save_preference(crawler);
-					} else if (key = 'main_directory') {
-						if (!default_configuration[crawler.site_id]) {
-							default_configuration[crawler.site_id] = {};
-						}
-						default_configuration[crawler.site_id]
+						crawler.preference
 						//
-						.main_directory = crawler[key];
+						.crawler_configuration[key] = crawler[key];
+						save_preference(crawler);
+
+					} else if (key === 'main_directory') {
+						if (!default_configuration[crawler.site_id]) {
+							default_configuration[crawler.site_id] = CeL
+									.null_Object();
+						}
+						default_configuration
+						//
+						[crawler.site_id][key] = crawler[key];
 						save_default_configuration();
 					}
 				}
@@ -269,10 +279,18 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 				if (!crawler) {
 					return;
 				}
-				crawler[this.title] = !crawler[this.title];
+				var key = this.title;
+				crawler[key] = !crawler[key];
 				CeL.set_class(this, 'selected', {
-					remove : !crawler[this.title]
+					remove : !crawler[key]
 				});
+
+				if (key in save_to_preference) {
+					crawler.preference
+					//
+					.crawler_configuration[key] = crawler[key];
+					save_preference(crawler);
+				}
 			};
 		}
 
@@ -284,7 +302,23 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 	}
 
 	set_click_trigger('download_options_trigger', CeL.new_node({
-		div : options_nodes
+		div : [ options_nodes, {
+			b : '重設下載選項',
+			onclick : function() {
+				var crawler = get_crawler();
+				if (!crawler) {
+					return;
+				}
+				Object.assign(crawler, crawler.default_save_to_preference);
+				crawler.preference.crawler_configuration = CeL.null_Object();
+				// Skip .main_directory
+
+				save_preference(crawler);
+				reset_site_options();
+			},
+			C : 'button',
+			S : 'margin: .5em; margin-left: 2em;'
+		} ]
 	}, 'download_options_panel'));
 
 	// --------------------------------
@@ -431,7 +465,7 @@ function reset_favorites(crawler) {
 				});
 			},
 			C : 'favorites_button'
-		} : '現無最愛作品。', {
+		} : '尚未設定最愛作品。', {
 			// 我的最愛
 			b : '編輯最愛作品清單',
 			onclick : function() {
@@ -490,7 +524,7 @@ function get_crawler(just_test) {
 	crawler = require(crawler);
 
 	if (!(site_id in download_site_nodes.link_of_site)) {
-		// 初始化 initialization
+		// 初始化 initialization: crawler
 		crawler.site_id = site_id;
 
 		// 會從以下檔案匯入使用者 preference:
@@ -507,19 +541,24 @@ function get_crawler(just_test) {
 			Object.assign(crawler, default_configuration[site_id]);
 		}
 
-		crawler.preference = CeL
-		//
-		.get_JSON(crawler.main_directory + 'preference.json') || {
+		crawler.preference = Object.assign({
+			// 因為會'重設下載選項'，一般使用不應 cache 這個值。
+			crawler_configuration : CeL.null_Object(),
 			// 我的最愛 my favorite
 			favorites : []
-		};
-		// import crawler.preference
+		}, CeL.get_JSON(crawler.main_directory + 'preference.json'));
+
+		// import crawler.preference.crawler_configuration
+		var crawler_configuration = crawler.preference.crawler_configuration;
+		crawler.default_save_to_preference = CeL.null_Object();
 		Object.keys(save_to_preference).forEach(function(key) {
-			if (key in crawler.preference) {
+			// Skip .main_directory
+			crawler.default_save_to_preference[key] = crawler[key];
+			if (key in crawler_configuration) {
 				CeL.info('import preference of ' + site_id + ': '
 				//
-				+ key + '=' + crawler.preference[key] + '←' + crawler[key]);
-				crawler[key] = crawler.preference[key];
+				+ key + '=' + crawler_configuration[key] + '←' + crawler[key]);
+				crawler[key] = crawler_configuration[key];
 			}
 		});
 
@@ -727,7 +766,7 @@ function initialize_work_data(crawler, work_data) {
 		return crawler.downloading_work_data;
 	}
 
-	// 初始化 initialization
+	// 初始化 initialization: crawler.downloading_work_data, job.work_data
 
 	// 這裡的 .id 可能是作品標題，因此不應該覆蓋 work_data.id
 	delete crawler.downloading_work_data.id;
