@@ -124,6 +124,11 @@ crawler = new CeL.work_crawler({
 			} else {
 				chapter_data.image_list.forEach(function(image_data) {
 					image_data.url = image_data.src;
+					// 正常圖片起頭如 'http://img6.u17i.com/'
+					// 有問題的mask圖片起頭為 'http://cover.u17i.com/image_mask/'
+					if (image_data.url.includes('/image_mask/')) {
+						image_data.is_bad = 'masked';
+					}
 				});
 			}
 
@@ -138,9 +143,13 @@ crawler = new CeL.work_crawler({
 			});
 
 		} else {
-			throw '網站結構改變，無法取得資料！';
+			throw '網站結構改變，無法取得資料！請回報此項錯誤。';
 		}
 
+		// e.g., type: '4'
+		if (chapter_data.chapter.type > 0)
+			chapter_data.limited = true;
+		// console.log(chapter_data);
 		return chapter_data;
 	}
 });
