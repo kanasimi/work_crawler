@@ -142,7 +142,7 @@ var crawler = new CeL.work_crawler({
 		return chapter_data;
 	},
 	// 檢測用，不應該有實際作用。
-	image_pre_process : function(contents, image_data) {
+	image_preprocessor : function(contents, image_data) {
 		if (contents && contents.length === 99242) {
 			if (contents.slice(99000, 99020).toString('hex') ===
 			// 99242: @see #19

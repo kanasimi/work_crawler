@@ -162,9 +162,11 @@ var crawler = new CeL.work_crawler({
 
 		return chapter_data;
 	},
-	image_pre_process : function(contents, image_data) {
+	image_preprocessor : function(contents, image_data) {
 		if (!contents)
 			return;
+		// console.log(image_data);
+		// 有可能出問題: image_data.meta.drm_hash===null
 		var decode_key = image_data.meta.drm_hash.slice(0, 16)
 		// decode image 用的關鍵 key
 		.match(/[\da-f]{2}/gi).map(function(t) {
