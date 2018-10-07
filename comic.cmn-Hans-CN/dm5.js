@@ -266,18 +266,15 @@ var crawler = new CeL.work_crawler({
 
 			// Skip codes below: 可以不用取得 history.ashx。
 			history_parameters.page = image_index;
-			CeL.get_URL(
-					_this.base_URL + _this.chapter_URL(work_data, chapter_NO)
-							+ 'history.ashx',
-					//
-					function(XMLHttp) {
+			CeL.get_URL(_this.full_URL(_this.chapter_URL(work_data, chapter_NO)
+					+ 'history.ashx'), function(XMLHttp) {
 
-						get_token(image_index, run_next);
+				get_token(image_index, run_next);
 
-					}, null, history_parameters, Object.assign({
-						error_retry : _this.MAX_ERROR_RETRY,
-						no_warning : true
-					}, _this.get_URL_options));
+			}, null, history_parameters, Object.assign({
+				error_retry : _this.MAX_ERROR_RETRY,
+				no_warning : true
+			}, _this.get_URL_options));
 
 		}, DM5.IMAGE_COUNT, 1, function() {
 			// .unique() 應該會過得相同的結果
@@ -292,16 +289,13 @@ var crawler = new CeL.work_crawler({
 
 		// --------------------------------------
 
-		// 從dm5網站獲得通行碼
+		// 從 dm5 網站獲得 token 通行碼
 		function get_token(image_index, run_next) {
 			parameters.page = image_index;
 			// CeL.set_debug(6);
 			// console.log(CeL.get_URL.parameters_to_String(parameters));
-			CeL.get_URL(_this.base_URL
-					+ _this.chapter_URL(work_data, chapter_NO)
-					+ 'chapterfun.ashx',
-			//
-			function(XMLHttp) {
+			CeL.get_URL(_this.full_URL(_this.chapter_URL(work_data, chapter_NO)
+					+ 'chapterfun.ashx'), function(XMLHttp) {
 				var html = XMLHttp.responseText;
 				// console.log(html);
 				if (html === '错误的请求') {
@@ -319,7 +313,7 @@ var crawler = new CeL.work_crawler({
 					var message = work_data.title + ' #' + chapter_NO + '-'
 							+ image_index + ': 無法從 dm5 網站獲得 token: ' + e;
 					CeL.error(message);
-					// _this.onerror(message, work_data);
+					_this.onerror(message, work_data);
 					console.trace(e);
 					// console.log(html);
 					run_next();
