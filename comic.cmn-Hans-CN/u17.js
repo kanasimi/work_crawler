@@ -146,8 +146,8 @@ crawler = new CeL.work_crawler({
 			throw '網站結構改變，無法取得資料！請回報此項錯誤。';
 		}
 
-		// e.g., type: '4'
-		if (chapter_data.chapter.type > 0)
+		// type: '0','3': OK, '4': masked
+		if (+chapter_data.chapter.type === 4)
 			chapter_data.limited = true;
 		// console.log(chapter_data);
 		return chapter_data;
