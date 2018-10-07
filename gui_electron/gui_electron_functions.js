@@ -544,7 +544,7 @@ function get_crawler(just_test) {
 		crawler.preference = Object.assign({
 			// 因為會'重設下載選項'，一般使用不應 cache 這個值。
 			crawler_configuration : CeL.null_Object(),
-			// 我的最愛 my favorite
+			// 我的最愛 my favorite 書庫 library
 			favorites : []
 		}, CeL.get_JSON(crawler.main_directory + 'preference.json'));
 
@@ -768,10 +768,12 @@ function initialize_work_data(crawler, work_data) {
 
 	// 初始化 initialization: crawler.downloading_work_data, job.work_data
 
+	if (work_data) {
+		// reset error list 下載出錯的作品
+		delete work_data.error_list;
+	}
 	// 這裡的 .id 可能是作品標題，因此不應該覆蓋 work_data.id
 	delete crawler.downloading_work_data.id;
-	// reset error list 下載出錯的作品
-	delete work_data.error_list;
 	crawler.downloading_work_data = Object.assign(work_data,
 			crawler.downloading_work_data);
 
@@ -815,10 +817,13 @@ function onerror(error, work_data) {
 	// e.g., work_data is image_data
 	work_data = initialize_work_data(this, work_data);
 
-	if (!work_data.error_list) {
-		work_data.error_list = [];
+	// work_data 可能為 undefined/image_data
+	if (work_data) {
+		if (!work_data.error_list) {
+			work_data.error_list = [];
+		}
+		work_data.error_list.push(error);
 	}
-	work_data.error_list.push(error);
 
 	console.trace(error);
 	// 會在 .finish_up() 執行。

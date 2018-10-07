@@ -144,7 +144,7 @@ var crawler = new CeL.work_crawler({
 	},
 
 	pre_parse_chapter_data
-	// 執行在解析章節資料process_chapter_data()之前的作業(async)。
+	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。必須自行保證不丟出異常。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
 		if (!work_data.image_list) {
 			// image_list[chapter_NO] = [url, url, ...]
@@ -307,7 +307,7 @@ var crawler = new CeL.work_crawler({
 				if (html === '错误的请求') {
 					var warning = work_data.title + ' #' + chapter_NO + '-'
 							+ image_index + ': ' + html;
-					_this.onerror(warning);
+					_this.onerror(warning, work_data);
 					CeL.warn(warning);
 					run_next();
 					return;
@@ -316,9 +316,10 @@ var crawler = new CeL.work_crawler({
 					// https://github.com/kanasimi/work_crawler/issues/81
 					html = eval(html.replace(/^eval/, ''));
 				} catch (e) {
-					_this.onerror(work_data.title + ' #' + chapter_NO + '-'
-							+ image_index + ': 無法從dm5網站獲得token: ' + e);
-					CeL.error(e);
+					var message = work_data.title + ' #' + chapter_NO + '-'
+							+ image_index + ': 無法從 dm5 網站獲得 token: ' + e;
+					CeL.error(message);
+					// _this.onerror(message, work_data);
 					console.trace(e);
 					// console.log(html);
 					run_next();
@@ -331,7 +332,7 @@ var crawler = new CeL.work_crawler({
 							+ image_index + ':');
 					console.log(image_list);
 				}
-				// image_list=[本圖url,下一張圖url]
+				// image_list = [ 本圖url, 下一張圖url ]
 				image_list.forEach(function(url, index) {
 					var previous_url
 					//
@@ -340,7 +341,7 @@ var crawler = new CeL.work_crawler({
 						var warning = work_data.title + ' #' + chapter_NO + '-'
 								+ image_index + ': url:\n	  ' + previous_url
 								+ '	→' + url;
-						_this.onerror(warning);
+						_this.onerror(warning, work_data);
 					}
 					this_image_list[index] = url;
 				});
