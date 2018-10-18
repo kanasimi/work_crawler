@@ -39,6 +39,7 @@ download_sites_set = {
 		manhuatai : '漫画台',
 
 		manhuagui : '看漫画/漫画柜',
+		manhuagui_tw : '繁體版漫畫櫃',
 		gufengmh : '古风漫画网',
 		'36mh' : '36漫画网',
 
@@ -410,7 +411,8 @@ function edit_favorites(crawler) {
 		br : null
 	}, {
 		div : [ {
-			b : '儲存最愛作品清單',
+			// save
+			b : '💾儲存最愛作品清單',
 			onclick : function() {
 				crawler.preference.favorites
 				// verify work titles
@@ -427,7 +429,7 @@ function edit_favorites(crawler) {
 			},
 			C : 'favorites_button'
 		}, {
-			b : '放棄編輯',
+			b : '🛑放棄編輯',
 			onclick : function() {
 				reset_favorites(crawler);
 			},
@@ -465,9 +467,9 @@ function reset_favorites(crawler) {
 				});
 			},
 			C : 'favorites_button'
-		} : '尚未設定最愛作品。', {
+		} : /* empty */'🈳 尚未設定最愛作品。', {
 			// 我的最愛
-			b : '編輯最愛作品清單',
+			b : '✍️編輯最愛作品清單',
 			onclick : function() {
 				edit_favorites(crawler);
 			},
