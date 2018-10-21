@@ -131,7 +131,9 @@ var crawler = new CeL.work_crawler({
 				title : get_label(matched.between(' class="title', '</p>')
 						.between('>'))
 						// e.g., 古惑仔
-						|| get_label(matched).replace(/\s+/g, ' '),
+						|| get_label(matched
+						// for 七原罪 第168话 <十戒>歼灭计划
+						.replace(/ title="[^"]+"/, '')).replace(/\s+/g, ' '),
 
 				url : matched.between(' href="', '"')
 			};
@@ -258,8 +260,8 @@ var crawler = new CeL.work_crawler({
 				run_next();
 				return;
 			}
-			process.stdout.write((DM5.IMAGE_COUNT - image_index + 1)
-					+ ' left...\r');
+			process.stdout.write('圖 ' + (image_index + 1) + '/'
+					+ DM5.IMAGE_COUNT + '...\r');
 
 			get_token(image_index, run_next);
 			return;
@@ -313,7 +315,7 @@ var crawler = new CeL.work_crawler({
 					var message = work_data.title + ' #' + chapter_NO + '-'
 							+ image_index + ': 無法從 dm5 網站獲得 token: ' + e;
 					CeL.error(message);
-					_this.onerror(message, work_data);
+					_this.onwarning(message, work_data);
 					console.trace(e);
 					// console.log(html);
 					run_next();
@@ -341,7 +343,9 @@ var crawler = new CeL.work_crawler({
 				});
 				get_image_file(image_index, image_list, run_next);
 
-			}, null, parameters, _this.get_URL_options);
+			}, null, parameters, Object.assign({
+				error_retry : _this.MAX_ERROR_RETRY
+			}, _this.get_URL_options));
 		}
 
 		// --------------------------------------
@@ -354,7 +358,9 @@ var crawler = new CeL.work_crawler({
 				no_write_info : true,
 				encoding : undefined,
 				charset : _this.charset,
-				get_URL_options : _this.get_URL_options
+				get_URL_options : Object.assign({
+					error_retry : _this.MAX_ERROR_RETRY
+				}, _this.get_URL_options)
 			});
 		}
 
