@@ -51,7 +51,7 @@ var crawler = new CeL.work_crawler({
 	convert_id : {
 		// 篩出今日限免 free today 本日免費. 2017/8/15 起取消了今日限免
 		// e.g., `echo 今日限免： && node qq free`
-		free : function(insert_id_list) {
+		free : function(insert_id_list, get_label) {
 			var _this = this;
 			this.free_title = CeL.null_Object();
 
@@ -164,55 +164,78 @@ var crawler = new CeL.work_crawler({
 	},
 	parse_chapter_data : function(html, work_data) {
 		// decode chapter data
+		// 2018/11/2-7 之間改版
 		// modify from
-		// http://ac.gtimg.com/media/js/ac.page.chapter.view_v2.3.5.js?v=20160826
-		function decode(c) {
-			c = c.substring(1);
-
-			var a = "", b, d, h, f, g, e = 0, _keyStr =
-			//
-			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
-			//
-			;
-			for (c = c.replace(/[^A-Za-z0-9\+\/\=]/g, ""); e < c.length;) {
-				b = _keyStr.indexOf(c.charAt(e++));
-				d = _keyStr.indexOf(c.charAt(e++));
-				f = _keyStr.indexOf(c.charAt(e++));
-				g = _keyStr.indexOf(c.charAt(e++));
-				b = b << 2 | d >> 4;
-				d = (d & 15) << 4 | f >> 2;
-				h = (f & 3) << 6 | g;
-				a += String.fromCharCode(b);
-				64 !== f && (a += String.fromCharCode(d));
-				64 !== g && (a += String.fromCharCode(h));
-			}
-			c = a;
-			for (var a = "", b = 0, c1, c2, d = c1 = c2 = 0; b < c.length;) {
-				d = c.charCodeAt(b);
-				if (128 > d) {
-					a += String.fromCharCode(d);
-					b++;
-				} else if (191 < d && 224 > d) {
-					c2 = c.charCodeAt(b + 1);
-					a += String.fromCharCode((d & 31) << 6 | c2 & 63);
-					b += 2;
-				} else {
-					c2 = c.charCodeAt(b + 1);
-					c3 = c.charCodeAt(b + 2);
-					a += String.fromCharCode((d & 15) << 12 | (c2 & 63) << 6
-							| c3 & 63);
-					b += 3;
+		// http://ac.gtimg.com/media/js/ac.page.chapter.view_v2.4.0.js?v=20170622
+		function decode(T, N) {
+			function Base() {
+				var _keyStr =
+				//
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+				//
+				;
+				this.decode = function(c) {
+					var a = "", b, d, h, f, g, e = 0;
+					c = c.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+					for (; e < c.length;) {
+						b = _keyStr.indexOf(c.charAt(e++));
+						d = _keyStr.indexOf(c.charAt(e++));
+						f = _keyStr.indexOf(c.charAt(e++));
+						g = _keyStr.indexOf(c.charAt(e++));
+						b = b << 2 | d >> 4;
+						d = (d & 15) << 4 | f >> 2;
+						h = (f & 3) << 6 | g;
+						a += String.fromCharCode(b);
+						64 != f && (a += String.fromCharCode(d));
+						64 != g && (a += String.fromCharCode(h));
+					}
+					return a = _utf8_decode(a)
+				}
+				function _utf8_decode(c) {
+					for (var a = "", b = 0, d = 0,
+					//
+					c1 = 0, c2 = 0; b < c.length;) {
+						d = c.charCodeAt(b);
+						if (128 > d) {
+							a += String.fromCharCode(d);
+							b++
+						} else if (191 < d && 224 > d) {
+							c2 = c.charCodeAt(b + 1);
+							a += String.fromCharCode((d & 31) << 6 | c2 & 63);
+							b += 2
+						} else {
+							c2 = c.charCodeAt(b + 1);
+							c3 = c.charCodeAt(b + 2);
+							a += String.fromCharCode((d & 15) << 12
+									| (c2 & 63) << 6 | c3 & 63);
+							b += 3;
+						}
+					}
+					return a
 				}
 			}
-
-			return JSON.parse(a);
+			var B = new Base(), len, locate, str;
+			T = T.split('');
+			N = N.match(/\d+[a-zA-Z]+/g);
+			len = N.length;
+			while (len--) {
+				locate = parseInt(N[len]) & 255;
+				str = N[len].replace(/\d+/g, '');
+				T.splice(locate, str.length)
+			}
+			T = T.join('');
+			return JSON.parse(B.decode(T));
 		}
 
-		var chapter_data = html.match(/\sDATA\s*=\s*'([^']{9,})'/);
-		if (!chapter_data || !(chapter_data = decode(chapter_data[1]))
+		var chapter_data = html.match(/\sDATA\s*=\s*'([^']{9,})'/),
+		//
+		chapter_nonce = html.match(/window\.nonce\s*=\s*'([^']{9,})'/);
+		if (!chapter_data
+				|| !(chapter_data = decode(chapter_data[1], chapter_nonce[1]))
 				|| !chapter_data.picture) {
 			return;
 		}
+		// console.log(chapter_data);
 
 		// 設定必要的屬性。
 		chapter_data.title = chapter_data.chapter.cTitle;
@@ -229,4 +252,6 @@ var crawler = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
+// https://github.com/abcfy2/getComic/issues/20
+// cookie中包含 uin和skey就可以下載到收費漫畫
 start_crawler(crawler, typeof module === 'object' && module);
