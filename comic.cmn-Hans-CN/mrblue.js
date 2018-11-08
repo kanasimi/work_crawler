@@ -22,7 +22,8 @@ var crawler = new CeL.work_crawler({
 	base_URL : 'http://comics.mrblue.com/',
 
 	extract_work_id : function(work_information) {
-		if (/^[a-z_\-\d]+$/.test(work_information))
+		// e.g., "wt_HQ0005"
+		if (/^[a-z_\-\d]+$/i.test(work_information))
 			return work_information;
 	},
 
