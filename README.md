@@ -22,10 +22,17 @@
 
 ## Features 特點
 * 可自動下載小說封面以及章節中的插圖。
-* 自動檢核下載的圖片是否是否完整。若有破損將重新下載。
+* 本工具會盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
 * 跨平台支援：支援 Windows, Linux, Mac。
 * 採用 CeJS [線上作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
 * 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料，僅更新有問題的圖檔。（請注意：必須先安裝 7-Zip **18.01 以上的版本**）
+
+## OS support
+| Platform | support |
+| --- | --- |
+| Windows | ✔️ |
+| macOS | ✔️ |
+| UNIX, Linux | ✔️ |
 
 ## Supported sites 已完成之網站工具
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：必須先安裝 7-Zip **18.01 以上的版本**，這樣才能製作 .epub 小說電子書、壓縮漫畫章節。
@@ -79,7 +86,7 @@
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [9妹漫画网](http://www.9mdm.com/) | 9mdm.js | |
 | [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |
-| [看漫画](http://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/)<br />[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板?<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |
+| [看漫画](https://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/)<br />[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板?<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。  [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 |
@@ -120,7 +127,7 @@
 
 ## Installation 安裝
 
-若是想要使用圖形介面，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。若是欲採用最新的版本，或者用作研究開發、想要使用命令行介面作批次處理，請採用下列步驟。
+若是想要使用系統安裝的方法，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。若是欲採用最新的版本，或者用作研究開發、想要使用命令行介面作批次處理，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
@@ -203,7 +210,7 @@
    ``` sh
    cd comic.cmn-Hans-CN && node qq.js "狐妖小红娘" skip_error=true
    cd novel.cmn-Hans-CN && node qidian free && echo 下载 起点中文网限免作品
-   cd novel.cmn-Hans-CN && node 23us "斗罗大陆Ⅲ龙王传说"
+   cd novel.cmn-Hans-CN && node 23us "斗罗大陆Ⅲ龙王传说" proxy=localhost:8080
    cd comic.cmn-Hans-CN && node 2manhua "大主宰" recheck=true
    cd comic.cmn-Hans-CN && node ikanman "l=ikanman.txt" recheck=true
    cd novel.cmn-Hans-CN && echo "via id" && node 630book "267"
@@ -236,7 +243,7 @@
    ![小說 → epub](https://lh3.googleusercontent.com/JJ4SGDQF-HzQb0baRZ0mCio19jJTnNp3VnWutirYgZbYg5i--ufS_ElL8DEetP6x7uJ4HUv8szNqzVLbGlr84_OnxFxjIZCDsOEOEmKBubYC6PkpaE2xBYk9KIHzBR4YPwjQVM2FTA=w1366-h738-no)
 
 ## Uninstallation 移除
-* 若是您採用安裝包，請利用系統的移除介面。否則要移除本工具，只需將解壓縮後工具檔所在的目錄整個刪除即可。
+* 若是您採用安裝包，請利用系統正規的移除方法或移除介面。否則要移除本工具，只需先備份好之前下載過的漫畫，之後將解壓縮後工具檔所在的目錄整個刪除即可。
 * 作品下載的標的目錄（存放圖片檔與紀錄檔的目錄）需另外手動刪除。
 
 ## FAQ 常見問題集

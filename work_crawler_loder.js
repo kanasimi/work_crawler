@@ -40,6 +40,9 @@ site_configuration.comico = site_configuration.comico_jp = site_configuration.co
 	password : ''
 };
 
+// 代理伺服器 "hostname:port"
+global.proxy_server = '';
+
 // ------------------------------------
 
 try {
@@ -117,7 +120,8 @@ global.work_id = is_CLI
 if (is_CLI && !work_id && process.mainModule
 // 檔案整理工具不需要下載作品，因此也不需要作品名稱。
 && (typeof need_work_id === 'undefined' || need_work_id)) {
-	var main_script = process.mainModule.filename.match(/[^\\\/]+$/)[0],
+	var main_script = process.mainModule
+			&& process.mainModule.filename.match(/[^\\\/]+$/)[0],
 	//
 	options_arguments = ' [option=true] [option=value]';
 	// 顯示幫助信息/用法說明。
@@ -156,6 +160,10 @@ function setup_crawler(crawler, crawler_module) {
 		Object.assign(crawler, site_configuration[crawler.id]);
 	}
 
+	if (proxy_server) {
+		crawler.proxy = proxy_server;
+	}
+
 	CeL.debug(crawler.id + ', ' + crawler.main_directory, 1, 'setup_crawler');
 }
 
@@ -165,7 +173,7 @@ function start_crawler(crawler, crawler_module) {
 	setup_crawler(crawler, crawler_module);
 	// console.log(crawler_module);
 	if (is_CLI) {
-		crawler.start(work_id, crawler.after_download);
+		crawler.start(work_id, crawler.after_download_list);
 	}
 }
 
