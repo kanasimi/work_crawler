@@ -31,15 +31,18 @@ crawler = new CeL.work_crawler({
 	// skip_error : true,
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'web/topic/search?keyword=',
+	search_URL_201803 : 'web/topic/search?keyword=',
+	search_URL : function(work_title, get_label) {
+		return 'v1/search/topic?q=' + encodeURIComponent(work_title)
+				+ '&since=0&size=20&f=3';
+	},
 	parse_search_result : function(html, get_label) {
-		html = JSON.parse(html).data.topic;
+		html = JSON.parse(html).data.hit;
 		var id_list = html.map(function(book) {
 			return book.id;
 		});
 		return [ id_list, html ];
 	},
-	// id_of_search_result : function(cached_data) { return cached_data; },
 	title_of_search_result : 'title',
 
 	// 取得作品的章節資料。 get_work_data()
@@ -49,10 +52,16 @@ crawler = new CeL.work_crawler({
 	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
+			title : get_label(html
+					.between('<div class="comic-name">', '</div>')),
+			author : get_label(html.between('<div class="author-nickname">',
+					'</div>')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			总热度 : get_label(html.between('<span class="hot-num">', '</span>'))
-					.replace(//, ''),
+			总热度 : get_label(html.between('<span class="hot-num">', '</span>')
+					.replace(//, '')),
+			赞 : get_label(html.between('<span class="tip-txt">', '</span>')
+					.replace(/赞:/, ''))
 		};
 		extract_work_data(work_data, html);
 		return work_data;
