@@ -8,7 +8,13 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var crawler = new CeL.work_crawler({
+// <a class="" href="/web/comic/0000/" title="~">
+// <a class="btn_lock" href="/web/comic/0000/" title="~">
+// 2018/10/20-11/8 改版
+// <a class="" href="/web/comic/101893/" title="~" data-vip="0">
+var PATTERN_chapter_item = /<a class="(?:[^<>"]*)" href="([^<>"]+)" title="([^<>"]+)"[^<>]*>/,
+//
+crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 	// one_by_one : true,
@@ -56,12 +62,7 @@ var crawler = new CeL.work_crawler({
 		html = html.between('<div class="article-list">', '</div>');
 
 		html.each_between('<tr>', '</tr>', function(token) {
-			var matched = token.match(
-			// <a class="" href="/web/comic/0000/" title="~">
-			// <a class="btn_lock" href="/web/comic/0000/" title="~">
-			/<a class="(?:[^<>"]*)" href="([^<>"]+)" title="([^<>"]+)">/),
-			//
-			data = {
+			var matched = token.match(PATTERN_chapter_item), data = {
 				url : matched[1],
 				title : matched[2],
 				like : get_label(token.between(' class="like">', '</td>'))
