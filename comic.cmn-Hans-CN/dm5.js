@@ -26,7 +26,7 @@ var crawler = new CeL.work_crawler({
 	// 提取出引數（如 URL）中的作品ID 以回傳。
 	extract_work_id : function(work_information) {
 		// /^manhua-[a-z]+$/;
-		return /^[a-z\-]+$/.test(work_information) && work_information;
+		return /^[a-z\-\d]+$/.test(work_information) && work_information;
 	},
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -233,7 +233,7 @@ var crawler = new CeL.work_crawler({
 				+ this.get_chapter_directory_name(work_data, chapter_NO) + '] '
 				+ DM5.IMAGE_COUNT + ' images.');
 
-		function image_file_path_of(image_index) {
+		function image_file_path_of(image_NO) {
 			// @see get_data() @ CeL.application.net.work_crawler
 			var chapter_label = _this.get_chapter_directory_name(work_data,
 					chapter_NO);
@@ -245,7 +245,7 @@ var crawler = new CeL.work_crawler({
 			// 這段程式碼模仿 work_crawler 模組的行為。
 			// @see image_data.file @ CeL.application.net.work_crawler
 			return chapter_directory + work_data.id + '-' + chapter_NO + '_'
-					+ image_index.pad(3) + '.' + _this.default_image_extension;
+					+ image_NO.pad(3) + '.' + _this.default_image_extension;
 		}
 
 		// --------------------------------------
@@ -255,23 +255,23 @@ var crawler = new CeL.work_crawler({
 		// 由於圖片不能並行下載，下載速度較慢。
 		// 但是可以多開幾支程式，每一支下載一個作品。
 
-		CeL.run_serial(function(run_next, image_index) {
-			if (CeL.read_file(image_file_path_of(image_index))) {
+		CeL.run_serial(function(run_next, image_NO) {
+			if (CeL.read_file(image_file_path_of(image_NO))) {
 				run_next();
 				return;
 			}
-			process.stdout.write('圖 ' + (image_index + 1) + '/'
-					+ DM5.IMAGE_COUNT + '...\r');
+			process.stdout.write('圖 ' + image_NO + '/' + DM5.IMAGE_COUNT
+					+ '...\r');
 
-			get_token(image_index, run_next);
+			get_token(image_NO, run_next);
 			return;
 
 			// Skip codes below: 可以不用取得 history.ashx。
-			history_parameters.page = image_index;
+			history_parameters.page = image_NO;
 			CeL.get_URL(_this.full_URL(_this.chapter_URL(work_data, chapter_NO)
 					+ 'history.ashx'), function(XMLHttp) {
 
-				get_token(image_index, run_next);
+				get_token(image_NO, run_next);
 
 			}, null, history_parameters, Object.assign({
 				error_retry : _this.MAX_ERROR_RETRY,
@@ -292,8 +292,8 @@ var crawler = new CeL.work_crawler({
 		// --------------------------------------
 
 		// 從 dm5 網站獲得 token 通行碼
-		function get_token(image_index, run_next) {
-			parameters.page = image_index;
+		function get_token(image_NO, run_next) {
+			parameters.page = image_NO;
 			// CeL.set_debug(6);
 			// console.log(CeL.get_URL.parameters_to_String(parameters));
 			CeL.get_URL(_this.full_URL(_this.chapter_URL(work_data, chapter_NO)
@@ -302,7 +302,7 @@ var crawler = new CeL.work_crawler({
 				// console.log(html);
 				if (html === '错误的请求') {
 					var warning = work_data.title + ' #' + chapter_NO + '-'
-							+ image_index + ': ' + html;
+							+ image_NO + ': ' + html;
 					_this.onerror(warning, work_data);
 					CeL.warn(warning);
 					run_next();
@@ -313,7 +313,7 @@ var crawler = new CeL.work_crawler({
 					html = eval(html.replace(/^eval/, ''));
 				} catch (e) {
 					var message = work_data.title + ' #' + chapter_NO + '-'
-							+ image_index + ': 無法從 dm5 網站獲得 token: ' + e;
+							+ image_NO + ': 無法從 dm5 網站獲得 token: ' + e;
 					CeL.error(message);
 					_this.onwarning(message, work_data);
 					console.trace(e);
@@ -325,23 +325,23 @@ var crawler = new CeL.work_crawler({
 				var image_list = eval(html);
 				if (false) {
 					console.log(work_data.title + ' #' + chapter_NO + '-'
-							+ image_index + ':');
+							+ image_NO + ':');
 					console.log(image_list);
 				}
 				// image_list = [ 本圖url, 下一張圖url ]
 				image_list.forEach(function(url, index) {
 					var previous_url
 					//
-					= this_image_list[index += image_index - 1];
+					= this_image_list[index += image_NO - 1];
 					if (previous_url && previous_url !== url) {
 						var warning = work_data.title + ' #' + chapter_NO + '-'
-								+ image_index + ': url:\n	  ' + previous_url
+								+ image_NO + ': url:\n	  ' + previous_url
 								+ '	→' + url;
 						_this.onerror(warning, work_data);
 					}
 					this_image_list[index] = url;
 				});
-				get_image_file(image_index, image_list, run_next);
+				get_image_file(image_NO, image_list, run_next);
 
 			}, null, parameters, Object.assign({
 				error_retry : _this.MAX_ERROR_RETRY
@@ -350,11 +350,11 @@ var crawler = new CeL.work_crawler({
 
 		// --------------------------------------
 
-		function get_image_file(image_index, image_list, run_next) {
+		function get_image_file(image_NO, image_list, run_next) {
 			CeL.get_URL_cache(encodeURI(image_list[0]), function() {
 				run_next();
 			}, {
-				file_name : image_file_path_of(image_index),
+				file_name : image_file_path_of(image_NO),
 				no_write_info : true,
 				encoding : undefined,
 				charset : _this.charset,
