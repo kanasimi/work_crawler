@@ -98,27 +98,39 @@ var crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'contents/detail/' + work_id + '/';
 	},
+	// ComicWalker 2018/10/16? 更新
 	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
-			title : get_label(html.between('<h1 class="bookTitle">', '</h1>')),
+			title : get_label(html.between('<h1>', '</h1>')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			author : html.between('<li class="bookAuther">', '</li>').split(
-					/<\/a>\s*\/?/).filter(function(author) {
-				return !!author;
-			}).map(get_label).map(function(author) {
-				return author.replace(/\([^()]+\)$/, '');
-			}),
-			authors : html.between('<ul id="bookInfoBox">', '</ul>').split(
-					/<\/a>\s*\/?/).map(get_label),
-			last_chapter : get_label(html.between(
-					'<li class="detail_storyNum">', '</li>')),
+
+			// <div class="acItem-copy">
+			// <a href="/contents/author/2442/">濃口kiki(漫画)</a><a
+			// href="/contents/author/2566/">犬魔人(原作)</a><a
+			// href="/contents/author/2567/">こちも(キャラクター原案)</a> <div
+			// class="acItem-copy-inner"><span>©Koikuchi Kiki ©Inumajin
+			// ©Kochimo</span></div>
+			authors : html.between('<div class="acItem-copy">', '</div>')
+					.split(/<\/a>\s*\/?/).filter(function(author) {
+						return !!author;
+					}).map(get_label).map(function(author) {
+						return author.replace(/\([^()]+\)$/, '');
+					}),
 			last_update : get_label(html.between(
-					'<li class="detail_releaseDay">', '</li>')),
+					'<span class="comicIndex-date">', '</span>').replace('更新',
+					'')),
+			last_chapter : get_label(html.between(
+					'<p class="comicIndex-title">', '</p>')),
 			next_update : get_label(html.between(
-					'<li class="detail_nextUpdate">', '</li>'))
+			// 【次回更新予定】2018/11/16
+			'<span class="comicIndex-nextTime">', '</span>').replace(
+					'【次回更新予定】', ''))
 		};
+		// e.g., "濃口kiki,犬魔人,こちも,©Koikuchi Kiki ©Inumajin ©Kochimo"
+		// → "濃口kiki,犬魔人,こちも"
+		work_data.author = work_data.authors.slice(0, -1);
 
 		extract_work_data(work_data, html);
 
@@ -129,18 +141,23 @@ var crawler = new CeL.work_crawler({
 	},
 	get_chapter_list : function(work_data, html, get_label) {
 		// バックナンバー
-		html = html.between('<ul class="detail_backnumberList">', '</ul>');
+		// <ul class="acBacknumber-list first-preview clearfix" id="reversible">
+		html = html.between('<ul class="acBacknumber-list', '<section>');
 		work_data.chapter_list = [];
-		html.each_between('<li class="readableLinkColor">', '</li>', function(
-				text) {
+		html.each_between('<li', '</li>', function(text) {
 			var matched = text.match(/<a title="([^<>"]+)" href="([^<>"]+)"/);
 			work_data.chapter_list.push({
-				title : get_label(matched[1]),
+				// matched[1].replace(work_data.title, '')
+				title : get_label(text.between(
+						'<span class="acBacknumber-title">', '</span>')
+						+ ' '
+						+ text.between('<h3 class="acBacknumber-subtitle">',
+								'</h3>')),
 				cid : matched[2].match(/cid=([a-zA-Z\d_]+)/)[1],
 				url : matched[2]
 			});
 		});
-		work_data.chapter_list.reverse();
+		// work_data.chapter_list.reverse();
 
 		// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
 		this.set_chapter_NO_via_title(work_data);
