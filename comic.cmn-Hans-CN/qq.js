@@ -21,6 +21,12 @@ var crawler = new CeL.work_crawler({
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	// skip_error : true,
 
+	// {Natural}MIN_LENGTH:最小容許圖案檔案大小 (bytes)。
+	MIN_LENGTH : 900,
+
+	// 2018/11/15: qq 不允許過於頻繁的 access，會給錯誤的資料。
+	// chapter_time_interval : '2s',
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
 		// TODO: "阿衰 on line":544410
@@ -192,9 +198,7 @@ var crawler = new CeL.work_crawler({
 					return a = _utf8_decode(a)
 				}
 				function _utf8_decode(c) {
-					for (var a = "", b = 0, d = 0,
-					//
-					c1 = 0, c2 = 0; b < c.length;) {
+					for (var a = "", b = 0, d = 0, c2, c3; b < c.length;) {
 						d = c.charCodeAt(b);
 						if (128 > d) {
 							a += String.fromCharCode(d);
@@ -217,6 +221,7 @@ var crawler = new CeL.work_crawler({
 			var B = new Base(), len, locate, str;
 			T = T.split('');
 			N = N.match(/\d+[a-zA-Z]+/g);
+			// console.log(N);
 			len = N.length;
 			while (len--) {
 				locate = parseInt(N[len]) & 255;
@@ -224,15 +229,41 @@ var crawler = new CeL.work_crawler({
 				T.splice(locate, str.length)
 			}
 			T = T.join('');
+			// console.log(T);
+			// console.log(B.decode(T));
 			return JSON.parse(B.decode(T));
 		}
 
 		var chapter_data = html.match(/\sDATA\s*=\s*'([^']{9,})'/),
 		//
-		chapter_nonce = html.match(/window\.nonce\s*=\s*'([^']{9,})'/);
+		chapter_nonce, matched, PATTERN_nonce =
+		// 2018/11/7: "window.nonce = '...'"
+		//
+		// 2018/11/15: 第一個指定可能是障眼法 fake
+		// "window.nonce = '' + '...';"
+		// window["non"+"ce"] = "..."+"...";
+		/window\s*(?:\.\s*nonce|\[([nonce"'\s+]+)\])\s*=([^;\n]{9,})/g;
+
+		// node qq 热血学霸
+		while (matched = PATTERN_nonce.exec(html)) {
+			// delete matched.input;
+			// console.log(matched);
+			if (!matched[1] || matched[1].replace(/['"\s+]/g, '') === 'nonce')
+				chapter_nonce = matched[2];
+		}
+
+		// for debug
+		if (false) {
+			if (chapter_nonce.replace(/['"\s+]/g, ''))
+				console.log(chapter_nonce);
+			else
+				console.log(html);
+		}
+
+		// assert: nonce.length === 32
 		if (!chapter_data
-				|| !(chapter_data = decode(chapter_data[1], chapter_nonce[1]))
-				|| !chapter_data.picture) {
+				|| !(chapter_data = decode(chapter_data[1], chapter_nonce
+						.replace(/['"\s+]/g, ''))) || !chapter_data.picture) {
 			return;
 		}
 		// console.log(chapter_data);
