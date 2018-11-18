@@ -68,9 +68,16 @@ var crawler = new CeL.work_crawler({
 		.between('<ul', '</ul>');
 
 		work_data.chapter_list = [];
+		var some_skipped;
 		html.each_between('<li', '</li>', function(token) {
-			var matched = token
-					.match(/<a [^<>]*?href=["']([^"'<>]+)["'][^<>]*>/);
+			var matched = token.between('<p class="yudo_wa">', '</div>');
+			if (matched) {
+				CeL.info(work_data.title + ': '
+						+ get_label(matched).replace(/\s{2,}/g, ' '));
+				some_skipped = true;
+				return;
+			}
+			matched = token.match(/<a [^<>]*?href=["']([^"'<>]+)["'][^<>]*>/);
 			var chapter_data = {
 				title : get_label(token
 				//
@@ -81,13 +88,19 @@ var crawler = new CeL.work_crawler({
 			work_data.chapter_list.push(chapter_data);
 		});
 		work_data.chapter_list.reverse();
+
+		if (some_skipped) {
+			// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
+			this.set_chapter_NO_via_title(work_data);
+		}
 	},
 
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		// console.log(html);
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
 		Object.assign(chapter_data, {
 			// 設定必要的屬性。
-			image_list : JSON.parse(html),
+			image_list : JSON.parse(html)
 		});
 
 		return chapter_data;
