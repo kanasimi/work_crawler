@@ -101,9 +101,9 @@ download_options_set = {
 	archive_images : '漫畫下載完畢後壓縮圖像檔案。',
 
 	// 容許錯誤用的相關操作設定。
-	MAX_ERROR_RETRY : '出錯時重新嘗試的次數。若值太小，傳輸到一半壞掉的圖片可能被當作正常圖片而不會出現錯誤。',
+	MAX_ERROR_RETRY : '出錯時重新嘗試的次數。',
 	allow_EOI_error : '當圖像不存在 EOI (end of image) 標記，或是被偵測出非圖像時，依舊強制儲存檔案。',
-	MIN_LENGTH : '最小容許圖案檔案大小 (bytes)。',
+	MIN_LENGTH : '最小容許圖案檔案大小 (bytes)。若值太小，傳輸到一半壞掉的圖片可能被當作正常圖片而不會出現錯誤。',
 	skip_error : '忽略/跳過圖像錯誤。',
 	skip_chapter_data_error : '當無法取得 chapter 資料時，直接嘗試下一章節。',
 
@@ -391,8 +391,11 @@ function save_default_configuration() {
 			default_configuration);
 }
 
+// 保存下載偏好選項
 // @private
 function save_preference(crawler) {
+	// prepare work directory.
+	CeL.create_directory(crawler.main_directory);
 	CeL.write_file(crawler.main_directory + 'preference.json',
 			crawler.preference);
 }
