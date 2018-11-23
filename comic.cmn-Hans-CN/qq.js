@@ -24,9 +24,6 @@ var crawler = new CeL.work_crawler({
 	// {Natural}MIN_LENGTH:最小容許圖案檔案大小 (bytes)。
 	MIN_LENGTH : 900,
 
-	// 2018/11/15: qq 不允許過於頻繁的 access，會給錯誤的資料。
-	// chapter_time_interval : '2s',
-
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
 		// TODO: "阿衰 on line":544410
@@ -241,8 +238,8 @@ var crawler = new CeL.work_crawler({
 		//
 		// 2018/11/15: 第一個指定可能是障眼法 fake
 		// "window.nonce = '' + '...';"
-		// window["non"+"ce"] = "..."+"...";
-		/window\s*(?:\.\s*nonce|\[([nonce"'\s+]+)\])\s*=([^;\n]{9,})/g;
+		// window["non"+"ce"]="..."+(+eval("...")).toString()+(+eval("Math.round(.5)+~~1.5")).toString();
+		/window\s*(?:\.\s*nonce|\[([nonce"'\s+]+)\])\s*=(.{9,})/g;
 
 		// node qq 热血学霸
 		while (matched = PATTERN_nonce.exec(html)) {
@@ -251,10 +248,11 @@ var crawler = new CeL.work_crawler({
 			if (!matched[1] || matched[1].replace(/['"\s+]/g, '') === 'nonce')
 				chapter_nonce = matched[2];
 		}
+		chapter_nonce = eval(chapter_nonce);
 
 		// for debug
 		if (false) {
-			if (chapter_nonce.replace(/['"\s+]/g, ''))
+			if (chapter_nonce)
 				console.log(chapter_nonce);
 			else
 				console.log(html);
@@ -262,8 +260,8 @@ var crawler = new CeL.work_crawler({
 
 		// assert: nonce.length === 32
 		if (!chapter_data
-				|| !(chapter_data = decode(chapter_data[1], chapter_nonce
-						.replace(/['"\s+]/g, ''))) || !chapter_data.picture) {
+				|| !(chapter_data = decode(chapter_data[1], chapter_nonce))
+				|| !chapter_data.picture) {
 			return;
 		}
 		// console.log(chapter_data);
