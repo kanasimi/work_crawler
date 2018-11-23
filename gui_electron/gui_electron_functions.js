@@ -53,6 +53,8 @@ download_sites_set = {
 	},
 	'comic.ja-JP' : {
 		ComicWalker : 'ComicWalker',
+		youngaceup : 'ヤングエースUP',
+
 		pixivcomic : 'pixivコミック',
 		OVERLAP : 'OVERLAP',
 
@@ -387,6 +389,8 @@ function open_external(URL) {
 }
 
 function save_default_configuration() {
+	// prepare work directory.
+	CeL.create_directory(global.data_directory);
 	CeL.write_file(global.data_directory + default_configuration_file_name,
 			default_configuration);
 }
