@@ -1,5 +1,7 @@
 ﻿/**
- * 批量下載 9妹漫画网 的工具。 Download 9mdm comics.
+ * 批量下載 大古漫画网 的工具。 Download dagu comics.
+ * 
+ * 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。
  */
 
 'use strict';
@@ -8,11 +10,15 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
+// for Error: unable to verify the first certificate
+// code: 'UNABLE_TO_VERIFY_LEAF_SIGNATURE'
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 var crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// one_by_one : true,
-	base_URL : 'http://www.9mdm.com/',
+	base_URL : 'https://www.dagumanhua.com/',
 	// fs.readdirSync('.').forEach(function(d){if(/^\d+\s/.test(d))fs.renameSync(d,'manhua-'+d);})
 	// fs.readdirSync('.').forEach(function(d){if(/^manhua-/.test(d))fs.renameSync(d,d.replace(/^manhua-/,''));})
 	// 所有作品都使用這種作品類別前綴。
@@ -100,7 +106,7 @@ var crawler = new CeL.work_crawler({
 	},
 
 	pre_parse_chapter_data
-	// 執行在解析章節資料process_chapter_data()之前的作業(async)。
+	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。必須自行保證不丟出異常。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
 		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
