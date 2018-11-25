@@ -16,7 +16,7 @@ crawler = new CeL.work_crawler({
 	// 循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。 Download images one by one.
 	// 若設成{Natural}大於零的數字(ms)或{String}時間長度，那會當成下載每張圖片之時間間隔。
 	//
-	// 2018/9/25: Rocaca 不允許過於頻繁的 access，會給出偽裝的錯誤 imgsrcs。
+	// 2018/9/25: Rocaca 不允許過於頻繁的 access，Cloudflare 會給出 403 錯誤。
 	// 3s: 下載20張圖就會出403
 	// Server: cloudflare
 	one_by_one : '4s',

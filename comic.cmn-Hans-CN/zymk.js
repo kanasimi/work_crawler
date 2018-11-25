@@ -18,7 +18,7 @@ var crawler = new CeL.work_crawler({
 	base_URL : 'https://www.zymk.cn/',
 
 	// 取得伺服器列表。
-	use_server_cache : true,
+	// use_server_cache : true,
 	server_URL : 'https://server.zymkcdn.com/mhpic.asp'
 			+ '?callback=__cr.setLine&_=' + Date.now(),
 	parse_server_list : function(html) {
@@ -86,6 +86,7 @@ var crawler = new CeL.work_crawler({
 		work_data.chapter_list.reverse();
 	},
 
+	// 取得每一個章節的內容與各個影像資料。
 	chapter_URL : function(work_data, chapter_NO) {
 		return this.work_URL(work_data.id)
 				+ work_data.chapter_list[chapter_NO - 1].url;
@@ -122,7 +123,9 @@ var crawler = new CeL.work_crawler({
 		// @see e.prototype.getPicUrl
 		index <= chapter_data.end_var; index++) {
 			chapter_data.image_list.push({
-				url : chapter_data.imgpath + index + postfix
+				url : chapter_data.imgpath + index + postfix,
+				// 有些圖檔其實是png格式。
+				acceptable_types : [ 'png' ]
 			});
 		}
 		// console.log(JSON.stringify(chapter_data));

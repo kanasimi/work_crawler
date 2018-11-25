@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載 XOY 漫畫 的工具。 Download XOY comics. (comic.ja-JP)
+ * 批量下載 XOY（ジョイ） 漫畫 的工具。 Download XOY comics. (comic.ja-JP)
  */
 
 'use strict';

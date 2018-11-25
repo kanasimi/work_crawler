@@ -9,4 +9,5 @@ FORFILES /M *.js /C "cmd.exe /c IF @isdir==FALSE START node @file l=list.txt || 
 
 chcp 950
 node ck101.js l=ck101.txt
+node kanunu.js l=kanunu.txt
 REM CD ..

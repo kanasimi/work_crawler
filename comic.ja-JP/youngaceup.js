@@ -83,6 +83,7 @@ var crawler = new CeL.work_crawler({
 				//
 				.between('<p class="text-bold">', '</p>')),
 				date : token.between('<span class="updated-date">', '</span>'),
+				// 直接取得圖片網址資訊。
 				url : matched[1] + 'json/'
 			};
 			work_data.chapter_list.push(chapter_data);

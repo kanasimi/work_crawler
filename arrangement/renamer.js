@@ -69,7 +69,7 @@ cache_data = CeL.get_JSON(cache_file),
 // file / folder name
 PATTERN_latin_fso_name = /^([\u0020-\u007F]+?)(\.[a-zA-Z]{2,9})?$/,
 // [[en:Numerals_in_Unicode#Roman_numerals]]
-PATTERN_full_latin_or_sign = /^[\u0020-\u00FF’★☆♥♡Ⅰ-ↈ①-⑳⑴-⑽㈠-㈩]+$/;
+PATTERN_full_latin_or_sign = /^[\u0020-\u00FF’★☆♥♡Ⅰ-ↈ①-⑳⑴-⑽㈠-㈩／]+$/;
 
 if (target_directory) {
 	if (!/[\\\/]$/.test(target_directory)) {
@@ -243,7 +243,6 @@ function parse_file_list(html, is_cache, got_torrent) {
 				parse_file_list.call(_this, html, is_cache, true);
 			}, {
 				reget : reget,
-				charset : 'binary',
 				get_URL_options : get_URL_options,
 				directory : base_directory + torrent_directory
 			});

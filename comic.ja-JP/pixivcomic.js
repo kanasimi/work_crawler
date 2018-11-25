@@ -127,12 +127,13 @@ var crawler = new CeL.work_crawler({
 	},
 
 	pre_parse_chapter_data
-	// 執行在解析章節資料process_chapter_data()之前的作業(async)。
+	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。必須自行保證不丟出異常。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
 		var _this = this, html = XMLHttp.responseText, url = html.between(
 				'<meta name="viewer-api-url" content="', '"');
 		work_data.token_options = {
 			headers : {
+				// work_data['csrf-token']
 				'X-CSRF-Token' : html.between(
 						'<meta name="csrf-token" content="', '"'),
 				// @see jQuery
@@ -186,6 +187,11 @@ var crawler = new CeL.work_crawler({
 		});
 
 		return chapter_data;
+	},
+
+	finish_up : function(work_data) {
+		// 不記錄 token。
+		delete work_data['csrf-token'];
 	}
 });
 

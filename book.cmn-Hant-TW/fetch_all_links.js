@@ -1,5 +1,5 @@
 ﻿/**
- * @fileoverview 下載網頁中所有連結的工具，例如電子書。
+ * @fileoverview 下載網頁中所有連結檔案，例如下載網頁中電子書的工具。
  * 
  * @since 2018/11/12 18:7:47 初版
  */
@@ -15,16 +15,29 @@ require('../work_crawler_loder.js');
 
 // CeL.run();
 
-// ----------------------------------------------------------------------------
+// CeL.character.load('big5');
+// CeL.character.load('gb2312');
 
 CeL.get_URL.default_user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 		+ Math.random();
 
+// ----------------------------------------------------------------------------
+
 var fetch = CeL.fetch, node_url = require('url'),
-//
+// web_page_URL
 base_URL = process.argv[2],
 /** {String}下載完成檔案所放置的目錄。 e.g., "node fetch_all_links.js C target_directory" */
-target_directory = process.argv[3];
+target_directory = process.argv[3],
+// e.g., azw3
+PATTERN_ebook_link = /\.(epub|mobi|azw\d?|fb2|txt|pdf|DjVu|docx?|xps|chm|htmlz|cbz|cbr)(?:$|[?#])/i;
+
+if (!base_URL || !target_directory) {
+	var main_script = process.mainModule
+			&& process.mainModule.filename.match(/[^\\\/]+$/)[0];
+	CeL.log('Download links in web page. 下載網頁中所有連結檔案，例如下載網頁中電子書的工具。\n\n'
+			+ 'Usage:\n	node ' + main_script + ' "URL" "target directory"');
+	process.exit();
+}
 
 target_directory = CeL.append_path_separator(target_directory);
 
@@ -71,9 +84,8 @@ function full_URL_of_path(url) {
 
 var url_list = [], downloaded_count = 0;
 
-var worker = fetch(base_URL).then(function(response) {
-	return response.text();
-}).then(function(html) {
+CeL.get_URL_cache(base_URL, function(html, error, XMLHttp) {
+	html = html.toString();
 	var PATTERN = /<a [^<>]*href=["']([^"']+)["'][^<>]*>/g, matched;
 	while (matched = PATTERN.exec(html)) {
 		var url = full_URL_of_path(matched[1]);
@@ -81,6 +93,17 @@ var worker = fetch(base_URL).then(function(response) {
 	}
 	CeL.info('Downloading ' + url_list.length + ' urls...');
 	download_next();
+}, {
+	directory : target_directory,
+	// reget : true,
+	get_URL_options : {
+		ondatastart : function(response) {
+			if (false)
+				response.pipe(require('fs').createWriteStream(
+						target_directory + 'data.html.zip'));
+		}
+	}
+
 });
 
 function download_next() {
@@ -90,30 +113,36 @@ function download_next() {
 			CeL.info('All ' + downloaded_count + ' files downloaded.');
 			return;
 		}
+
 		if (url = url_list.shift()) {
 
-			var file_name = decodeURI(url).match(/[^\/]+$/);
+			// unescape(): for %23
+			var file_name = unescape(decodeURI(url)).match(/[^\/]+$/);
 			if (!file_name || !(file_name = file_name[0].match(/\?f=(.+)/))) {
 				download_next();
-				if (/\.(?:epub|mobi|azw\d?|fb2|djvu|pdf|docx|htmlz|chm|txt)/i
-						.test(url))
+				if (PATTERN_ebook_link.test(url))
 					throw 'epub? ' + url;
 				return;
 			}
 			file_name = file_name[1];
+			if ((file_name in {})||file_name.includes('吞噬星空')||/^.{1,2}\.html?$/i.test(file_name)) {
+				download_next();
+				return;
+			}
 
 			// CeL.info('Downloading ' + url);
 			CeL.get_URL_cache(url, function(data, error, XMLHttp) {
 				// XMLHttp && console.log(XMLHttp.headers);
-				if (data.toString().length < 1000) {
-					if (data.toString().includes('文件未找到')) {
+				data = data && data.toString() || '';
+				if (data.length < 1000) {
+					console.log(file_name + ': ' + (data || 'no response'));
+					// 刪除有問題的檔案。
+					CeL.remove_file(target_directory + file_name);
+
+					if (data.includes('文件未找到')) {
 						download_next();
 					} else {
 						// XMLHttp.status === 200
-
-						console.log(file_name + ': ' + data.toString());
-						// 刪除有問題的檔案。
-						CeL.remove_file(target_directory + file_name);
 						setTimeout(download_next, 60 * 1000);
 					}
 				} else {
@@ -122,7 +151,10 @@ function download_next() {
 				}
 			}, {
 				directory : target_directory,
-				file_name : file_name
+				file_name : file_name,
+				get_URL_options : {
+					timeout : 3 * 60 * 1000
+				}
 			});
 			return;
 		}

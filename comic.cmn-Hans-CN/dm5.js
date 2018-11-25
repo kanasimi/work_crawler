@@ -25,7 +25,9 @@ var crawler = new CeL.work_crawler({
 	preserve_chapter_page : false,
 	// 提取出引數（如 URL）中的作品ID 以回傳。
 	extract_work_id : function(work_information) {
-		// /^manhua-[a-z]+$/;
+		// /^manhua-[a-z\-\d]+$/;
+		// e.g., http://www.dm5.com/manhua-1122/
+		// http://www.dm5.com/manhua--c-94-okazu/
 		return /^[a-z\-\d]+$/.test(work_information) && work_information;
 	},
 

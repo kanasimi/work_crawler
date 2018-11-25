@@ -23,7 +23,8 @@ var crawler = new CeL.work_crawler({
 	skip_error : true,
 
 	// one_by_one : true,
-	base_URL : 'http://www.omanhua.com/',
+	// 2018/8/1: http://www.omanhua.com/ → http://www.omanhua.net/
+	base_URL : 'http://www.omanhua.net/',
 
 	// 解析 作品名稱 → 作品id get_work()
 	baidu_cse : '14332530747137244191',

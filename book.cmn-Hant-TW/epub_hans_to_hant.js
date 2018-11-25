@@ -18,7 +18,7 @@ CeL.run([ 'application.storage.archive', 'application.storage.EPUB',
 function initialization() {
 	var epub_file_path = process.argv[2];
 	if (!epub_file_path) {
-		var main_script = process.mainModule.filename.match(/[^\\\/]+$/)[0];
+		var main_script = process.mainModule && process.mainModule.filename.match(/[^\\\/]+$/)[0];
 		CeL.log('Convert epub: hans to hant. 將 epub 簡體中文電子書轉換為繁體中文的工具。\n\n'
 				+ 'Usage:\n	node ' + main_script + ' "epub.epub"');
 		return;

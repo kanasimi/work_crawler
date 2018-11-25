@@ -1,7 +1,7 @@
 ﻿/**
  * 批量下載 漫画DB 的工具。 Download manhuadb comics.
  * 
- * modify from 9mdm.js
+ * modify from 9mdm.js→dagu.js
  */
 
 'use strict';
@@ -26,6 +26,7 @@ var crawler = new CeL.work_crawler({
 
 	// 單行本圖片較多且大，因此採用一個圖一個圖取得的方式。
 	one_by_one : true,
+	// 下載圖片的逾時ms數。若逾時時間太小（如10秒），下載大檔案容易失敗。
 	timeout : 90 * 1000,
 	base_URL : 'http://www.manhuadb.com/',
 
@@ -93,7 +94,7 @@ var crawler = new CeL.work_crawler({
 	},
 
 	pre_parse_chapter_data
-	// 執行在解析章節資料process_chapter_data()之前的作業(async)。
+	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。必須自行保證不丟出異常。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
 		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
@@ -125,6 +126,13 @@ var crawler = new CeL.work_crawler({
 				CeL.debug(work_data.title + ' #' + chapter_NO + ' '
 						+ chapter_data.title + ': Already got ' + image_count
 						+ ' images.');
+				chapter_data.image_list = chapter_data.image_list.map(function(
+						image_data) {
+					// 僅保留網址資訊。
+					return {
+						url : image_data.url
+					};
+				});
 				callback();
 				return;
 			}

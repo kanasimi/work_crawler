@@ -48,6 +48,7 @@ var crawler = new CeL.work_crawler({
 
 		extract_work_data(work_data, html);
 
+		// 放在這裡以預防被extract_work_data()覆蓋。
 		Object.assign(work_data, {
 			description : get_label(html.between('<div id="main_text">',
 					'<div id="main_release">').between('<p>', '</p>'))

@@ -136,13 +136,13 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter) {
+	chapter_URL : function(work_data, chapter_NO) {
 		return this.chapter_list_URL(work_data.id)
-				+ work_data.chapter_list[chapter - 1].url;
+				+ work_data.chapter_list[chapter_NO - 1].url;
 	},
 	// 檢測所取得內容的章節編號是否相符。
 	check_chapter_NO : [ '<div style="text-align:right;font-size:80%">', '/' ],
-	parse_chapter_data : function(html, work_data, get_label, chapter) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 儲存單一檔案之全篇文字。
 		if (!this.got_all) {
 			this.got_all = CeL.null_Object();
@@ -183,9 +183,9 @@ var crawler = new CeL.work_crawler({
 				/[\s\n]+<span style="font-size:120%">(?:.+?)<\/span><BR><BR>/g,
 				'');
 
-		var chapter_data = work_data.chapter_list[chapter - 1];
+		var chapter_data = work_data.chapter_list[chapter_NO - 1];
 
-		this.add_ebook_chapter(work_data, chapter, {
+		this.add_ebook_chapter(work_data, chapter_NO, {
 			title : chapter_data.part_title,
 			sub_title : chapter_data.title,
 			text : text

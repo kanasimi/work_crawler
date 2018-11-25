@@ -17,7 +17,7 @@ var log_file = CeL.env.script_name + '.log.txt';
 
 CeL.run(
 // for
-'application.OS.Windows.archive');
+);
 
 // ----------------------------------------------------------------------------
 
@@ -123,6 +123,7 @@ catalog_directory = {
 	game : [ '_game,ゲーム,同人', 'g' ],
 	game_sub : {
 		doujin : '!DOUJIN,同人',
+		doujinshi : '!同人誌',
 		cosplay : '!cosplay,コスプレ',
 		game_CG : '!CG,画集',
 		game_music : '!music',
@@ -130,7 +131,7 @@ catalog_directory = {
 	},
 	tool : [ 'Tools', 't' ],
 
-	_maybe_doujin : null,
+	_maybe_doujinshi : null,
 	_maybe_comic_novel : null,
 	_maybe_translated_adult_comic : null,
 	_maybe_anime : null,
@@ -264,11 +265,11 @@ function check_fso(fso_name) {
 			non_zero_size_count++;
 		}
 		// TODO: .bmp
-		if (/\.(?:jpg|jpeg|png|gif|ico|icon)$/i.test(sub_fso_name)) {
+		if (/\.(?:jpg|jpeg|webp|png|gif|ico|icon)$/i.test(sub_fso_name)) {
 			image_count++;
 		} else if (PATTERN_executable_file.test(sub_fso_name)) {
 			exe_count++;
-		} else if (/\.(?:cue|iso|mdf|mds|bin)$/i.test(sub_fso_name)) {
+		} else if (/\.(?:cue|iso|mdf|mds|bin|ccd|sub)$/i.test(sub_fso_name)) {
 			iso_count++;
 		} else if (/\.(?:cue|mp3|flac|ape|wav)$/i.test(sub_fso_name)) {
 			music_count++;
@@ -344,8 +345,8 @@ function check_fso(fso_name) {
 	// 降序序列排序: 大→小
 	// non_zero_size_array.sort(CeL.descending);
 
-	if (exe_count > 0
-			&& test_size_OK(1e9, 'game folder', '含有 ' + exe_count + '/'
+	if ((exe_count > 0 || iso_count > 1 && sub_sub_files_count < 20 || iso_count === sub_sub_files_count)
+			&& test_size_OK(1e10, 'game folder', '含有 ' + exe_count + '/'
 					+ sub_sub_files_count + ' 個可執行檔')) {
 		return;
 	}
@@ -355,7 +356,7 @@ function check_fso(fso_name) {
 	: image_count > 2 && image_count > sub_sub_files_count - 2)) {
 		fso_status.maybe_image = true;
 		// 壓縮大多只有圖片的目錄。
-		if (test_size_OK(1e7, 'image folder', '含有 ' + image_count + '/'
+		if (test_size_OK(5e7, 'image folder', '含有 ' + image_count + '/'
 				+ sub_sub_files_count + ' 個圖片')) {
 			return;
 		}
@@ -469,7 +470,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 			|| fso_name.includes('同人誌')
 			// "(サンクリ2015 Winter) "
 			|| /^\((?:同人|COMIC1☆|こみトレ|例大祭|紅楼夢|ふたけっと|サンクリ)/.test(fso_name)) {
-		move_to('doujin');
+		move_to('doujinshi');
 		return;
 	}
 
@@ -487,14 +488,14 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 
 	// ------------------------------------------
 
-	if (/\.(zip|rar)$/.test(fso_name)
+	if (/\.(zip|rar|7z)$/.test(fso_name)
 			&& /第\d{1,2}(?:-\d{1,2})?巻/.test(fso_name)) {
 		move_to('_maybe_comic_novel');
 		return;
 	}
 
 	matched = fso_name
-			.match(/\(([^()\[\]]+)\)(?: *[\[【](?:DL版|Digital|見本|ページ欠落)[\]】])*(?: *\(\d\))?\.(zip|rar|cbz)$/);
+			.match(/\(([^()\[\]]+)\)(?: *[\[【](?:DL版|Digital|見本|ページ欠落)[\]】])*(?: *\(\d\))?\.(zip|rar|7z|cbz)$/);
 	if (matched) {
 		if (/^x\d{3,4}$/.test(matched[1])
 		// COMIC 阿吽, コミックマグナム
@@ -513,8 +514,8 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		/^(?:[\d\- ]*|Ongoing|Eng?|English(?:-Uncen)?|korean|kor|Jap|Japanese|RUS|英訳|中国語|更正|GIFs?|CG|mp3|FLAC|APE)$/i
 				.test(matched[1])) {
 			// [Pixiv] 60枚 (3322006).zip
-		} else {
-			move_to('_maybe_doujin');
+		} else if (matched[1] !== '仮') {
+			move_to('_maybe_doujinshi');
 			return;
 		}
 	}
@@ -685,4 +686,5 @@ function compress_each_directory(config, index) {
 // -----------------------------------------------------------------
 // finish up
 
+process.title = CeL.env.script_name + ': done';
 // CeL.log('Done.');

@@ -231,7 +231,7 @@ var crawler = new CeL.work_crawler({
 			return JSON.parse(B.decode(T));
 		}
 
-		var chapter_data = html.match(/\sDATA\s*=\s*'([^']{9,})'/),
+		var chapter_data = html.match(/\sDATA\s*=\s*'([^']{32,})'/),
 		//
 		chapter_nonce, matched, PATTERN_nonce =
 		// 2018/11/7: "window.nonce = '...'"
@@ -239,7 +239,7 @@ var crawler = new CeL.work_crawler({
 		// 2018/11/15: 第一個指定可能是障眼法 fake
 		// "window.nonce = '' + '...';"
 		// window["non"+"ce"]="..."+(+eval("...")).toString()+(+eval("Math.round(.5)+~~1.5")).toString();
-		/window\s*(?:\.\s*nonce|\[([nonce"'\s+]+)\])\s*=(.{9,})/g;
+		/window\s*(?:\.\s*nonce|\[([nonce"'\s+]+)\])\s*=(.{32,})/g;
 
 		// node qq 热血学霸
 		while (matched = PATTERN_nonce.exec(html)) {
@@ -253,7 +253,7 @@ var crawler = new CeL.work_crawler({
 		// for debug
 		if (false) {
 			if (chapter_nonce)
-				console.log(chapter_nonce);
+				CeL.info('nonce: ' + chapter_nonce);
 			else
 				console.log(html);
 		}

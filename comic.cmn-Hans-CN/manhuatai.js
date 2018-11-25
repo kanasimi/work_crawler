@@ -150,7 +150,7 @@ crawler = new CeL.work_crawler({
 		chapter_data.postfix = '.jpg'
 		// http://static.321mh.com/js/comic.read.min.js?20180731163120
 		+ (/-\d+x\d+/gi.test(chapter_data.imgpath) ? ''
-		// @see __cr.switchWebp
+		// @see __cr.switchWebp=function
 		: chapter_data.comic_size || '-noresize');
 
 		// chapter_data.image_count = chapter_data.totalimg;

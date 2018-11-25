@@ -17,7 +17,7 @@ var crawler = CeL.webtoon({
 	// https://www.webtoons.com/zh-hant/
 	language_code : 'zh-hant',
 
-	// 2018/10: 投稿新星專區 用預設方法搜尋不到，得要用網頁的方法。
+	// 2018/10: 投稿新星專區 用預設方法(callback var API)搜尋不到，得要用網頁的方法。
 	search_URL : 'search?keyword=',
 	parse_search_result : function(html, get_label) {
 		// console.log(html);

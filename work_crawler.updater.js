@@ -60,9 +60,12 @@ function install_npm(package_name, message) {
 		if (!node_fs.existsSync('node_modules'))
 			node_fs.mkdirSync('node_modules');
 		require('child_process').execSync(
-				'npm i -D ' + package_name + '@latest', {
-					stdio : 'inherit'
-				});
+		// https://github.com/kanasimi/work_crawler/issues/104
+		// npm install electron --save-dev
+		// sudo npm install -g electron --unsafe-perm=true --allow-root
+		'npm i -D ' + package_name + '@latest', {
+			stdio : 'inherit'
+		});
 	}
 }
 
@@ -71,7 +74,7 @@ function update_components(update_script_name) {
 			.existsSync('work_crawler_loder.js'), updater = require('./'
 			+ update_script_name);
 
-	show_info('下載/更新 CeJS 線上小說漫畫下載工具...');
+	show_info('下載並更新 CeJS 線上小說漫畫下載工具...');
 	updater.update('kanasimi/work_crawler', executing_at_tool_directory
 	// 解開到當前目錄下。
 	? '.' : '', function() {
@@ -82,12 +85,13 @@ function update_components(update_script_name) {
 			process.chdir('work_crawler-master');
 		}
 
-		show_info('下載/更新 Colorless echo JavaScript kit 組件...');
+		show_info('下載並更新 Colorless echo JavaScript kit 組件...');
 		updater.update(null, null, function() {
 			// @see "dependencies" @ package.json
+			// 下載並更新本工具需要用到的組件 gh-updater...
 			install_npm('gh-updater');
 			// 配置圖形使用者介面。
-			install_npm('electron', '下載/更新圖形介面需要用到的組件 electron...');
+			install_npm('electron', '下載並更新圖形介面需要用到的組件 electron...');
 			// install_npm('electron-builder');
 			install_npm('electron-updater');
 

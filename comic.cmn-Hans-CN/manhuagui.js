@@ -45,7 +45,7 @@ crawler = new CeL.work_crawler({
 	// 10s, 15s 在下載過100章(1 hr)之後一樣會 ban 5hr。
 	// 20s, 30s 在下載過200章(~2 hr)之後一樣會 ban。
 	// 60s 大致OK
-	chapter_time_interval : 20 * 1000,
+	chapter_time_interval : '20s',
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.

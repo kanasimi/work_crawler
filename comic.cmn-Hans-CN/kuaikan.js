@@ -31,7 +31,7 @@ crawler = new CeL.work_crawler({
 	// skip_error : true,
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL_201803 : 'web/topic/search?keyword=',
+	search_URL_201805 : 'web/topic/search?keyword=',
 	search_URL : function(work_title, get_label) {
 		return 'v1/search/topic?q=' + encodeURIComponent(work_title)
 				+ '&since=0&size=20&f=3';

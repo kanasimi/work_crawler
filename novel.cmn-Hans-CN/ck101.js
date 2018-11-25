@@ -1,5 +1,6 @@
 ﻿/**
- * 批量下載卡提諾論壇小說的工具。 Download Catino novels. https://www.facebook.com/ck101fans
+ * 批量下載卡提諾論壇小說的工具。 Download Catino novels. (novel.cmn-Hant-TW)
+ * https://www.facebook.com/ck101fans
  * 
  * TODO: https://ck101.com/forum.php?mod=viewthread&action=printable&tid=2737067
  * 
@@ -441,6 +442,7 @@ crawler = new CeL.work_crawler({
 				continue;
 			}
 
+			// 評分。
 			var rate = text.between('<table class="ratl">', '</table>');
 
 			text = text.between(' class="pcb">')
@@ -472,6 +474,7 @@ crawler = new CeL.work_crawler({
 
 			// ----------------------------------
 			// 嘗試解析章節號碼與章節標題。
+			// @see function set_chapter_NO_via_title()
 
 			if (matched) {
 				// add <h2>...</h2>
@@ -593,7 +596,6 @@ crawler = new CeL.work_crawler({
 			}
 
 			// CeL.log('chapter_title: ' + chapter_title);
-			// throw 14564164;
 
 			// ----------------------------------
 

@@ -22,7 +22,14 @@ CeL.run(
 // ----------------------------------------------------------------------------
 
 // 要處理的目錄。
-var target_directory = process.argv[2] || '.';
+var target_directory = process.argv[2]/* || '.' */;
+
+if (!target_directory) {
+	var main_script = process.mainModule
+			&& process.mainModule.filename.match(/[^\\\/]+$/)[0];
+	CeL.log('Usage:\n	node ' + main_script + ' "target directory"');
+	process.exit();
+}
 
 // -----------------------------------------------------------------
 

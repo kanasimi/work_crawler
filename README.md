@@ -23,12 +23,12 @@
 ## Features 特點
 * 可自動下載小說封面以及章節中的插圖。
 * 本工具會盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
-* 跨平台支援：支援 Windows, Linux, Mac。
+* 跨平臺支援：支援 Windows, Linux, Mac。
 * 採用 CeJS [線上作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
 * 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料，僅更新有問題的圖檔。（請注意：必須先安裝 7-Zip **18.01 以上的版本**）
 
-## OS support
-| Platform | support |
+## OS support 作業系統支援
+| Platform 作業系統平臺 | support 支援狀況 |
 | --- | --- |
 | Windows | ✔️ |
 | macOS | ✔️ |
@@ -43,7 +43,7 @@
 ### Japanese web fictions / Japanese light novels ライトノベル 日本輕小說 日本語のオンライン小説
 [novel.ja-JP/](novel.ja-JP/)*.js, web pages → epub
 
-| Site 平台名稱 | Tool file | Note 說明 |
+| Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
 | [アルファポリス](https://www.alphapolis.co.jp/) | AlphaPolis.js | レンタルする話は取得できません |
 | [カクヨム](https://kakuyomu.jp/) | kakuyomu.js | |
@@ -54,13 +54,13 @@
 ### Chinese web fictions / novels 中国内地小说 中国のオンライン小説
 [novel.cmn-Hans-CN/](novel.cmn-Hans-CN/)*.js, web pages → epub
 
-| Site 平台名稱 | Tool file | Note 說明 |
+| Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
 | [起点中文网](https://www.qidian.com/) | qidian.js | **本工具無法下載 VIP章节內容** |
 | [八一中文网](http://www.81xsw.com/) | 81xsw.js | [PTCMS](https://www.ptcms.com/)系统 |
-| [顶点小说](https://www.23us.cc/) | 23us.js | PTCMS |
-| [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
 | [八八读书网](http://www.88dus.com/) | 88dus.js | 88读书网(88dushu)，PTCMS? |
+| [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
+| [顶点小说](https://www.23us.cc/) | 23us.js | [WMCMS](http://www.weimengcms.com/index.html) (未梦开源小说程序) [仿电脑顶点小说模板](http://www.weimengcms.com/html/temple/article/141.html) or PTCMS? |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | |
 | [飘天文学](http://www.piaotian.com/) | piaotian.js | NOT PTCMS |
 | [落霞小说网](http://www.luoxia.com/) | luoxia.js | WordPress，數量少、速度較慢但品質較高，較少錯字和自我審查。 |
@@ -74,7 +74,7 @@
 [comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, images → zip
 * 本工具無法下載需VIP付費、已屏蔽或刪除的內容。
 
-| Site 平台名稱 | Tool file | Note 說明 |
+| Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** 2017/8/15 起取消了今日限免 |
 | [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 **本工具無法下載VIP付費內容** |
@@ -84,7 +84,7 @@
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
-| [9妹漫画网](http://www.9mdm.com/) | 9mdm.js | |
+| [大古漫画网](https://www.dagumanhua.com/) | dagu.js | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。 |
 | [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |
 | [看漫画](https://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/)<br />[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板?<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
@@ -110,10 +110,11 @@
 | Site | Tool file | Note |
 | --- | --- | --- |
 | [ComicWalker](https://comic-walker.com/) | ComicWalker.js | KADOKAWAの無料漫画（マンガ） コミックウォーカー |
+| [ヤングエースUP](https://web-ace.jp/youngaceup/) | youngaceup.js | KADOKAWA webエース |
 | [pixivコミック](https://comic.pixiv.net/) | pixivcomic.js | pixivコミック(ぴくしぶこみっく) |
 | [OVERLAP](https://over-lap.co.jp/gardo/) | OVERLAP.js | オーバーラップ コミックガルド |
-| [XOY](https://xoy.webtoons.com/) | XOY.js | NAVER WEBTOON ja |
 | [コミコ](https://www.comico.jp/)<br />[オトナ限定 コミコ](http://plus.comico.jp/) | comico_jp.js<br />comico_jp_plus.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
+| [XOY](https://xoy.webtoons.com/) | XOY.js | NAVER WEBTOON ja<br />2018.09.13: [XOYの作品が「LINEマンガ」に移行されます。](https://xoy.webtoons.com/ja/notice/detail?noticeNo=849) |
 
 ### English webcomics 英語網路漫畫 英語のウェブコミック
 [comic.en-US/](comic.en-US/)*.js, images → zip
@@ -167,7 +168,7 @@
 
 5. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
 6. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的作品檔案要放到哪個目錄底下。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
-7. 每次要更新到最新版本時，只要重新執行一次本工具安裝檔即可。
+7. 每次要更新到最新版本時，只要進到工具安裝檔所在目錄，重新執行一次本工具安裝檔即可。
    ``` sh
    node work_crawler.updater.js
    ```
