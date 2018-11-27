@@ -78,6 +78,13 @@ var crawler = new CeL.work_crawler({
 	// one_by_one : true,
 	base_URL : 'https://comic-walker.com/',
 
+	// 規範 work id 的正規模式；提取出引數中的作品id 以回傳。
+	extract_work_id : function(work_information) {
+		// e.g., KDCW_KS02000043010000_68
+		if (/^KDCW_[A-Z_\d]+$/.test(work_information))
+			return work_information;
+	},
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'contents/search/?q=',
 	parse_search_result : function(html, get_label) {

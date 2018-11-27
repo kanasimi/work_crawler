@@ -2,7 +2,7 @@
 ![GitHub Release Date](https://img.shields.io/github/release-date/kanasimi/work_crawler.svg)
 ![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)
 ![GitHub commit activity the past week, 4 weeks, year](https://img.shields.io/github/commit-activity/y/kanasimi/work_crawler.svg)
-![Github All Releases Downloads](https://img.shields.io/github/downloads/kanasimi/work_crawler/total.svg)
+[![Github All Releases Downloads](https://img.shields.io/github/downloads/kanasimi/work_crawler/total.svg)](https://github.com/kanasimi/work_crawler/releases)
 [![Known Vulnerabilities](https://snyk.io/test/github/kanasimi/work_crawler/badge.svg?targetFile=package.json)](https://snyk.io/test/github/kanasimi/work_crawler?targetFile=package.json)
 <!--
 ![Github Release Downloads](https://img.shields.io/github/downloads/kanasimi/work_crawler/v1.4/total.svg)
