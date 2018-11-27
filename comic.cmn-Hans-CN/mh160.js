@@ -12,6 +12,11 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
+// https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature
+// for Error: unable to verify the first certificate
+// code: 'UNABLE_TO_VERIFY_LEAF_SIGNATURE'
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 var crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
@@ -110,16 +115,29 @@ var crawler = new CeL.work_crawler({
 		if (chapter_data) {
 			// getUrlpics() @
 			// http://www.mh160.com/template/skin4_20110501/js/mh160style/base64.js
-			chapter_data = (chapter_data.includes('mh160tuku')
+			chapter_data = chapter_data.includes('mh160tuku')
 			// e.g., https://www.mh160.com/kanmanhua/203/248562.html
 			|| chapter_data.includes('$qingtiandy$') ? chapter_data
 			// 對於非utf-8編碼之中文，不能使用 atob()
-			: base64_decode(chapter_data)).split("$qingtiandy$");
+			: base64_decode(chapter_data);
 		}
+		// console.log(chapter_data);
 		if (!chapter_data) {
 			CeL.log('無法解析資料！');
 			return;
 		}
+
+		// getUrlpics() @
+		// http://www.mh160.com/template/skin4_20110501/js/mh160style/base64.js
+		if (chapter_data.includes("JLmh160")) {
+			// https://www.mh160.com/template/skin4_20110501/js/mh160style/cartoon_common.js
+			chapter_data = ithmsh(chapter_data);
+		} else if (chapter_data.includes("TWmh160")) {
+			// https://www.mh160.com/template/skin4_20110501/js/mh160style/jquery.jstore-min.js
+			chapter_data = itwrnm(chapter_data);
+		}
+		chapter_data = chapter_data.split("$qingtiandy$");
+
 		// console.log(JSON.stringify(chapter_data));
 		// console.log(chapter_data.length);
 		// CeL.set_debug(6);
@@ -152,12 +170,12 @@ var crawler = new CeL.work_crawler({
 function getpicdamin(cid, currentChapterid) {
 	var yuming;
 	if (parseInt(cid) > 10000) {
-		yuming = "http://mhpic6.lineinfo.cn";
+		yuming = "https://mhpic6.lineinfo.cn";
 	} else {
-		yuming = "http://mhpic7.lineinfo.cn";
+		yuming = "https://mhpic7.lineinfo.cn";
 	}
 	if (parseInt(currentChapterid) > 542724) {
-		yuming = "http://mhpic5.lineinfo.cn";
+		yuming = "https://mhpic5.lineinfo.cn";
 	}
 	return yuming;
 }
@@ -215,5 +233,50 @@ function utf8_decode(str_data) {
 String.prototype.splic = function(sp) {
 	return base64_decode(this).split(sp);
 };
+
+// --------------------------
+
+function ithmsh(nummhstr) {
+	var x, num_out, num_in, str_out, realstr;
+	x = nummhstr.replaceAll1("JLmh160", "");
+	realstr = x;
+
+	var PicUrlArr1 = x.split("$qingtiandy$");
+	for (var k = 0; k < PicUrlArr1.length; k++) {
+		str_out = "";
+		num_out = PicUrlArr1[k];
+		for (var i = 0; i < num_out.length; i += 2) {
+			num_in = parseInt(num_out.substr(i, [ 2 ])) + 23;
+			num_in = unescape('%' + num_in.toString(16));
+			str_out += num_in;
+		}
+		realstr = realstr.replaceAll1(num_out, unescape(str_out));
+
+	}
+	// consoloe.log(realstr);
+	return realstr;
+
+}
+
+String.prototype.replaceAll1 = function(oldstring, newstring) {
+	return this.replace(new RegExp(oldstring, "gm"), newstring);
+}
+
+// --------------------------
+
+function itwrnm(nummhstr) {
+	var x, text, realstr;
+	x = nummhstr.replaceAll1("TWmh160", "");
+	realstr = x;
+	var PicUrlArr1 = x.split("$qingtiandy$");
+	for (var k = 0; k < PicUrlArr1.length; k++) {
+		last = "";
+		text = PicUrlArr1[k];
+		last = jsff(text, z$)
+		realstr = realstr.replaceAll1(text, last);
+
+	}
+	return realstr;
+}
 
 start_crawler(crawler, typeof module === 'object' && module);
