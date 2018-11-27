@@ -52,6 +52,7 @@ var crawler = new CeL.work_crawler({
 		return 'manhua/' + work_id;
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
+		// console.log(html);
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 
@@ -71,17 +72,19 @@ var crawler = new CeL.work_crawler({
 			title : work_data.book_name
 		});
 
+		// console.log(work_data);
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
 		html = html.between('<div class="comic-toc-section', '<script ')
-				.between(null, {
+				.between('<ol', {
 					tail : '</ol>'
 				});
 
 		var matched, PATTERN_chapter =
-		//
-		/<li[\s\S]+?<a [^<>]*?href="([^<>"]+)">([^<>]+)</g;
+		// <a class="fixed-a-es" target="_blank" href="/manhua/000/....html"
+		// title="第01回">第01回</a>
+		/<li[\s\S]+?<a [^<>]*?href="([^<>"]+)"[^<>]*?>([^<>]+)</g;
 
 		work_data.chapter_list = [];
 		while (matched = PATTERN_chapter.exec(html)) {
@@ -91,14 +94,18 @@ var crawler = new CeL.work_crawler({
 			};
 			work_data.chapter_list.push(chapter_data);
 		}
+		// console.log(work_data.chapter_list);
+		// console.log(work_data);
 	},
 
 	pre_parse_chapter_data
 	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。必須自行保證不丟出異常。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
+		// console.log(XMLHttp);
 		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
 		html = XMLHttp.responseText, _this = this, image_page_list = [];
+		// console.log(html);
 
 		chapter_data.title = html.between('<h2 class="h4 text-center">',
 				'</h2>')
@@ -113,6 +120,7 @@ var crawler = new CeL.work_crawler({
 			});
 		});
 		var image_count = image_page_list.length;
+		// console.log(image_page_list);
 
 		if (!(image_count >= 0)) {
 			throw work_data.title + ' #' + chapter_NO + ' '
