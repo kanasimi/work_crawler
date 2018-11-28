@@ -31,6 +31,7 @@ var crawler = new CeL.work_crawler({
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	// skip_error : true,
 
+	// 循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。 Download images one by one.
 	// one_by_one : true,
 
 	// 2018/6/4 6:34 最後一次成功存取 http://www.733mh.com/
@@ -130,10 +131,8 @@ var crawler = new CeL.work_crawler({
 		// getUrlpics() @
 		// http://www.mh160.com/template/skin4_20110501/js/mh160style/base64.js
 		if (chapter_data.includes("JLmh160")) {
-			// https://www.mh160.com/template/skin4_20110501/js/mh160style/cartoon_common.js
 			chapter_data = ithmsh(chapter_data);
 		} else if (chapter_data.includes("TWmh160")) {
-			// https://www.mh160.com/template/skin4_20110501/js/mh160style/jquery.jstore-min.js
 			chapter_data = itwrnm(chapter_data);
 		}
 		chapter_data = chapter_data.split("$qingtiandy$");
@@ -236,6 +235,8 @@ String.prototype.splic = function(sp) {
 
 // --------------------------
 
+// https://www.mh160.com/template/skin4_20110501/js/mh160style/cartoon_common.js
+
 function ithmsh(nummhstr) {
 	var x, num_out, num_in, str_out, realstr;
 	x = nummhstr.replaceAll1("JLmh160", "");
@@ -264,13 +265,18 @@ String.prototype.replaceAll1 = function(oldstring, newstring) {
 
 // --------------------------
 
+// https://www.mh160.com/Template/skin4_20110501/js/mh160style/jquery-1.7.2.min.js
+var z$ = "TWmh160";
+
+// https://www.mh160.com/template/skin4_20110501/js/mh160style/jquery.jstore-min.js
+
 function itwrnm(nummhstr) {
 	var x, text, realstr;
 	x = nummhstr.replaceAll1("TWmh160", "");
 	realstr = x;
 	var PicUrlArr1 = x.split("$qingtiandy$");
 	for (var k = 0; k < PicUrlArr1.length; k++) {
-		last = "";
+		var last = "";
 		text = PicUrlArr1[k];
 		last = jsff(text, z$)
 		realstr = realstr.replaceAll1(text, last);
@@ -278,5 +284,53 @@ function itwrnm(nummhstr) {
 	}
 	return realstr;
 }
+
+// https://www.mh160.com/template/skin4_20110501/js/mh160style/dww3.min.js
+
+function jsff(str, pwd) {
+	if (str == "")
+		return "";
+	if (!pwd || pwd == "") {
+		var pwd = "1234";
+	}
+	pwd = escape(pwd);
+	if (str == null || str.length < 8) {
+		alert("A salt value could not be extracted from the encrypted message because it's length is too short. The message cannot be decrypted.");
+		return;
+	}
+	if (pwd == null || pwd.length <= 0) {
+		alert("Please enter a password with which to decrypt the message.");
+		return;
+	}
+	var prand = "";
+	for (var I = 0; I < pwd.length; I++) {
+		prand += pwd.charCodeAt(I).toString();
+	}
+	var sPos = Math.floor(prand.length / 5);
+	var mult = parseInt(prand.charAt(sPos) + prand.charAt(sPos * 2)
+			+ prand.charAt(sPos * 3) + prand.charAt(sPos * 4)
+			+ prand.charAt(sPos * 5));
+	var incr = Math.round(pwd.length / 2);
+	var modu = Math.pow(2, 31) - 1;
+	var salt = parseInt(str.substring(str.length - 8, str.length), 16);
+	str = str.substring(0, str.length - 8);
+	prand += salt;
+	while (prand.length > 10) {
+		prand = (parseInt(prand.substring(0, 10)) + parseInt(prand.substring(
+				10, prand.length))).toString();
+	}
+	prand = (mult * prand + incr) % modu;
+	var enc_chr = "";
+	var enc_str = "";
+	for (var I = 0; I < str.length; I += 2) {
+		enc_chr = parseInt(parseInt(str.substring(I, I + 2), 16)
+				^ Math.floor((prand / modu) * 255));
+		enc_str += String.fromCharCode(enc_chr);
+		prand = (mult * prand + incr) % modu;
+	}
+	return unescape(enc_str);
+}
+
+// --------------------------
 
 start_crawler(crawler, typeof module === 'object' && module);
