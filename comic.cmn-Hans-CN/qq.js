@@ -248,6 +248,9 @@ var crawler = new CeL.work_crawler({
 			if (!matched[1] || matched[1].replace(/['"\s+]/g, '') === 'nonce')
 				chapter_nonce = matched[2];
 		}
+		chapter_nonce = chapter_nonce.replace(
+		// (+eval("!!document.getElementsByTagName('html')")).toString()
+		/document\.getElementsByTagName\([^()]+\)/g, '[{}]');
 		chapter_nonce = eval(chapter_nonce);
 
 		// for debug
