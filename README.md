@@ -279,7 +279,7 @@
 * 目前本工具不支援 GUI 安裝包自動更新。
 * 對於本工具已經包含的下載模式，熟練後一般約需2至4小時新增或更新下載工具，以達初步可用狀態。
 * 小說作品採用單線程下載，以避免對網站造成過度的負荷。漫畫作品則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
-* 歡迎熱心友人參與開發，以改進這個工具。
+* 若可能，[您應該檢核並參與維護您需要的軟體](https://gist.github.com/dominictarr/9fd9c1024c94592bc7268d36b8d83b3a)。現在您可以參與本工具開發了！本工具歡迎熱心友人參與開發，以改進這個工具。
 
 ## Purpose 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [線上作品爬蟲程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。

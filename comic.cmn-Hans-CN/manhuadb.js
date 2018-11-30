@@ -30,6 +30,8 @@ var crawler = new CeL.work_crawler({
 	timeout : 90 * 1000,
 	base_URL : 'http://www.manhuadb.com/',
 
+	// reget_image_page : true,
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search?q=',
 	parse_search_result : function(html, get_label) {
@@ -129,7 +131,7 @@ var crawler = new CeL.work_crawler({
 
 		if (work_data.image_list) {
 			chapter_data.image_list = work_data.image_list[chapter_NO - 1];
-			if (chapter_data.image_list
+			if (!this.reget_image_page && chapter_data.image_list
 					&& chapter_data.image_list.length === image_count) {
 				CeL.debug(work_data.title + ' #' + chapter_NO + ' '
 						+ chapter_data.title + ': Already got ' + image_count
