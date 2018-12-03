@@ -107,56 +107,90 @@ CeL.get_URL_cache(base_URL, function(html, error, XMLHttp) {
 });
 
 function download_next() {
-	var url;
 	while (true) {
 		if (url_list.length === 0) {
 			CeL.info('All ' + downloaded_count + ' files downloaded.');
 			return;
 		}
 
-		if (url = url_list.shift()) {
+		var url = url_list.shift();
+		if (!url)
+			continue;
 
-			// unescape(): for %23
-			var file_name = unescape(decodeURI(url)).match(/[^\/]+$/);
-			if (!file_name || !(file_name = file_name[0].match(/\?f=(.+)/))) {
-				download_next();
-				if (PATTERN_ebook_link.test(url))
-					throw 'epub? ' + url;
-				return;
-			}
-			file_name = file_name[1];
-			if ((file_name in {})||file_name.includes('吞噬星空')||/^.{1,2}\.html?$/i.test(file_name)) {
-				download_next();
-				return;
-			}
-
-			// CeL.info('Downloading ' + url);
-			CeL.get_URL_cache(url, function(data, error, XMLHttp) {
-				// XMLHttp && console.log(XMLHttp.headers);
-				data = data && data.toString() || '';
-				if (data.length < 1000) {
-					console.log(file_name + ': ' + (data || 'no response'));
-					// 刪除有問題的檔案。
-					CeL.remove_file(target_directory + file_name);
-
-					if (data.includes('文件未找到')) {
-						download_next();
-					} else {
-						// XMLHttp.status === 200
-						setTimeout(download_next, 60 * 1000);
-					}
-				} else {
-					downloaded_count++;
-					download_next();
-				}
-			}, {
-				directory : target_directory,
-				file_name : file_name,
-				get_URL_options : {
-					timeout : 3 * 60 * 1000
-				}
-			});
-			return;
+		// unescape(): for %23
+		var file_name = unescape(decodeURI(url)).match(/[^\/]+$/);
+		// console.log('Test ' + file_name);
+		if (!file_name || !(file_name = file_name[0].match(/\?f=(.+)/))) {
+			if (PATTERN_ebook_link.test(url))
+				throw 'epub? ' + url;
+			continue;
 		}
+		file_name = file_name[1];
+		// filter
+		if ((file_name in {
+			'DeDRM_tools_6.5.3.zip' : 1,
+			'C语言函数参考手册-明日科技.azw3' : 1,
+			'Office 2013应用技巧实例大全 (Office办公无忧).azw3' : 1,
+			'锋利的jQuery（第2版）-源码.7z' : 1,
+			'Excel统计分析与应用大全.azw3' : 1,
+			'Office 2013应用技巧实例大全 （Office办公无忧）.azw3' : 1,
+			'KindleGen_2.9.zip' : 1,
+			'KindleUnpack v0.80.app.zip' : 1,
+			'KindleUnpack-080.zip' : 1,
+			'Z.Kindle推送服务.txt' : 1,
+			'数学建模的思想和方法 - 张世斌.azw3' : 1,
+			StreamsList : 1,
+			ID : 1,
+			IgnoreList : 1
+		})
+				|| file_name.includes('吞噬星空')
+				|| file_name.includes('模拟电子技术 - 崔海良')
+				|| file_name.includes('世界是红的：看懂中国经济格局的一本书')
+				|| file_name.includes('闲雅茶生活之十万个为什么（全6册）')
+				|| file_name.includes('余罪：我的刑侦笔记1-5（第一季）')
+				|| file_name
+						.includes("国家级优秀教学成果奖'十二五'普通高等教育本科国家级规划教材•教育部推荐教材•中国人民大学会计系列教材—管理会计学（第6版）")
+				|| /^.{1,2}\.html?$/i.test(file_name)) {
+			continue;
+		}
+
+		// 檢查檔案是否存在
+		if (CeL.file_exists(target_directory + file_name)) {
+			continue;
+		}
+
+		// CeL.info('Downloading ' + url);
+		CeL.get_URL_cache(url, function(data, error, XMLHttp) {
+			// XMLHttp && console.log(XMLHttp.headers);
+			data = data && data.toString() || '';
+			if (data.length < 1000
+					&& (!/\.txt$/i.test(file_name) || data.includes('文件未找到')
+							|| data.includes('每小时限制下载') || data
+							.includes('每分钟最大下载'))) {
+				console.log(file_name + ': ' + (data || 'no response'));
+				// 刪除有問題的檔案。
+				CeL.remove_file(target_directory + file_name);
+
+				if (data.includes('文件未找到')) {
+					download_next();
+				} else {
+					// XMLHttp.status === 200
+					var time_interval = 60 * 1000;
+					setTimeout(download_next, time_interval);
+					process.stdout.write('Wait ' + CeL.age_of(0, time_interval)
+							+ ' to get next file...\r');
+				}
+			} else {
+				downloaded_count++;
+				download_next();
+			}
+		}, {
+			directory : target_directory,
+			file_name : file_name,
+			get_URL_options : {
+				timeout : 3 * 60 * 1000
+			}
+		});
+		return;
 	}
 }
