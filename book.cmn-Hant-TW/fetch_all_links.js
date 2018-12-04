@@ -120,37 +120,12 @@ function download_next() {
 		// unescape(): for %23
 		var file_name = unescape(decodeURI(url)).match(/[^\/]+$/);
 		// console.log('Test ' + file_name);
-		if (!file_name || !(file_name = file_name[0].match(/\?f=(.+)/))) {
-			if (PATTERN_ebook_link.test(url))
-				throw 'epub? ' + url;
-			continue;
-		}
-		file_name = file_name[1];
+
 		// filter
-		if ((file_name in {
-			'DeDRM_tools_6.5.3.zip' : 1,
-			'C语言函数参考手册-明日科技.azw3' : 1,
-			'Office 2013应用技巧实例大全 (Office办公无忧).azw3' : 1,
-			'锋利的jQuery（第2版）-源码.7z' : 1,
-			'Excel统计分析与应用大全.azw3' : 1,
-			'Office 2013应用技巧实例大全 （Office办公无忧）.azw3' : 1,
-			'KindleGen_2.9.zip' : 1,
-			'KindleUnpack v0.80.app.zip' : 1,
-			'KindleUnpack-080.zip' : 1,
-			'Z.Kindle推送服务.txt' : 1,
-			'数学建模的思想和方法 - 张世斌.azw3' : 1,
-			StreamsList : 1,
-			ID : 1,
-			IgnoreList : 1
-		})
-				|| file_name.includes('吞噬星空')
-				|| file_name.includes('模拟电子技术 - 崔海良')
-				|| file_name.includes('世界是红的：看懂中国经济格局的一本书')
-				|| file_name.includes('闲雅茶生活之十万个为什么（全6册）')
-				|| file_name.includes('余罪：我的刑侦笔记1-5（第一季）')
-				|| file_name
-						.includes("国家级优秀教学成果奖'十二五'普通高等教育本科国家级规划教材•教育部推荐教材•中国人民大学会计系列教材—管理会计学（第6版）")
-				|| /^.{1,2}\.html?$/i.test(file_name)) {
+		if ((file_name in {})
+		// || file_name.includes('')
+		// || /^.{1,2}\.html?$/i.test(file_name)
+		) {
 			continue;
 		}
 
