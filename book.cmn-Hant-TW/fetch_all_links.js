@@ -76,7 +76,7 @@ function full_URL_of_path(url) {
 		if (url.startsWith('.')) {
 			CeL.warn('full_URL_of_path: Invalid url: ' + url);
 		}
-		url = base_URL + url;
+		url = base_URL.replace(/[^\/]+$/, '') + url;
 	}
 
 	return url;
@@ -85,8 +85,9 @@ function full_URL_of_path(url) {
 var url_list = [], downloaded_count = 0;
 
 CeL.get_URL_cache(base_URL, function(html, error, XMLHttp) {
+	// console.log(XMLHttp || error);
 	html = html.toString();
-	var PATTERN = /<a [^<>]*href=["']([^"']+)["'][^<>]*>/g, matched;
+	var PATTERN = /<a [^<>]*href=["']([^"']+)["'][^<>]*>/ig, matched;
 	while (matched = PATTERN.exec(html)) {
 		var url = full_URL_of_path(matched[1]);
 		url_list.push(url);
@@ -97,6 +98,7 @@ CeL.get_URL_cache(base_URL, function(html, error, XMLHttp) {
 	directory : target_directory,
 	// reget : true,
 	get_URL_options : {
+		redirect : true,
 		ondatastart : function(response) {
 			if (false)
 				response.pipe(require('fs').createWriteStream(
