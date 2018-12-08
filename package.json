@@ -89,7 +89,7 @@
 		"electron-builder" : "latest"
 	},
 	"dependencies" : {
-		"electron-updater" : "^3.1.2",
+		"electron-updater" : "^4.0.0",
 		"gh-updater" : "latest",
 		"cejs" : "latest"
 	}
