@@ -53,6 +53,10 @@ compress_each_directory.profiles = {
 		file_type : '7z',
 		switches : '-mx=9 -r -sdel -sccUTF-8'
 	},
+	'game file' : {
+		file_type : '7z',
+		switches : '-mx=9 -r -sdel -sccUTF-8'
+	},
 	'padding files' : {
 		file_type : '7z',
 		switches : '-mx=9 -r -sdel -sccUTF-8'
@@ -207,11 +211,12 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 // -----------------------------------------------------------------
 
 // 首先整個掃描一次，篩選出需要處理的目錄，放在process_queue。
-var process_queue = [], PATTERN_executable_file = /\.(?:exe|dll)$/i;
+var process_queue = [], PATTERN_executable_file = /\.(?:exe|dll|pkg)$/i;
 fso_name_list.forEach(check_fso);
 
 function check_fso(fso_name) {
 	if (fso_name in catalog_directory) {
+		// 不處理分類的標的目錄。
 		return;
 	}
 
@@ -225,15 +230,21 @@ function check_fso(fso_name) {
 				+ '的目錄: ' + directory_path);
 	}
 
-	var directory_path = target_directory + fso_name, fso_status = CeL
-			.fso_status(directory_path);
+	var directory_path = target_directory + fso_name,
+	//
+	fso_status = CeL.fso_status(directory_path);
 	if (!fso_status) {
 		CeL.error('Can not read file / directory: ' + directory_path);
 		return;
 	}
 	if (!fso_status.isDirectory()) {
 		// i.e. file
-		classify(fso_name, directory_path, fso_status);
+
+		// 經過測試，.pkg file 通常越壓縮越大。
+		if (false && PATTERN_executable_file.test(fso_name)) {
+			process_queue.push([ directory_path, 'game file', '為遊戲執行檔' ]);
+		} else
+			classify(fso_name, directory_path, fso_status);
 		return;
 	}
 

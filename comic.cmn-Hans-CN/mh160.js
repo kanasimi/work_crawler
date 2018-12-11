@@ -40,8 +40,15 @@ var crawler = new CeL.work_crawler({
 	charset : 'gb2312',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'e/search/?key=',
+	// search_URL_201811 : 'e/search/?key=',
+	search_URL : function(work_title) {
+		return [ this.base_URL + 'e/search/', {
+			key : work_title
+		} ];
+	},
+	// @see archive/733dm.js comic.cmn-Hans-CN/katui.js
 	parse_search_result : function(html) {
+		console.log(html);
 		var id_list = [], id_data = [], matched, PATTERN =
 		//
 		/<a href="\/kanmanhua\/(\d+)\/?" title="([^"<>]+)">/g;
@@ -168,16 +175,27 @@ var crawler = new CeL.work_crawler({
 // http://www.mh160.com/template/skin4_20110501/js/mh160style/base64.js
 function getpicdamin(cid, currentChapterid) {
 	var yuming;
+
+	// copy-paste start ---------------
+
 	if (parseInt(cid) > 10000) {
-		yuming = "https://mhpic6.lineinfo.cn";
+
+		yuming = "https://mhpic6.kingwar.cn";
 	} else {
-		yuming = "https://mhpic7.lineinfo.cn";
+
+		yuming = "https://mhpic7.kingwar.cn";
 	}
+
 	if (parseInt(currentChapterid) > 542724) {
-		yuming = "https://mhpic5.lineinfo.cn";
+
+		yuming = "https://mhpic5.kingwar.cn";
+
 	}
 	return yuming;
+
+	// copy-paste end -----------------
 }
+
 function base64_decode(data) {
 	var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 	var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, dec = "", tmp_arr = [];
