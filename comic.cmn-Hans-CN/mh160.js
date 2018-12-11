@@ -48,7 +48,7 @@ var crawler = new CeL.work_crawler({
 	},
 	// @see archive/733dm.js comic.cmn-Hans-CN/katui.js
 	parse_search_result : function(html) {
-		console.log(html);
+		// console.log(html);
 		var id_list = [], id_data = [], matched, PATTERN =
 		//
 		/<a href="\/kanmanhua\/(\d+)\/?" title="([^"<>]+)">/g;
