@@ -67,7 +67,7 @@ cache_file = base_directory + 'data.json',
 //
 cache_data = CeL.get_JSON(cache_file),
 // file / folder name
-PATTERN_latin_fso_name = /^([\u0020-\u007F]+?)(\.[a-zA-Z]{2,9})?$/,
+PATTERN_latin_fso_name = /^([\u0020-\u007Fūûōô]+?)(\.[a-z\d]{2,9})?$/i,
 // [[en:Numerals_in_Unicode#Roman_numerals]]
 PATTERN_full_latin_or_sign = /^[\u0020-\u00FF’★☆♥♡Ⅰ-ↈ①-⑳⑴-⑽㈠-㈩／]+$/;
 

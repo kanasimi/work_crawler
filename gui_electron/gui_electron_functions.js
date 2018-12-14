@@ -57,6 +57,7 @@ download_sites_set = {
 
 		pixivcomic : 'pixivコミック',
 		OVERLAP : 'OVERLAP',
+		MAGCOMI : 'MAGCOMI',
 
 		XOY : 'WEBTOON ja',
 
