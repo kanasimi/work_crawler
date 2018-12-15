@@ -41,6 +41,7 @@ value: function(t, e) {
 	return o
 }
 
+經過xor轉換即可還原先的圖片。
 
 
 
