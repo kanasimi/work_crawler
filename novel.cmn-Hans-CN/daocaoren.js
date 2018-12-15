@@ -108,9 +108,13 @@ var crawler = new CeL.work_crawler({
 		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
 		text = html.between('<div id="cont-text" class="cont-text">',
-				'<div class="page">').between(null, {
+				'<div class="page">');
+		text = text.between(null, '<div class="clear">') || text;
+		text = text.between(null, {
 			tail : '</div>'
-		});
+		}).replace(
+		// 去除廣告
+		/<(i|p|span) class='[a-z]{3}\d{3}'>[^<>]{0,30}<\/\1>/ig, '');
 
 		this.add_ebook_chapter(work_data, chapter_NO, {
 			sub_title : get_label(html.between('<h1 class="cont-title">',
