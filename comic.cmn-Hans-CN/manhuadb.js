@@ -10,7 +10,12 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var crawler = new CeL.work_crawler({
+var PATTERN_chapter
+// <a class="fixed-a-es" target="_blank" href="/manhua/000/....html"
+// title="第01回">第01回</a>
+= /<li[\s\S]+?<a [^<>]*?href="([^<>"]+)"[^<>]*? title="([^<>"]+)"|<h3[^<>]*>(.+?)<\/h3>/g,
+//
+crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// 本站常常無法取得圖片，因此得多重新檢查。
@@ -77,31 +82,84 @@ var crawler = new CeL.work_crawler({
 		// console.log(work_data);
 		return work_data;
 	},
+	add_part : true,
 	get_chapter_list : function(work_data, html, get_label) {
-		html = html.between('<div class="comic-toc-section', '<script ')
-				.between('<ol', {
+		// <div class="comic-toc-section bg-white p-3">
+		// e.g., 一拳超人
+		var part_title_list = html.between('<div class="comic-toc-section',
+				'</ul>').all_between('<li', '</li>').map(function(token) {
+			return get_label(token.between('>'));
+		});
+		// console.log(part_title_list);
+
+		// <div class="tab-content" id="comic-book-list">
+		html = html.between(' id="comic-book-list">', '<script ').between(null,
+				{
 					tail : '</ol>'
 				});
 
-		var matched, PATTERN_chapter =
-		// <a class="fixed-a-es" target="_blank" href="/manhua/000/....html"
-		// title="第01回">第01回</a>
-		/<li[\s\S]+?<a [^<>]*?href="([^<>"]+)"[^<>]*?>([^<>]+)</g;
+		var matched, part_NO = 0, part_title, PATTERN_title = new RegExp(
+				work_data.title + '\\s*'), NO_in_part;
 
 		work_data.chapter_list = [];
 		while (matched = PATTERN_chapter.exec(html)) {
+			// delete matched.input;
+			// console.log(matched);
+			if (matched[3]) {
+				part_title = get_label(matched[3]).replace(PATTERN_title, '')
+						.replace(/\[\]/g, '');
+				part_title = part_title_list[part_NO++];
+				NO_in_part = 0;
+				continue;
+			}
+			++NO_in_part;
 			var chapter_data = {
+				// part_NO : part_NO,
+				part_title : part_title,
+				NO_in_part : NO_in_part,
+				chapter_NO : NO_in_part,
 				url : matched[1],
 				title : get_label(matched[2])
 			};
 			work_data.chapter_list.push(chapter_data);
+			continue;
+
+			// ----------------------------------
+			// 以下: 若是存在舊格式的檔案就把它移成新格式。
+			// console.log(chapter_data);
+
+			// chapter_data.title = chapter_data.title.replace('文传', '文傳');
+			var old_directory = work_data.directory
+					+ work_data.chapter_list.length.pad(4)
+					+ ' '
+					+ (chapter_data.title.includes('[') ? chapter_data.title
+							: '[' + chapter_data.title + ']'),
+			//
+			new_directory = work_data.directory + part_title + ' '
+					+ NO_in_part.pad(4) + ' ' + chapter_data.title;
+			if (CeL.directory_exists(old_directory)) {
+				CeL.move_fso(old_directory, new_directory);
+			}
+
+			var old_archive = old_directory + '.'
+					+ this.images_archive_extension;
+			if (CeL.file_exists(old_archive)) {
+				CeL.log(old_archive + '\n→ ' + new_directory);
+				var images_archive = new CeL.storage.archive(old_archive);
+				images_archive.extract({
+					cwd : images_archive
+				});
+				CeL.move_fso(old_directory, new_directory);
+				CeL.remove_file(old_archive);
+			}
 		}
 		// console.log(work_data.chapter_list);
 		// console.log(work_data);
 	},
 
 	pre_parse_chapter_data
-	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。必須自行保證不丟出異常。
+	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。
+	// 必須自行保證執行 callback()，不丟出異常、中斷。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
 		// console.log(XMLHttp);
 		var chapter_data = work_data.chapter_list[chapter_NO - 1],
@@ -112,6 +170,9 @@ var crawler = new CeL.work_crawler({
 		chapter_data.title = html.between('<h2 class="h4 text-center">',
 				'</h2>')
 				|| chapter_data.title;
+		var matched = chapter_data.title.match(/^\[([^\[\]]+)\]$/);
+		if (matched)
+			chapter_data.title = matched[1];
 
 		html.between('id="page-selector"', '</select>').each_between(
 		//
