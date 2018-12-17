@@ -745,6 +745,9 @@ function destruct_download_job(crawler) {
 			work_data.error_list = work_data.error_list.unique();
 			// 在進度條顯現出這個作品下載失敗
 			job.progress_layer.parentNode.style.backgroundColor = '#f44';
+			job.progress_layer.innerHTML += ' <span class="error">'
+			// 顯示最後一個錯誤。
+			+ work_data.error_list[work_data.error_list.length - 1] + '</span>';
 			job.layer.title = work_data.error_list.join('\n');
 			if (false)
 				CeL.new_node([ {
@@ -781,16 +784,17 @@ function initialize_work_data(crawler, work_data) {
 	if (work_data) {
 		// reset error list 下載出錯的作品
 		delete work_data.error_list;
+
+		// 這裡的 .id 可能是作品標題，因此不應該覆蓋 work_data.id
+		delete crawler.downloading_work_data.id;
+		crawler.downloading_work_data = Object.assign(work_data,
+				crawler.downloading_work_data);
+
+		var job = Download_job.job_list[work_data.job_index];
+		job.work_data = work_data;
+
+		return work_data;
 	}
-	// 這裡的 .id 可能是作品標題，因此不應該覆蓋 work_data.id
-	delete crawler.downloading_work_data.id;
-	crawler.downloading_work_data = Object.assign(work_data,
-			crawler.downloading_work_data);
-
-	var job = Download_job.job_list[work_data.job_index];
-	job.work_data = work_data;
-
-	return work_data;
 }
 
 function after_download_chapter(work_data, chapter_NO) {
