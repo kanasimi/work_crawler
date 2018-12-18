@@ -55,6 +55,8 @@ download_sites_set = {
 		ComicWalker : 'ComicWalker',
 		youngaceup : 'ヤングエースUP',
 
+		AlphaPolis_manga : 'アルファポリス',
+
 		pixivcomic : 'pixivコミック',
 		OVERLAP : 'OVERLAP',
 		MAGCOMI : 'MAGCOMI',
@@ -112,7 +114,7 @@ download_options_set = {
 
 	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。',
 	main_directory : '下載檔案儲存目錄路徑。圖片檔+紀錄檔下載位置。',
-	user_agent : '瀏覽器識別',
+	user_agent : '瀏覽器識別。運行前後始終維持相同的瀏覽器識別，應該就不會影響到下載。',
 
 	preserve_download_work_layer : '下載完成後保留下載進度條'
 },
@@ -747,7 +749,11 @@ function destruct_download_job(crawler) {
 			job.progress_layer.parentNode.style.backgroundColor = '#f44';
 			job.progress_layer.innerHTML += ' <span class="error">'
 			// 顯示最後一個錯誤。
-			+ work_data.error_list[work_data.error_list.length - 1] + '</span>';
+			+ work_data.error_list[work_data.error_list.length - 1] + '</span>'
+			//
+			+ (work_data.error_list.length > 1 ? ' (總共有'
+			//
+			+ work_data.error_list.length + '個錯誤)' : '');
 			job.layer.title = work_data.error_list.join('\n');
 			if (false)
 				CeL.new_node([ {

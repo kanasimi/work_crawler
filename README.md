@@ -45,7 +45,7 @@
 
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
-| [アルファポリス](https://www.alphapolis.co.jp/) | AlphaPolis.js | レンタルする話は取得できません |
+| [アルファポリスの小説](https://www.alphapolis.co.jp/novel) | AlphaPolis.js | レンタルする話は取得できません |
 | [カクヨム](https://kakuyomu.jp/) | kakuyomu.js | |
 | [ハーメルン](https://syosetu.org/) | Hameln.js | |
 | [小説を読もう！](https://yomou.syosetu.com/) | yomou.js | [小説家になろう](http://syosetu.com/) |
@@ -111,6 +111,7 @@
 | --- | --- | --- |
 | [ComicWalker](https://comic-walker.com/) | ComicWalker.js | KADOKAWAの無料漫画（マンガ） コミックウォーカー |
 | [ヤングエースUP](https://web-ace.jp/youngaceup/) | youngaceup.js | KADOKAWA webエース |
+| [アルファポリスの公式Web漫画](https://www.alphapolis.co.jp/manga/official) | AlphaPolis_manga.js | レンタルする話は取得できません |
 | [pixivコミック](https://comic.pixiv.net/) | pixivcomic.js | pixivコミック(ぴくしぶこみっく) |
 | [OVERLAP](https://over-lap.co.jp/gardo/) | OVERLAP.js | オーバーラップ コミックガルド: [ActiBook](https://ebook.digitalink.ne.jp/)系統 |
 | [MAGCOMI](https://comic.mag-garden.co.jp/) | MAGCOMI.js | マグコミ: [ActiBook](https://ebook.digitalink.ne.jp/)系統 |

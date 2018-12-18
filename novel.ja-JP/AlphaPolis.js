@@ -40,15 +40,15 @@ var crawler = new CeL.work_crawler({
 			'data[refer]' : work_title
 		} ];
 	},
-	parse_search_result : function(html) {
+	parse_search_result : function(html, get_label) {
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
 		id_list = [];
-		html.each_between('<h2 class="title">', '</a>', function(text) {
+		html.each_between(' class="title">', '</a>', function(text) {
 			id_list.push(text.between(' href="/novel/', '"')
 			//
 			.replace('/', '-'));
-			id_data.push(text.between('>'));
+			id_data.push(get_label(text.between('>')));
 		});
 		return [ id_list, id_data ];
 	},
@@ -130,7 +130,8 @@ var crawler = new CeL.work_crawler({
 				.to_Date({
 					zone : work_data.time_zone
 				}),
-				title : text.between('<span class="title">', '</span>')
+				// '<span class="title">', '</span>'
+				title : text.between(' class="title">', '</')
 			});
 		});
 	},
