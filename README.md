@@ -82,6 +82,7 @@
 | [知音漫客](https://www.zymk.cn/) | zymk.js | |
 | [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
+| [土豪漫画](https://www.tohomh.com/) | tohomh.js | 系統似 dm5。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [大古漫画网](https://www.dagumanhua.com/) | dagu.js | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。 |

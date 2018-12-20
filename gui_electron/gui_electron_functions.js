@@ -35,6 +35,7 @@ download_sites_set = {
 
 		dmzj : '动漫之家',
 		dm5 : '动漫屋',
+		tohomh : '土豪漫画',
 
 		manhuatai : '漫画台',
 
