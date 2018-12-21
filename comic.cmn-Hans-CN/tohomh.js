@@ -206,17 +206,31 @@ var crawler = new CeL.work_crawler({
 		var _this = this, base_URL = 'action/play/read?did=' + config.did
 				+ '&sid=' + config.sid + '&iid=', image_count = config.pcount;
 
+		if (!(image_count >= 1)) {
+			// e.g., https://www.tohomh.com/shijie/276.html
+			this.onwarning(this.id + ': Failed to get chapter page of #'
+					+ chapter_NO, work_data);
+			work_data.image_list[chapter_NO - 1].truncate();
+			callback();
+			return;
+		}
+
 		CeL.run_serial(function(run_next, image_NO) {
 			process.stdout.write('Get image data pages of #' + chapter_NO
 					+ ': ' + image_NO + '/' + image_count + '...\r');
 			_this.get_URL(base_URL + image_NO + '&tmp=' + Math.random(),
 			// @see https://manhua.wzlzs.com/muban/mh/js/p.js?20181207
 			function(XMLHttp) {
-				var data = JSON.parse(XMLHttp.responseText);
-				// {"IsError":false,"MessageStr":null,"Code":"https://mh2.ahjsny.com/upload/id/0001/0001.jpg"}
-				work_data.image_list[chapter_NO - 1]
-				//
-				.push(encodeURI(data.Code));
+				var data;
+				try {
+					// {"IsError":false,"MessageStr":null,"Code":"https://mh2.ahjsny.com/upload/id/0001/0001.jpg"}
+					data = encodeURI(JSON.parse(XMLHttp.responseText).Code);
+				} catch (e) {
+					if (!_this.skip_error) {
+						throw e;
+					}
+				}
+				work_data.image_list[chapter_NO - 1].push(data);
 				run_next();
 			});
 		}, image_count, config.iid, callback);
