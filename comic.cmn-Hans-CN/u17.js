@@ -48,7 +48,8 @@ crawler = new CeL.work_crawler({
 			status : [],
 			last_update : get_label(html.between('最后更新时间：', '<'))
 		};
-		eval(html.match(/var comic_id[^\r\n]+(?:\r?\nvar [^\r\n]+)+/)[0]
+		// must fit 镇魂街, 雏蜂
+		eval(html.match(/var comic_id[^\r\n]+(?:\r?\n\s*var [^\r\n]+)+/)[0]
 				.replace(/var /g, 'work_data.').replace(/=\s*cfg_host_base/,
 						'=work_data.cfg_host_base'));
 
