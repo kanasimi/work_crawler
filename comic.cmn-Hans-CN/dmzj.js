@@ -26,7 +26,8 @@ var crawler = new CeL.work_crawler({
 
 	// 提取出引數（如 URL）中的作品ID 以回傳。
 	extract_work_id : function(work_information) {
-		return /^[a-z_]+$/.test(work_information) && work_information;
+		// 不可包含英文大寫、"-": e.g., https://manhua.dmzj.com/rkdek9/
+		return /^[a-z_\d]+$/.test(work_information) && work_information;
 	},
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -98,11 +99,13 @@ var crawler = new CeL.work_crawler({
 		};
 		// 由 meta data 取得作品資訊。
 		extract_work_data(work_data, html);
-		extract_work_data(work_data, html.between('<ul class="comic_deCon_liO">',
-				'</ul>'), /<li>([^<>：]+)(.+?)<\/li>/g);
+		extract_work_data(work_data, html.between(
+				'<ul class="comic_deCon_liO">', '</ul>'),
+				/<li>([^<>：]+)(.+?)<\/li>/g);
 		// is_manhua
-		extract_work_data(work_data, html.between('<div class="anim-main_list">',
-				'</div>'), /<th>([^<>]+?)<\/th>[\s\n]*<td>(.+?)<\/td>/g);
+		extract_work_data(work_data, html.between(
+				'<div class="anim-main_list">', '</div>'),
+				/<th>([^<>]+?)<\/th>[\s\n]*<td>(.+?)<\/td>/g);
 		work_data.status = work_data.状态;
 		if (work_data.最新收录) {
 			work_data.last_update = work_data.最新收录
