@@ -226,8 +226,11 @@ var crawler = new CeL.work_crawler({
 					// {"IsError":false,"MessageStr":null,"Code":"https://mh2.ahjsny.com/upload/id/0001/0001.jpg"}
 					data = encodeURI(JSON.parse(XMLHttp.responseText).Code);
 				} catch (e) {
-					if (!_this.skip_error) {
-						throw e;
+					// e.g., status 500
+					if (_this.skip_error) {
+						_this.onwarning(e);
+					} else {
+						_this.onerror(e);
 					}
 				}
 				work_data.image_list[chapter_NO - 1].push(data);
