@@ -71,7 +71,9 @@ var crawler = new CeL.work_crawler({
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between('<p class="title">',
-					'<span class="right">')),
+					'<span class="right">')
+					// 土豪漫画
+					|| html.between('<h1>', '</h1>')),
 
 			// 選擇性屬性：須配合網站平台更改。
 			// e.g., "<p class="subtitle">作者：...图：.../文：...</p>"
@@ -80,6 +82,8 @@ var crawler = new CeL.work_crawler({
 					.between('>').replace(/<a href="#[^<>]+>.+?<\/a>/g, '')),
 			image : html.between('<img src="', '"'),
 			score : html.between('<span class="score">', '</span>'),
+			// 土豪漫画: <em class="remind">每周六更</em>
+			next_update : html.between(' class="remind">', '<'),
 			part_list : part_list
 		};
 
