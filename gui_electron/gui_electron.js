@@ -97,6 +97,7 @@ require('electron').ipcMain.on('send_message', function(event, message) {
 	if (message === 'check-for-updates') {
 		start_update(event.sender);
 	} else {
+		// console.log(message);
 		try {
 			message = JSON.parse(message);
 		} catch (e) {
@@ -111,7 +112,7 @@ require('electron').ipcMain.on('send_message', function(event, message) {
 // for update
 function start_update(event_sender) {
 	try {
-		if (is_installation_package) {
+		if (!is_installation_package) {
 			event_sender.send('send_message_debug',
 					'所執行的並非安裝包版本，因此不執行安裝包版本的升級檢查。');
 			return;
