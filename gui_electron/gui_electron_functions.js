@@ -119,7 +119,7 @@ download_options_set = {
 
 	preserve_download_work_layer : '下載完成後保留下載進度條'
 },
-// const
+// const `global.data_directory`/`default_configuration_file_name`
 default_configuration_file_name = 'work_crawler.configuration.json';
 
 var site_used, default_configuration, download_site_nodes = [], download_options_nodes = {},
@@ -371,6 +371,9 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 
 	// --------------------------------
 
+	node_electron.ipcRenderer.send('send_message', {
+		is_installation_package : is_installation_package
+	});
 	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
 	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
 });

@@ -87,15 +87,36 @@ app.on('activate', function() {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+var is_installation_package;
+
 // 接收訊息
 require('electron').ipcMain.on('send_message', function(event, message) {
-	if (message === 'check-for-updates')
+	if (!message) {
+		return;
+	}
+	if (message === 'check-for-updates') {
 		start_update(event.sender);
+	} else {
+		try {
+			message = JSON.parse(message);
+		} catch (e) {
+			return;
+		}
+
+		if (message.is_installation_package)
+			is_installation_package = message.is_installation_package;
+	}
 });
 
 // for update
 function start_update(event_sender) {
 	try {
+		if (is_installation_package) {
+			event_sender.send('send_message_debug',
+					'所執行的並非安裝包版本，因此不執行安裝包版本的升級檢查。');
+			return;
+		}
+
 		event_sender.send('send_message_debug', 'Start release updating...');
 
 		// https://github.com/iffy/electron-updater-example/blob/master/main.js
@@ -148,12 +169,13 @@ function start_update(event_sender) {
 			event_sender.send('send_message_log', 'Release update downloaded: '
 					+ JSON.stringify(event));
 
-			require('electron').ipcMain.on('start-install-now', function(e, arg) {
-				console.log(arguments);
-				console.log("開始更新");
-				// some code here to handle event
-				autoUpdater.quitAndInstall();
-			});
+			require('electron').ipcMain.on('start-install-now',
+					function(e, arg) {
+						console.log(arguments);
+						console.log("開始更新");
+						// some code here to handle event
+						autoUpdater.quitAndInstall();
+					});
 		});
 
 	} catch (e) {
