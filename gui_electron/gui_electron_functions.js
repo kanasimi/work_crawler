@@ -123,7 +123,7 @@ download_options_set = {
 default_configuration_file_name = 'work_crawler.configuration.json';
 
 var site_used, default_configuration, download_site_nodes = [], download_options_nodes = {},
-// 為安裝包
+// 為 electron-builder 安裝包
 is_installation_package,
 // 會儲存到 crawler.preference.crawler_configuration 的選項。
 save_to_preference = Object.assign({}, download_options_set), preserve_download_work_layer,
@@ -371,9 +371,6 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 
 	// --------------------------------
 
-	node_electron.ipcRenderer.send('send_message', {
-		is_installation_package : is_installation_package
-	});
 	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
 	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
 });
@@ -522,6 +519,80 @@ function reset_site_options() {
 	}
 }
 
+// will called by setup_crawler() @ work_crawler_loder.js
+function prepare_crawler(crawler, crawler_module) {
+	var site_id = site_used;
+	if (site_id in download_site_nodes.link_of_site) {
+		// 已經初始化過了。
+		// 因為 setup_crawler() 只執行一次，因此照理來說不會到這邊來。
+		return;
+	}
+
+	// 初始化 initialization: crawler
+	crawler.site_id = site_id;
+
+	/**
+	 * 會從以下檔案匯入使用者 preference:<code>
+	# work_crawler_loder.js
+	# work_crawler_loder.configuration.js → site_configuration
+	# global.data_directory + default_configuration_file_name → default_configuration
+	# site script .js → crawler.*
+	# setup_crawler.prepare() call setup_crawler.prepare() call default_configuration[site_id] → crawler.*
+	# crawler.main_directory + 'preference.json' → crawler.preference
+	 </code>
+	 * 
+	 * TODO: 將 default_configuration_file_name 轉入 work_crawler_loder.js
+	 */
+
+	// 在這邊引入最重要的設定是儲存的目錄 crawler.main_directory。
+	// 在引入 crawler.main_directory 後，可以讓網站腳本檔案採用新的設定，把檔案儲存在最終的儲存目錄下。
+	// 有些 crawler script 會 cache 網站整體的設定，如 .js 檔案，以備不時之需。因為是 cache，就算刪掉了也沒關係。
+	// 只是下次下載的時候還會再重新擷取並且儲存一次。
+	if (default_configuration[site_id]) {
+		// e.g., crawler.main_directory
+		CeL.info('import configuration of ' + site_id + ': '
+				+ JSON.stringify(default_configuration[site_id]));
+		Object.assign(crawler, default_configuration[site_id]);
+	}
+
+	crawler.preference = Object.assign({
+		// 因為會'重設下載選項'，一般使用不應 cache 這個值。
+		crawler_configuration : CeL.null_Object(),
+		// 我的最愛 my favorite 書庫 library
+		favorites : []
+	}, CeL.get_JSON(crawler.main_directory + 'preference.json'));
+
+	// import crawler.preference.crawler_configuration
+	var crawler_configuration = crawler.preference.crawler_configuration;
+	crawler.default_save_to_preference = CeL.null_Object();
+	Object.keys(save_to_preference).forEach(function(key) {
+		// Skip .main_directory
+		crawler.default_save_to_preference[key] = crawler[key];
+		if (key in crawler_configuration) {
+			CeL.info('import preference of ' + site_id + ': '
+			//
+			+ key + '=' + crawler_configuration[key] + '←' + crawler[key]);
+			crawler[key] = crawler_configuration[key];
+		}
+	});
+
+	crawler.download_queue = [];
+	if (!crawler.site_name) {
+		crawler.site_name = CeL.DOM_data(
+				download_site_nodes.node_of_id[site_id], 'gettext');
+	}
+	download_site_nodes.link_of_site[site_id] = crawler.base_URL;
+	// add link to site
+	CeL.new_node([ ' ', {
+		a : '🔗 link',
+		href : crawler.base_URL,
+		target : '_blank',
+		onclick : open_external
+	} ], download_site_nodes.node_of_id[site_id].parentNode);
+}
+
+setup_crawler.prepare = prepare_crawler;
+
 function get_crawler(just_test) {
 	if (!site_used) {
 		if (!just_test) {
@@ -537,61 +608,13 @@ function get_crawler(just_test) {
 	var site_id = site_used, crawler = base_directory + site_id + '.js';
 	CeL.debug('當前路徑: ' + CeL.storage.working_directory(), 1, 'get_crawler');
 	CeL.debug('Load ' + crawler, 1, 'get_crawler');
+
+	// include site script .js
+	// 這個過程會執行 setup_crawler() @ work_crawler_loder.js
+	// 以及 setup_crawler.prepare()
 	crawler = require(crawler);
 
-	if (!(site_id in download_site_nodes.link_of_site)) {
-		// 初始化 initialization: crawler
-		crawler.site_id = site_id;
-
-		// 會從以下檔案匯入使用者 preference:
-		// work_crawler_loder.js
-		// work_crawler_loder.configuration.js
-		// global.data_directory + default_configuration_file_name
-		// site script .js
-		// crawler.main_directory + 'preference.json'
-
-		if (default_configuration[site_id]) {
-			// e.g., crawler.main_directory
-			CeL.info('import configuration of ' + site_id + ': '
-					+ JSON.stringify(default_configuration[site_id]));
-			Object.assign(crawler, default_configuration[site_id]);
-		}
-
-		crawler.preference = Object.assign({
-			// 因為會'重設下載選項'，一般使用不應 cache 這個值。
-			crawler_configuration : CeL.null_Object(),
-			// 我的最愛 my favorite 書庫 library
-			favorites : []
-		}, CeL.get_JSON(crawler.main_directory + 'preference.json'));
-
-		// import crawler.preference.crawler_configuration
-		var crawler_configuration = crawler.preference.crawler_configuration;
-		crawler.default_save_to_preference = CeL.null_Object();
-		Object.keys(save_to_preference).forEach(function(key) {
-			// Skip .main_directory
-			crawler.default_save_to_preference[key] = crawler[key];
-			if (key in crawler_configuration) {
-				CeL.info('import preference of ' + site_id + ': '
-				//
-				+ key + '=' + crawler_configuration[key] + '←' + crawler[key]);
-				crawler[key] = crawler_configuration[key];
-			}
-		});
-
-		crawler.download_queue = [];
-		if (!crawler.site_name) {
-			crawler.site_name = CeL.DOM_data(
-					download_site_nodes.node_of_id[site_id], 'gettext');
-		}
-		download_site_nodes.link_of_site[site_id] = crawler.base_URL;
-		// add link to site
-		CeL.new_node([ ' ', {
-			a : '🔗 link',
-			href : crawler.base_URL,
-			target : '_blank',
-			onclick : open_external
-		} ], download_site_nodes.node_of_id[site_id].parentNode);
-	}
+	// assert: (site_id in download_site_nodes.link_of_site)
 
 	return crawler;
 }

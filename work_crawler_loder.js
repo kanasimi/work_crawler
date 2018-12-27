@@ -164,6 +164,10 @@ function setup_crawler(crawler, crawler_module) {
 		crawler.proxy = proxy_server;
 	}
 
+	if (typeof setup_crawler.prepare === 'function') {
+		setup_crawler.prepare(crawler, crawler_module);
+	}
+
 	CeL.debug(crawler.id + ', ' + crawler.main_directory, 1, 'setup_crawler');
 }
 

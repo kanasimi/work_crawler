@@ -87,8 +87,6 @@ app.on('activate', function() {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-var is_installation_package;
-
 // 接收訊息
 require('electron').ipcMain.on('send_message', function(event, message) {
 	if (!message) {
@@ -104,20 +102,13 @@ require('electron').ipcMain.on('send_message', function(event, message) {
 			return;
 		}
 
-		if (message.is_installation_package)
-			is_installation_package = message.is_installation_package;
+		;
 	}
 });
 
 // for update
 function start_update(event_sender) {
 	try {
-		if (!is_installation_package) {
-			event_sender.send('send_message_debug',
-					'所執行的並非安裝包版本，因此不執行安裝包版本的升級檢查。');
-			return;
-		}
-
 		event_sender.send('send_message_debug', 'Start release updating...');
 
 		// https://github.com/iffy/electron-updater-example/blob/master/main.js
@@ -131,6 +122,12 @@ function start_update(event_sender) {
 		// nsis可允許用戶自定義安裝位置、添加桌面快捷方式、安裝完成立即啟動、配置安裝圖標等。
 
 		var updater = require("electron-updater"), autoUpdater = updater.autoUpdater;
+		if (!autoUpdater.app.isPackaged) {
+			event_sender.send('send_message_log',
+					'所執行的並非安裝包版本，因此不執行安裝包版本的升級檢查。');
+			return;
+		}
+
 		autoUpdater.checkForUpdatesAndNotify();
 
 		if (false)
