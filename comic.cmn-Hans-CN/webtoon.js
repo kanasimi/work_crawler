@@ -17,6 +17,13 @@ var crawler = CeL.webtoon({
 	// https://www.webtoons.com/zh-hant/
 	language_code : 'zh-hant',
 
+	extract_work_id : function(work_information) {
+		if (library_namespace.is_digits(work_information)
+		// e.g., webtoon 投稿新星專區 id 下載: "challenge_00000"
+		|| /^([a-z]+)_(\d+)$/.test(work_information))
+			return work_information;
+	},
+
 	// 2018/10: 投稿新星專區 用預設方法(callback var API)搜尋不到，得要用網頁的方法。
 	search_URL : 'search?keyword=',
 	parse_search_result : function(html, get_label) {
