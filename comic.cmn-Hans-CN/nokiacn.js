@@ -25,6 +25,12 @@ var crawler = new CeL.work_crawler({
 	// 所有作品都使用這種作品類別前綴。
 	// use_work_id_prefix : 'manhua',
 
+	// 規範 work id 的正規模式；提取出引數中的作品id 以回傳。
+	extract_work_id : function(work_information) {
+		if (/^[a-z\-\d]+$/.test(work_information))
+			return work_information;
+	},
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'statics/search.aspx?key=',
 	parse_search_result : function(html, get_label) {
