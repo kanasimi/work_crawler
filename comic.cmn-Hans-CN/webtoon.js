@@ -18,7 +18,7 @@ var crawler = CeL.webtoon({
 	language_code : 'zh-hant',
 
 	extract_work_id : function(work_information) {
-		if (library_namespace.is_digits(work_information)
+		if (CeL.is_digits(work_information)
 		// e.g., webtoon 投稿新星專區 id 下載: "challenge_00000"
 		|| /^([a-z]+)_(\d+)$/.test(work_information))
 			return work_information;
