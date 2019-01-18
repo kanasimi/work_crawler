@@ -191,7 +191,13 @@ var crawler = new CeL.work_crawler({
 		if (!contents)
 			return;
 		// console.log(image_data);
-		// 有可能出問題: image_data.meta.drm_hash===null
+		if (image_data.meta.drm_hash === null) {
+			// 這個情況下所獲得的圖片內容似乎沒問題?
+			// CeL.warn('Bad image data?');
+			// console.log(image_data);
+			return;
+		}
+
 		var decode_key = image_data.meta.drm_hash.slice(0, 16)
 		// decode image 用的關鍵 key
 		.match(/[\da-f]{2}/gi).map(function(t) {
