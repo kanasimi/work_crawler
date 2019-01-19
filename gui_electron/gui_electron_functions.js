@@ -58,6 +58,8 @@ download_sites_set = {
 
 		AlphaPolis_manga : 'アルファポリス',
 
+		moae : 'モアイ',
+
 		pixivcomic : 'pixivコミック',
 		OVERLAP : 'OVERLAP',
 		MAGCOMI : 'MAGCOMI',
@@ -130,7 +132,7 @@ save_to_preference = Object.assign({}, download_options_set), preserve_download_
 // Windows 10: Windows NT 10.0; Win64; x64
 old_Unicode_support = navigator.appVersion.match(/Windows NT (\d+(?:\.\d))/);
 if (old_Unicode_support) {
-	// 舊版本的Windows不支援"⬚ "之類符號。
+	// 舊版本的 Windows 7 不支援"⬚ "之類符號。
 	old_Unicode_support = +old_Unicode_support[1] < 10;
 }
 
@@ -310,7 +312,10 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 
 	set_click_trigger('download_options_trigger', CeL.new_node({
 		div : [ options_nodes, {
-			b : '重設下載選項',
+			b : [ '重設下載選項', '' && {
+				T : '與最愛作品清單',
+				S : 'color: red;'
+			} ],
 			onclick : function() {
 				var crawler = get_crawler();
 				if (!crawler) {
@@ -399,7 +404,7 @@ function save_default_configuration() {
 			default_configuration);
 }
 
-// 保存下載偏好選項
+// 保存下載偏好選項 + 最愛作品清單
 // @private
 function save_preference(crawler) {
 	// prepare work directory.
@@ -409,7 +414,7 @@ function save_preference(crawler) {
 }
 
 function edit_favorites(crawler) {
-	var favorites = crawler.preference.favorites, favorites_node = CeL
+	var favorites = crawler.preference.favorites || [], favorites_node = CeL
 			.new_node({
 				textarea : '',
 				S : 'width: 99%; height: 20em;'
@@ -428,7 +433,7 @@ function edit_favorites(crawler) {
 				crawler.preference.favorites
 				// verify work titles
 				= favorites_node.value.trim().split(/\n/)
-
+				//
 				.map(function(work_title) {
 					return work_title.trim();
 				}).filter(function(work_title) {
@@ -440,7 +445,8 @@ function edit_favorites(crawler) {
 			},
 			C : 'favorites_button'
 		}, {
-			b : '🛑放棄編輯',
+			// abandon
+			b : (old_Unicode_support ? '❌' : '🛑') + '放棄編輯',
 			onclick : function() {
 				reset_favorites(crawler);
 			},
