@@ -251,7 +251,12 @@ var crawler = new CeL.work_crawler({
 		chapter_nonce = chapter_nonce.replace(
 		// (+eval("!!document.getElementsByTagName('html')")).toString()
 		/document\.getElementsByTagName\([^()]+\)/g, '[{}]');
-		chapter_nonce = eval(chapter_nonce);
+		try {
+			chapter_nonce = eval(chapter_nonce);
+		} catch (e) {
+			// qq: 有時取得的網頁包含錯誤，重新取得一次便可成功解析。
+			return this.REGET_PAGE;
+		}
 
 		// for debug
 		if (false) {
@@ -262,10 +267,14 @@ var crawler = new CeL.work_crawler({
 		}
 
 		// assert: nonce.length === 32
-		if (!chapter_data
-				|| !(chapter_data = decode(chapter_data[1], chapter_nonce))
-				|| !chapter_data.picture) {
-			return;
+		try {
+			if (!chapter_data || !(chapter_data =
+			// maybe: "Unexpected token & in JSON"
+			decode(chapter_data[1], chapter_nonce)) || !chapter_data.picture) {
+				return;
+			}
+		} catch (e) {
+			return this.REGET_PAGE;
 		}
 		// console.log(chapter_data);
 
