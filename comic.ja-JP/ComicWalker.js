@@ -192,6 +192,7 @@ var crawler = new CeL.work_crawler({
 			return;
 		// console.log(image_data);
 		if (image_data.meta.drm_hash === null) {
+			// e.g., 英雄の娘として生まれ変わった英雄は再び英雄を目指す
 			// 這個情況下所獲得的圖片內容似乎沒問題?
 			// CeL.warn('Bad image data?');
 			// console.log(image_data);

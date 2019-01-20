@@ -522,7 +522,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 
 		if (
 		// "1", "12-13-15", "3211231", "2014"
-		/^(?:[\d\- ]*|Ongoing|Eng?|English(?:-Uncen)?|korean|kor|Jap|Japanese|RUS|英訳|中国語|更正|GIFs?|CG|mp3|FLAC|APE)$/i
+		/^(?:[\d\- ]*|Ongoing|Eng?|English(?:-Uncen)?|korean|kor|Jap|Japanese|RUS|英訳|中国語|更正|GIFs?|CG|mp3|FLAC|APE|文庫版?)$/i
 				.test(matched[1])) {
 			// [Pixiv] 60枚 (3322006).zip
 		} else if (matched[1] !== '仮') {

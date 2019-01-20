@@ -75,17 +75,27 @@ var crawler = new CeL.work_crawler({
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between('<p class="title">',
-					'<span class="right">')),
+					'<span class="right">')
+					// 土豪漫画
+					|| html.between('<h1>', '</h1>')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			author : get_label(html.between('<p class="subtitle">', '</p>')
-					.replace(/^.*?[:：]/, '')),
+			// e.g., "<p class="subtitle">作者：...图：.../文：...</p>"
+			author : get_label(html.between('<p class="subtitle">', '</p>')),
 			description : get_label(html.between('<p class="content"', '</p>')
 					.between('>').replace(/<a href="#[^<>]+>.+?<\/a>/g, '')),
 			image : html.between('<img src="', '"'),
 			score : html.between('<span class="score">', '</span>'),
-			part_list : part_list
+			// 土豪漫画: <em class="remind">每周六更</em>
+			next_update : html.between(' class="remind">', '<'),
+			part_list : part_list,
+			// reset work_data.chapter_list
+			chapter_list : []
 		};
+
+		if (!/[:：][^:：]+?[:：]/.test(work_data.author)) {
+			work_data.author = work_data.author.replace(/^.*?[:：]/, '');
+		}
 
 		if (matched) {
 			work_data.latest_chapter = matched[1];
@@ -101,18 +111,19 @@ var crawler = new CeL.work_crawler({
 			}
 		});
 
-		work_data.status = work_data.状态;
+		Object.assign(work_data, {
+			status : work_data.状态,
+			last_update : work_data.更新时间
+		});
 
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
-		// 1: 由舊至新
-		work_data.inverted_order = / DM5_COMIC_SORT\s*=\s*2/.test(html);
+		// 1: 由舊至新, 2: 由新至舊
+		work_data.inverted_order = !/ DM5_COMIC_SORT\s*=\s*1/.test(html);
 
 		html = html.between('detail-list-select', '<div class="index-title">');
 
-		// reset chapter_list
-		work_data.chapter_list = [];
 		var PATTERN_chapter = /<li>([\s\S]+?)<\/li>|<ul ([^<>]+)>/g, matched;
 		while (matched = PATTERN_chapter.exec(html)) {
 			if (matched[2]) {
@@ -122,7 +133,9 @@ var crawler = new CeL.work_crawler({
 				if (matched[2]
 						&& (matched[2] = work_data.part_list[matched[2][1]])) {
 					this.set_part(work_data, matched[2]);
-				} else if (!matched[0].includes(' class="chapteritem">')) {
+				} else if (!matched[0].includes(' class="chapteritem">')
+				// <ul style="display:none" class="chapteritem">
+				&& work_data.part_list.length > 0) {
 					CeL.error('get_chapter_list: Invalid NO: ' + matched[0]);
 				}
 				continue;
@@ -135,7 +148,12 @@ var crawler = new CeL.work_crawler({
 						// e.g., 古惑仔
 						|| get_label(matched
 						// for 七原罪 第168话 <十戒>歼灭计划
-						.replace(/ title="[^"]+"/, '')).replace(/\s+/g, ' '),
+						.replace(/ title="[^"]+"/, '')).replace(/\s+/g, ' ')
+						// 土豪漫画
+						|| get_label(matched
+						// <a href="/title/1.html" ...>title<span>（1P）</span>
+						// </a>
+						.match(/<a [^<>]+>([\s\S]+?)<\/span>/)[1]),
 
 				url : matched.between(' href="', '"')
 			};
@@ -145,10 +163,12 @@ var crawler = new CeL.work_crawler({
 			}
 			this.add_chapter(work_data, chapter_data);
 		}
+		// console.log(work_data);
 	},
 
 	pre_parse_chapter_data
-	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。必須自行保證不丟出異常。
+	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。
+	// 必須自行保證執行 callback()，不丟出異常、中斷。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
 		if (!work_data.image_list) {
 			// image_list[chapter_NO] = [url, url, ...]

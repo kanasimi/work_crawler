@@ -101,7 +101,8 @@ var crawler = new CeL.work_crawler({
 	},
 
 	pre_parse_chapter_data
-	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。必須自行保證不丟出異常。
+	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。
+	// 必須自行保證執行 callback()，不丟出異常、中斷。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
 		var html = XMLHttp.responseText;
 

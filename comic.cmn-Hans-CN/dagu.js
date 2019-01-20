@@ -57,6 +57,7 @@ var crawler = new CeL.work_crawler({
 					: matched[1].replace('/', '-'));
 			id_data.push(get_label(matched[2]));
 		}, this);
+		// console.log([ id_list, id_data ]);
 		return [ id_list, id_data ];
 	},
 
@@ -107,10 +108,12 @@ var crawler = new CeL.work_crawler({
 			work_data.chapter_list.push(chapter_data);
 		}
 		work_data.chapter_list.reverse();
+		// console.log(work_data.chapter_list);
 	},
 
 	pre_parse_chapter_data
-	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。必須自行保證不丟出異常。
+	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。
+	// 必須自行保證執行 callback()，不丟出異常、中斷。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
 		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
@@ -161,11 +164,12 @@ var crawler = new CeL.work_crawler({
 		chapter_data.image_list = [];
 		extract_image(XMLHttp);
 
-		CeL.run_serial(function(run_next, NO, index) {
-			var image_page_url = url.replace(/(\.[^.]+)$/, '_' + NO + '$1');
+		CeL.run_serial(function(run_next, image_NO, index) {
+			var image_page_url = url.replace(/(\.[^.]+)$/, '_' + image_NO
+					+ '$1');
 			// console.log('Get #' + index + ': ' + image_page_url);
-			process.stdout.write('Get image pages of #' + chapter_NO + ': '
-					+ NO + '/' + image_count + '...\r');
+			process.stdout.write('Get image data pages of #' + chapter_NO
+					+ ': ' + image_NO + '/' + image_count + '...\r');
 			_this.get_URL(image_page_url, function(XMLHttp) {
 				extract_image(XMLHttp);
 				run_next();
