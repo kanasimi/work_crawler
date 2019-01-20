@@ -126,6 +126,7 @@ crawler = new CeL.work_crawler({
 
 			// ----------------------------------
 			// 以下: 若是存在舊格式的檔案就把它移成新格式。
+			// @deprecated
 			// console.log(chapter_data);
 
 			// chapter_data.title = chapter_data.title.replace('文传', '文傳');
@@ -190,6 +191,7 @@ crawler = new CeL.work_crawler({
 					+ chapter_data.title + ': Can not get image count!';
 		}
 
+		// 將過去的 chapter_data.image_list cache 於 work_data.image_list。
 		if (work_data.image_list) {
 			chapter_data.image_list = work_data.image_list[chapter_NO - 1];
 			if (!this.reget_image_page && chapter_data.image_list
@@ -197,13 +199,6 @@ crawler = new CeL.work_crawler({
 				CeL.debug(work_data.title + ' #' + chapter_NO + ' '
 						+ chapter_data.title + ': Already got ' + image_count
 						+ ' images.');
-				chapter_data.image_list = chapter_data.image_list.map(function(
-						image_data) {
-					// 僅保留網址資訊。
-					return {
-						url : image_data.url
-					};
-				});
 				callback();
 				return;
 			}
@@ -218,21 +213,26 @@ crawler = new CeL.work_crawler({
 					'"');
 			CeL.debug('Add image ' + chapter_data.image_list.length + '/'
 					+ image_count + ': ' + url, 2, 'extract_image');
+			if (!url && !_this.skip_error) {
+				_this.onerror('No image url got: #'
+						+ chapter_data.image_list.length + '/' + image_count);
+			}
 			chapter_data.image_list.push({
 				url : url
 			});
 		}
 
 		chapter_data.image_list = [];
-		extract_image(XMLHttp);
+		if (image_count > 0)
+			extract_image(XMLHttp);
 
-		CeL.run_serial(function(run_next, NO, index) {
+		CeL.run_serial(function(run_next, image_NO, index) {
 			var image_page_url
 			//
 			= _this.full_URL(image_page_list[index - 1].url);
 			// console.log('Get #' + index + ': ' + image_page_url);
-			process.stdout.write('Get image pages of #' + chapter_NO + ': '
-					+ NO + '/' + image_count + '...\r');
+			process.stdout.write('Get image data pages of #' + chapter_NO
+					+ ': ' + image_NO + '/' + image_count + '...\r');
 			CeL.get_URL(image_page_url, function(XMLHttp) {
 				extract_image(XMLHttp);
 				run_next();
@@ -240,7 +240,11 @@ crawler = new CeL.work_crawler({
 				error_retry : _this.MAX_ERROR_RETRY
 			}, _this.get_URL_options));
 		}, image_count, 2, function() {
-			work_data.image_list[chapter_NO - 1] = chapter_data.image_list;
+			work_data.image_list[chapter_NO - 1] = chapter_data.image_list
+			// 僅保留網址資訊。
+			.map(function(image_data) {
+				return image_data.url;
+			});
 			callback();
 		});
 	},
