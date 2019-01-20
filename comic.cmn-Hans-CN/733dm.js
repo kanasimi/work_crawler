@@ -143,6 +143,8 @@ var crawler = new CeL.work_crawler({
 					url = url.replace("http://www.baidu1.com/", "");
 				}
 
+				url = url.replace(/(\.jpg)\/.*/, '$1');
+				// console.log(url);
 				if (!url.includes('://')) {
 					// File_Server 图片服务器
 					url = 'http://img_733.234us.com/' + url;
