@@ -53,6 +53,7 @@ var crawler = new CeL.work_crawler({
 					: matched[1].replace('/', '-'));
 			id_data.push(get_label(matched[2]));
 		}, this);
+		// console.log([ id_list, id_data ]);
 		return [ id_list, id_data ];
 	},
 
@@ -103,6 +104,7 @@ var crawler = new CeL.work_crawler({
 			work_data.chapter_list.push(chapter_data);
 		}
 		work_data.chapter_list.reverse();
+		// console.log(work_data.chapter_list);
 	},
 
 	parse_chapter_data : function(html, work_data) {

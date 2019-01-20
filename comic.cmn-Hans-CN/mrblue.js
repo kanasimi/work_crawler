@@ -67,7 +67,8 @@ var crawler = new CeL.work_crawler({
 		return chapter_data;
 	},
 
-	after_get_images : function(image_list, work_data, chapter_NO) {
+	// 每個圖片下載結束都會執行一次。
+	after_get_image : function(image_list, work_data, chapter_NO) {
 		// console.log(image_list);
 		var latest_image_data = image_list[image_list.index];
 		// console.log(latest_image_data);

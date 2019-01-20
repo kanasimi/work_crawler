@@ -17,6 +17,7 @@ var crawler = CeL.webtoon({
 	// https://www.webtoons.com/zh-hant/
 	language_code : 'zh-hant',
 
+	// 規範 work id 的正規模式；提取出引數中的作品id 以回傳。
 	extract_work_id : function(work_information) {
 		if (CeL.is_digits(work_information)
 		// e.g., webtoon 投稿新星專區 id 下載: "challenge_00000"

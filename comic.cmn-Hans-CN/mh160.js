@@ -46,7 +46,7 @@ var crawler = new CeL.work_crawler({
 			key : work_title
 		} ];
 	},
-	// @see archive/733dm.js comic.cmn-Hans-CN/katui.js
+	// @see archive/733dm.201808.js comic.cmn-Hans-CN/katui.js
 	parse_search_result : function(html) {
 		// console.log(html);
 		var id_list = [], id_data = [], matched, PATTERN =

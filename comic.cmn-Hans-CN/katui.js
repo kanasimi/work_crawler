@@ -1,7 +1,7 @@
 ﻿/**
  * 批量下載 卡推漫画 的工具。 Download katui comics.
  * 
- * @see 733dm.js , archive/733dm.js
+ * @see archive/733dm.201811.js , archive/733dm.201808.js
  */
 
 'use strict';
