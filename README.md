@@ -91,9 +91,9 @@
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。  [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 |
-| [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。 |
-| [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm其實是一樣的東西... |
-| [卡推漫画](http://www.katui.net/) | katui.js | 系統同 733dm.js |
+| [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。2018/11/9 之後 (11/16之後?) 改版成 晴天漫画系统 |
+| [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm內容類似... |
+| [卡推漫画](http://www.katui.net/) | katui.js | 系統同 archive/733dm.201808.js |
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
 | [漫画160](http://www.mh160.com/) | mh160.js | 與 733mh.js 相同系統 |
 | [哦漫画](http://www.omanhua.net/) | omanhua.js | |

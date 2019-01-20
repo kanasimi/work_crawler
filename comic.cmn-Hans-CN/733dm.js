@@ -1,5 +1,9 @@
 ﻿/**
  * 批量下載733动漫网的工具。 Download 733dm comics.
+ * 
+ * modify from nokiacn.js, dagu.js
+ * 
+ * @see qTcms 晴天漫画程序 晴天漫画系统 http://manhua.qingtiancms.com/
  */
 
 'use strict';
@@ -25,132 +29,133 @@ var crawler = new CeL.work_crawler({
 	// 最小容許圖案檔案大小 (bytes)。
 
 	// 因為要經過轉址，所以一個圖一個圖來。
-	one_by_one : true,
+	// one_by_one : true,
 	// 2018/3: https://www.733dm.net/
 	base_URL : 'https://www.733.so/',
-	charset : 'gb2312',
 
-	// 取得伺服器列表。
-	// use_server_cache : true,
-	// /skin/2014mh/global.js
-	server_URL : 'skin/2014mh/global.js',
-	parse_server_list : function(html) {
-		var server_list = [],
-		// e.g., WebimgServerURL[0]="http://img.tsjjx.com/"
-		// WebimgServerURL[0]="http://www.733mh.com/fd.php?url=http://img.tsjjx.com/";
-		matched, PATTERN = /\nWebimgServerURL\[\d\]\s*=\s*"([^"]+)"/g;
-		while (matched = PATTERN.exec(html)) {
-			server_list.push(matched[1].between('url=') || matched[1]);
-		}
-		// console.log(server_list);
-		return server_list;
-	},
+	// 733动漫网 2018/11/9 之後 (11/16之後?) 改版成 晴天漫画系统
+	// fs.readdirSync('.').forEach(function(d){if(/^\d+\s/.test(d))fs.renameSync(d,'manhua-'+d);})
+	// fs.readdirSync('.').forEach(function(d){if(/^manhua-/.test(d))fs.renameSync(d,d.replace(/^manhua-/,''));})
+	// 所有作品都使用這種作品類別前綴。
+	use_work_id_prefix : 'mh',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : {
-		URL : 'http://so.733dm.net/cse/search?s=12232769419968673741&q=',
-		charset : 'UTF-8'
+	search_URL : 'statics/search.aspx?key=',
+	parse_search_result : function(html, get_label) {
+		// console.log(html);
+		html = html.between('<div class="cy_list">', '</div>');
+		var id_list = [], id_data = [];
+		html.each_between('<li class="title">', '</li>', function(token) {
+			// console.log(token);
+			var matched = token.match(
+			//
+			/<a href="\/([a-z]+\/[a-z_\-\d]+)\/"[^<>]*?>([^<>]+)/);
+			// console.log(matched);
+			if (this.use_work_id_prefix
+			// 去掉所有不包含作品類別前綴者。
+			&& !matched[1].startsWith(this.use_work_id_prefix + '/'))
+				return;
+			id_list.push(this.use_work_id_prefix
+			//
+			? matched[1].slice((this.use_work_id_prefix + '/').length)
+					: matched[1].replace('/', '-'));
+			id_data.push(get_label(matched[2]));
+		}, this);
+		// console.log([ id_list, id_data ]);
+		return [ id_list, id_data ];
 	},
-	// for 百度站内搜索工具。非百度搜索系統得要自己撰寫。
-	parse_search_result : 'baidu',
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return '/mh/' + work_id + '/';
+		return (this.use_work_id_prefix ? this.use_work_id_prefix + '/'
+				+ work_id : work_id.replace('-', '/'))
+				+ '/';
 	},
-	parse_work_data : function(html, get_label) {
-		var text = html
-				.between('<div class="detailInfo">', '<div class="intro'),
-		// work_data={id,title,author,authors,chapters,last_update,last_download:{date,chapter}}
-		work_data = {
+	parse_work_data : function(html, get_label, extract_work_data) {
+		// console.log(html);
+		var work_data = {
 			// 必要屬性：須配合網站平台更改。
-			title : get_label(
-			//
-			text.between('<div class="titleInfo">', '</h1>')),
+			title : get_label(html.between('<h1>', '</h1>')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			status : get_label(text.between('</h1><span>', '</span>')),
-			description : get_label(html.between(
-					'<div class="introduction" id="intro1">', '</div>'))
+			description : get_label(html.between(' id="comic-description">',
+					'</')),
+			last_update_chapter : get_label(html.between('<p>最新话：', '</p>'))
 		};
-		text.each_between('<li class="twoCol">', '</li>', function(token) {
-			work_data[get_label(token.between('<span>', '</span>')).replace(
-					/：$/, '')] = get_label(token.between('</span>'));
+
+		extract_work_data(work_data, html);
+		extract_work_data(work_data, html.between('<h1>',
+				' id="comic-description">'),
+				/<span>([^<>：]+)：([\s\S]*?)<\/span>/g);
+
+		Object.assign(work_data, {
+			author : work_data.作者,
+			status : work_data.状态,
 		});
-		work_data.author = work_data.作者;
-		work_data.last_update = work_data.更新时间;
+
+		// console.log(work_data);
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
-		html = html.between('<div id="section">', '<div class="description">');
+		html = html.between('<div class="cy_plist', '</div>');
+
+		var matched, PATTERN_chapter =
+		//
+		/<li><a href="([^<>"]+)"[^<>]*>([\s\S]+?)<\/li>/g;
+
 		work_data.chapter_list = [];
-		var matched,
-		// [ , chapter_url, chapter_title ]
-		PATTERN_chapter = /<a href="(\/mh\/[^"]+)" title="([^"]+)"/g;
 		while (matched = PATTERN_chapter.exec(html)) {
-			work_data.chapter_list.push({
+			var chapter_data = {
 				url : matched[1],
 				title : get_label(matched[2])
-			});
+			};
+			work_data.chapter_list.push(chapter_data);
 		}
-		if (work_data.chapter_list.length > 1) {
-			// 轉成由舊至新之順序。
-			work_data.chapter_list.reverse();
-		}
-		// console.log(work_data);
+		work_data.chapter_list.reverse();
+		// console.log(work_data.chapter_list);
 	},
 
-	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
-		function decode(packed) {
-			var photosr = [];
-			// decode chapter data @ every picture page
-			eval(eval(atob(packed).slice(4)));
-			// 通常[0]===undefined
-			return photosr.filter(function(url) {
-				return url;
-			});
-		}
+	parse_chapter_data : function(html, work_data) {
+		// modify from mh160.js
 
-		var chapter_data = html.between('packed="', '"');
-		if (!chapter_data || !(chapter_data = decode(chapter_data))) {
+		var chapter_data = html.between('qTcms_S_m_murl_e="', '"');
+		if (chapter_data) {
+			// 對於非utf-8編碼之中文，不能使用 atob()???
+			chapter_data = atob(chapter_data).split("$qingtiandy$");
+		}
+		if (!chapter_data) {
+			CeL.log('無法解析資料！');
 			return;
 		}
 		// console.log(JSON.stringify(chapter_data));
 		// console.log(chapter_data.length);
 		// CeL.set_debug(6);
 
-		var chapter_URL = this.chapter_URL(work_data, chapter_NO);
-
 		// 設定必要的屬性。
 		chapter_data = {
-			image_list : chapter_data.map(function(url, index) {
-				// @see https://www.733.so/skin/2014mh/global.js?v=003 line 434
-				// https://www.733.so/skin/2014mh/view.js line 97
+			image_list : chapter_data.map(function(url) {
+				url = encodeURI(url);
+				// f_qTcms_Pic_curUrl() → f_qTcms_Pic_curUrl_realpic(v) @
+				// http://www.nokiacn.net/template/skin2/css/d7s/js/show.20170501.js?20180805095630
+				if (url.startsWith('/')) {
+					;
+				} else {
+					url = url.replace("http://www.baidu1.com/", "");
+				}
+
+				if (!url.includes('://')) {
+					// File_Server 图片服务器
+					url = 'http://img_733.234us.com/' + url;
+				}
 				return {
-					// 此 URL 會再轉址至圖片真實網址。
-					url : chapter_URL + "&mode=pc&hash="
-					// create md5 hash from string, hex_md5()
-					+ require('crypto').createHash('md5')
-					// 就算給一個錯誤的雜湊值似乎也可以獲得正確的檔案？
-					.update(chapter_URL + url).digest('hex') + "&file=" + url
+					url : url
 				};
-			})
+			}, this)
 		};
 		// console.log(JSON.stringify(chapter_data));
-		// console.log(chapter_data);
 
 		return chapter_data;
-	},
-	// 檢測用，不應該有實際作用。
-	image_preprocessor : function(contents, image_data) {
-		if (contents && contents.length === 99242) {
-			if (contents.slice(99000, 99020).toString('hex') ===
-			// 99242: @see #19
-			'5a925a19be65b31fac5555a73155540555501555')
-				throw this.id + ' 改版了!';
-		}
 	}
-
 });
 
 // ----------------------------------------------------------------------------
