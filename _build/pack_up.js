@@ -12,9 +12,14 @@ var repository = 'work_crawler', branch = 'master', update_script_url = 'https:/
 // ----------------------------------------------------------------------------
 
 // const
-var node_https = require('https'), node_fs = require('fs'), child_process = require('child_process');
+var node_https = require('https'), node_fs = require('fs'), child_process = require('child_process')
+// path segment separator
+path_separator = require('path').sep;
 
-show_info('Build package in current directory...');
+// You may need to change the working directory first.
+
+show_info('Build package in current directory [' + process.cwd() + ']...');
+
 download_update_tool(update_script_url, build_package);
 
 function show_info(message) {
@@ -56,19 +61,27 @@ function download_update_tool(update_script_url, callback) {
 	});
 }
 
+function remove_directory(directory_path) {
+	var is_windows = process.platform.startsWith('win');
+	if (is_windows)
+		directory_path = directory_path.replace(/[\\\/]/g, path_separator);
+	child_process.execSync((is_windows ? 'rd /s /q' : 'rm -rf') + ' "'
+			+ directory_path + '"', {
+		stdio : 'inherit'
+	});
+}
+
 function build_package(update_script_name) {
 	var directory_name = repository + '-' + branch;
 	if (node_fs.existsSync(directory_name)) {
 		show_info('清理戰場...');
-		child_process.execSync(
-				(process.platform.startsWith('win') ? 'rd /s /q ' : 'rm -rf ')
-						+ directory_name, {
-					stdio : 'inherit'
-				});
+		remove_directory(directory_name);
 	}
+	// clean previous cache
 	try {
-		fs.unlinkSync('work_crawler-master.version.json');
+		node_fs.unlinkSync('work_crawler-master.version.json');
 	} catch (e) {
+		// TODO: handle exception
 	}
 
 	show_info('建立執行環境...');
@@ -78,7 +91,7 @@ function build_package(update_script_name) {
 	});
 
 	node_fs.renameSync(directory_name + '.version.json', directory_name
-			+ require('path').sep + directory_name + '.version.json');
+			+ path_separator + directory_name + '.version.json');
 
 	// cd work_crawler-master
 	process.chdir(directory_name);
@@ -91,16 +104,10 @@ function build_package(update_script_name) {
 		stdio : 'inherit'
 	});
 
-	// rm -rf node_modules/cejs
-	child_process.execSync((process.platform.startsWith('win') ? 'rd /s /q '
-			: 'rm -rf ')
-			+ 'node_modules/cejs', {
-		stdio : 'inherit'
-	});
+	remove_directory('node_modules/cejs');
 
 	// mv CeJS-master node_modules/cejs
-	node_fs.renameSync('CeJS-master', 'node_modules' + require('path').sep
-			+ 'cejs');
+	node_fs.renameSync('CeJS-master', 'node_modules' + path_separator + 'cejs');
 
 	show_info('開始打包...');
 	child_process.execSync('npm run-script dist', {
