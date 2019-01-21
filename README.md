@@ -84,6 +84,7 @@
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
 | [土豪漫画](https://www.tohomh.com/) | tohomh.js | 系統似 dm5。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | |
+| [微博动漫](http://manhua.weibo.com/) | weibo.js | 竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [大古漫画网](https://www.dagumanhua.com/) | dagu.js | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。 |
 | [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |

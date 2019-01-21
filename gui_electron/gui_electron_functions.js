@@ -24,6 +24,7 @@ download_sites_set = {
 		zymk : '知音漫客',
 		dajiaochong : '大角虫漫画',
 		kuaikan : '快看漫画',
+		weibo : '微博动漫',
 
 		katui : '卡推漫画',
 		pufei : '扑飞漫画',
