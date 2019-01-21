@@ -26,6 +26,8 @@ download_sites_set = {
 		kuaikan : '快看漫画',
 
 		katui : '卡推漫画',
+		pufei : '扑飞漫画',
+		taduo : '塔多漫画',
 		'733dm' : '733动漫网',
 		'733mh' : '733漫画网',
 		mh160 : '漫画160',
@@ -118,6 +120,9 @@ download_options_set = {
 	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。',
 	main_directory : '下載檔案儲存目錄路徑。圖片檔+紀錄檔下載位置。',
 	user_agent : '瀏覽器識別。運行前後始終維持相同的瀏覽器識別，應該就不會影響到下載。',
+
+	write_chapter_metadata : '將每個章節壓縮檔的資訊寫入同名(添加.json延伸檔名)的JSON檔。',
+	write_image_metadata : '將每個圖像的資訊寫入同名(添加.json延伸檔名)的JSON檔。',
 
 	preserve_download_work_layer : '下載完成後保留下載進度條'
 },
