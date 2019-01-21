@@ -121,8 +121,8 @@ download_options_set = {
 	main_directory : '下載檔案儲存目錄路徑。圖片檔+紀錄檔下載位置。',
 	user_agent : '瀏覽器識別。運行前後始終維持相同的瀏覽器識別，應該就不會影響到下載。',
 
-	write_chapter_metadata : '將每個章節壓縮檔的資訊寫入同名(添加.json延伸檔名)的JSON檔。',
-	write_image_metadata : '將每個圖像的資訊寫入同名(添加.json延伸檔名)的JSON檔。',
+	write_chapter_metadata : '將每個章節壓縮檔的資訊寫入同名(添加.json延伸檔名)的JSON檔，方便其他工具匯入用。',
+	write_image_metadata : '將每個圖像的資訊寫入同名(添加.json延伸檔名)的JSON檔，方便其他工具匯入用。',
 
 	preserve_download_work_layer : '下載完成後保留下載進度條'
 },
