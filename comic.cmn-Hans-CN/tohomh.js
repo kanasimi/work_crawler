@@ -22,7 +22,8 @@ var crawler = new CeL.work_crawler({
 	// skip_error : true,
 
 	// one_by_one : true,
-	base_URL : 'https://www.tohomh.com/',
+	// 2019/1/21 土豪漫畫網址更動 ← https://www.tohomh.com/
+	base_URL : 'https://www.tohomh123.com/',
 
 	preserve_chapter_page : false,
 	// 提取出引數（如 URL）中的作品ID 以回傳。
@@ -225,6 +226,7 @@ var crawler = new CeL.work_crawler({
 			_this.get_URL(base_URL + image_NO + '&tmp=' + Math.random(),
 			// @see https://manhua.wzlzs.com/muban/mh/js/p.js?20181207
 			function(XMLHttp) {
+				// console.log(XMLHttp.responseText);
 				var data;
 				try {
 					// {"IsError":false,"MessageStr":null,"Code":"https://mh2.ahjsny.com/upload/id/0001/0001.jpg"}
