@@ -38,6 +38,12 @@ var crawler = new CeL.work_crawler({
 	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
+			title : get_label(html.between(
+			// 2019/1/21 アルファポリス 公式漫画 改版
+			'<div class="manga-detail-description', '</div>')
+			// <div class="manga-detail-description section"> <div
+			// class="title"> <h1>title</h1> </div>
+			.between('<h1>', '</h1>')),
 
 			// 選擇性屬性：須配合網站平台更改。
 			// e.g., 连载中, 連載中
@@ -58,6 +64,7 @@ var crawler = new CeL.work_crawler({
 
 		};
 
+		// console.log(html);
 		extract_work_data(work_data, html);
 
 		work_data.status = work_data.status.concat(
