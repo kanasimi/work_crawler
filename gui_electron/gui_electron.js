@@ -17,7 +17,13 @@ function create_window() {
 	win = new BrowserWindow(Object.assign({
 		// https://github.com/electron-userland/electron-builder/issues/2269#issuecomment-342168989
 		// Mac OS icon: at least 512x512
-		icon : path.join(__dirname, '/icon/rasen2.png')
+		icon : path.join(__dirname, '/icon/rasen2.png'),
+		webPreferences : {
+			// https://github.com/electron/electron/issues/5113
+			// preload : "preload.js",
+			// https://electronjs.org/docs/faq
+			nodeIntegration : true
+		}
 	},
 	// https://github.com/electron/electron/blob/master/docs/api/screen.md
 	require('electron').screen.getPrimaryDisplay().workAreaSize));
