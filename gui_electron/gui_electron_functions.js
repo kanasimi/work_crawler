@@ -53,7 +53,9 @@ download_sites_set = {
 		comico : 'comico',
 
 		webtoon : 'WEBTOON',
-		dongman : '咚漫'
+		dongman : '咚漫',
+
+		mrblue : 'Mr.Blue (不再維護)'
 	},
 	'comic.ja-JP' : {
 		ComicWalker : 'ComicWalker',
