@@ -123,7 +123,7 @@ if (is_CLI && !work_id && process.mainModule
 	var main_script = process.mainModule
 			&& process.mainModule.filename.match(/[^\\\/]+$/)[0],
 	//
-	options_arguments = ' [option=true] [option=value]';
+	options_arguments = ' [option=true] ["option=value"]';
 	// 顯示幫助信息/用法說明。
 	CeL.log('Usage:\n	node ' + main_script + ' "work title / work id"'
 			+ options_arguments + '\n'
@@ -157,12 +157,16 @@ function setup_crawler(crawler, crawler_module) {
 	+ CeL.env.path_separator;
 
 	if (site_configuration[crawler.id]) {
+		// assert: 不包含 .main_directory
 		Object.assign(crawler, site_configuration[crawler.id]);
 	}
 
 	if (proxy_server) {
 		crawler.proxy = proxy_server;
 	}
+
+	// 從命令列引數來的設定，優先等級比起作品預設設定更高。
+	crawler.import_args();
 
 	if (typeof setup_crawler.prepare === 'function') {
 		setup_crawler.prepare(crawler, crawler_module);
