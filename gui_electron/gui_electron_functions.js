@@ -53,9 +53,9 @@ download_sites_set = {
 		comico : 'comico',
 
 		webtoon : 'WEBTOON',
-		dongman : '咚漫',
+		dongman : '咚漫'
 
-		mrblue : 'Mr.Blue (不再維護)'
+	// mrblue : 'Mr.Blue (不再維護)'
 	},
 	'comic.ja-JP' : {
 		ComicWalker : 'ComicWalker',
@@ -77,10 +77,10 @@ download_sites_set = {
 	'comic.en-US' : {
 		webtoon : 'WEBTOON en',
 
-		mangamew : 'Manga Mew',
-		manganew : 'Manga New',
+		mangamew : 'Manga Mew (不再維護)',
+		manganew : 'Manga New (不再維護)',
 
-		Rocaca : 'rocaca'
+		Rocaca : 'rocaca (不再維護)'
 	},
 	'novel.cmn-Hans-CN' : {
 		qidian : '起点中文网',
