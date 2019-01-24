@@ -104,7 +104,10 @@ CeL.run([
 // Add color to console messages. 添加主控端報告的顏色。
 'interact.console',
 // 載入批量下載小說、漫畫的主要功能。
-'application.net.work_crawler' ]);
+'application.net.work_crawler' ], function() {
+	// 不自動匯入 .env.arg_hash
+	CeL.work_crawler.prototype.auto_import_args = false;
+});
 
 // ----------------------------------------------------------------------------
 
@@ -140,6 +143,8 @@ if (is_CLI && !work_id && process.mainModule
 	process.exit();
 }
 
+// ----------------------------------------------------------------------------
+
 function setup_crawler(crawler, crawler_module) {
 	// 不重複設定。
 	if (crawler.already_settled)
@@ -152,20 +157,16 @@ function setup_crawler(crawler, crawler_module) {
 	}
 
 	// 儲存路徑。圖片檔+紀錄檔下載位置。
-	crawler.main_directory = data_directory + crawler.id
-	// main_directory 必須以 path separator 作結。
-	+ CeL.env.path_separator;
+	crawler.setup_value('main_directory', data_directory + crawler.id);
 
-	if (site_configuration[crawler.id]) {
-		// assert: 不包含 .main_directory
-		Object.assign(crawler, site_configuration[crawler.id]);
-	}
+	crawler.setup_value(site_configuration[crawler.id]);
 
 	if (proxy_server) {
-		crawler.proxy = proxy_server;
+		crawler.setup_value('proxy', proxy_server);
 	}
 
 	// 從命令列引數來的設定，優先等級比起作品預設設定更高。
+	// console.log(CeL.env.arg_hash);
 	crawler.import_args();
 
 	if (typeof setup_crawler.prepare === 'function') {
