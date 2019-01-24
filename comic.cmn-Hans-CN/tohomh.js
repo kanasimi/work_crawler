@@ -191,9 +191,9 @@ var crawler = new CeL.work_crawler({
 			return;
 		}
 
-		work_data.chapter_list[chapter_NO - 1].image_list
+		var image_list = work_data.image_list[chapter_NO - 1]
 		//
-		= work_data.image_list[chapter_NO - 1] = [
+		= work_data.chapter_list[chapter_NO - 1].image_list = [
 		// 第一張圖片的網址在網頁中。
 		html.between(' class="comiclist"', '</div>').between(' src="', '"') ];
 
@@ -215,22 +215,20 @@ var crawler = new CeL.work_crawler({
 			// e.g., https://www.tohomh.com/shijie/276.html
 			this.onwarning(this.id + ': Failed to get chapter page of #'
 					+ chapter_NO, work_data);
-			work_data.image_list[chapter_NO - 1].truncate();
+			image_list.truncate();
 			callback();
 			return;
 		}
 
 		CeL.run_serial(function(run_next, image_NO) {
-			process.stdout.write('Get image data pages of #' + chapter_NO
-					+ ': ' + image_NO + '/' + image_count + '...\r');
-			_this.get_URL(base_URL + image_NO + '&tmp=' + Math.random(),
 			// @see https://manhua.wzlzs.com/muban/mh/js/p.js?20181207
-			function(XMLHttp) {
+			function add_image_data(XMLHttp) {
 				// console.log(XMLHttp.responseText);
-				var data;
+				var image_data;
 				try {
+					image_data
 					// {"IsError":false,"MessageStr":null,"Code":"https://mh2.ahjsny.com/upload/id/0001/0001.jpg"}
-					data = encodeURI(JSON.parse(XMLHttp.responseText).Code);
+					= encodeURI(JSON.parse(XMLHttp.responseText).Code);
 				} catch (e) {
 					// e.g., status 500
 					if (_this.skip_error) {
@@ -239,9 +237,15 @@ var crawler = new CeL.work_crawler({
 						_this.onerror(e);
 					}
 				}
-				work_data.image_list[chapter_NO - 1].push(data);
+				image_list.push(image_data);
 				run_next();
-			});
+			}
+
+			process.stdout.write('Get image data pages of #' + chapter_NO
+					+ ': ' + image_NO + '/' + image_count + '...\r');
+
+			_this.get_URL(base_URL + image_NO + '&tmp=' + Math.random(),
+					add_image_data);
 		}, image_count, config.iid, callback);
 	}
 });
