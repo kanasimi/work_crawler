@@ -150,8 +150,19 @@ delete save_to_preference.main_directory;
 
 require(base_directory + 'work_crawler_loder.js');
 
+CeL.run([ 'application.debug.log', 'interact.DOM' ], initializer);
+
+// ---------------------------------------------------------------------//
+
+// for i18n: define gettext() user domain resource location.
+// gettext() will auto load (CeL.env.domain_location + language + '.js').
+// e.g., resource/cmn-Hant-TW.js, resource/ja-JP.js
+CeL.env.domain_location = 'resource/';
+// declaration for gettext()
+var _;
+
 // initialization
-CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
+function initializer() {
 	CeL.Log.set_board('log_panel');
 	// CeL.set_debug();
 	// 設置完成
@@ -160,6 +171,16 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 
 	CeL.debug('當前目錄: ' + CeL.storage.working_directory(), 1);
 	CeL.debug('環境變數: ' + JSON.stringify(process.env), 1);
+
+	// --------------------------------
+
+	_ = CeL.gettext;
+
+	_.create_menu('language_menu', [ 'TW', 'CN', 'ja', 'en', 'ko' ],
+	//
+	function() {
+		;
+	});
 
 	// --------------------------------
 
@@ -387,7 +408,7 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], function() {
 
 	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
 	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
-});
+}
 
 // --------------------------------------------------------------------------------------------------------------------
 
