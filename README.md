@@ -10,10 +10,10 @@
 -->
 
 # CeJS 線上小說漫畫下載工具 online novels / comics downloader
-- [en] Download novels → epub and comics with [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) and [command-line interface](https://en.wikipedia.org/wiki/Command-line_interface).
-- [TW] 批量下載小說 → epub、漫畫網站的工具。視窗+命令行介面。
-- [CN] 批量下载小说 → epub、漫画网站的网络爬虫。图形+命令行界面。
-- [ja] ウェブ小説 → epub、ウェブ漫画作品を一括ダウンロードツール。グラフィカル+コマンドラインインターフェース。
+- [en] Download novels (→ epub) and comics with [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) and [command-line interface](https://en.wikipedia.org/wiki/Command-line_interface).
+- [TW] 批量下載小說 (→ epub)、漫畫網站的工具。視窗+命令行介面。
+- [CN] 批量下载小说 (→ epub)、漫画网站的网络爬虫。图形+命令行界面。
+- [ja] ウェブ小説 (→ epub)、ウェブ漫画作品を一括ダウンロードツール。グラフィカル+コマンドラインインターフェース。
 
 ## TOC 快速瀏覽
 * [Installation 安裝](#installation-安裝)
@@ -84,19 +84,20 @@
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
 | [土豪漫画](https://www.tohomh.com/) | tohomh.js | 系統似 dm5。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | |
-| [微博动漫](http://manhua.weibo.com/) | weibo.js | 竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
+| [微博动漫](http://manhua.weibo.com/) | weibo.js | **本工具無法下載VIP付費內容** 竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [大古漫画网](https://www.dagumanhua.com/) | dagu.js | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。 |
-| [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |
-| [看漫画](https://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/)<br />[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板?<br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? |
+| [360漫画](http://www.xatxwh.com/) | 360taofu.js | 有些漫畫畫質較高<br />[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) |
+| [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多<br />[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
+| [看漫画](https://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/)<br />[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板?<!-- <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。  [圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 |
-| [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm內容類似... |
+| [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm內容類似...<br />可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板3](http://manhua4.qingtiancms.net/)?? |
 | [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。2018/11/9 之後 (11/16之後?) 改版成 晴天漫画系统 |
-| [卡推漫画](http://www.katui.net/) | katui.js | 系統同 archive/733dm.201808.js，可能為早期晴天漫画系统？ |
-| [扑飞漫画](http://www.pufei.net/) | pufei.js | 系統同 archive/733dm.201808.js，可能為早期晴天漫画系统？ |
-| [塔多漫画](http://www.taduo.net/) | taduo.js | 系統同 archive/733dm.201808.js，可能為早期晴天漫画系统？ |
+| [卡推漫画](http://www.katui.net/) | katui.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
+| [扑飞漫画](http://www.pufei.net/) | pufei.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
+| [塔多漫画](http://www.taduo.net/) | taduo.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
 | [漫画160](http://www.mh160.com/) | mh160.js | 與 733mh.js 相同系統 |
 | [哦漫画](http://www.omanhua.net/) | omanhua.js | |

@@ -33,6 +33,7 @@ download_sites_set = {
 		'733mh' : '733漫画网',
 		mh160 : '漫画160',
 		nokiacn : '乙女漫画',
+		'360taofu' : '360漫画',
 		dagu : '大古漫画网',
 		manhuadb : '漫画DB',
 
