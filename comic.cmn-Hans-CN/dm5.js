@@ -12,7 +12,8 @@ var crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
-	// recheck : true,
+	// 有些漫畫作品分區分單行本、章節與外傳，當章節數量改變、添加新章節時就需要重新檢查。
+	recheck : 'changed',
 	// 當無法取得chapter資料時，直接嘗試下一章節。在手動+監視下recheck時可併用此項。
 	// skip_chapter_data_error : true,
 
@@ -266,8 +267,31 @@ var crawler = new CeL.work_crawler({
 
 			// 這段程式碼模仿 work_crawler 模組的行為。
 			// @see image_data.file @ CeL.application.net.work_crawler
-			return chapter_directory + work_data.id + '-' + chapter_NO + '_'
-					+ image_NO.pad(3) + '.' + _this.default_image_extension;
+			function path_of(chapter_NO) {
+				return chapter_directory + work_data.id + '-' + chapter_NO
+						+ '_' + image_NO.pad(3) + '.'
+						+ _this.default_image_extension;
+			}
+
+			var image_file_path = path_of(chapter_data.NO_in_part >= 1
+			// 若有分部，則以部編號為主。
+			? chapter_data.NO_in_part : chapter_NO);
+
+			if (!CeL.file_exists(image_file_path)) {
+				function move_old_file(chapter_NO) {
+					var old_image_file_path = path_of(chapter_NO);
+					if (old_image_file_path !== image_file_path
+							&& CeL.file_exists(old_image_file_path)) {
+						CeL.move_file(old_image_file_path, image_file_path);
+						return true;
+					}
+				}
+				move_old_file(chapter_NO)
+				// || move_old_file(chapter_data.NO_in_part + 1)
+				;
+			}
+
+			return image_file_path;
 		}
 
 		// --------------------------------------
