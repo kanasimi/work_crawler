@@ -11,6 +11,7 @@
 	"homepage" : "https://github.com/kanasimi/work_crawler",
 	"license" : "BSD-3-Clause",
 	"scripts" : {
+		"test" : "node \"work_crawler.updater.js\"",
 		"start" : "node_modules/.bin/electron .",
 		"pack" : "node_modules/.bin/electron-builder --dir",
 		"dist" : "node_modules/.bin/electron-builder",
