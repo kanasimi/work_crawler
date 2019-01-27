@@ -27,6 +27,8 @@ var crawler = new CeL.work_crawler({
 	// 本站採用採集其他網站圖片的方法，錯漏圖片太多。
 	skip_error : true,
 
+	guess_image_url : true,
+
 	// {Natural}最小容許圖案檔案大小 (bytes)。
 	// MIN_LENGTH : 500,
 
@@ -41,7 +43,7 @@ var crawler = new CeL.work_crawler({
 
 	// 規範 work id 的正規模式；提取出引數中的作品id 以回傳。
 	extract_work_id : function(work_information) {
-		if (/^[a-z\-\d]+$/.test(work_information))
+		if (/^[a-z\-\d]+_[a-z\-\d]+$/.test(work_information))
 			return work_information;
 	},
 
@@ -145,62 +147,69 @@ var crawler = new CeL.work_crawler({
 				if (url.startsWith('/')) {
 					// url = qTcms_m_weburl + url;
 				} else if (html.between('qTcms_Pic_m_if="', '"') !== "2") {
-					var original_url;
-					if (false) {
-						url = url.replace(/^.+:\/(\/[^\/]+\/comic\/)/,
-						// http://www.xatxwh.com/hougong/nvzixueyuandenansheng/306555.html
-						// http://www.xatxwh.com/hougong/nvzixueyuandenansheng/306615.html
-						// http://www.xatxwh.com/hougong/nvzixueyuandenansheng/306617.html
+					if (this.guess_image_url) {
+						var original_url;
+						if (false) {
+							url = url.replace(/^.+:\/(\/[^\/]+\/comic\/)/,
+							// http://www.xatxwh.com/hougong/nvzixueyuandenansheng/306555.html
+							// http://www.xatxwh.com/hougong/nvzixueyuandenansheng/306615.html
+							// http://www.xatxwh.com/hougong/nvzixueyuandenansheng/306617.html
+							function(all, domain) {
+								if (domain === '/mhpic.cnmanhua.com/comic/') {
+									// http://mhpic.cnmanhua.com/comic/N%2F%E5%A5%B3%E5%AD%90%E5%AD%A6%E9%99%A2%E7%9A%84%E7%94%B7%E7%94%9F%2F60%E8%AF%9D%2F1.jpg-kmw.middle
+									// sometimes '2f', sometimes 'f'
+									return encodeURIComponent_low_case('/')
+											.slice(1);
+								}
+								return all;
+							});
+						}
+						url = url.replace(/^.+:\/(\/[^\/]+\/)/,
+						// 去掉 domain。
 						function(all, domain) {
-							if (domain === '/mhpic.cnmanhua.com/comic/') {
-								// http://mhpic.cnmanhua.com/comic/N%2F%E5%A5%B3%E5%AD%90%E5%AD%A6%E9%99%A2%E7%9A%84%E7%94%B7%E7%94%9F%2F60%E8%AF%9D%2F1.jpg-kmw.middle
-								// sometimes '2f', sometimes 'f'
-								return encodeURIComponent_low_case('/')
-										.slice(1);
+							// http://www.xatxwh.com/maoxian/shenzhouluan/43845.html
+							if (domain in {
+								'/ac.tc.qq.com/' : true,
+								'/res.img.pufei.net/' : true,
+								'/res.gufengmh.com/' : true,
+								'/res.mhkan.com/' : true,
+								// http://img.manhua.weibo.com/comic/15/69915/325331/001_325331_shard_0.jpg
+								'/img.manhua.weibo.com/' : true,
+								'/www.72qier.com/' : true,
+								// http://www.xatxwh.com/wuxia/longfuzhiwangdaotianxia/85948.html
+								'/coldpic.sfacg.com/' : true,
+
+							// http://www.xatxwh.com/xuanhuan/mikexingdong/473867.html
+							// http://www.uc5522.net/upload2/5305/2018/12-26/20181226142148_978226bk48kPjA.D._small.jpg
+							}) {
+								return '';
 							}
-							return all;
+
+							// http://www.xatxwh.com/maoxian/shenzhouluan/43899.html
+							if (domain in {
+								'/manhua.qpic.cn/' : true
+							}) {
+								return domain;
+							}
+
+							original_url = url;
 						});
-					}
-					url = url.replace(/^.+:\/(\/[^\/]+\/)/,
-					// 去掉 domain。
-					function(all, domain) {
-						// http://www.xatxwh.com/maoxian/shenzhouluan/43845.html
-						if (domain in {
-							'/ac.tc.qq.com/' : true,
-							'/res.img.pufei.net/' : true,
-							'/res.gufengmh.com/' : true,
-							'/res.mhkan.com/' : true,
-							// http://img.manhua.weibo.com/comic/15/69915/325331/001_325331_shard_0.jpg
-							'/img.manhua.weibo.com/' : true,
-							'/www.72qier.com/' : true
-						}) {
-							return '';
+						url = encodeURIComponent_low_case(
+						// 尋找採集後放置的地點。
+						url.replace(/[\s.]/g, '_')).replace(/%/g, '_');
+						url = '/qingtiancms_wap/upload2/cache/'
+								+ work_data.qTid + '/' + url + '.jpg';
+						if (!original_url) {
+							return {
+								url : url
+							};
 						}
 
-						// http://www.xatxwh.com/maoxian/shenzhouluan/43899.html
-						if (domain in {
-							'/manhua.qpic.cn/' : true
-						}) {
-							return domain;
-						}
-
-						original_url = url;
-					});
-					url = encodeURIComponent_low_case(
-					// 尋找採集後放置的地點。
-					url.replace(/[\s.]/g, '_')).replace(/%/g, '_');
-					url = '/qingtiancms_wap/upload2/cache/' + work_data.qTid
-							+ '/' + url + '.jpg';
-					if (!original_url) {
-						return {
-							url : url
-						};
+						if (!original_url.includes('/mhpic.cnmanhua.com/'))
+							CeL.error('Unknown domain: "' + original_url
+									+ '", 請回報。');
+						url = original_url;
 					}
-
-					if (!original_url.includes('/mhpic.cnmanhua.com/'))
-						CeL.error('Unknown domain: "' + original_url
-								+ '", 請回報。');
-					url = original_url;
 
 					// 因被 Cloudflare 保護，盡可能改成上面使用的，嘗試直接取得圖片檔案位址。
 					// 其他判別不出來的，則用正統方法。
@@ -219,7 +228,7 @@ var crawler = new CeL.work_crawler({
 				return {
 					url : url
 				};
-			})
+			}, this)
 		};
 		// console.log(JSON.stringify(chapter_data));
 
