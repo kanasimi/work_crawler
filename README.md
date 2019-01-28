@@ -1,4 +1,5 @@
-﻿[![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)
+[![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkanasimi%2Fwork_crawler.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkanasimi%2Fwork_crawler?ref=badge_shield)
+
 ![GitHub Release Date](https://img.shields.io/github/release-date/kanasimi/work_crawler.svg)
 ![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)
 ![GitHub commit activity the past week, 4 weeks, year](https://img.shields.io/github/commit-activity/y/kanasimi/work_crawler.svg)
@@ -306,3 +307,7 @@ auto-update
 
 https://ctrlq.org/google/photos/
 -->
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkanasimi%2Fwork_crawler.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkanasimi%2Fwork_crawler?ref=badge_large)
