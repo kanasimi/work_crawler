@@ -987,6 +987,7 @@ function check_update() {
 	}
 
 	if (!is_installation_package) {
+		// ，請勿關閉程式
 		CeL.log('非安裝包版本自動更新程序於背景檢測並執行中。');
 		// 非安裝包圖形介面自動更新功能。
 		require('child_process').exec('node work_crawler.updater.js', {
@@ -994,7 +995,10 @@ function check_update() {
 			// https://nodejs.org/api/child_process.html#child_process_options_stdio
 			stdio : 'inherit'
 		}, function(error, stdout, stderr) {
-			CeL.error('Update checking failed: ' + error);
+			if (error)
+				CeL.error('Update checking failed: ' + error);
+			else
+				CeL.info('Update checked.');
 		});
 		return;
 	}
@@ -1002,7 +1006,7 @@ function check_update() {
 	// --------------------------------
 
 	CeL.debug('Checking update...');
-	var GitHub_repository_path = 'kanasimi/work_crawler',
+	var GitHub_repository_path = 'kanasimi/work_crawler';
 	var update_panel = CeL.new_node({
 		div : {
 			T : 'Checking update...',
