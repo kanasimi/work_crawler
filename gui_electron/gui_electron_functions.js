@@ -105,6 +105,7 @@ download_sites_set = {
 // const 下載選項。有順序。常用的排前面。
 // @see CeL.application.net.work_crawler
 download_options_set = {
+	// 亮著的原因可能是因為設定成了 'changed'，此時請取消勾選後重新勾選可強制從頭檢測。
 	recheck : '從頭檢測所有作品之所有章節與所有圖片。',
 	start_chapter : '將開始/接續下載的章節編號。對已下載過的章節，必須配合 .recheck。',
 	chapter_filter : '篩選想要下載的章節標題關鍵字。例如"單行本"。',
@@ -408,7 +409,7 @@ function initializer() {
 	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
 	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
 
-	// 延遲檢測更新。
+	// 延遲檢測更新，避免 hang 住。
 	setTimeout(check_update, 2000);
 }
 
@@ -1011,10 +1012,9 @@ function check_update() {
 		}
 
 		if (!is_installation_package) {
-			CeL.log('自動更新檢測並執行中。');
-			// 非安裝包圖形介面自動更新功能
-			var child_process = require('child_process');
-			child_process.execSync('node work_crawler.updater.js', {
+			CeL.log('非安裝包版自動更新檢測並執行中。');
+			// 非安裝包圖形介面自動更新功能。
+			require('child_process').exec('node work_crawler.updater.js', {
 				// pass I/O to the child process
 				// https://nodejs.org/api/child_process.html#child_process_options_stdio
 				stdio : 'inherit'
