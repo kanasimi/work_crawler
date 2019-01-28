@@ -109,7 +109,8 @@ download_options_set = {
 	start_chapter : '將開始/接續下載的章節編號。對已下載過的章節，必須配合 .recheck。',
 	chapter_filter : '篩選想要下載的章節標題關鍵字。例如"單行本"。',
 	// 重新擷取用的相關操作設定。
-	regenerate : '章節數量無變化時依舊利用 cache 重建資料(如ebook)。',
+	// 漫畫不需要重建電子書檔案
+	regenerate : '章節數量無變化時依舊利用 cache 重建資料(如下載小說時不重新取得網頁資料，只重建ebook檔)。',
 	reget_chapter : '重新取得每個所檢測的章節內容。',
 
 	archive_images : '漫畫下載完畢後壓縮圖像檔案。',
@@ -392,8 +393,6 @@ function initializer() {
 		});
 	}
 
-	check_update();
-
 	'debug,log,info,warn,error'.split(',').forEach(function(log_type) {
 		node_electron.ipcRenderer
 		//
@@ -408,6 +407,9 @@ function initializer() {
 
 	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
 	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
+
+	// 延遲檢測更新。
+	setTimeout(check_update, 2000);
 }
 
 // --------------------------------------------------------------------------------------------------------------------
