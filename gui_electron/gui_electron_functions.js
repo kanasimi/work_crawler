@@ -981,7 +981,35 @@ function open_download_directory(crawler) {
 // ----------------------------------------------
 
 function check_update() {
-	var update_panel;
+	if (!global.auto_update) {
+		CeL.log('已設定不自動更新。');
+		return;
+	}
+
+	if (!is_installation_package) {
+		CeL.log('非安裝包版本自動更新程序於背景檢測並執行中。');
+		// 非安裝包圖形介面自動更新功能。
+		require('child_process').exec('node work_crawler.updater.js', {
+			// pass I/O to the child process
+			// https://nodejs.org/api/child_process.html#child_process_options_stdio
+			stdio : 'inherit'
+		}, function(error, stdout, stderr) {
+			CeL.error('Update checking failed: ' + error);
+		});
+		return;
+	}
+
+	// --------------------------------
+
+	CeL.debug('Checking update...');
+	var GitHub_repository_path = 'kanasimi/work_crawler',
+	var update_panel = CeL.new_node({
+		div : {
+			T : 'Checking update...',
+			C : 'waiting'
+		},
+		id : 'update_panel'
+	}, [ document.body, 'first' ]);
 
 	function update_process(version_data) {
 		console.log(version_data);
@@ -1006,36 +1034,9 @@ function check_update() {
 	}
 
 	try {
-		if (!global.auto_update) {
-			CeL.log('已設定不自動更新。');
-			return;
-		}
-
-		if (!is_installation_package) {
-			CeL.log('非安裝包版自動更新檢測並執行中。');
-			// 非安裝包圖形介面自動更新功能。
-			require('child_process').exec('node work_crawler.updater.js', {
-				// pass I/O to the child process
-				// https://nodejs.org/api/child_process.html#child_process_options_stdio
-				stdio : 'inherit'
-			});
-			return;
-		}
-
-		CeL.debug('Checking update...');
-		var GitHub_repository_path = 'kanasimi/work_crawler';
-		update_panel = CeL.new_node({
-			div : {
-				T : 'Checking update...',
-				C : 'waiting'
-			},
-			id : 'update_panel'
-		}, [ document.body, 'first' ]);
-
-		var updater = require('gh-updater');
-		updater.check_version(GitHub_repository_path,
+		require('gh-updater')
 		// 必須手動上網站把檔案下載下來執行更新。
-		update_process);
+		.check_version(GitHub_repository_path, update_process);
 
 	} catch (e) {
 		CeL.error('Update checking failed: ' + e);
