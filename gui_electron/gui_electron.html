@@ -11,55 +11,68 @@
 
 	<!-- <h2>CeJS 線上小說漫畫下載工具 online novels / comics downloader</h2> -->
 	<div class="panel">
-		<label>作品名稱或 id <input id="input_work_id" value=""
-			title="快速鍵: Ctrl + V 貼上作品名稱或 id" /></label> <b class="button"
-			onclick="start_gui_crawler();">▶開始下載</b>
+		<label><span data-gettext="作品名稱或 id"></span> <input
+			id="input_work_id" value="" title="快速鍵: Ctrl + V 貼上作品名稱或 id" /></label> <b
+			class="button" onclick="start_gui_crawler();">▶<span
+			data-gettext="開始下載"></span></b>
 		<!--  <b class="button"
 			onclick="stop_task();">暫停下載</b> <b class="button"
 			onclick="continue_task();">繼續下載</b> <b class="button"
 			onclick="cancel_task();">取消下載</b> -->
 		<!-- <b class="button" onclick="">搜尋</b> -->
-		<b class="button" onclick="open_download_directory();">📂開啓下載目錄</b>
+		<b class="button" onclick="open_download_directory();">📂<span
+			data-gettext="開啓下載目錄"></span></b>
 	</div>
 
 
 	<div id="operation_panel">
 		<div>
 			<div id="download_sites_panel" class="panel">
-				<h3 id="download_sites_trigger" title="使用線上作品網站（單選）">線上作品網站</h3>
+				<h3 id="download_sites_trigger" title="使用線上作品網站（單選）">
+					<span data-gettext="線上作品網站"></span>
+				</h3>
 				<div id="download_sites_list"></div>
 			</div>
 		</div>
 
 		<div id="right_panel">
 			<div id="favorites_panel">
-				<h3 id="favorites_trigger">😘最愛作品清單</h3>
+				<h3 id="favorites_trigger">
+					😘<span data-gettext="最愛作品清單"></span>
+				</h3>
 				<!-- 💖 -->
 				<div id="favorites_list"></div>
 			</div>
 
 			<div id="download_options_panel" class="panel">
-				<h3 id="download_options_trigger">⚙️下載選項</h3>
+				<h3 id="download_options_trigger">
+					⚙️<span data-gettext="下載選項"></span>
+				</h3>
 			</div>
 
 			<div id="download_job_panel" class="panel">
-				<h3 id="download_job_trigger">下載中的作品</h3>
+				<h3 id="download_job_trigger">
+					<span data-gettext="下載中的作品"></span>
+				</h3>
 				<div id="download_job_queue"></div>
 			</div>
 		</div>
 	</div>
 
 	<hr />
-	<b class="button" onclick="CeL.Log.clear();" title="清除訊息">clear log</b>
-	<b class="button" onclick="CeL.Log.toggle();" title="顯示/隱藏訊息">show
-		/ hidden log</b>
-	<b class="button" onclick="open_DevTools();" title="開啟偵錯工具">open
-		DevTools</b>
+	<b class="button" onclick="CeL.Log.clear();"><span
+		data-gettext="清除訊息"></span></b>
+	<b class="button" onclick="CeL.Log.toggle();"><span
+		data-gettext="顯示/隱藏訊息"></span></b>
+	<b class="button" onclick="open_DevTools();"><span
+		data-gettext="開啟偵錯工具"></span></b>
 
 	<span style="color: #f88;"><a
 		href="https://support.microsoft.com/zh-tw/help/12445/windows-keyboard-shortcuts"
-		onclick="return open_external(this.href);">複製貼上快速鍵</a>：<kbd>Ctrl+C</kbd>
-		複製選取的項目，<kbd>Ctrl+V</kbd> 貼上項目</span>
+		onclick="return open_external(this.href);"><span
+			data-gettext="複製貼上快速鍵"></span></a> - <span data-gettext="複製選取的項目："></span>
+		<kbd>Ctrl+C</kbd> <span data-gettext="貼上項目："></span> <kbd>Ctrl+V</kbd>
+	</span>
 
 	<div id="log_panel"></div>
 </body>

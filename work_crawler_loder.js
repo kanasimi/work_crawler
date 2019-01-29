@@ -78,6 +78,7 @@ if (typeof CeL !== 'function' && use_cejs_mudule) {
 	try {
 		require('cejs');
 	} catch (e) {
+		// no cejs
 	}
 }
 
@@ -104,7 +105,9 @@ CeL.run([
 // Add color to console messages. 添加主控端報告的顏色。
 'interact.console',
 // 載入批量下載小說、漫畫的主要功能。
-'application.net.work_crawler' ], function() {
+'application.net.work_crawler',
+// for internationalization and localization 國際化與在地化 gettext()
+'application.locale' ], function() {
 	// 不自動匯入 .env.arg_hash
 	CeL.work_crawler.prototype.auto_import_args = false;
 });
@@ -120,6 +123,24 @@ global.work_id = is_CLI
 		&& (CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id) || process.argv[2])
 		|| global.work_id;
 
+if (is_CLI) {
+	// for i18n: define gettext() user domain resource location.
+	// gettext() will auto load (CeL.env.domain_location + language + '.js').
+	// e.g., resource/cmn-Hant-TW.js, resource/ja-JP.js
+	CeL.gettext.use_domain_location(module.filename.replace(/[^\\\/]*$/,
+			'resource' + CeL.env.path_separator));
+
+	try {
+		CeL.env.code_page = require('child_process').execSync('CHCP')
+				.toString().match(/(\d+)[^\d]*$/)[1];
+	} catch (e) {
+		// TODO: handle exception
+	}
+	if (CeL.env.code_page > 0) {
+		CeL.gettext.use_domain.via_code_page(CeL.env.code_page, true);
+	}
+}
+
 if (is_CLI && !work_id && process.mainModule
 // 檔案整理工具不需要下載作品，因此也不需要作品名稱。
 && (typeof need_work_id === 'undefined' || need_work_id)) {
@@ -127,19 +148,22 @@ if (is_CLI && !work_id && process.mainModule
 			&& process.mainModule.filename.match(/[^\\\/]+$/)[0],
 	//
 	options_arguments = ' [option=true] ["option=value"]';
+
+	CeL.log(CeL.gettext('Usage:') + '\n	node ' + main_script
+	//
+	+ ' "work title / work id"'
 	// 顯示幫助信息/用法說明。
-	CeL.log('Usage:\n	node ' + main_script + ' "work title / work id"'
-			+ options_arguments + '\n'
-			//
-			+ '	node ' + main_script + ' "l=work list file"'
+	+ options_arguments + '\n' + '	node ' + main_script + ' "l=work list file"'
 			+ options_arguments);
-	CeL.log('options:'
+
+	CeL.log(CeL.gettext('Options:')
 	//
 	+ Object.entries(CeL.work_crawler.prototype.import_arg_hash)
 	//
 	.map(function(pair) {
 		return '\n	' + pair[0] + '	(' + pair[1] + ')';
 	}).join(''));
+
 	process.exit();
 }
 

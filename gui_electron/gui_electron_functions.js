@@ -184,12 +184,33 @@ function initializer() {
 		;
 	});
 
+	// handle with document.title in IE 8.
+	if (CeL.set_text.need_check_title)
+		_.document_title = document_title;
+
+	// translate all nodes to show in specified language (or default domain).
+	_.translate_nodes();
+
 	// --------------------------------
 
 	if (!global.data_directory) {
 		global.data_directory = CeL.determin_download_directory();
 	}
-	CeL.info('預設的主要下載目錄: ' + global.data_directory);
+	CeL.info({
+		T : [ 'Default download location: %1', global.data_directory ]
+	});
+	if (false)
+		CeL.info({
+			span : [ '請幫助我們', {
+				a : '翻譯介面文字',
+				href : '#',
+				onclick : function() {
+					open_external(
+					//
+					'https://github.com/kanasimi/work_crawler/issues/185');
+				}
+			}, '，謝謝您！' ]
+		});
 	// read default configuration
 	default_configuration = CeL.get_JSON(global.data_directory
 			+ default_configuration_file_name)
@@ -215,7 +236,7 @@ function initializer() {
 		var sites = download_sites_set[site_type];
 		for ( var site_id in sites) {
 			var site_node = CeL.new_node({
-				T : sites[site_id],
+				span : sites[site_id],
 				C : 'download_sites'
 						+ (old_Unicode_support ? ' old_Unicode_support' : ''),
 				title : site_type + '/' + site_id,
@@ -344,7 +365,9 @@ function initializer() {
 
 	set_click_trigger('download_options_trigger', CeL.new_node({
 		div : [ options_nodes, {
-			b : [ '重設下載選項', '' && {
+			b : [ {
+				T : '重設下載選項'
+			}, '' && {
 				T : '與最愛作品清單',
 				S : 'color: red;'
 			} ],
@@ -402,7 +425,7 @@ function initializer() {
 		});
 	});
 
-	process.title = 'CeJS 線上小說漫畫下載工具';
+	process.title = _('CeJS 線上小說漫畫下載工具');
 
 	// --------------------------------
 
@@ -461,7 +484,9 @@ function edit_favorites(crawler) {
 	}, {
 		div : [ {
 			// save
-			b : '💾儲存最愛作品清單',
+			b : [ '💾', {
+				T : '儲存最愛作品清單'
+			} ],
 			onclick : function() {
 				crawler.preference.favorites
 				// verify work titles
@@ -479,7 +504,9 @@ function edit_favorites(crawler) {
 			C : 'favorites_button'
 		}, {
 			// abandon
-			b : (old_Unicode_support ? '❌' : '🛑') + '放棄編輯',
+			b : [ old_Unicode_support ? '❌' : '🛑', {
+				T : '放棄編輯最愛作品清單'
+			} ],
 			onclick : function() {
 				reset_favorites(crawler);
 			},
@@ -510,7 +537,9 @@ function reset_favorites(crawler) {
 		ol : favorites_nodes
 	} : '', {
 		div : [ favorites.length > 0 ? {
-			b : '檢查並下載所有最愛作品之更新',
+			b : {
+				T : '檢查所有最愛作品之更新並下載更新作品'
+			},
 			onclick : function() {
 				favorites.forEach(function(work_title) {
 					add_new_download_job(crawler, work_title, true);
@@ -519,7 +548,9 @@ function reset_favorites(crawler) {
 			C : 'favorites_button'
 		} : /* empty */'🈳 尚未設定最愛作品。', {
 			// 我的最愛
-			b : '✍️編輯最愛作品清單',
+			b : [ '✍️', {
+				T : '編輯最愛作品清單'
+			} ],
 			onclick : function() {
 				edit_favorites(crawler);
 			},
@@ -617,8 +648,7 @@ function prepare_crawler(crawler, crawler_module) {
 
 	crawler.download_queue = [];
 	if (!crawler.site_name) {
-		crawler.site_name = CeL.DOM_data(
-				download_site_nodes.node_of_id[site_id], 'gettext');
+		crawler.site_name = download_site_nodes.node_of_id[site_id].innerText;
 	}
 	download_site_nodes.link_of_site[site_id] = crawler.base_URL;
 	// add link to site
@@ -670,12 +700,13 @@ function Download_job(crawler, work_id) {
 		C : 'progress_layer'
 	});
 	var this_job = this;
+	console.log(crawler)
 	this.layer = CeL.new_node({
 		div : [ {
-			b : [ {
-				T : crawler.site_name,
+			b : [ crawler.site_name ? {
+				span : crawler.site_name,
 				R : crawler.site_id
-			}, ' ', work_id ],
+			} : crawler.site_id, ' ', work_id ],
 			C : 'task_label'
 		}, {
 			div : this.progress_layer,
@@ -707,12 +738,12 @@ function Download_job(crawler, work_id) {
 			}, {
 				T : '取消'
 			} ],
-			R : '取消下載',
+			R : _('取消下載'),
 			C : 'task_controller',
 			onclick : cancel_task.bind(null, this_job)
 		}, {
-			T : '📂',
-			R : (old_Unicode_support ? '' : '🗁 ') + '開啓下載目錄',
+			span : '📂',
+			R : (old_Unicode_support ? '' : '🗁 ') + _('開啓作品下載目錄'),
 			C : 'task_controller',
 			onclick : open_download_directory.bind(null, this)
 		} ],
@@ -933,7 +964,9 @@ function start_gui_crawler() {
 	if (work_id) {
 		add_new_download_job(crawler, work_id);
 	} else {
-		CeL.info('請輸入作品名稱或 id。');
+		CeL.info({
+			T : '請輸入作品名稱或 id。'
+		});
 	}
 }
 
@@ -982,23 +1015,32 @@ function open_download_directory(crawler) {
 
 function check_update() {
 	if (!global.auto_update) {
-		CeL.log('已設定不自動更新。');
+		CeL.log({
+			T : '已設定不自動更新。'
+		});
 		return;
 	}
 
 	if (!is_installation_package) {
 		// ，請勿關閉程式
-		CeL.log('非安裝包版本自動更新程序於背景檢測並執行中。');
+		CeL.log({
+			T : '非安裝包版本自動更新程序於背景檢測並執行中。'
+		});
 		// 非安裝包圖形介面自動更新功能。
 		require('child_process').exec('node work_crawler.updater.js', {
 			// pass I/O to the child process
 			// https://nodejs.org/api/child_process.html#child_process_options_stdio
 			stdio : 'inherit'
 		}, function(error, stdout, stderr) {
-			if (error)
-				CeL.error('Update checking failed: ' + error);
-			else
-				CeL.info('Update checked.');
+			if (error) {
+				CeL.error({
+					T : [ '自動更新程序檢測失敗：%1', error ]
+				});
+			} else {
+				CeL.log({
+					T : '自動更新程序檢測完畢。'
+				});
+			}
 		});
 		return;
 	}
