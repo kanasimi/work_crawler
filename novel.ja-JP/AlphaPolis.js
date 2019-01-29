@@ -26,12 +26,18 @@ var crawler = new CeL.work_crawler({
 	need_create_ebook : true,
 	// recheck:從頭檢測所有作品之所有章節。
 	// 'changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。
-	recheck : 'changed',
+	// ** 以本站來說太消耗時間。
+	// recheck : 'changed',
+
+	// 2018/10/16-19 間開始: 頁面讀得太頻繁，例如連續讀取20個頁面，之後會只提供無內容頁面。
+	// 開新的 instance 可以多重下載作品。
+	// 2019/1/29: 13s 還不行, 15s OK (每20個章節需要超過5分鐘)
+	chapter_time_interval : '15s',
 
 	base_URL : 'https://www.alphapolis.co.jp/',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'search?query=',
+	search_URL : 'search?category=novel&query=',
 	// till 20170619, use POST. 20170620 AlphaPolis 改版, use UTF-8.
 	search_URL_2016_to_20170619 : function(work_title) {
 		return [ 'top/search/', {
@@ -44,11 +50,12 @@ var crawler = new CeL.work_crawler({
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
 		id_list = [];
-		html.each_between(' class="title">', '</a>', function(text) {
+		html.each_between('<h2 class="title">', '</h2>', function(text) {
 			id_list.push(text.between(' href="/novel/', '"')
 			//
 			.replace('/', '-'));
-			id_data.push(get_label(text.between('>')));
+			// get <a>.innerText
+			id_data.push(get_label(text.between('>', '<')));
 		});
 		return [ id_list, id_data ];
 	},
@@ -65,6 +72,7 @@ var crawler = new CeL.work_crawler({
 			// 選擇性屬性：須配合網站平台更改。
 			// e.g., 连载中, 連載中
 			status : [],
+			// get the first <div class="author">...</div>
 			author : get_label(html.between('<div class="author">', '</a>')),
 			last_update : get_label(html.between('<th>更新日時</th>', '</td>')),
 			description : get_label(html.between('<div class="abstract">',
@@ -82,28 +90,28 @@ var crawler = new CeL.work_crawler({
 		while (matched = PATTERN.exec(html)) {
 			work_data[matched[1]] = get_label(matched[2]);
 		}
+		if (work_data.site_name) {
+			// "アルファポリス - 電網浮遊都市 - " → "アルファポリス"
+			work_data.site_name = work_data.site_name.replace(/ +- .+/, '');
+		}
 
-		PATTERN = / class="tag [^"]+">([^<>]+)</g;
-		while (matched = PATTERN.exec(html.between('<div class="tags">',
-				'</div>'))) {
+		// 2019/1 才發現改 pattern 了。
+		PATTERN = /<span class="tag">([\s\S]+?)<\/span>/g;
+		while (matched = PATTERN.exec(html.between(
+				'<div class="content-tags">', '</div>'))) {
 			work_data.status.push(get_label(matched[1]));
 		}
 
-		html.between('<div class="meta keyword-blocks">', '</div>')
-		//
-		.each_between('<span class="keyword-block">', '</a></span>',
+		html.between('<div class="content-statuses">', '</div>')
+		// additional tags
+		.each_between(' class="content-status', '<',
 		//
 		function(text) {
-			var key = get_label(text.between(
-			//
-			'<span class="label-circle">', '</span>')),
-			//
-			value = get_label(text.between('</span><a ')
-			//
-			.between('> '));
-			work_data[key] = value;
+			work_data.status.push(get_label(text.between('>')));
 		});
+		work_data.status = work_data.status.unique();
 
+		// 作品の情報
 		PATTERN = /<th>([\s\S]+?)<\/th>[\s\n]*<td[^<>]*>([\s\S]+?)<\/td>/g;
 		while (matched = PATTERN.exec(html.between('<table class="detail">',
 				'</table>'))) {
@@ -130,8 +138,10 @@ var crawler = new CeL.work_crawler({
 				.to_Date({
 					zone : work_data.time_zone
 				}),
-				// '<span class="title">', '</span>'
-				title : text.between(' class="title">', '</')
+				title : text.between(' class="title">',
+				// '<span class="title"><span class="bookmark-dummy"></span>',
+				// '</span>'
+				'<span class="open-date">')
 			});
 		});
 	},
@@ -142,10 +152,31 @@ var crawler = new CeL.work_crawler({
 	// 檢測所取得內容的章節編號是否相符。
 	_check_chapter_NO : [ '<div class="page-count">', '/' ],
 	parse_chapter_data : function(html, work_data, get_label, chapter) {
+		// <div class="text " id="novelBoby">
+		var text = html.between('<div class="text',
+		// <div class="episode-navigation section ">
+		'<div class="episode-navigation');
+		if (text.includes('しおりを挟む</a>')) {
+			text = text.between(null, {
+				tail : 'しおりを挟む</a>'
+			});
+		}
+		text = text.between('>', {
+			tail : '</div>'
+		});
+		if (text.length < 200 && text.includes(' id="LoadingEpisode"')) {
+			// console.log(html);
+			CeL.warn((work_data.title || work_data.id)
+			//
+			+ ': 讀取太過頻繁，只取得了無內容頁面！');
+			// text: <div class="dots-indicator" id="LoadingEpisode">
+			// assert: get_label(text) === ''
+			text = '';
+		}
 		this.add_ebook_chapter(work_data, chapter, {
 			title : html.between('<div class="chapter-title">', '</div>'),
 			sub_title : html.between('<h2 class="episode-title">', '</h2>'),
-			text : html.between('<div class="text', '</div>').between('>')
+			text : text
 		});
 	}
 });
