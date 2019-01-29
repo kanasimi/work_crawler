@@ -38,11 +38,12 @@ function create_window() {
 		slashes : true
 	}));
 
-	if (false)
+	if (false) {
 		// https://electronjs.org/docs/api/web-contents#contentssendchannel-arg1-arg2-
 		win.webContents.on('did-finish-load', function() {
 			win.webContents.send('send_message', 'message');
 		});
+	}
 
 	require('electron').ipcMain.on('set_progress', function(event, progress) {
 		// https://electronjs.org/docs/tutorial/progress-bar
@@ -115,7 +116,7 @@ require('electron').ipcMain.on('send_message', function(event, message) {
 // for update
 function start_update(event_sender) {
 	try {
-		event_sender.send('send_message_debug', 'Start release updating...');
+		event_sender.send('send_message_debug', '開始檢測並更新安裝包……');
 
 		// https://github.com/iffy/electron-updater-example/blob/master/main.js
 		// https://nicholaslee119.github.io/2018/01/11/electronBuilder%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/
@@ -136,55 +137,64 @@ function start_update(event_sender) {
 
 		autoUpdater.checkForUpdatesAndNotify();
 
-		if (false)
+		if (false) {
 			autoUpdater
 					.setFeedURL({
 						provider : "gitlab",
 						url : "https://gitlab.com/_example_repo_/-/jobs/artifacts/master/raw/dist?job=build"
 					});
+		}
 
 		autoUpdater.on('checking-for-update', function() {
-			event_sender.send('send_message_log',
-					'Checking for release update...');
+			event_sender.send('send_message_log', '開始檢測安裝包更新……');
 		});
 		autoUpdater.on('update-available', function(info) {
-			event_sender.send('send_message_info', 'Release update available: '
-					+ JSON.stringify(info));
+			event_sender.send('send_message_info', [ {
+				T : '新安裝包出來了：'
+			}, JSON.stringify(info) ]);
 		});
 		autoUpdater.on('update-not-available', function(info) {
-			event_sender.send('send_message_log',
-					'Release update not available: ' + JSON.stringify(info));
+			event_sender.send('send_message_log', [ {
+				T : '沒有新安裝包：'
+			}, JSON.stringify(info) ]);
 		});
-		autoUpdater.on('error', function(err) {
-			event_sender.send('send_message_warn', 'Error in auto-updater: '
-					+ err);
+		autoUpdater.on('error', function(error) {
+			event_sender.send('send_message_warn', [ {
+				T : '安裝包更新出錯：'
+			}, error ]);
 		});
 		autoUpdater.on('download-progress', function(progressObj) {
-			var log_message = "Download speed: " + progressObj.bytesPerSecond;
-			log_message = log_message + ' - Downloaded ' + progressObj.percent
-					+ '%';
-			log_message = log_message + ' (' + progressObj.transferred + "/"
-					+ progressObj.total + ')';
-			progressObj.message = log_message;
-			event_sender.send('send_message_debug', progressObj.log_message);
+			var log_message = [ {
+				T : [
+						'安裝包已下載%1，下載速度：%2',
+						progressObj.percent + '%' + ' ('
+								+ progressObj.transferred + "/"
+								+ progressObj.total + ')',
+						progressObj.bytesPerSecond ]
+			} ];
+			event_sender.send('send_message_debug', log_message);
 		});
 		autoUpdater.on('update-downloaded', function(event, releaseNotes,
 				releaseName, releaseDate, updateUrl, quitAndUpdate) {
-			event_sender.send('send_message_log', 'Release update downloaded: '
-					+ JSON.stringify(event));
+			event_sender.send('send_message_log', [ {
+				T : '新的安裝包下載完成：'
+			}, JSON.stringify(event) ]);
 
 			require('electron').ipcMain.on('start-install-now',
-					function(e, arg) {
-						console.log(arguments);
-						console.log("開始更新");
-						// some code here to handle event
-						autoUpdater.quitAndInstall();
-					});
+			//
+			function(e, arg) {
+				console.log(arguments);
+				console.log("關閉程式以更新安裝包……");
+				// some code here to handle event
+				autoUpdater.quitAndInstall();
+			});
 		});
 
 	} catch (e) {
 		// e.g., Error: Cannot find module 'electron-updater'
 		// win.webContents.send()
-		event_sender.send('send_message_warn', 'Release update failed: ' + e);
+		event_sender.send('send_message_warn', [ {
+			T : '安裝包更新失敗：'
+		}, String(e) ]);
 	}
 }

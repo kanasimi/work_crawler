@@ -229,7 +229,9 @@ function initializer() {
 	var site_nodes = [];
 	for ( var site_type in download_sites_set) {
 		var label_node = CeL.new_node({
-			div : site_type_description[site_type] || site_type,
+			div : {
+				T : site_type_description[site_type] || site_type
+			},
 			C : 'site_type_label'
 		}), label_sites = [];
 
@@ -478,7 +480,9 @@ function edit_favorites(crawler) {
 	favorites_node.value = favorites.join('\n');
 
 	CeL.new_node([ {
-		div : '請在每一行鍵入一個作品名稱或 id：'
+		div : {
+			T : '請在每一行鍵入一個作品名稱或 id：'
+		}
 	}, favorites_node, {
 		br : null
 	}, {
@@ -546,7 +550,7 @@ function reset_favorites(crawler) {
 				});
 			},
 			C : 'favorites_button'
-		} : /* empty */'🈳 尚未設定最愛作品。', {
+		} : '🈳 尚未設定最愛作品。', {
 			// 我的最愛
 			b : [ '✍️', {
 				T : '編輯最愛作品清單'
@@ -653,7 +657,10 @@ function prepare_crawler(crawler, crawler_module) {
 	download_site_nodes.link_of_site[site_id] = crawler.base_URL;
 	// add link to site
 	CeL.new_node([ ' ', {
-		a : '🔗 link',
+		a : [ '🔗 ', {
+			// 作品平臺連結 (略稱)
+			T : '連結'
+		} ],
 		href : crawler.base_URL,
 		target : '_blank',
 		onclick : open_external
@@ -665,7 +672,9 @@ setup_crawler.prepare = prepare_crawler;
 function get_crawler(just_test) {
 	if (!site_used) {
 		if (!just_test) {
-			CeL.info('請先指定要下載的網站。');
+			CeL.info({
+				T : '請先指定要下載的網站。'
+			});
 		}
 		return;
 	}
@@ -712,8 +721,11 @@ function Download_job(crawler, work_id) {
 			div : this.progress_layer,
 			S : 'flex-grow: 1; background-color: #888;'
 		}, {
-			T : (old_Unicode_support ? '' : '⏸') + '暫停',
-			R : (old_Unicode_support ? '' : '⏯ ') + '暫停/恢復下載',
+			span : [ old_Unicode_support ? '' : '⏸', {
+				// 暫停下載 (略稱)
+				T : '暫停'
+			} ],
+			R : (old_Unicode_support ? '' : '⏯ ') + _('暫停/恢復下載'),
 			C : 'task_controller',
 			onclick : function() {
 				if (this.stopped) {
@@ -721,13 +733,13 @@ function Download_job(crawler, work_id) {
 					continue_task(this_job);
 					CeL.DOM.set_text(this,
 					// pause
-					CeL.gettext((old_Unicode_support ? '' : '⏸') + '暫停'));
+					CeL.gettext((old_Unicode_support ? '' : '⏸') + _('暫停')));
 				} else {
 					this.stopped = true
 					stop_task(this_job);
 					CeL.DOM.set_text(this,
-					// resume ⏯
-					CeL.gettext('▶️' + '繼續'));
+					// resume ⏯ "恢復下載 (略稱)"
+					CeL.gettext('▶️' + _('繼續')));
 				}
 				return false;
 			}
@@ -736,6 +748,7 @@ function Download_job(crawler, work_id) {
 				b : '✘',
 				S : 'color:red'
 			}, {
+				// 取消下載 (略稱)
 				T : '取消'
 			} ],
 			R : _('取消下載'),
