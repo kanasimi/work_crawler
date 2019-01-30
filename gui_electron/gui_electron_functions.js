@@ -404,6 +404,31 @@ function initializer() {
 		}
 	};
 
+	if (CeL.platform.is_Windows()) {
+		CeL.new_node([ {
+			a : {
+				T : '複製貼上快速鍵'
+			},
+			href : 'https://en.wikipedia.org/wiki/'
+			//
+			+ 'Cut,_copy,_and_paste#Common_keyboard_shortcuts',
+			onclick : function() {
+				return open_external(this.href);
+			}
+		}, ' - ', {
+			T : '複製選取的項目：'
+		}, {
+			kbd : 'Ctrl+C'
+		}, ' ', {
+			span : ' | ',
+			S : "color: blue;"
+		}, {
+			T : '貼上項目：'
+		}, {
+			kbd : 'Ctrl+V'
+		} ], 'small_tips');
+	}
+
 	// https://developer.mozilla.org/en-US/docs/Web/API/Notification/permission
 	// https://electronjs.org/docs/tutorial/desktop-environment-integration
 	// https://electronjs.org/docs/api/notification
@@ -435,7 +460,7 @@ function initializer() {
 	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
 
 	// 延遲檢測更新，避免 hang 住。
-	setTimeout(check_update, 2000);
+	setTimeout(check_update, 80);
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -550,7 +575,9 @@ function reset_favorites(crawler) {
 				});
 			},
 			C : 'favorites_button'
-		} : '🈳 尚未設定最愛作品。', {
+		} : {
+			T : '🈳 尚未設定最愛作品。'
+		}, {
 			// 我的最愛
 			b : [ '✍️', {
 				T : '編輯最愛作品清單'
