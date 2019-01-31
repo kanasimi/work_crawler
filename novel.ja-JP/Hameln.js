@@ -26,7 +26,8 @@ var crawler = new CeL.work_crawler({
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : '?mode=search&word=',
-	parse_search_result : function(html) {
+	parse_search_result : function(html, get_label) {
+		// console.log(html);
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
 		id_list = [];
@@ -34,14 +35,16 @@ var crawler = new CeL.work_crawler({
 		//
 		function(text) {
 			id_list.push(
-			//
-			text.between(' href="//novel.syosetu.org/', '/"') | 0);
-			id_data.push(text.between('<b>', '</b>'));
+			// e.g., <a href="//syosetu.org/novel/0000/"><b>title</b></a>
+			// 2019/1 才發現已經過時: <a href="//novel.syosetu.org/0000/">"
+			text.between(' href="//syosetu.org/novel/', '/"') | 0);
+			id_data.push(get_label(text));
 		});
 		return [ id_list, id_data ];
 	},
 	convert_id : {
 		r18 : function(callback) {
+			CeL.info('これ以降はR-18小説と見なされる。');
 			this.search_URL = '?mode=search_r18cs&word=';
 			callback();
 		}
@@ -49,6 +52,7 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
+		// 小説情報
 		return '?mode=ss_detail&nid=' + work_id;
 	},
 	parse_work_data : function(html, get_label) {
@@ -95,11 +99,22 @@ var crawler = new CeL.work_crawler({
 	},
 	// 對於章節列表與作品資訊分列不同頁面(URL)的情況，應該另外指定.chapter_list_URL。
 	chapter_list_URL : function(work_id) {
-		return 'https://novel.syosetu.org/' + work_id + '/';
+		return 'novel/' + work_id + '/';
 	},
-	get_chapter_list : function(work_data, html) {
-		// TODO: 對於單話，可能無目次。
+	get_chapter_list : function(work_data, html, get_label) {
+		// console.log(html);
+
+		if (!html.includes('<table width=100%>')
+		// 對於單話，可能無目次。
 		// e.g., https://novel.syosetu.org/106514/
+		&& html.includes(this.check_chapter_NO[0])) {
+			work_data.chapter_list = [ {
+				url : '' /* '1.html' */,
+				title : get_label(html.between('<span style="font-size:120%">',
+						'</span>'))
+			} ];
+			return;
+		}
 
 		work_data.chapter_list = [];
 		var part_title;
