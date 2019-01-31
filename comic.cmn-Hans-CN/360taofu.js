@@ -15,7 +15,7 @@ require('../work_crawler_loder.js');
 // ----------------------------------------------------------------------------
 
 // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
-function encodeURIComponent_low_case(string) {
+function encodeURIComponent_lower_case(string) {
 	return string.replace(/[^a-zA-Z\d().!~*'\-_]/g, function(c) {
 		return encodeURIComponent(c).toLowerCase();
 	});
@@ -85,6 +85,12 @@ var crawler = new CeL.work_crawler({
 		var work_data;
 		eval('work_data=' + html.between('qingtiancms_Details=', ';var'));
 
+		extract_work_data(work_data, html.between(
+		// <div class="cy_zhangjie">...<div class="cy_zhangjie_top">
+		'<div class="cy_zhangjie_top">',
+		// <div class="cy_plist" id="play_0">
+		' class="cy_plist"'), /<p>([^<>：]+)：([\s\S]*?)<\/p>/g);
+
 		html = html.between(
 		// <div class="mh-date-info fl"> <div class="mh-date-info-name">
 		'<div class="mh-date-info', '<div class="work-author">');
@@ -96,6 +102,8 @@ var crawler = new CeL.work_crawler({
 			author : work_data.作者,
 			status : work_data.状态,
 			评分 : get_label(html.between(' id="comicStarDis">', '<')),
+			latest_chapter : work_data.最新话,
+			last_update : work_data.更新时间,
 			description : get_label(html.between(
 			// <div id="workint" class="work-ov">
 			' id="workint"', '</div>').between('>'))
@@ -147,7 +155,7 @@ var crawler = new CeL.work_crawler({
 				if (url.startsWith('/')) {
 					// url = qTcms_m_weburl + url;
 				} else if (html.between('qTcms_Pic_m_if="', '"') !== "2") {
-					if (this.guess_image_url) {
+					if (this.guess_image_url && this.had_called_api) {
 						var original_url;
 						if (false) {
 							url = url.replace(/^.+:\/(\/[^\/]+\/comic\/)/,
@@ -158,7 +166,7 @@ var crawler = new CeL.work_crawler({
 								if (domain === '/mhpic.cnmanhua.com/comic/') {
 									// http://mhpic.cnmanhua.com/comic/N%2F%E5%A5%B3%E5%AD%90%E5%AD%A6%E9%99%A2%E7%9A%84%E7%94%B7%E7%94%9F%2F60%E8%AF%9D%2F1.jpg-kmw.middle
 									// sometimes '2f', sometimes 'f'
-									return encodeURIComponent_low_case('/')
+									return encodeURIComponent_lower_case('/')
 											.slice(1);
 								}
 								return all;
@@ -178,6 +186,7 @@ var crawler = new CeL.work_crawler({
 								'/www.72qier.com/' : true,
 								// http://www.xatxwh.com/wuxia/longfuzhiwangdaotianxia/85948.html
 								'/coldpic.sfacg.com/' : true,
+								'/mhpic.isamanhua.com/' : true
 
 							// http://www.xatxwh.com/xuanhuan/mikexingdong/473867.html
 							// http://www.uc5522.net/upload2/5305/2018/12-26/20181226142148_978226bk48kPjA.D._small.jpg
@@ -194,7 +203,7 @@ var crawler = new CeL.work_crawler({
 
 							original_url = url;
 						});
-						url = encodeURIComponent_low_case(
+						url = encodeURIComponent_lower_case(
 						// 尋找採集後放置的地點。
 						url.replace(/[\s.]/g, '_')).replace(/%/g, '_');
 						url = '/qingtiancms_wap/upload2/cache/'
@@ -210,6 +219,9 @@ var crawler = new CeL.work_crawler({
 									+ '", 請回報。');
 						url = original_url;
 					}
+
+					// 每個IP最起碼必須先呼叫過一次API?
+					this.had_called_api = true;
 
 					// 因被 Cloudflare 保護，盡可能改成上面使用的，嘗試直接取得圖片檔案位址。
 					// 其他判別不出來的，則用正統方法。
