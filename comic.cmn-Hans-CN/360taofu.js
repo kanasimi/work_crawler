@@ -27,7 +27,8 @@ var crawler = new CeL.work_crawler({
 	// 本站採用採集其他網站圖片的方法，錯漏圖片太多。
 	skip_error : true,
 
-	guess_image_url : true,
+	// 2019/1/31 網站改版? 必須先呼叫過API才給過。
+	guess_image_url : false,
 
 	// {Natural}最小容許圖案檔案大小 (bytes)。
 	// MIN_LENGTH : 500,
@@ -155,7 +156,7 @@ var crawler = new CeL.work_crawler({
 				if (url.startsWith('/')) {
 					// url = qTcms_m_weburl + url;
 				} else if (html.between('qTcms_Pic_m_if="', '"') !== "2") {
-					if (this.guess_image_url && this.had_called_api) {
+					if (this.guess_image_url) {
 						var original_url;
 						if (false) {
 							url = url.replace(/^.+:\/(\/[^\/]+\/comic\/)/,
@@ -219,9 +220,6 @@ var crawler = new CeL.work_crawler({
 									+ '", 請回報。');
 						url = original_url;
 					}
-
-					// 每個IP最起碼必須先呼叫過一次API?
-					this.had_called_api = true;
 
 					// 因被 Cloudflare 保護，盡可能改成上面使用的，嘗試直接取得圖片檔案位址。
 					// 其他判別不出來的，則用正統方法。
