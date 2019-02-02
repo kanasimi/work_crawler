@@ -101,24 +101,48 @@ var crawler = new CeL.work_crawler({
 	// 取得每一個章節的內容與各個影像資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 在取得小說章節內容的時候，若發現有章節被目錄漏掉，則將之補上。
-		this.check_next_chapter(work_data, chapter_NO, html,
+		var has_continue = this.check_next_chapter(work_data, chapter_NO, html,
 		// PATTERN_next_chapter: [ all, next chapter url ]
 		/<a [^<>]*?href="([^"]+.html)"[^<>]*><button[^<>]*>下一[章页][：: →]*/);
 
-		var chapter_data = work_data.chapter_list[chapter_NO - 1],
+		// var chapter_data = work_data.chapter_list[chapter_NO - 1];
+
+		var sub_title = work_data.previous_sub_title
+				|| get_label(html.between('<h1 class="cont-title">', '</h1>')),
 		//
 		text = html.between('<div id="cont-text" class="cont-text">',
 				'<div class="page">');
 		text = text.between(null, '<div class="clear">') || text;
 		text = text.between(null, {
 			tail : '</div>'
-		}).replace(
+		}).replace(/<script[^<>]*>[\s\S]*?<\/script>/g, '').replace(
 		// 去除廣告
-		/<(i|p|span) class='[a-z]{3}\d{3}'>[^<>]{0,30}<\/\1>/ig, '');
+		/<(i|p|span) class='[a-z]{3}\d{3}'>[^<>]{0,30}<\/\1>/ig, '').trim();
+		// console.log(text);
 
+		// 合併被分割的章節。
+		if (work_data.previous_text) {
+			text = work_data.previous_text + text;
+			if (!has_continue) {
+				delete work_data.previous_sub_title;
+				delete work_data.previous_text;
+			}
+		}
+
+		if (has_continue) {
+			work_data.chapter_list[chapter_NO - 1].url
+			// hack
+			= work_data.chapter_list[chapter_NO].url;
+			work_data.chapter_list.splice(chapter_NO, 1);
+
+			work_data.previous_sub_title = sub_title;
+			work_data.previous_text = text;
+			return this.REGET_PAGE;
+		}
+
+		// console.log(text);
 		this.add_ebook_chapter(work_data, chapter_NO, {
-			sub_title : get_label(html.between('<h1 class="cont-title">',
-					'</h1>')),
+			sub_title : sub_title,
 			date : html.between(
 					'<i class="fa fa-clock-o" aria-hidden="true"></i>', '</a>')
 					.trim(),
