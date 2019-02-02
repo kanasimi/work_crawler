@@ -3,7 +3,8 @@
  * 
  * 2017/10: 爱看漫/看漫画改名(DNS被導引到)漫画柜
  * 
- * @see qTcms 晴天漫画程序 晴天漫画系统 http://manhua.qingtiancms.com/
+ * @see http://www.manhua.demo.shenl.com/?theme=mhd
+ * @see qTcms 晴天漫画程序 晴天漫画系统 http://manhua3.qingtiancms.net/
  */
 
 'use strict';
@@ -28,6 +29,19 @@ var core_filename = 'core_ABBA2B6ADC1DABE325D505BE3314C273.js',
 // 2018/3/11 15:59:14 GMT:
 // https://cf.hamreus.com/scripts/config_FAF1BF617BAF8A691A828F80672D3588.js
 decode_filename = 'config_FAF1BF617BAF8A691A828F80672D3588.js',
+/**
+ * e.g., <code>
+ <li><a href="/comic/17515/272218.html" title="第72话：一虎进击" class="status0" target="_blank"><span>第72话：一…<i>31p</i><em class="new"></em></span></a></li>
+
+ https://www.manhuagui.com/comic/4076/
+ <script type="text/javascript">$.Tabs('#chapter-page-1 li', '#chapter-list-1 ul',{'trigger':'click'});</script><h4><span>单行本</span></h4><div class="chapter-list cf mt10" id='chapter-list-1'><ul style="display:block"><li><a href="/comic/4076/390110.html" title="第67卷" class="status0" target="_blank"><span>第67卷<i>180p</i></span></a></li>
+ </code>
+ * 
+ * [:]: incase href="javascript:;"
+ * 
+ * matched: [ all, href, title, inner, part_title ]
+ */
+PATTERN_chapter = /<li><a href="([^"<>:]+)" title="([^"<>]+)"[^<>]*>(.+?)<\/a><\/li>|<h4>(.+?)<\/h4>/g,
 //
 crawler = new CeL.work_crawler({
 	// 本站常常無法取得圖片，因此得多重新檢查。
@@ -111,42 +125,52 @@ crawler = new CeL.work_crawler({
 		}
 		return work_data;
 	},
-	get_chapter_list : function(work_data, html) {
+	get_chapter_list : function(work_data, html, get_label) {
 		var data, chapter_list = [], matched,
-		/**
-		 * e.g., <code>
-		<li><a href="/comic/17515/272218.html" title="第72话：一虎进击" class="status0" target="_blank"><span>第72话：一…<i>31p</i><em class="new"></em></span></a></li>
-		</code>
-		 */
-		PATTERN_chapter =
-		// [:]: incase href="javascript:;"
-		// [ all, href, title, inner ]
-		/<li><a href="([^"<>:]+)" title="([^"<>]+)"[^<>]*>(.+?)<\/a><\/li>/g;
+		//
+		part_title, part_title_hash = CeL.null_Object(), part_NO = 0;
 
 		// 有些尚使用舊模式。
 		// @see http://www.ikanman.com/comic/8004/
-		data = html.between('chapter-list', 'class="comment')
+		data = html.between('<div class="chapter-bar">',
+		// <div class="comment mt10" id="Comment">
+		'class="comment')
 		// 2017/3/3? ikanman 改版
 		|| LZString.decompressFromBase64(
 		//
 		html.between('id="__VIEWSTATE"', '>').between('value="', '"'));
 
 		while (matched = PATTERN_chapter.exec(data)) {
-			matched[2] = matched[2].trim();
-			if (matched[3] = matched[3].between('<i>', '</i>')) {
-				matched[2] = matched[2] + ' ' + matched[3];
+			// delete matched.input;
+			// console.log(matched);
+			var chapter_data = get_label(matched[4]);
+			// console.log(chapter_data);
+			if (chapter_data) {
+				// console.log(chapter_data);
+				part_title = chapter_data;
+				part_title_hash[part_title]
+				// last part NO. part_NO starts from 1
+				= ++part_NO;
+				continue;
 			}
-			var chapter_data = {
+
+			chapter_data = {
 				url : matched[1],
-				title : matched[2]
+				title : get_label(matched[2] + ' '
+						+ matched[3].between('<i>', '</i>'))
 			};
 			if (matched = matched[1].match(/(\d+)\.html$/)) {
-				chapter_data.id = +matched[1];
+				chapter_data.id = matched[1] | 0;
 			} else {
 				chapter_list.some_without_id = chapter_data;
 			}
+			if (part_title) {
+				chapter_data.part_title = part_title
+			}
 			chapter_list.push(chapter_data);
 		}
+		// console.log(chapter_list);
+
 		if (chapter_list.length === 0
 		// e.g., <div class="book-btn"><a href="/comic/8772/86612.html"
 		// target="_blank" title="1话" class="btn-read">开始阅读</a>
@@ -173,14 +197,39 @@ crawler = new CeL.work_crawler({
 							+ JSON.stringify(chapter_list.some_without_id));
 					chapter_list.reverse();
 				} else {
-					chapter_list = chapter_list.sort(function(a, b) {
+					// 按照章節添加時間排序。
+					chapter_list.sort(function(a, b) {
 						// 排序以.html檔案檔名(序號)為準。
 						// assert: 後來的檔名，序號會比較大。
 						// @see http://www.ikanman.com/comic/8928/
-						return a.id < b.id ? -1 : 1;
+						return a.id - b.id;
+					});
+				}
+				// console.log(chapter_list);
+
+				if (part_NO > 1) {
+					// rearrange part_NO
+					chapter_list.part_NO = part_NO;
+					// 初始化 NO_in_part
+					var NO_in_part_hash = new Array(part_NO + 1).fill(0);
+					chapter_list.forEach(function(chapter_data) {
+						chapter_data.part_NO
+						// 在維持分部順序不動的情況下排序 NO_in_part
+						= part_title_hash[chapter_data.part_title];
+						chapter_data.NO_in_part
+						//
+						= ++NO_in_part_hash[chapter_data.part_NO];
+					});
+					// 重新按照 分部→章節順序 排序。
+					chapter_list.sort(function(a, b) {
+						// assert: max(NO_in_part) < 1e4
+						return (a.part_NO - b.part_NO) * 1e4 + a.NO_in_part
+								- b.NO_in_part;
 					});
 				}
 			}
+			// console.log(chapter_list);
+			// console.log(JSON.stringify(chapter_list));
 			// console.log(chapter_list.slice(0, 20));
 			// console.log(chapter_list.slice(-20));
 			work_data.chapter_list = chapter_list;
@@ -237,6 +286,8 @@ crawler = new CeL.work_crawler({
 					+ ': No valid chapter data got!');
 			return;
 		}
+		chapter_data = Object.assign(work_data.chapter_list[chapter_NO - 1],
+				chapter_data);
 		// for debug
 		// console.log(chapter_data);
 		// throw this.id + ': debug throw';
