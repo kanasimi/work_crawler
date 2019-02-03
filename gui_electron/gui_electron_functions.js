@@ -33,6 +33,7 @@ download_sites_set = {
 		'733mh' : '733漫画网',
 		mh160 : '漫画160',
 		nokiacn : '乙女漫画',
+		iqg365 : '365漫画网',
 		'360taofu' : '360漫画',
 		dagu : '大古漫画网',
 		manhuadb : '漫画DB',
@@ -134,6 +135,8 @@ download_options_set = {
 },
 // const `global.data_directory`/`default_configuration_file_name`
 default_configuration_file_name = 'work_crawler.configuration.json';
+
+var save_config_this_time = true;
 
 var site_used, default_configuration, download_site_nodes = [], download_options_nodes = {},
 // 為 electron-builder 安裝包
@@ -367,6 +370,21 @@ function initializer() {
 
 	set_click_trigger('download_options_trigger', CeL.new_node({
 		div : [ options_nodes, {
+			b : {
+				// 本次執行期間不儲存選項設定
+				T : '自動儲存選項設定'
+			},
+			onclick : function() {
+				save_config_this_time = !save_config_this_time;
+				CeL.info({
+					T : save_config_this_time ? '已設定自動儲存選項設定' : '已設定不自動儲存選項設定'
+				});
+				CeL.set_class(this, 'not_set', {
+					remove : save_config_this_time
+				});
+			},
+			C : 'button' + (save_config_this_time ? '' : ' ' + 'not_set')
+		}, {
 			b : [ {
 				T : '重設下載選項'
 			}, '' && {
@@ -385,8 +403,7 @@ function initializer() {
 				save_preference(crawler);
 				reset_site_options();
 			},
-			C : 'button',
-			S : 'margin: .5em; margin-left: 2em;'
+			C : 'button'
 		} ]
 	}, 'download_options_panel'));
 
@@ -459,6 +476,8 @@ function initializer() {
 	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
 	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
 
+	CeL.get_element('input_work_id').focus();
+
 	// 延遲檢測更新，避免 hang 住。
 	setTimeout(check_update, 80);
 }
@@ -481,6 +500,8 @@ function open_external(URL) {
 }
 
 function save_default_configuration() {
+	if (!save_config_this_time)
+		return;
 	// prepare work directory.
 	CeL.create_directory(global.data_directory);
 	CeL.write_file(global.data_directory + default_configuration_file_name,
@@ -490,6 +511,8 @@ function save_default_configuration() {
 // 保存下載偏好選項 + 最愛作品清單
 // @private
 function save_preference(crawler) {
+	if (!save_config_this_time)
+		return;
 	// prepare work directory.
 	CeL.create_directory(crawler.main_directory);
 	CeL.write_file(crawler.main_directory + 'preference.json',
@@ -736,7 +759,7 @@ function Download_job(crawler, work_id) {
 		C : 'progress_layer'
 	});
 	var this_job = this;
-	console.log(crawler)
+	// console.log(crawler);
 	this.layer = CeL.new_node({
 		div : [ {
 			b : [ crawler.site_name ? {
@@ -859,6 +882,8 @@ function destruct_download_job(crawler) {
 	if (work_data.error_list
 			|| ('preserve_download_work_layer' in crawler ? crawler.preserve_download_work_layer
 					: preserve_download_work_layer)) {
+		// remove "暫停"
+		// job.layer.removeChild(job.layer.firstChild);
 		CeL.new_node([ {
 			T : '↻',
 			R : '重新下載',
@@ -1087,28 +1112,32 @@ function check_update() {
 
 	// --------------------------------
 
-	CeL.debug('Checking update...');
+	CeL.debug({
+		T : '檢查更新中……'
+	});
 	var GitHub_repository_path = 'kanasimi/work_crawler';
 	var update_panel = CeL.new_node({
 		div : {
-			T : 'Checking update...',
+			T : '檢查更新中……',
 			C : 'waiting'
 		},
 		id : 'update_panel'
 	}, [ document.body, 'first' ]);
 
 	function update_process(version_data) {
-		console.log(version_data);
+		// console.log(version_data);
 		var package_data = JSON.parse(CeL.read_file(
 				process.resourcesPath + '\\app.asar\\package.json').toString());
 
 		if (version_data.has_new_version) {
+			var has_version = version_data.has_version || package_data
+					&& package_data.package_data.version;
 			CeL.new_node({
-				a : 'Update available: '
-				//
-				+ (version_data.has_version ? version_data.has_version
-				//
-				+ ' → ' : '') + version_data.latest_version,
+				a : {
+					T : [ '有新版本：%1', (has_version ? has_version + ' → ' : '')
+					//
+					+ version_data.latest_version ]
+				},
 				href : 'https://github.com/' + GitHub_repository_path,
 				target : '_blank',
 				onclick : open_external
@@ -1125,8 +1154,10 @@ function check_update() {
 		.check_version(GitHub_repository_path, update_process);
 
 	} catch (e) {
-		CeL.error('Update checking failed: ' + e);
-		CeL.node_value(update_panel, 'Update failed!');
+		CeL.error({
+			T : [ '更新檢測失敗：%1', e ]
+		});
+		CeL.node_value(update_panel, gettext('更新失敗！'));
 		CeL.set_class(update_panel, 'check_failed', {
 			reset : true
 		});

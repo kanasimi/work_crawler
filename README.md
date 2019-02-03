@@ -45,7 +45,7 @@
 
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
-| [アルファポリスの小説](https://www.alphapolis.co.jp/novel) | AlphaPolis.js | レンタルする話は取得できません |
+| [アルファポリスの小説](https://www.alphapolis.co.jp/novel) | AlphaPolis.js | 使用頻度制限あり。レンタルする話は取得できません |
 | [カクヨム](https://kakuyomu.jp/) | kakuyomu.js | |
 | [ハーメルン](https://syosetu.org/) | Hameln.js | |
 | [小説を読もう！](https://yomou.syosetu.com/) | yomou.js | [小説家になろう](http://syosetu.com/) |
@@ -87,9 +87,10 @@
 | [微博动漫](http://manhua.weibo.com/) | weibo.js | **本工具無法下載VIP付費內容**<br />竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [大古漫画网](https://www.dagumanhua.com/) | dagu.js | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。 |
-| [360漫画](http://www.xatxwh.com/) | 360taofu.js | 有些漫畫畫質較高，然而本站有太多缺圖、亂序、錯漏話。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) |
+| [360漫画](http://www.xatxwh.com/) | 360taofu.js | 有頻率限制。有些漫畫畫質較高，然而本站有太多缺圖、亂序、錯漏話。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) |
+| [365漫画网](http://www.iqg365.com/) | iqg365.js | 速度頗慢。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
 | [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
-| [看漫画](https://www.manhuagui.com/) | manhuagui.js | **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
+| [看漫画](https://www.manhuagui.com/) | manhuagui.js | 有頻率限制。**漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 |
