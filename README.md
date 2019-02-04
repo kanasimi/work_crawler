@@ -34,6 +34,17 @@
 | macOS | ✔️ |
 | UNIX, Linux | ✔️ |
 
+## Language support 多語言支援
+Welcome to join [the translating project](https://github.com/kanasimi/work_crawler/issues/185)!
+
+| Language 語言 | support 支援狀況 |
+| --- | --- |
+| 繁體中文 | ✔️ |
+| 简体中文 | ✔️ |
+| 日本語 | 🚧 |
+| English | 🚧 |
+| 한국어 | 🚧 |
+
 ## Supported sites 已完成之網站工具
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：必須先安裝 7-Zip **18.01 以上的版本**，這樣才能製作 .epub 小說電子書、壓縮漫畫章節。
 * 各線上作品網站往往不時改版（更改結構），同時造成本工具無法正常作動；因此若有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
@@ -88,11 +99,12 @@
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
 | [大古漫画网](https://www.dagumanhua.com/) | dagu.js | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。 |
 | [360漫画](http://www.xatxwh.com/) | 360taofu.js | 有頻率限制。有些漫畫畫質較高，然而本站有太多缺圖、亂序、錯漏話。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) |
-| [365漫画网](http://www.iqg365.com/) | iqg365.js | 速度頗慢。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
-| [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
-| [看漫画](https://www.manhuagui.com/) | manhuagui.js | 有頻率限制。**漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
+| [365漫画网](http://www.iqg365.com/) | iqg365.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
+| [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
+| [看漫画](https://www.manhuagui.com/) | manhuagui.js | 有頻率限制。**漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
+| [亲亲漫画网](http://www.duzhez.com/) | 930mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 |
 | [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm內容類似...<br />可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板3](http://manhua4.qingtiancms.net/)?? |
 | [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。2018/11/9 之後 (11/16之後?) 改版成 晴天漫画系统 |

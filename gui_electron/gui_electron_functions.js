@@ -48,6 +48,7 @@ download_sites_set = {
 		manhuagui_tw : '繁體版漫畫櫃',
 		gufengmh : '古风漫画网',
 		'36mh' : '36漫画网',
+		'930mh' : '亲亲漫画网',
 
 		hhcool : '汗汗酷漫',
 		omanhua : '哦漫画',
@@ -204,6 +205,7 @@ function initializer() {
 	});
 	if (false)
 		CeL.info({
+			// 🚧
 			span : [ '請幫助我們', {
 				a : '翻譯介面文字',
 				href : '#',

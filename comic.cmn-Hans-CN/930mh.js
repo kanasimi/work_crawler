@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載 36漫画网 的工具。 Download 36mh comics.
+ * 批量下載 亲亲漫画网 的工具。 Download 930mh.com → duzhez.com comics.
  */
 
 'use strict';
@@ -17,7 +17,12 @@ var crawler = CeL.SinMH({
 	// 有些漫畫作品分區分單行本、章節與外傳，當章節數量改變、添加新章節時就需要重新檢查。
 	// recheck : 'changed',
 
-	base_URL : 'https://www.36mh.com/'
+	// one_by_one : true,
+
+	base_URL : 'http://www.duzhez.com/',
+
+	search_URL : 'API',
+	api_base_URL : 'https://api.acg.gd/'
 });
 
 // ----------------------------------------------------------------------------
