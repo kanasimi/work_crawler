@@ -17,7 +17,6 @@ site_type_description = {
 // const
 download_sites_set = {
 	'comic.cmn-Hans-CN' : {
-		// '2manhua' : '爱漫画',
 		qq : '腾讯漫画',
 		'163' : '网易漫画',
 		u17 : '有妖气',
@@ -37,6 +36,9 @@ download_sites_set = {
 		'360taofu' : '360漫画',
 		dagu : '大古漫画网',
 		manhuadb : '漫画DB',
+
+		// '2manhua' : '爱漫画',
+		'57mh' : '57漫画网',
 
 		dmzj : '动漫之家',
 		dm5 : '动漫屋',
