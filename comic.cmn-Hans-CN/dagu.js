@@ -26,7 +26,7 @@ var crawler = new CeL.work_crawler({
 	// fs.readdirSync('.').forEach(function(d){if(/^\d+\s/.test(d))fs.renameSync(d,'manhua-'+d);})
 	// fs.readdirSync('.').forEach(function(d){if(/^manhua-/.test(d))fs.renameSync(d,d.replace(/^manhua-/,''));})
 	// 所有作品都使用這種作品類別前綴。
-	use_work_id_prefix : 'manhua',
+	common_catalog : 'manhua',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
@@ -47,14 +47,14 @@ var crawler = new CeL.work_crawler({
 			//
 			/<a href="\/([a-z]+\/[a-z_\-\d]+)\/"[^<>]*?>([^<>]+)/);
 			// console.log(matched);
-			if (this.use_work_id_prefix
+			if (this.common_catalog
 			// 去掉所有不包含作品類別前綴者。
-			&& !matched[1].startsWith(this.use_work_id_prefix + '/'))
+			&& !matched[1].startsWith(this.common_catalog + '/'))
 				return;
-			id_list.push(this.use_work_id_prefix
+			id_list.push(this.common_catalog
 			//
-			? matched[1].slice((this.use_work_id_prefix + '/').length)
-					: matched[1].replace('/', '-'));
+			? matched[1].slice((this.common_catalog + '/').length) : matched[1]
+					.replace('/', '-'));
 			id_data.push(get_label(matched[2]));
 		}, this);
 		// console.log([ id_list, id_data ]);
@@ -63,8 +63,8 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return (this.use_work_id_prefix ? this.use_work_id_prefix + '/'
-				+ work_id : work_id.replace('-', '/'))
+		return (this.common_catalog ? this.common_catalog + '/' + work_id
+				: work_id.replace('-', '/'))
 				+ '/';
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
@@ -120,8 +120,20 @@ var crawler = new CeL.work_crawler({
 		url = this.full_URL(chapter_data.url), html = XMLHttp.responseText,
 		//
 		image_count = html.between('totalpage =', ';').trim(), _this = this;
-		// e.g., http://www.9mdm.com/manhua/4353/141236.html
-		image_count = image_count === '[!--diypagenum--]' ? 1 : +image_count;
+
+		if (image_count === '[!--diypagenum--]') {
+			// displayed page number?
+			// console.log(html);
+
+			// e.g., http://www.9mdm.com/manhua/4353/141236.html
+			// https://www.dagumanhua.com/manhua/10008/317688.html
+			image_count = XMLHttp.responseText.between('<div class="mh_list">',
+					'</div>').match(/ src="[^"]+"/g);
+			// https://www.dagumanhua.com/manhua/4520/129933.html
+			image_count = image_count ? image_count.length : 0;
+		} else {
+			image_count = +image_count;
+		}
 
 		if (!(image_count >= 0)) {
 			throw work_data.title + ' #' + chapter_NO + ' '
@@ -150,14 +162,18 @@ var crawler = new CeL.work_crawler({
 		}
 
 		function extract_image(XMLHttp) {
-			var html = XMLHttp.responseText,
-			// .trim(): for 遮天 第92话 各打算盘
-			url = encodeURI(html.between('<div class="mh_list">', '</div>')
-					.between(' src="', '"').trim());
-			CeL.debug('Add image ' + chapter_data.image_list.length + '/'
-					+ image_count + ': ' + url, 1, 'extract_image');
-			chapter_data.image_list.push({
-				url : url
+			XMLHttp.responseText.between('<div class="mh_list">', '</div>')
+			// .each_between(): for
+			// https://www.dagumanhua.com/manhua/10008/317688.html
+			.each_between(' src="', '"', function(url) {
+				// .trim(): for 遮天 第92话 各打算盘
+				url = encodeURI(url.trim());
+				CeL.debug('Add image ' + chapter_data.image_list.length
+				//
+				+ '/' + image_count + ': ' + url, 1, 'extract_image');
+				chapter_data.image_list.push({
+					url : url
+				});
 			});
 		}
 
