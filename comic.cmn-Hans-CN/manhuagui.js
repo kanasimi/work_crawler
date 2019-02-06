@@ -44,9 +44,8 @@ decode_filename = 'config_FAF1BF617BAF8A691A828F80672D3588.js',
 PATTERN_chapter = /<li><a href="([^"<>:]+)" title="([^"<>]+)"[^<>]*>(.+?)<\/a><\/li>|<h4>(.+?)<\/h4>/g,
 //
 crawler = new CeL.work_crawler({
-	// 本站常常無法取得圖片，因此得多重新檢查。
-	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
-	// recheck : true,
+	// 當有多個分部的時候才重新檢查。
+	recheck : 'multi_parts_changed',
 	one_by_one : true,
 
 	base_URL : 'https://www.manhuagui.com/',
@@ -55,11 +54,12 @@ crawler = new CeL.work_crawler({
 	// 2018/4: manhuagui 不允許過於頻繁的 access，會直接 ban IP。
 	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
 	// 模仿實際人工請求。
-	// 2018/7/12 22:29:18 9s: NG, ban 2 hr.
+	// 2018/7/12 22:29:18: 9s: NG, ban 2 hr.
+	// 2019/2/5: 35s: NG, ban 1 day.
 	// 10s, 15s 在下載過100章(1 hr)之後一樣會 ban 5hr。
 	// 20s, 30s 在下載過200章(~2 hr)之後一樣會 ban。
 	// 60s 大致OK
-	chapter_time_interval : '20s',
+	chapter_time_interval : '40s',
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.
@@ -225,6 +225,10 @@ crawler = new CeL.work_crawler({
 						// assert: max(NO_in_part) < 1e4
 						return (a.part_NO - b.part_NO) * 1e4 + a.NO_in_part
 								- b.NO_in_part;
+					});
+					// 使章節目錄名稱不包含 part_NO。
+					chapter_list.forEach(function(chapter_data) {
+						delete chapter_data.part_NO;
 					});
 				}
 			}
