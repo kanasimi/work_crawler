@@ -1,6 +1,6 @@
 {
 	"name" : "work_crawler",
-	"version" : "1.8.20190120",
+	"version" : "1.9",
 	"main" : "gui_electron/gui_electron.js",
 	"description" : "CeJS online novels / comics downloader, CeJS 線上小說漫畫下載工具.",
 	"author" : {
@@ -11,7 +11,6 @@
 	"homepage" : "https://github.com/kanasimi/work_crawler",
 	"license" : "BSD-3-Clause",
 	"scripts" : {
-		"test" : "node \"work_crawler.updater.js\"",
 		"start" : "node_modules/.bin/electron .",
 		"pack" : "node_modules/.bin/electron-builder --dir",
 		"dist" : "node_modules/.bin/electron-builder",
@@ -64,6 +63,9 @@
 			}, {
 				"target" : "deb",
 				"arch" : [ "x64", "ia32" ]
+			}, {
+				"target" : "apk",
+				"arch" : [ "x64" ]
 			} ],
 			"category" : "Network",
 			"icon" : "gui_electron/icon/rasen2.png"
