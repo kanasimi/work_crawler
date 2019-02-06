@@ -1,18 +1,22 @@
 ﻿/**
- * CeJS 線上小說漫畫下載工具 命令行介面自動更新工具。
+ * @name CeJS 線上小說漫畫下載工具 命令列介面自動產生新安裝包工具。
+ * 
+ * @fileoverview You may using this tool to generate executable packages.
  * 
  * @since 2018/9/9 20:54:21
+ * 
+ * @see work_crawler.updater.js
  */
 
 'use strict';
 
 var repository = 'work_crawler', branch = 'master', update_script_url = 'https://raw.githubusercontent.com/kanasimi/'
-		+ repository + '/' + branch + '/work_crawler.updater.js';
+		+ repository + '/' + branch + '/' + repository + '.updater.js';
 
 // ----------------------------------------------------------------------------
 
 // const
-var node_https = require('https'), node_fs = require('fs'), child_process = require('child_process')
+var node_https = require('https'), node_fs = require('fs'), child_process = require('child_process'),
 // path segment separator
 path_separator = require('path').sep;
 
@@ -61,10 +65,15 @@ function download_update_tool(update_script_url, callback) {
 	});
 }
 
+// 刪除目錄與底下所有檔案。
 function remove_directory(directory_path) {
 	var is_windows = process.platform.startsWith('win');
 	if (is_windows)
 		directory_path = directory_path.replace(/[\\\/]/g, path_separator);
+
+	if (!node_fs.existsSync(directory_path))
+		return;
+
 	child_process.execSync((is_windows ? 'rd /s /q' : 'rm -rf') + ' "'
 			+ directory_path + '"', {
 		stdio : 'inherit'
@@ -79,7 +88,7 @@ function build_package(update_script_name) {
 	}
 	// clean previous cache
 	try {
-		node_fs.unlinkSync('work_crawler-master.version.json');
+		node_fs.unlinkSync(repository + '-' + branch + '.version.json');
 	} catch (e) {
 		// TODO: handle exception
 	}
