@@ -129,7 +129,7 @@ var crawler = new CeL.work_crawler({
 			last_update : get_label(html.between(
 					'<span class="comicIndex-date">', '</span>').replace('更新',
 					'')),
-			last_chapter : get_label(html.between(
+			latest_chapter : get_label(html.between(
 					'<p class="comicIndex-title">', '</p>')),
 			next_update : get_label(html.between(
 			// 【次回更新予定】2018/11/16
@@ -141,6 +141,10 @@ var crawler = new CeL.work_crawler({
 		work_data.author = work_data.authors.slice(0, -1);
 
 		extract_work_data(work_data, html);
+		if (work_data.site_name) {
+			// "ComicWalker - 人気マンガが無料で読める！" → "ComicWalker"
+			work_data.site_name = work_data.site_name.replace(/ +- .+/, '');
+		}
 
 		// 因為沒有明確記載作品是否完結，一年沒更新就不再檢查。
 		work_data.recheck_days = 400;
@@ -193,7 +197,7 @@ var crawler = new CeL.work_crawler({
 		// console.log(image_data);
 		if (image_data.meta.drm_hash === null) {
 			// e.g., 英雄の娘として生まれ変わった英雄は再び英雄を目指す
-			// 這個情況下所獲得的圖片內容似乎沒問題?
+			// 這情況下所獲得的圖片內容似乎不用解碼？
 			// CeL.warn('Bad image data?');
 			// console.log(image_data);
 			return;

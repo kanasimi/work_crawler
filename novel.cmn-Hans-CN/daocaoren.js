@@ -20,6 +20,8 @@ var crawler = new CeL.work_crawler({
 	// recheck='changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。否則只會自上次下載過的章節接續下載。
 	recheck : 'changed',
 
+	// 2019/2/3 16:33: 讀取頻率太過頻繁會變15到20分鐘。
+
 	base_URL : 'http://www.daocaorenshuwu.com/',
 
 	// 規範 work id 的正規模式；提取出引數（如 URL）中的作品id 以回傳。
@@ -130,10 +132,14 @@ var crawler = new CeL.work_crawler({
 		}
 
 		if (has_continue) {
+			CeL.debug('Move url of #' + (chapter_NO + 1) + ' to #' + chapter_NO
+					+ '/' + work_data.chapter_list.length, 2);
 			work_data.chapter_list[chapter_NO - 1].url
-			// hack
+			// hack for this.check_next_chapter()
 			= work_data.chapter_list[chapter_NO].url;
 			work_data.chapter_list.splice(chapter_NO, 1);
+			// 重新設定章節數量。
+			work_data.chapter_count = work_data.chapter_list.length;
 
 			work_data.previous_sub_title = sub_title;
 			work_data.previous_text = text;

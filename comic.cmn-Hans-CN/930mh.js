@@ -13,13 +13,14 @@ CeL.run('application.net.work_crawler.SinMH');
 // ----------------------------------------------------------------------------
 
 var crawler = CeL.SinMH({
-	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
-	// 有些漫畫作品分區分單行本、章節與外傳，當章節數量改變、添加新章節時就需要重新檢查。
-	// recheck : 'changed',
-
 	// one_by_one : true,
 
 	base_URL : 'http://www.duzhez.com/',
+
+	extract_work_id : CeL.is_digits,
+
+	// for 年轻人脱离黑魔法虽然刻不容缓、但试着就业之后待遇却很好、社长和使魔也非常可爱真是棒极了！
+	acceptable_types : 'images',
 
 	search_URL : 'API',
 	api_base_URL : 'https://api.acg.gd/'

@@ -57,11 +57,11 @@ crawler = new CeL.work_crawler({
 	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
 	// 模仿實際人工請求。
 	// 2018/7/12 22:29:18: 9s: NG, ban 2 hr.
-	// 2019/2/5: 35s: NG, ban 1 day.
 	// 10s, 15s 在下載過100章(1 hr)之後一樣會 ban 5hr。
 	// 20s, 30s 在下載過200章(~2 hr)之後一樣會 ban。
 	// 60s 大致OK
-	chapter_time_interval : '40s',
+	// 2019/2/6: 40s: NG, ban 1 day.
+	chapter_time_interval : '50s',
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.

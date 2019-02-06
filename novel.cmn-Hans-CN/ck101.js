@@ -619,15 +619,15 @@ crawler = new CeL.work_crawler({
 			}
 			text = text.trim();
 
-			if (this.last_chapter_title === chapter_title
-			// && this.last_chapter_hash === matched_list[index][1]
-			&& this.last_chapter_text === text) {
+			if (this.latest_chapter_title === chapter_title
+			// && this.latest_chapter_hash === matched_list[index][1]
+			&& this.latest_chapter_text === text) {
 				CeL.log('偵測到重複章節，將跳過: ' + chapter_title);
 				continue;
 			}
-			this.last_chapter_title = chapter_title;
-			// this.last_chapter_hash = matched_list[index][1];
-			this.last_chapter_text = text;
+			this.latest_chapter_title = chapter_title;
+			// this.latest_chapter_hash = matched_list[index][1];
+			this.latest_chapter_text = text;
 
 			this.add_ebook_chapter(work_data, work_data.book_chapter_count, {
 				title : chapter_title,

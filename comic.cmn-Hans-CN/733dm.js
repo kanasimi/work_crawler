@@ -37,7 +37,7 @@ var crawler = new CeL.work_crawler({
 	// fs.readdirSync('.').forEach(function(d){if(/^\d+\s/.test(d))fs.renameSync(d,'manhua-'+d);})
 	// fs.readdirSync('.').forEach(function(d){if(/^manhua-/.test(d))fs.renameSync(d,d.replace(/^manhua-/,''));})
 	// 所有作品都使用這種作品類別前綴。
-	use_work_id_prefix : 'mh',
+	common_catalog : 'mh',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'statics/search.aspx?key=',
@@ -51,14 +51,14 @@ var crawler = new CeL.work_crawler({
 			//
 			/<a href="\/([a-z]+\/[a-z_\-\d]+)\/"[^<>]*?>([^<>]+)/);
 			// console.log(matched);
-			if (this.use_work_id_prefix
+			if (this.common_catalog
 			// 去掉所有不包含作品類別前綴者。
-			&& !matched[1].startsWith(this.use_work_id_prefix + '/'))
+			&& !matched[1].startsWith(this.common_catalog + '/'))
 				return;
-			id_list.push(this.use_work_id_prefix
+			id_list.push(this.common_catalog
 			//
-			? matched[1].slice((this.use_work_id_prefix + '/').length)
-					: matched[1].replace('/', '-'));
+			? matched[1].slice((this.common_catalog + '/').length) : matched[1]
+					.replace('/', '-'));
 			id_data.push(get_label(matched[2]));
 		}, this);
 		// console.log([ id_list, id_data ]);
@@ -67,8 +67,8 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return (this.use_work_id_prefix ? this.use_work_id_prefix + '/'
-				+ work_id : work_id.replace('-', '/'))
+		return (this.common_catalog ? this.common_catalog + '/' + work_id
+				: work_id.replace('-', '/'))
 				+ '/';
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
@@ -146,7 +146,7 @@ var crawler = new CeL.work_crawler({
 				url = url.replace(/(\.jpg)\/.*/, '$1');
 				// console.log(url);
 				if (!url.includes('://')) {
-					// File_Server 图片服务器
+					// TODO: using File_Server 图片服务器: 此 URL 會再轉址至圖片真實網址。
 					url = 'http://img_733.234us.com/' + url;
 				}
 				return {

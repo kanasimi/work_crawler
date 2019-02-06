@@ -211,7 +211,9 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 // -----------------------------------------------------------------
 
 // 首先整個掃描一次，篩選出需要處理的目錄，放在process_queue。
-var process_queue = [], PATTERN_executable_file = /\.(?:exe|dll|pkg)$/i;
+var process_queue = [],
+// 可執行檔或函式庫
+PATTERN_executable_file = /\.(?:exe|dll|pkg)$/i;
 fso_name_list.forEach(check_fso);
 
 function check_fso(fso_name) {
@@ -242,7 +244,7 @@ function check_fso(fso_name) {
 
 		// 經過測試，.pkg file 通常越壓縮越大。
 		if (false && PATTERN_executable_file.test(fso_name)) {
-			process_queue.push([ directory_path, 'game file', '為遊戲執行檔' ]);
+			process_queue.push([ directory_path, 'game file', '為遊戲可執行檔或函式庫' ]);
 		} else
 			classify(fso_name, directory_path, fso_status);
 		return;
@@ -358,7 +360,7 @@ function check_fso(fso_name) {
 
 	if ((exe_count > 0 || iso_count > 1 && sub_sub_files_count < 20 || iso_count === sub_sub_files_count)
 			&& test_size_OK(1e10, 'game folder', '含有 ' + exe_count + '/'
-					+ sub_sub_files_count + ' 個可執行檔')) {
+					+ sub_sub_files_count + ' 個可執行檔或函式庫')) {
 		return;
 	}
 
@@ -383,7 +385,7 @@ function check_fso(fso_name) {
 		return sub_fso_name_list.some(function(name) {
 			return PATTERN_executable_file.test(name);
 		});
-	}) && test_size_OK(null, 'game folder', '次目錄中含有可執行檔')) {
+	}) && test_size_OK(null, 'game folder', '次目錄中含有可執行檔或函式庫')) {
 		return;
 	}
 

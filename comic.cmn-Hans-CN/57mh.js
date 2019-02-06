@@ -23,6 +23,7 @@ var crawler = new CeL.work_crawler({
 	skip_error : true,
 
 	// one_by_one : true,
+	// 早於2017/11-2019/1底換域名: http://www.57mh.com/
 	base_URL : 'http://www.5qmh.com/',
 
 	// 取得伺服器列表。
@@ -136,17 +137,20 @@ var crawler = new CeL.work_crawler({
 		var chapter_data = html.between('<script type="text/javascript">eval',
 				'\n');
 		if (!chapter_data || !(chapter_data = decode(chapter_data))) {
+			CeL.warn(work_data.title + ' #' + chapter_NO + ': '
+					+ 'No valid chapter data got!');
 			return;
 		}
 
 		// 設定必要的屬性。
 		chapter_data.title = get_label(html.between('<h2>', '</h2>'));
 		chapter_data.image_count = chapter_data.fc;
-		chapter_data.image_list = chapter_data.fs.map(function(url) {
-			return {
-				url : url
-			}
-		});
+		chapter_data.image_list = chapter_data.fs;
+		if (!chapter_data.fs[chapter_data.fs.length - 1]) {
+			// for http://www.5qmh.com/6908/0296.html?p=9
+			chapter_data.fs.pop();
+			chapter_data.image_count--;
+		}
 
 		return chapter_data;
 	}

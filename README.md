@@ -93,7 +93,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [知音漫客](https://www.zymk.cn/) | zymk.js | |
 | [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。似乎拿來下載日本漫畫的人比較多。 |
-| [土豪漫画](https://www.tohomh.com/) | tohomh.js | 系統似 dm5。 |
+| [土豪漫画](https://www.tohomh123.com/) | tohomh.js | 系統似 dm5。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | **本工具無法下載VIP付費內容** |
 | [微博动漫](http://manhua.weibo.com/) | weibo.js | **本工具無法下載VIP付費內容**<br />竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
 | [漫画台](http://www.manhuatai.com/) | manhuatai.js | |
@@ -118,7 +118,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
-| [57漫画网](http://www.5qmh.com/) | 57mh.js | 系統同 2manhua.js。可能是早期版本的 圣樱漫画管理系统？ MHD模板？ |
+| [57漫画网](http://www.5qmh.com/) | 57mh.js | 缺話眾多。系統同 2manhua.js。可能是早期版本的 圣樱漫画管理系统？ MHD模板？ |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |
@@ -150,7 +150,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 ## Installation 安裝
 
-若是想要使用系統安裝的方法，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版修正次數：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。若是欲採用最新的版本，或者用作研究開發、想要使用命令列介面作批次處理，請採用下列步驟。
+若是想要使用系統安裝的方法，或者您的系統並未提供命令列介面，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版修正次數：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。欲採用最新版本，或研究開發、想要使用命令列介面作批次處理，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->

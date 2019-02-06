@@ -1,21 +1,36 @@
 {
 	"name" : "work_crawler",
-	"version" : "1.8.20190120",
-	"main" : "gui_electron/gui_electron.js",
-	"description" : "CeJS online novels / comics downloader, CeJS 線上小說漫畫下載工具.",
+	"title" : "CeJS online novels / comics downloader, CeJS 線上小說漫畫下載工具.",
+	"version" : "1.9",
+	"description" : "A tool using CeJS library to download online novels / comics.",
+	"keywords" : [ "comic-downloader", "novel-downloader", "cejs",
+			"downloader", "download-comic", "epub", "ebook", "comics",
+			"webcomics", "manga-downloader", "manga", "narou", "novels",
+			"crawler" ],
 	"author" : {
 		"name" : "Colorless echo",
 		"email" : "vimunci@gmail.com",
 		"url" : "https://github.com/kanasimi/work_crawler"
 	},
-	"homepage" : "https://github.com/kanasimi/work_crawler",
+	"contributors" : "vimunci",
 	"license" : "BSD-3-Clause",
+	"homepage" : "https://github.com/kanasimi/work_crawler",
+	"bugs" : {
+		"url" : "https://github.com/kanasimi/work_crawler/issues"
+	},
+	"repository" : {
+		"type" : "git",
+		"url" : "https://github.com/kanasimi/work_crawler.git"
+	},
+
+	"main" : "gui_electron/gui_electron.js",
 	"scripts" : {
 		"start" : "node_modules/.bin/electron .",
 		"pack" : "node_modules/.bin/electron-builder --dir",
 		"dist" : "node_modules/.bin/electron-builder",
 		"postinstall" : "node_modules/.bin/electron-builder install-app-deps"
 	},
+
 	"build" : {
 		"productName" : "work_crawler",
 		"appId" : "org.kanasimi.work_crawler",
@@ -78,6 +93,7 @@
 			} ],
 			"icon" : "gui_electron/icon/rasen2.ico"
 		},
+
 		"nsis" : {
 			"oneClick" : false,
 			"perMachine" : false,
@@ -86,6 +102,9 @@
 			"createDesktopShortcut" : true,
 			"runAfterFinish" : true
 		}
+	},
+	"engines" : {
+		"node" : ">=0.10"
 	},
 	"devDependencies" : {
 		"electron" : "latest",

@@ -1,12 +1,15 @@
 ﻿/**
- * CeJS 線上小說漫畫下載工具 命令行介面自動更新工具。
+ * CeJS 線上小說漫畫下載工具 命令列介面自動更新工具。
  * 
  * @since 2018/8/27
+ * 
+ * @see _build/pack_up.js
  */
 
 'use strict';
 
-var update_script_url = 'https://raw.githubusercontent.com/kanasimi/gh-updater/master/GitHub.updater.node.js';
+var repository = 'gh-updater', branch = 'master', update_script_url = 'https://raw.githubusercontent.com/kanasimi/'
+		+ repository + '/' + branch + '/' + 'GitHub.updater.node.js';
 
 // ----------------------------------------------------------------------------
 
@@ -21,7 +24,7 @@ function show_info(message) {
 }
 
 function download_update_tool(update_script_url, callback) {
-	show_info('下載 GitHub 更新工具...');
+	show_info('下載 ' + repository + ' 更新工具...');
 	node_https.get(update_script_url, function(response) {
 		var buffer_array = [], sum_size = 0;
 

@@ -22,6 +22,7 @@ var crawler = new CeL.work_crawler({
 
 	// one_by_one : true,
 	base_URL : 'http://www.dmzj.com/',
+	// https://manhua.dmzj.com/update_1.shtml
 	base_URL_manhua : 'http://manhua.dmzj.com/',
 
 	// 提取出引數（如 URL）中的作品ID 以回傳。

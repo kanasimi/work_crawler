@@ -38,11 +38,9 @@ crawler = new CeL.work_crawler({
 	},
 	parse_search_result : function(html, get_label) {
 		html = JSON.parse(html).data.hit;
-		var id_list = html.map(function(book) {
-			return book.id;
-		});
-		return [ id_list, html ];
+		return [ html, html ];
 	},
+	id_of_search_result : 'id',
 	title_of_search_result : 'title',
 
 	// 取得作品的章節資料。 get_work_data()
@@ -87,6 +85,7 @@ crawler = new CeL.work_crawler({
 			// 轉成由舊至新之順序。
 			work_data.chapter_list.reverse();
 		}
+		// console.log(work_data.chapter_list);
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()

@@ -21,6 +21,8 @@ crawler = new CeL.work_crawler({
 	// 本站常常無法取得圖片，因此得多重新檢查。
 	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
 	// recheck : true,
+	// 當有多個分部的時候才重新檢查。
+	recheck : 'multi_parts_changed',
 	// 當無法取得chapter資料時，直接嘗試下一章節。在手動+監視下recheck時可併用此項。
 	// skip_chapter_data_error : true,
 
@@ -114,6 +116,7 @@ crawler = new CeL.work_crawler({
 			}
 			++NO_in_part;
 			var chapter_data = {
+				// 使章節目錄名稱不包含 part_NO。
 				// part_NO : part_NO,
 				part_title : part_title,
 				NO_in_part : NO_in_part,

@@ -15,6 +15,8 @@ var crawler = new CeL.work_crawler({
 
 	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
 	// recheck : true,
+	// 當有多個分部的時候才重新檢查。
+	recheck : 'multi_parts_changed',
 	// 當無法取得chapter資料時，直接嘗試下一章節。在手動+監視下recheck時可併用此項。
 	// skip_chapter_data_error : true,
 
@@ -195,6 +197,7 @@ var crawler = new CeL.work_crawler({
 		//
 		= work_data.chapter_list[chapter_NO - 1].image_list = [
 		// 第一張圖片的網址在網頁中。
+		// <div class="comiclist">\n <div class="comicpage">\n <img src="..."
 		html.between(' class="comiclist"', '</div>').between(' src="', '"') ];
 
 		html = html.match(
@@ -203,13 +206,18 @@ var crawler = new CeL.work_crawler({
 		// console.log(html);
 		var config = Object.create(null), matched, PATTERN =
 		//
-		/[\s\n;]var\s+([a-z]+)\s*=\s*(\d+)/ig;
+		/[\s\n;]var\s+([a-z]+)\s*=\s*(\d+|[a-z]+|'[^']*'|"[^"]*")/ig;
 		while (matched = PATTERN.exec(html)) {
-			config[matched[1]] = matched[2];
+			config[matched[1]] = eval(matched[2]);
 		}
 		// console.log(config);
 		var _this = this, base_URL = 'action/play/read?did=' + config.did
 				+ '&sid=' + config.sid + '&iid=', image_count = config.pcount;
+		if (!image_list[0].includes('://')) {
+			// 2019/2/5 13:-17: 間改版。
+			// assert: image_list[0].startsWith('data:image/')
+			image_list[0] = config.pl;
+		}
 
 		if (!(image_count >= 1)) {
 			// e.g., https://www.tohomh.com/shijie/276.html

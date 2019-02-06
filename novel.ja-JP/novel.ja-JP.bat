@@ -1,9 +1,11 @@
 @ECHO OFF
-REM serial
+REM parallelly
 REM chcp 65001
-chcp 932
+REM chcp 936
 REM cd/d D:\USB\cgi-bin\program\comic
 
 REM CD "%~n0"
-FORFILES /M *.js /C "cmd.exe /c if @isdir==FALSE node @file l=@fname.txt || PAUSE"
+REM It's often too slow, so trying to execute parallelly.
+FORFILES /M *.js /C "cmd.exe /c IF @isdir==FALSE START node @file l=@fname.txt || PAUSE"
+
 REM CD ..

@@ -68,8 +68,17 @@ var crawler = new CeL.work_crawler({
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label) {
+		// console.log(html);
 		var chapter_data = JSON.parse(html).data, site_ver = 'site_ver='
 				+ chapter_data.site_ver;
+
+		// console.log(chapter_data);
+		if (!chapter_data.json_content.page
+		// 本章为付费章节
+		&& !chapter_data.is_allow_read.is_chapter_read) {
+			chapter_data.limited = true;
+			return;
+		}
 
 		// chapter_data.image_count = chapter_data.json_content.header.pageNum;
 		(chapter_data.image_list = chapter_data.json_content.page)

@@ -917,9 +917,9 @@ function destruct_download_job(crawler) {
 			// 顯示最後一個錯誤。
 			+ work_data.error_list[work_data.error_list.length - 1] + '</span>'
 			//
-			+ (work_data.error_list.length > 1 ? ' (總共有'
+			+ (work_data.error_list.length > 1 ? ' <small>(總共有'
 			//
-			+ work_data.error_list.length + '個錯誤)' : '');
+			+ work_data.error_list.length + '個錯誤)</small>' : '');
 			job.layer.title = work_data.error_list.join('\n');
 			if (false)
 				CeL.new_node([ {

@@ -27,7 +27,7 @@ var crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// 'changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。
 	// ** 以本站來說太消耗時間。
-	// recheck : 'changed',
+	recheck : 'changed',
 
 	// 2018/10/16-19 間開始: 頁面讀得太頻繁，例如連續讀取20個頁面，之後會只提供無內容頁面。
 	// 開新的 instance 可以多重下載作品。

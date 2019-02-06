@@ -8,6 +8,7 @@
 
 本工具以修正錯誤為主，由於人力有限，只能把精力放在維護常用的網站。新增網站僅在行有餘力時為之，請見諒。
 英語或韓語的網站煩請利用 Free Manga Downloader 之類軟體會比較好。這邊幾乎不會上英語或者韓語網站，就算做了出來也很少在做維護，沒有專門看英語韓語網站的工具維護得勤勞。
+I am sorry that for English or Korean sites, using Free Manga Downloader is much suitable. For the deficiency of time, it is hard to maintain the tools instantly.
 新增網站時，請 **一個網站開一個議題，除了在標題說明要新增網站，並加上網站名稱**。
 另外增加網站往往要耗費時間、作許多考量，之後還需維護；請確認網站經常更新、付費作品不多，並附個其他網站未揭載之作品。
 
@@ -19,7 +20,7 @@ Plese fill the template when you reporting a new issue, thank you!
 -->
 
 * **Version**: <!-- 您使用的 work_crawler 為哪個版本: 安裝包, 懶人安裝法 -->
-* **Interface**: <!-- 您使用的 work_crawler 為哪個介面: 圖形介面, 命令行介面 -->
+* **Interface**: <!-- 您使用的 work_crawler 為哪個介面: 圖形介面, 命令列介面 -->
 
 <!-- 請描述出了什麼問題、造成問題的操作步驟，您可貼上錯誤訊息或者執行時的畫面 -->
 

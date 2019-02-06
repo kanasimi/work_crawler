@@ -97,7 +97,7 @@ crawler = new CeL.work_crawler({
 			// e.g., http://www.manhuatai.com/faqishaonv/99.html
 			// http://www.kanman.com/27965/99.html
 			work_data.trying = true;
-			CeL.info('嘗試用數字遍歷的方法一個一個測試是否能讀取。檢查到第300章都還沒有內容就放棄。');
+			CeL.info('嘗試用數字遍歷的方法一個一個章節測試是否能讀取。檢查到第300章都還沒有內容就放棄。');
 			for (var i = 1; i < 300; i++) {
 				work_data.chapter_list.push({
 					url : '/' + work_data.id + '/' + i + '.html'
