@@ -33,6 +33,7 @@
 | Windows | ✔️ |
 | macOS | ✔️ |
 | UNIX, Linux | ✔️ |
+<!-- | Android | ❌ | -->
 
 ## Language support 多語言支援
 Welcome to join [the translating project](https://github.com/kanasimi/work_crawler/issues/185)!
@@ -135,6 +136,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [pixivコミック](https://comic.pixiv.net/) | pixivcomic.js | pixivコミック(ぴくしぶこみっく) |
 | [OVERLAP](https://over-lap.co.jp/gardo/) | OVERLAP.js | オーバーラップ コミックガルド: [ActiBook](https://ebook.digitalink.ne.jp/)系統 |
 | [MAGCOMI](https://comic.mag-garden.co.jp/) | MAGCOMI.js | マグコミ: [ActiBook](https://ebook.digitalink.ne.jp/)系統 |
+| [サイコミ](https://cycomi.com/fw/cycomibrowser/title/serialization/0) | cycomi.js | |
 | [コミコ](https://www.comico.jp/)<br />[オトナ限定 コミコ](http://plus.comico.jp/) | comico_jp.js<br />comico_jp_plus.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [XOY](https://xoy.webtoons.com/) | XOY.js | NAVER WEBTOON ja<br />2018.09.13: [XOYの作品が「LINEマンガ」に移行されます。](https://xoy.webtoons.com/ja/notice/detail?noticeNo=849) |
 
