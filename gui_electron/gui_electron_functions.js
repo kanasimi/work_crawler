@@ -55,6 +55,8 @@ download_sites_set = {
 		hhcool : '汗汗酷漫',
 		omanhua : '哦漫画',
 
+		migudm : '咪咕圈圈',
+
 		comico : 'comico',
 
 		webtoon : 'WEBTOON',

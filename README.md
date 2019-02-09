@@ -4,6 +4,7 @@
 ![GitHub commit activity the past week, 4 weeks, year](https://img.shields.io/github/commit-activity/y/kanasimi/work_crawler.svg)
 [![Github All Releases Downloads](https://img.shields.io/github/downloads/kanasimi/work_crawler/total.svg)](https://github.com/kanasimi/work_crawler/releases)
 [![Known Vulnerabilities](https://snyk.io/test/github/kanasimi/work_crawler/badge.svg?targetFile=package.json)](https://snyk.io/test/github/kanasimi/work_crawler?targetFile=package.json)
+[![codebeat badge](https://codebeat.co/badges/3a891138-ee8a-411a-90dd-20513f4f6a2b)](https://codebeat.co/projects/github-com-kanasimi-work_crawler-master)
 <!--
 ![Github Release Downloads](https://img.shields.io/github/downloads/kanasimi/work_crawler/v1.4/total.svg)
 ![Github Release Downloads](https://img.shields.io/github/downloads/kanasimi/work_crawler/latest/total.svg)
@@ -116,6 +117,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [漫画160](http://www.mh160.com/) | mh160.js | 與 733mh.js 相同系統 |
 | [哦漫画](http://www.omanhua.net/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
+| [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
 | [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
