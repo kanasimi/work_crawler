@@ -90,9 +90,7 @@ var crawler = new CeL.work_crawler({
 			score : html.between('<span class="score">', '</span>'),
 			// 土豪漫画: <em class="remind">每周六更</em>
 			next_update : html.between(' class="remind">', '<'),
-			part_list : part_list,
-			// reset work_data.chapter_list
-			chapter_list : []
+			part_list : part_list
 		};
 
 		if (!/[:：][^:：]+?[:：]/.test(work_data.author)) {
@@ -125,6 +123,11 @@ var crawler = new CeL.work_crawler({
 		work_data.inverted_order = !/ DM5_COMIC_SORT\s*=\s*1/.test(html);
 
 		html = html.between('detail-list-select', '<div class="index-title">');
+
+		// reset work_data.chapter_list
+		work_data.chapter_list = [];
+		// 漫畫目錄名稱不須包含分部號碼。使章節目錄名稱不包含 part_NO。
+		work_data.chapter_list.add_part_NO = false;
 
 		var PATTERN_chapter = /<li>([\s\S]+?)<\/li>|<ul ([^<>]+)>/g, matched;
 		while (matched = PATTERN_chapter.exec(html)) {
