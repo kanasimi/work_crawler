@@ -61,7 +61,8 @@ crawler = new CeL.work_crawler({
 	// 20s, 30s 在下載過200章(~2 hr)之後一樣會 ban。
 	// 60s 大致OK
 	// 2019/2/6: 40s: NG, ban 1 day.
-	chapter_time_interval : '50s',
+	// 50s 在下載過50章後一樣會 ban。.5 day?
+	chapter_time_interval : '70s',
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.
@@ -131,6 +132,9 @@ crawler = new CeL.work_crawler({
 		var data, chapter_list = [], matched,
 		//
 		part_title, part_title_hash = CeL.null_Object(), part_NO = 0;
+
+		// 漫畫目錄名稱不須包含分部號碼。使章節目錄名稱不包含 part_NO。
+		chapter_list.add_part_NO = false;
 
 		// 有些尚使用舊模式。
 		// @see http://www.ikanman.com/comic/8004/
@@ -227,10 +231,6 @@ crawler = new CeL.work_crawler({
 						// assert: max(NO_in_part) < 1e4
 						return (a.part_NO - b.part_NO) * 1e4 + a.NO_in_part
 								- b.NO_in_part;
-					});
-					// 使章節目錄名稱不包含 part_NO。
-					chapter_list.forEach(function(chapter_data) {
-						delete chapter_data.part_NO;
 					});
 				}
 			}
