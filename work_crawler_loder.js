@@ -43,6 +43,9 @@ site_configuration.comico = site_configuration.comico_jp = site_configuration.co
 // 代理伺服器 "hostname:port"
 global.proxy_server = '';
 
+// 儲存最愛作品清單的目錄。
+global.favorite_list_directory = '';
+
 // ------------------------------------
 
 try {

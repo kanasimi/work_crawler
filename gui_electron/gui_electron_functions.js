@@ -416,7 +416,7 @@ function initializer() {
 
 	// --------------------------------
 
-	set_click_trigger('favorites_trigger', 'favorites_list');
+	set_click_trigger('favorites_trigger', 'favorite_list');
 
 	set_click_trigger('download_job_trigger', 'download_job_queue');
 
@@ -527,11 +527,10 @@ function save_preference(crawler) {
 }
 
 function edit_favorites(crawler) {
-	var favorites = crawler.preference.favorites || [], favorites_node = CeL
-			.new_node({
-				textarea : '',
-				S : 'width: 99%; height: 20em;'
-			});
+	var favorites = get_favorites(crawler), favorites_node = CeL.new_node({
+		textarea : '',
+		S : 'width: 99%; height: 20em;'
+	});
 	favorites_node.value = favorites.join('\n');
 
 	CeL.new_node([ {
@@ -547,17 +546,7 @@ function edit_favorites(crawler) {
 				T : '儲存最愛作品清單'
 			} ],
 			onclick : function() {
-				crawler.preference.favorites
-				// verify work titles
-				= favorites_node.value.trim().split(/\n/)
-				//
-				.map(function(work_title) {
-					return work_title.trim();
-				}).filter(function(work_title) {
-					return !!work_title;
-				}).unique();
-
-				save_preference(crawler);
+				save_favorites(crawler, list_data);
 				reset_favorites(crawler);
 			},
 			C : 'favorites_button'
@@ -571,14 +560,96 @@ function edit_favorites(crawler) {
 			},
 			C : 'favorites_button cancel'
 		} ]
-	} ], [ 'favorites_list', 'clean' ]);
+	} ], [ 'favorite_list', 'clean' ]);
+}
+
+function get_favorite_list_file_path(crawler) {
+	// 儲存最愛作品清單的目錄。
+	var favorite_list_file_path = global.favorite_list_directory;
+	if (!favorite_list_file_path)
+		return;
+
+	if (typeof favorite_list_file_path === 'fuunction') {
+		favorite_list_file_path = favorite_list_file_path(crawler);
+	} else {
+		CeL.create_directory(favorite_list_directory);
+		favorite_list_file_path += crawler.id + '.txt';
+	}
+	return favorite_list_file_path;
+}
+
+var PATTERN_favorite_list_token = /(?:^|\n)(#.*|\/\*[\s\S]*?\*\/(.*)|.*?)/g;
+// parse favorite list
+function parse_favorites(list_data) {
+	var matched, list = [], parsed = [], list_hash = CeL.null_Object();
+	list.work_indexes = [];
+
+	while (matched = PATTERN_favorite_list_token.exec(list_data)) {
+		// or work id
+		var work_title = matched[1];
+		// parsed.push(work_title);
+
+		if (work_title.startsWith('#')) {
+			;
+		} else if (work_title.startsWith('/*')) {
+			if (matched[2] = matched[2].trim())
+				CeL.warn(gettext('作品列表區塊註解後面的"%1"會被忽略', matched[2]));
+		} else if ((work_title = work_title.trim())
+		// verify work titles: .unique()
+		&& !(work_title in list_hash)) {
+			list.push(work_title);
+		}
+	}
+	return list;
+}
+
+function get_favorites(crawler) {
+	if (!crawler)
+		crawler = get_crawler();
+
+	var favorite_list_file_path = get_favorite_list_file_path(crawler);
+	if (!favorite_list_file_path)
+		return crawler.preference.favorites || [];
+
+	var list_data = CeL.read_file(favorite_list_file_path), list;
+	if (list_data && (list_data = list_data.toString()).trim()) {
+		list = parse_favorites(list_data);
+		return list;
+	}
+
+	list = crawler.preference.favorites;
+	if (Array.isArray(list) && list.length > 0) {
+		CeL.info('儲存最愛作品清單的檔案不存在或者沒有內容。採用舊有的最愛作品列表。');
+		return list;
+	}
+
+	return [];
+}
+
+function save_favorites(crawler, list_data) {
+	if (!crawler)
+		crawler = get_crawler();
+
+	var list = parse_favorites(list_data);
+
+	// 將喜愛的作品名單存放在 .preference
+	// Store your favorite work list in .preference
+	crawler.preference.favorites = list;
+
+	var favorite_list_file_path = get_favorite_list_file_path(crawler);
+	if (!favorite_list_file_path) {
+		save_preference(crawler);
+		return;
+	}
+
+	CeL.write_file(favorite_list_file_path, list_data);
 }
 
 function reset_favorites(crawler) {
 	if (!crawler)
 		crawler = get_crawler();
 
-	var favorites = crawler.preference.favorites || [];
+	var favorites = get_favorites(crawler);
 
 	var favorites_nodes = favorites.map(function(work_title) {
 		return {
@@ -620,7 +691,7 @@ function reset_favorites(crawler) {
 	} ];
 
 	// console.log(favorites_nodes);
-	CeL.new_node(favorites_nodes, [ 'favorites_list', 'clean' ]);
+	CeL.new_node(favorites_nodes, [ 'favorite_list', 'clean' ]);
 }
 
 function reset_site_options() {
@@ -1085,6 +1156,30 @@ function open_download_directory(crawler) {
 
 // ----------------------------------------------
 
+function check_update_NOT_package() {
+	// ，請勿關閉程式
+	CeL.log({
+		T : '非安裝包版本自動更新程序於背景檢測並執行中。'
+	});
+	// 非安裝包圖形介面自動更新功能。
+	// TODO: get update result
+	require('child_process').exec('node work_crawler.updater.js', {
+		// pass I/O to the child process
+		// https://nodejs.org/api/child_process.html#child_process_options_stdio
+		stdio : 'inherit'
+	}, function(error, stdout, stderr) {
+		if (error) {
+			CeL.error({
+				T : [ '自動更新程序檢測失敗：%1', error ]
+			});
+		} else {
+			CeL.log({
+				T : '自動更新程序檢測完畢。'
+			});
+		}
+	});
+}
+
 function check_update() {
 	if (!global.auto_update) {
 		CeL.log({
@@ -1094,30 +1189,12 @@ function check_update() {
 	}
 
 	if (!is_installation_package) {
-		// ，請勿關閉程式
-		CeL.log({
-			T : '非安裝包版本自動更新程序於背景檢測並執行中。'
-		});
-		// 非安裝包圖形介面自動更新功能。
-		require('child_process').exec('node work_crawler.updater.js', {
-			// pass I/O to the child process
-			// https://nodejs.org/api/child_process.html#child_process_options_stdio
-			stdio : 'inherit'
-		}, function(error, stdout, stderr) {
-			if (error) {
-				CeL.error({
-					T : [ '自動更新程序檢測失敗：%1', error ]
-				});
-			} else {
-				CeL.log({
-					T : '自動更新程序檢測完畢。'
-				});
-			}
-		});
+		check_update_NOT_package_GUI();
 		return;
 	}
 
 	// --------------------------------
+	// 安裝包圖形介面自動更新功能。
 
 	CeL.debug({
 		T : '檢查更新中……'
