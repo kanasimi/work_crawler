@@ -527,7 +527,9 @@ function save_preference(crawler) {
 }
 
 function edit_favorites(crawler) {
-	var favorites = get_favorites(crawler), favorites_node = CeL.new_node({
+	var favorites = get_favorites(crawler, true),
+	//
+	favorites_node = CeL.new_node({
 		textarea : '',
 		S : 'width: 99%; height: 20em;'
 	});
@@ -546,7 +548,7 @@ function edit_favorites(crawler) {
 				T : '儲存最愛作品清單'
 			} ],
 			onclick : function() {
-				save_favorites(crawler, list_data);
+				save_favorites(crawler, favorites_node.value);
 				reset_favorites(crawler);
 			},
 			C : 'favorites_button'
@@ -581,7 +583,7 @@ function get_favorite_list_file_path(crawler) {
 	return favorite_list_file_path;
 }
 
-function get_favorites(crawler) {
+function get_favorites(crawler, get_parsed) {
 	if (!crawler)
 		crawler = get_crawler();
 
@@ -589,31 +591,33 @@ function get_favorites(crawler) {
 	if (!favorite_list_file_path)
 		return crawler.preference.favorites || [];
 
-	var list_data = CeL.read_file(favorite_list_file_path), list;
-	if (list_data && (list_data = list_data.toString()).trim()) {
+	var work_list_data = CeL.read_file(favorite_list_file_path), work_list;
+	if (work_list_data && (work_list_data = work_list_data.toString()).trim()) {
 		// 有東西。
-		list = CeL.work_crawler.parse_favorite_list(list_data);
-		return list;
+		work_list = CeL.work_crawler.parse_favorite_list(work_list_data, {
+			get_parsed : get_parsed
+		});
+		return get_parsed ? work_list.parsed : work_list;
 	}
 
-	list = crawler.preference.favorites;
-	if (Array.isArray(list) && list.length > 0) {
+	work_list = crawler.preference.favorites;
+	if (Array.isArray(work_list) && work_list.length > 0) {
 		CeL.info('儲存最愛作品清單的檔案不存在或者沒有內容。採用舊有的最愛作品列表。');
-		return list;
+		return work_list;
 	}
 
 	return [];
 }
 
-function save_favorites(crawler, list_data) {
+function save_favorites(crawler, work_list_data) {
 	if (!crawler)
 		crawler = get_crawler();
 
-	var list = CeL.work_crawler.parse_favorite_list(list_data);
+	var work_list = CeL.work_crawler.parse_favorite_list(work_list_data);
 
 	// 將喜愛的作品名單存放在 .preference
 	// Store your favorite work list in .preference
-	crawler.preference.favorites = list;
+	crawler.preference.favorites = work_list;
 
 	var favorite_list_file_path = get_favorite_list_file_path(crawler);
 	if (!favorite_list_file_path) {
@@ -621,7 +625,7 @@ function save_favorites(crawler, list_data) {
 		return;
 	}
 
-	CeL.write_file(favorite_list_file_path, list_data);
+	CeL.write_file(favorite_list_file_path, work_list_data);
 }
 
 function reset_favorites(crawler) {
