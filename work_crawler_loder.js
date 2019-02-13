@@ -43,8 +43,12 @@ site_configuration.comico = site_configuration.comico_jp = site_configuration.co
 // 代理伺服器 "hostname:port"
 global.proxy_server = '';
 
-/** {String|Function}儲存最愛作品清單的目錄。 */
+/** {String|Function}儲存最愛作品清單的目錄。可以把最愛作品清單放在獨立的檔案，便於編輯。 */
 global.favorite_list_directory = '';
+// 儲存最愛作品清單的目錄 @ .main_directory。
+favorite_list_directory = function() {
+	return this.main_directory + 'favorite.txt';
+};
 
 /** {String|Function}當只輸入 "l" 時的轉換。 */
 global.default_favorite_list = '';
