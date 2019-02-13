@@ -43,8 +43,11 @@ site_configuration.comico = site_configuration.comico_jp = site_configuration.co
 // 代理伺服器 "hostname:port"
 global.proxy_server = '';
 
-// 儲存最愛作品清單的目錄。
+/** {String|Function}儲存最愛作品清單的目錄。 */
 global.favorite_list_directory = '';
+
+/** {String|Function}當只輸入 "l" 時的轉換。 */
+global.default_favorite_list = '';
 
 // ------------------------------------
 
@@ -209,6 +212,12 @@ function start_crawler(crawler, crawler_module) {
 	setup_crawler(crawler, crawler_module);
 	// console.log(crawler_module);
 	if (is_CLI) {
+		if (work_id === 'l' && default_favorite_list) {
+			work_id = default_favorite_list;
+			if (typeof work_id === 'function')
+				work_id = work_id.call(crawler);
+		}
+
 		crawler.start(work_id, crawler.after_download_list);
 	}
 }

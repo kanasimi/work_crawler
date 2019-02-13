@@ -394,10 +394,10 @@ function initializer() {
 		}, {
 			b : [ {
 				T : '重設下載選項'
-			}, '' && {
+			}, get_favorite_list_file_path(get_crawler()) ? {
 				T : '與最愛作品清單',
 				S : 'color: red;'
-			} ],
+			} : '' ],
 			onclick : function() {
 				var crawler = get_crawler();
 				if (!crawler) {
@@ -564,43 +564,21 @@ function edit_favorites(crawler) {
 }
 
 function get_favorite_list_file_path(crawler) {
-	// 儲存最愛作品清單的目錄。
-	var favorite_list_file_path = global.favorite_list_directory;
-	if (!favorite_list_file_path)
+	if (!crawler)
 		return;
 
-	if (typeof favorite_list_file_path === 'fuunction') {
-		favorite_list_file_path = favorite_list_file_path(crawler);
-	} else {
-		CeL.create_directory(favorite_list_directory);
+	// 儲存最愛作品清單的目錄。
+	var favorite_list_file_path = global.favorite_list_directory;
+
+	if (typeof favorite_list_file_path === 'function') {
+		favorite_list_file_path = favorite_list_file_path.call(crawler);
+
+	} else if (favorite_list_file_path) {
+		CeL.create_directory(favorite_list_file_path);
 		favorite_list_file_path += crawler.id + '.txt';
 	}
+
 	return favorite_list_file_path;
-}
-
-var PATTERN_favorite_list_token = /(?:^|\n)(#.*|\/\*[\s\S]*?\*\/(.*)|.*?)/g;
-// parse favorite list
-function parse_favorites(list_data) {
-	var matched, list = [], parsed = [], list_hash = CeL.null_Object();
-	list.work_indexes = [];
-
-	while (matched = PATTERN_favorite_list_token.exec(list_data)) {
-		// or work id
-		var work_title = matched[1];
-		// parsed.push(work_title);
-
-		if (work_title.startsWith('#')) {
-			;
-		} else if (work_title.startsWith('/*')) {
-			if (matched[2] = matched[2].trim())
-				CeL.warn(gettext('作品列表區塊註解後面的"%1"會被忽略', matched[2]));
-		} else if ((work_title = work_title.trim())
-		// verify work titles: .unique()
-		&& !(work_title in list_hash)) {
-			list.push(work_title);
-		}
-	}
-	return list;
 }
 
 function get_favorites(crawler) {
@@ -613,7 +591,8 @@ function get_favorites(crawler) {
 
 	var list_data = CeL.read_file(favorite_list_file_path), list;
 	if (list_data && (list_data = list_data.toString()).trim()) {
-		list = parse_favorites(list_data);
+		// 有東西。
+		list = CeL.work_crawler.parse_favorite_list(list_data);
 		return list;
 	}
 
@@ -630,7 +609,7 @@ function save_favorites(crawler, list_data) {
 	if (!crawler)
 		crawler = get_crawler();
 
-	var list = parse_favorites(list_data);
+	var list = CeL.work_crawler.parse_favorite_list(list_data);
 
 	// 將喜愛的作品名單存放在 .preference
 	// Store your favorite work list in .preference
@@ -1189,7 +1168,7 @@ function check_update() {
 	}
 
 	if (!is_installation_package) {
-		check_update_NOT_package_GUI();
+		check_update_NOT_package();
 		return;
 	}
 
