@@ -242,6 +242,7 @@ function initializer() {
 			div : {
 				T : site_type_description[site_type] || site_type
 			},
+			title : site_type,
 			C : 'site_type_label'
 		}), label_sites = [];
 
@@ -271,7 +272,9 @@ function initializer() {
 			S : 'display: none;'
 		});
 		site_nodes.push(label_node, label_sites);
-		set_click_trigger(label_node, label_sites);
+		set_click_trigger(label_node, label_sites, function() {
+			language_used = this.title;
+		});
 	}
 	CeL.new_node(site_nodes, 'download_sites_list');
 
@@ -376,7 +379,8 @@ function initializer() {
 	}
 
 	// 獨立的最愛清單
-	var external_favorite_list = get_favorite_list_file_path(get_crawler(true));
+	var external_favorite_list = get_favorite_list_file_path(get_crawler(null,
+			true));
 	set_click_trigger('download_options_trigger', CeL.new_node({
 		div : [ options_nodes, {
 			b : [ {
@@ -422,6 +426,8 @@ function initializer() {
 	// --------------------------------
 
 	set_click_trigger('favorites_trigger', 'favorite_list');
+
+	set_click_trigger('search_results_trigger', 'search_results');
 
 	set_click_trigger('download_job_trigger', 'download_job_queue');
 
@@ -496,10 +502,13 @@ function initializer() {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-function set_click_trigger(trigger, panel) {
+function set_click_trigger(trigger, panel, callback) {
 	CeL.set_class(trigger, 'trigger');
 	CeL.add_listener('click', function() {
 		CeL.toggle_display(panel);
+		if (typeof callback === 'function') {
+			callback.call(trigger, panel);
+		}
 		return false;
 	}, trigger);
 }
@@ -568,6 +577,7 @@ function edit_favorites(crawler) {
 			C : 'favorites_button cancel'
 		} ]
 	} ], [ 'favorite_list', 'clean' ]);
+	favorites_node.focus();
 }
 
 function get_favorite_list_file_path(crawler) {
@@ -630,6 +640,7 @@ function save_favorites(crawler, work_list_text) {
 		return;
 	}
 
+	CeL.create_directory(favorite_list_file_path.replace(/[^\\\/]+$/g, ''));
 	CeL.write_file(favorite_list_file_path, work_list_text);
 }
 
@@ -653,7 +664,8 @@ function reset_favorites(crawler) {
 
 	favorites_nodes = [ favorites.length > 0 ? {
 		ol : favorites_nodes,
-		C : 'favorite_ol'
+		C : 'favorite_ol',
+		S : 'column-count: ' + Math.min(Math.round(favorites.length / 30), 6)
 	} : '', {
 		div : [ favorites.length > 0 ? {
 			b : [ '✅', {
@@ -800,8 +812,230 @@ function prepare_crawler(crawler, crawler_module) {
 
 setup_crawler.prepare = prepare_crawler;
 
-function get_crawler(just_test) {
-	if (!site_used) {
+// ----------------------------------------------
+// 搜尋功能
+
+function show_search_result(work_data_search_queue) {
+	var work_title = work_data_search_queue.work_title, not_found_site_hash = CeL
+			.null_Object(), node_list = [ {
+		tr : [ {
+			th : {
+				T : '網站'
+			}
+		}, {
+			th : {
+				T : '標題',
+				R : '僅於所獲得之作品標題特殊，不同於所查詢之作品標題時，才會標示。'
+			}
+		}, {
+			th : {
+				T : '為最愛',
+				R : '在最愛清單中'
+			}
+		}, {
+			th : {
+				T : '章節數量'
+			}
+		}, {
+			th : {
+				T : '上次下載',
+				R : '當之前下載過時，標示上次下載到第幾章節。'
+			}
+		}, {
+			th : {
+				T : '已完結'
+			}
+		}, {
+			th : {
+				T : '作品狀況'
+			}
+		} ]
+	} ];
+	delete work_data_search_queue.work_title;
+
+	for ( var site_id in work_data_search_queue) {
+		var work_data = work_data_search_queue[site_id];
+		if (!work_data || !(work_data.chapter_count >= 1)) {
+			not_found_site_hash[site_id] = null;
+			continue;
+		}
+		var crawler = get_crawler(site_id), favorite_list = get_favorites(crawler);
+		var list = [ {
+			td : {
+				b : crawler.site_name ? {
+					span : crawler.site_name,
+					R : crawler.site_id
+				} : crawler.site_id,
+				onclick : function() {
+					add_new_download_job(crawler, work_title);
+				},
+				C : 'download_searched'
+			}
+		}, {
+			td : work_title === work_data.title ? '' : work_data.title
+		}, {
+			td : favorite_list.includes(work_data.title) ? '✓' : ''
+		}, {
+			td : work_data.chapter_count
+		}, {
+			td : work_data.last_download
+			//
+			&& work_data.last_download.chapter >= 1 ? {
+				span : work_data.last_download.chapter,
+				title : work_data.last_download.date
+			} : ''
+		}, {
+			td : crawler.is_finished(work_data) ? '✓' : ''
+		}, {
+			td : work_data.status
+		} ];
+		node_list.push({
+			tr : list
+		});
+	}
+
+	node_list = [ {
+		T : [ '搜尋作品：%1', work_title ]
+	}, {
+		table : node_list
+	} ];
+	if (!CeL.is_empty_object(not_found_site_hash)) {
+		var not_found_list = Object.keys(not_found_site_hash)
+		//
+		.map(function(site_id) {
+			return site_id.replace(/^.+?\//, '');
+		});
+		node_list.push([ {
+			b : {
+				T : [ '以下%1個網站未發現本作品：', not_found_list.length ]
+			}
+		}, not_found_list.join(', '), {
+			br : null
+		} ]);
+	}
+	node_list.push({
+		// save
+		b : [ '📥', {
+			T : '下載所有可找到的作品'
+		} ],
+		onclick : function() {
+			for ( var site_id in work_data_search_queue) {
+				if (site_id in not_found_site_hash)
+					continue;
+
+				var work_data = work_data_search_queue[site_id];
+				var crawler = get_crawler(site_id);
+				add_new_download_job(crawler, work_data.title || work_data.id);
+			}
+		},
+		C : 'button'
+	});
+
+	CeL.remove_all_child('search_results');
+	CeL.new_node(node_list, 'search_results');
+	// free
+	node_list = null;
+	delete CeL.get_element('search_results').running;
+}
+
+var language_used;
+function search_work_title() {
+	if (site_used) {
+		language_used = site_used.replace(/\/.+/, '');
+	}
+	if (!language_used) {
+		CeL.info({
+			// 點選
+			T : '請先指定要搜尋的語言或網站。'
+		});
+		return;
+	}
+
+	var work_title = CeL.node_value('#input_work_id').trim();
+	if (!work_title) {
+		CeL.info({
+			T : '請輸入作品名稱或 id。'
+		});
+		return;
+	}
+
+	var sites = CeL.get_element('search_results');
+	if (sites.running) {
+		CeL.error({
+			T : [ '正在搜尋[%1]中，必須先取消當前的搜尋程序才能重新搜尋。', work_title ]
+		});
+		return;
+	}
+	sites.running = work_title;
+
+	CeL.remove_all_child('search_results');
+	CeL.new_node([ {
+		T : [ '正在搜尋[%1]中……', work_title ]
+	}, {
+		span : '',
+		id : 'searching_process'
+	}, {
+		div : '',
+		id : 'still_searching'
+	}, {
+		b : '取消搜尋',
+		onclick : function() {
+			CeL.toggle_display('search_results_panel', false);
+			work_data_search_queue = null;
+			CeL.remove_all_child('search_results');
+			delete CeL.get_element('search_results').running;
+		},
+		C : 'button'
+	} ], 'search_results');
+
+	sites = download_sites_set[language_used];
+	var work_data_search_queue = CeL.null_Object(), sites = Object.keys(sites), site_count = sites.length, done = 0;
+	sites.forEach(function(site_id) {
+		site_id = language_used + '/' + site_id;
+		var crawler = get_crawler(site_id);
+		crawler.data_of(work_title, function got_work_data(work_data) {
+			if (!work_data_search_queue) {
+				// canceled
+				return;
+			}
+
+			work_data_search_queue[site_id] = work_data;
+			console.log(work_data);
+			if (++done === site_count) {
+				// all done
+				work_data_search_queue.work_title = work_title;
+				show_search_result(work_data_search_queue);
+				return;
+			}
+
+			CeL.remove_all_child('searching_process');
+			CeL.new_node({
+				T : [ '已完成 %1', done + ' / ' + site_count ]
+			}, 'searching_process');
+
+			if (site_count - done < 5) {
+				var still_searching = sites.filter(function(site_id) {
+					return !((language_used + '/' + site_id)
+					//
+					in work_data_search_queue);
+				});
+
+				CeL.remove_all_child('still_searching');
+				CeL.new_node({
+					T : [ '%1個網站仍在搜尋中：%2', still_searching.length,
+							still_searching.join(', ') ]
+				}, 'still_searching');
+			}
+		});
+	});
+	CeL.toggle_display('search_results_panel', true);
+}
+
+// ----------------------------------------------
+
+function get_crawler(site_id, just_test) {
+	site_id = site_id || site_used;
+	if (!site_id) {
 		if (!just_test) {
 			CeL.info({
 				T : '請先指定要下載的網站。'
@@ -814,15 +1048,26 @@ function get_crawler(just_test) {
 
 	CeL.toggle_display('download_options_panel', true);
 
-	var site_id = site_used, crawler = base_directory + site_id + '.js';
+	var crawler = base_directory + site_id + '.js';
 	CeL.debug('當前路徑: ' + CeL.storage.working_directory(), 1, 'get_crawler');
 	CeL.debug('Load ' + crawler, 1, 'get_crawler');
 
+	var old_site_used;
+	if (site_id !== site_used) {
+		old_site_used = site_used;
+		// Will used in function prepare_crawler()
+		site_used = site_id;
+	}
 	// include site script .js
 	// 這個過程會執行 setup_crawler() @ work_crawler_loder.js
 	// 以及 setup_crawler.prepare()
 	crawler = require(crawler);
-	process.title = _('選擇下載工具：%1', crawler.site_id);
+	if (old_site_used) {
+		// recover
+		site_used = old_site_used;
+	} else {
+		process.title = _('選擇下載工具：%1', crawler.site_id);
+	}
 
 	// assert: (site_id in download_site_nodes.link_of_site)
 
@@ -972,6 +1217,7 @@ function destruct_download_job(crawler) {
 			C : 'task_controller',
 			onclick : function() {
 				remove_download_work_layer();
+				// crawler.recheck = true;
 				add_new_download_job(crawler, work_data.title || work_data.id);
 			},
 			S : 'color: blue; font-weight: bold;'
@@ -1018,6 +1264,11 @@ function destruct_download_job(crawler) {
 }
 
 function initialize_work_data(crawler, work_data) {
+	if (!crawler.downloading_work_data) {
+		// e.g., from search_work_title();
+		return;
+	}
+
 	if (crawler.downloading_work_data === work_data) {
 		return work_data;
 	}
