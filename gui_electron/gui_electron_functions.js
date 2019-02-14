@@ -175,6 +175,7 @@ var _;
 // initialization
 function initializer() {
 	CeL.Log.set_board('log_panel');
+	CeL.Log.set_max_logs(500);
 	// CeL.set_debug();
 	// 設置完成
 	// CeL.debug('Log panel has been set.');
@@ -693,12 +694,28 @@ function reset_favorites(crawler) {
 		}, {
 			// 我的最愛
 			b : [ '🔨', {
-				T : '重新整理列表檔案'
+				// 重新整理列表檔案
+				T : '注解掉重複的作品名稱或 id',
 			} ],
 			onclick : function() {
 				crawler.parse_favorite_list_file(
 				//
 				get_favorite_list_file_path(crawler), true);
+				reset_favorites(crawler);
+			},
+			C : 'favorites_button'
+		}, {
+			// 我的最愛
+			b : [ '🔨', {
+				T : '刪除重複的作品名稱或 id'
+			} ],
+			onclick : function() {
+				crawler.parse_favorite_list_file(
+				//
+				get_favorite_list_file_path(crawler), function(parsed) {
+					// 直接把最後一個消掉。
+					parsed.pop();
+				});
 				reset_favorites(crawler);
 			},
 			C : 'favorites_button'
@@ -813,7 +830,7 @@ function prepare_crawler(crawler, crawler_module) {
 setup_crawler.prepare = prepare_crawler;
 
 // ----------------------------------------------
-// 搜尋功能
+// 搜尋功能。
 
 function show_search_result(work_data_search_queue) {
 	var work_title = work_data_search_queue.work_title, not_found_site_hash = CeL
@@ -882,7 +899,10 @@ function show_search_result(work_data_search_queue) {
 			//
 			&& work_data.last_download.chapter >= 1 ? {
 				span : work_data.last_download.chapter,
-				title : work_data.last_download.date
+				title : work_data.last_download.date,
+				C : work_data.last_download.chapter
+				//
+				=== work_data.chapter_count ? '' : 'different',
 			} : ''
 		}, {
 			td : crawler.is_finished(work_data) ? '✓' : ''
@@ -986,6 +1006,14 @@ function search_work_title() {
 			delete CeL.get_element('search_results').running;
 		},
 		C : 'button'
+	}, {
+		b : '放棄還沒搜尋完成的網站',
+		onclick : function() {
+			work_data_search_queue.work_title = work_title;
+			show_search_result(work_data_search_queue);
+			work_data_search_queue = null;
+		},
+		C : 'button'
 	} ], 'search_results');
 
 	sites = download_sites_set[language_used];
@@ -1013,7 +1041,7 @@ function search_work_title() {
 				T : [ '已完成 %1', done + ' / ' + site_count ]
 			}, 'searching_process');
 
-			if (site_count - done < 5) {
+			if (site_count - done < 8) {
 				var still_searching = sites.filter(function(site_id) {
 					return !((language_used + '/' + site_id)
 					//
