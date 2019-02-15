@@ -149,36 +149,27 @@ function start_update(event_sender) {
 			event_sender.send('send_message_log', '開始檢測安裝包更新……');
 		});
 		autoUpdater.on('update-available', function(info) {
-			event_sender.send('send_message_info', [ {
-				T : '新安裝包出來了：'
-			}, JSON.stringify(info) ]);
+			event_sender.send('send_message_info', [ '新安裝包出來了：%1',
+					JSON.stringify(info) ]);
 		});
 		autoUpdater.on('update-not-available', function(info) {
-			event_sender.send('send_message_log', [ {
-				T : '沒有新安裝包：'
-			}, JSON.stringify(info) ]);
+			event_sender.send('send_message_log', [ '沒有新安裝包：%1',
+					JSON.stringify(info) ]);
 		});
 		autoUpdater.on('error', function(error) {
-			event_sender.send('send_message_warn', [ {
-				T : '安裝包更新出錯：'
-			}, error ]);
+			event_sender.send('send_message_warn', [ '安裝包更新出錯：%1', error ]);
 		});
 		autoUpdater.on('download-progress', function(progressObj) {
-			var log_message = [ {
-				T : [
-						'安裝包已下載%1，下載速度：%2',
-						progressObj.percent + '%' + ' ('
-								+ progressObj.transferred + "/"
-								+ progressObj.total + ')',
-						progressObj.bytesPerSecond ]
-			} ];
-			event_sender.send('send_message_debug', log_message);
+			event_sender.send('send_message_debug', [
+					'安裝包已下載%1，下載速度：%2',
+					progressObj.percent + '%' + ' (' + progressObj.transferred
+							+ "/" + progressObj.total + ')',
+					progressObj.bytesPerSecond ]);
 		});
 		autoUpdater.on('update-downloaded', function(event, releaseNotes,
 				releaseName, releaseDate, updateUrl, quitAndUpdate) {
-			event_sender.send('send_message_log', [ {
-				T : '新的安裝包下載完成：'
-			}, JSON.stringify(event) ]);
+			event_sender.send('send_message_log', [ '新的安裝包下載完成：%1',
+					JSON.stringify(event) ]);
 
 			require('electron').ipcMain.on('start-install-now',
 			//
@@ -193,8 +184,6 @@ function start_update(event_sender) {
 	} catch (e) {
 		// e.g., Error: Cannot find module 'electron-updater'
 		// win.webContents.send()
-		event_sender.send('send_message_warn', [ {
-			T : '安裝包更新失敗：'
-		}, String(e) ]);
+		event_sender.send('send_message_warn', [ '安裝包更新失敗：%1', String(e) ]);
 	}
 }
