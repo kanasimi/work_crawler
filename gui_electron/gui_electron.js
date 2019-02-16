@@ -114,6 +114,7 @@ require('electron').ipcMain.on('send_message', function(event, message) {
 });
 
 // for update
+// 📦安裝包圖形介面自動更新功能
 function start_update(event_sender) {
 	try {
 		event_sender.send('send_message_debug', '開始檢測並更新安裝包……');

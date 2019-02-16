@@ -146,7 +146,7 @@ default_configuration_file_name = 'work_crawler.configuration.json';
 var save_config_this_time = true;
 
 var site_used, default_configuration, download_site_nodes = [], download_options_nodes = {},
-// 為 electron-builder 安裝包
+// 為 electron-builder 📦安裝包
 is_installation_package,
 // 會儲存到 crawler.preference.crawler_configuration 的選項。
 save_to_preference = Object.assign({}, download_options_set), preserve_download_work_layer,
@@ -172,6 +172,7 @@ function check_max_logs() {
 	CeL.set_class(this, 'disabled', {
 		remove : show
 	});
+	this.innerHTML = _(CeL.DOM_data(this).gettext = show ? '限制訊息行數' : '不限制訊息行數');
 }
 
 // for i18n: define gettext() user domain resource location.
@@ -400,7 +401,7 @@ function initializer() {
 			true));
 	set_click_trigger('download_options_trigger', CeL.new_node({
 		div : [ options_nodes, {
-			b : [ {
+			b : [ '📥', {
 				// 本次執行期間不儲存選項設定
 				T : '自動儲存選項設定'
 			}, external_favorite_list ? {
@@ -418,7 +419,7 @@ function initializer() {
 			},
 			C : 'button' + (save_config_this_time ? '' : ' ' + 'not_set')
 		}, {
-			b : [ {
+			b : [ '🔙', {
 				T : '重設下載選項'
 			}, external_favorite_list ? {
 				T : '與最愛作品清單',
@@ -715,10 +716,25 @@ function reset_favorites(crawler) {
 		};
 	});
 
+	var average_length = Math.round(favorites.reduce(function(len, now) {
+		return len + now.length;
+	}, 0) / favorites.length);
 	favorites_nodes = [ favorites.length > 0 ? {
 		ol : favorites_nodes,
 		C : 'favorite_ol',
-		S : 'column-count: ' + Math.min(Math.round(favorites.length / 30), 6)
+		S : 'column-count: ' + Math.min(Math.round(favorites.length / 30),
+		// e.g., avg 1: 10
+		// 2: 9
+		// 3: 8
+		// 4: 7
+		// 5: 6
+		// 6: 5
+		// 7: 4
+		average_length < 8 ? 11 - average_length
+		// 10+2: 3
+		// 15+2: 2
+		// 20+2: 1
+		: Math.max(1, 5 - ((average_length - 2) / 5 | 0)))
 	} : '', {
 		div : [ favorites.length > 0 ? {
 			b : [ '✅', {
@@ -758,7 +774,7 @@ function reset_favorites(crawler) {
 			C : 'favorites_button'
 		}, {
 			// 我的最愛
-			b : [ '🔨', {
+			b : [ '❌', {
 				T : '刪除重複的作品名稱或 id'
 			} ],
 			onclick : function() {
@@ -1634,7 +1650,7 @@ function check_update() {
 			onclick : open_external
 		}, [ update_panel, 'clean' ]);
 
-		// 安裝包圖形介面自動更新功能交由 start_update() @ gui_electron.js，
+		// 📦安裝包圖形介面自動更新功能交由 start_update() @ gui_electron.js，
 		// 不在此處處理。
 		if (!is_installation_package) {
 			check_update_NOT_package();
