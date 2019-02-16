@@ -73,6 +73,12 @@
 	</b>
 	<b class="button" onclick="CeL.Log.toggle();"><span
 		data-gettext="顯示/隱藏訊息"></span></b>
+	<label for="max_logs"><span class="disabled"
+		style="cursor: pointer;" data-gettext="限制訊息行數"
+		onclick="check_max_logs.call(this);"></span> </label>
+	<input style="display: none;" id="max_logs" type="number" pattern="\d*"
+		max="99999" min="0" value="500"></input>
+
 	<b class="button" onclick="open_DevTools();"><span
 		data-gettext="開啟偵錯工具"></span></b>
 

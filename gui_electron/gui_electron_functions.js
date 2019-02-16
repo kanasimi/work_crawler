@@ -166,6 +166,14 @@ CeL.run([ 'application.debug.log', 'interact.DOM' ], initializer);
 
 // ---------------------------------------------------------------------//
 
+function check_max_logs() {
+	var panel = CeL.get_element('max_logs'), show = CeL.toggle_display(panel) !== 'none';
+	CeL.Log.set_max_logs(show ? panel.value : undefined);
+	CeL.set_class(this, 'disabled', {
+		remove : show
+	});
+}
+
 // for i18n: define gettext() user domain resource location.
 // gettext() will auto load (CeL.env.domain_location + language + '.js').
 // e.g., resource/cmn-Hant-TW.js, resource/ja-JP.js
@@ -176,11 +184,18 @@ var _;
 // initialization
 function initializer() {
 	CeL.Log.set_board('log_panel');
-	CeL.Log.set_max_logs(500);
 	// CeL.set_debug();
 	// 設置完成
 	// CeL.debug('Log panel has been set.');
 	CeL.Log.clear();
+
+	// for 限制訊息行數
+	CeL.adapt_input_validation();
+	CeL.add_listener('change', function() {
+		if (this.style.display !== 'none') {
+			CeL.Log.set_max_logs(this.value);
+		}
+	}, 'max_logs');
 
 	CeL.debug('當前目錄: ' + CeL.storage.working_directory(), 1);
 	CeL.debug('環境變數: ' + JSON.stringify(process.env), 1);
