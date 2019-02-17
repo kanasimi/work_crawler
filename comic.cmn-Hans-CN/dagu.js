@@ -76,7 +76,7 @@ var crawler = new CeL.work_crawler({
 			// 選擇性屬性：須配合網站平台更改。
 			description : get_label(html.between(' id="comic-description">',
 					'</')),
-			last_update_chapter : get_label(html.between('<p>最新话：', '</p>'))
+			latest_chapter : get_label(html.between('<p>最新话：', '</p>'))
 		};
 
 		extract_work_data(work_data, html);
@@ -140,19 +140,21 @@ var crawler = new CeL.work_crawler({
 					+ chapter_data.title + ': Can not get image count!';
 		}
 
+		// 將過去的 chapter_data.image_list cache 於 work_data.image_list。
 		if (work_data.image_list) {
 			chapter_data.image_list = work_data.image_list[chapter_NO - 1];
-			if (chapter_data.image_list
+			if (!this.reget_image_page && chapter_data.image_list
 					&& chapter_data.image_list.length === image_count) {
 				CeL.debug(work_data.title + ' #' + chapter_NO + ' '
 						+ chapter_data.title + ': Already got ' + image_count
 						+ ' images.');
-				chapter_data.image_list = chapter_data.image_list.map(function(
-						image_data) {
-					// 僅保留網址資訊。
-					return {
-						url : image_data.url
-					};
+				chapter_data.image_list = chapter_data.image_list
+				// .slice() 重建以節省記憶體用量。
+				.slice().map(function(image_data) {
+					// 僅保留網址資訊，節省記憶體用量。
+					return typeof image_data === 'string' ? image_data
+					// else assert: CeL.is_Object(image_data)
+					: image_data.url;
 				});
 				callback();
 				return;
@@ -171,9 +173,8 @@ var crawler = new CeL.work_crawler({
 				CeL.debug('Add image ' + chapter_data.image_list.length
 				//
 				+ '/' + image_count + ': ' + url, 1, 'extract_image');
-				chapter_data.image_list.push({
-					url : url
-				});
+				// 僅保留網址資訊，節省記憶體用量。
+				chapter_data.image_list.push(url);
 			});
 		}
 
@@ -191,7 +192,9 @@ var crawler = new CeL.work_crawler({
 				run_next();
 			}, null, true);
 		}, image_count, 2, function() {
-			work_data.image_list[chapter_NO - 1] = chapter_data.image_list;
+			work_data.image_list[chapter_NO - 1] = chapter_data.image_list
+			// .slice() 重建以節省記憶體用量。
+			.slice();
 			callback();
 		});
 	},

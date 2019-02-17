@@ -173,6 +173,7 @@ function check_max_logs() {
 		remove : show
 	});
 	this.innerHTML = _(CeL.DOM_data(this).gettext = show ? '限制訊息行數' : '不限制訊息行數');
+	CeL.node_value(this.parentNode.firstChild, show ? '✂️' : '');
 }
 
 // for i18n: define gettext() user domain resource location.
@@ -231,12 +232,8 @@ function initializer() {
 			// 🚧
 			span : [ '請幫助我們', {
 				a : '翻譯介面文字',
-				href : '#',
-				onclick : function() {
-					open_external(
-					//
-					'https://github.com/kanasimi/work_crawler/issues/185');
-				}
+				href : 'https://github.com/kanasimi/work_crawler/issues/185',
+				onclick : open_external
 			}, '，謝謝您！' ]
 		});
 	// read default configuration
@@ -465,9 +462,7 @@ function initializer() {
 			href : 'https://en.wikipedia.org/wiki/'
 			//
 			+ 'Cut,_copy,_and_paste#Common_keyboard_shortcuts',
-			onclick : function() {
-				return open_external(this.href);
-			}
+			onclick : open_external
 		}, ' - ', {
 			T : '複製選取的項目：'
 		}, {
@@ -890,7 +885,6 @@ function prepare_crawler(crawler, crawler_module) {
 			T : '連結'
 		} ],
 		href : crawler.base_URL,
-		target : '_blank',
 		onclick : open_external
 	} ], download_site_nodes.node_of_id[site_id].parentNode);
 }
@@ -918,30 +912,46 @@ function show_search_result(work_data_search_queue) {
 			}
 		}, {
 			th : {
+				T : '作者'
+			}
+		}, {
+			th : {
 				T : '最愛',
 				R : '✓: 在最愛清單中, ➕: 加入最愛清單'
 			}
 		}, {
 			th : {
-				T : '章節數量'
+				small : {
+					T : '章節數'
+				},
+				R : '章節數量'
 			}
 		}, {
 			th : {
-				T : '上次下載',
+				T : '最新',
+				R : '最新章節'
+			}
+		}, {
+			th : {
+				small : {
+					T : '上次下載'
+				},
 				R : '當之前下載過時，標示上次下載到第幾章節。'
 			}
 		}, {
 			th : {
-				T : '已完結'
+				T : '完',
+				R : '作品已完結。'
 			}
 		}, {
 			th : {
-				T : '制限',
-				R : '需要付費/被鎖住'
+				T : '限',
+				R : '部份章節需要付費/被鎖住/被限制'
 			}
 		}, {
 			th : {
-				T : '作品狀況'
+				T : '狀況',
+				R : '作品狀況'
 			}
 		} ]
 	} ];
@@ -971,6 +981,10 @@ function show_search_result(work_data_search_queue) {
 		}, {
 			td : work_title === work_data.title ? '' : work_data.title
 		}, {
+			td : {
+				small : work_data.author
+			}
+		}, {
 			td : favorite_list.includes(work_data.title) ? '✓' : {
 				span : '➕',
 				title : site_id,
@@ -988,21 +1002,55 @@ function show_search_result(work_data_search_queue) {
 		}, {
 			td : work_data.chapter_count
 		}, {
+			td : {
+				$ : work_data.latest_chapter_url ? 'a' : 'span',
+				I : work_data.latest_chapter && work_data.latest_chapter
+				// 不需包含作品標題
+				.replace(work_data.title, '') || work_data.last_update,
+				R : work_data.last_update,
+				href : work_data.latest_chapter_url
+				//
+				? crawler.full_URL(work_data.latest_chapter_url) : '#',
+				onclick : work_data.latest_chapter_url ? open_external : null
+			}
+		}, {
 			td : work_data.last_download
 			//
-			&& work_data.last_download.chapter >= 1 ? {
+			&& work_data.last_download.chapter >= 1 ? [ {
 				span : work_data.last_download.chapter,
 				title : new Date(work_data.last_download.date).format(),
 				C : work_data.last_download.chapter
 				//
 				=== work_data.chapter_count ? '' : 'different',
+			}, {
+				span : '📂',
+				R : (old_Unicode_support ? '' : '🗁 ') + _('開啓作品下載目錄'),
+				onclick : function() {
+					var work_data
+					//
+					= work_data_search_queue[this.parentNode.title];
+					// TODO: 解析及操作列表檔案的功能。
+					open_external(work_data.directory);
+				},
+				S : 'cursor: pointer;'
+			} ] : '',
+			title : site_id
+		}, {
+			td : crawler.is_finished(work_data) ? {
+				T : '完'
 			} : ''
 		}, {
-			td : crawler.is_finished(work_data) ? '✓' : ''
+			td : work_data.some_limited ? {
+				T : '限'
+			} : ''
 		}, {
-			td : work_data.some_limited ? '✓' : ''
-		}, {
-			td : work_data.status
+			td : {
+				a : Array.isArray(work_data.status) ? work_data.status.join()
+				//
+				: (work_data.status || '').replace(/[\s,;.，；。]+$/, ''),
+				href : crawler.full_URL(crawler.work_URL(work_data.id)),
+				onclick : open_external
+			}
 		} ];
 		node_list.push({
 			tr : list
@@ -1104,6 +1152,7 @@ function search_work_title() {
 		CeL.info({
 			T : '請輸入作品名稱或 id。'
 		});
+		CeL.get_element('input_work_id').focus();
 		return;
 	}
 
@@ -1154,6 +1203,7 @@ function search_work_title() {
 			}
 
 			work_data_search_queue[site_id] = work_data;
+			// for debug
 			console.log(work_data);
 			if (++done === site_count) {
 				// all done
@@ -1530,6 +1580,7 @@ function start_gui_crawler() {
 		CeL.info({
 			T : '請輸入作品名稱或 id。'
 		});
+		CeL.get_element('input_work_id').focus();
 	}
 }
 
@@ -1646,7 +1697,6 @@ function check_update() {
 				+ version_data.latest_version ]
 			},
 			href : 'https://github.com/' + GitHub_repository_path,
-			target : '_blank',
 			onclick : open_external
 		}, [ update_panel, 'clean' ]);
 

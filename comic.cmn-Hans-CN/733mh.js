@@ -86,8 +86,12 @@ var crawler = new CeL.work_crawler({
 				'<div class="info_cover">'),
 				/<em>([^<>]+?)<\/em>([\s\S]*?)<\/p>/g);
 
-		work_data.author = work_data.原著作者;
-		work_data.last_update = work_data.更新时间;
+		Object.assign(work_data, {
+			author : work_data.原著作者,
+			last_update : work_data.更新时间,
+			status : work_data.漫画状态
+		});
+
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {

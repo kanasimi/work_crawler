@@ -22,6 +22,8 @@
 * [Execution 執行](#execution-執行)
 
 ## Features 特點
+* 具備最愛清單功能。
+* 能從各個網站下載搜尋並下載作品。
 * 可自動下載小說封面以及章節中的插圖。
 * 本工具會盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
 * 跨平臺支援：支援 Windows, Linux, Mac。
@@ -154,7 +156,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 ## Installation 安裝
 
-若是想要使用系統安裝的方法，或者您的系統並未提供命令列介面，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版修正次數：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。欲採用最新版本，或研究開發、想要使用命令列介面作批次處理，請採用下列步驟。
+若是想要使用系統安裝的方法，或者您的系統並未提供命令列介面，您可以 **[直接下載📦安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版修正次數：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。欲採用最新版本，或研究開發、想要使用命令列介面作批次處理，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
@@ -270,7 +272,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
    ![小說 → epub](https://lh3.googleusercontent.com/JJ4SGDQF-HzQb0baRZ0mCio19jJTnNp3VnWutirYgZbYg5i--ufS_ElL8DEetP6x7uJ4HUv8szNqzVLbGlr84_OnxFxjIZCDsOEOEmKBubYC6PkpaE2xBYk9KIHzBR4YPwjQVM2FTA=w1366-h738-no)
 
 ## Uninstallation 移除
-* 若是您採用安裝包，請利用系統正規的移除方法或移除介面。否則要移除本工具，只需先備份好之前下載過的漫畫，之後將解壓縮後工具檔所在的目錄整個刪除即可。
+* 若是您採用📦安裝包，請利用系統正規的移除方法或移除介面。否則要移除本工具，只需先備份好之前下載過的漫畫，之後將解壓縮後工具檔所在的目錄整個刪除即可。
 * 作品下載的標的目錄（存放圖片檔與紀錄檔的目錄）需另外手動刪除。
 
 ## FAQ 常見問題集
@@ -302,7 +304,6 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 </details>
 
 ## Notes 附注
-* 目前本工具不支援 GUI 安裝包自動更新。
 * 對於本工具已經包含的下載模式，熟練後一般約需2至4小時新增或更新下載工具，以達初步可用狀態。
 * 小說作品採用單線程下載，以避免對網站造成過度的負荷。漫畫作品則以章節為單位多線程下載，每個章節的圖片下載完畢之後，再接著下一個章節。
 * 若可能，[您應該檢核並參與維護您需要的軟體](https://gist.github.com/dominictarr/9fd9c1024c94592bc7268d36b8d83b3a)。現在您可以參與本工具開發了！本工具歡迎熱心友人參與開發，以改進這個工具。

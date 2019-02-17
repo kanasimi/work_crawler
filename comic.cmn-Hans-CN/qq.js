@@ -132,6 +132,11 @@ var crawler = new CeL.work_crawler({
 			get_label(html.between('<p class="bear-p-xone">', '</p>')),
 			description : html.between('<meta name="Description" content="',
 					'"'),
+			latest_chapter : get_label(html.between(
+					'<a class="works-ft-new" href="', '</a>').between('>')
+					.replace(/^[\s\n]*\[|\][\s\n]*$/g, '')),
+			latest_chapter_url : html.between('<a class="works-ft-new" href="',
+					'"'),
 			last_update : get_label(html.between(
 					'<span class="ui-pl10 ui-text-gray6">', '</span>'))
 		};

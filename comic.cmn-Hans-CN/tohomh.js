@@ -98,9 +98,10 @@ var crawler = new CeL.work_crawler({
 			work_data.latest_chapter = matched[1];
 		}
 
-		html.between('<p class="tip">', '<p class="content"').split(
-				'<span class="block">').forEach(function(text) {
-			var matched = text.match(/^([^<>:：]+)([\s\S]+)$/);
+		html.between('<p class="tip">', '<p class="content"')
+		// <span class="block ticai">题材：...
+		.split('<span class="block').forEach(function(text) {
+			var matched = text.match(/^[^<>]+>([^<>:：]+)([\s\S]+)$/);
 			if (matched && (matched[2] = get_label(matched[2])
 			//
 			.replace(/^[\s:：]+/, '').trim().replace(/\s+/g, ' '))) {
@@ -122,8 +123,11 @@ var crawler = new CeL.work_crawler({
 
 		html = html.between('detail-list-select', '<div class="index-title">');
 
-		// reset chapter_list
+		// reset work_data.chapter_list
 		work_data.chapter_list = [];
+		// 漫畫目錄名稱不須包含分部號碼。使章節目錄名稱不包含 part_NO。
+		work_data.chapter_list.add_part_NO = false;
+
 		var PATTERN_chapter = /<li>([\s\S]+?)<\/li>|<ul ([^<>]+)>/g, matched;
 		while (matched = PATTERN_chapter.exec(html)) {
 			if (matched[2]) {
@@ -172,6 +176,7 @@ var crawler = new CeL.work_crawler({
 	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。
 	// 必須自行保證執行 callback()，不丟出異常、中斷。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
+		// console.log(XMLHttp);
 		// console.log(work_data);
 		if (!work_data.image_list) {
 			// image_list[chapter_NO] = [url, url, ...]

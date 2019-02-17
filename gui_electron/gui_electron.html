@@ -75,10 +75,9 @@
 	<b class="button"
 		onclick="this.firstChild.innerHTML = CeL.Log.toggle() ? '📖' : '📕';"><span>📖</span><span
 		data-gettext="顯示/隱藏訊息"></span></b>
-	<label for="max_logs">✂️<span class="disabled"
+	<label for="max_logs"><span></span><span class="disabled"
 		style="cursor: pointer;" data-gettext="不限制訊息行數"
-		onclick="check_max_logs.call(this);"></span>
-	</label>
+		onclick="check_max_logs.call(this);"></span> </label>
 	<input style="display: none;" id="max_logs" type="number" pattern="\d*"
 		max="99999" min="0" value="500"></input>
 
