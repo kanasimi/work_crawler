@@ -76,7 +76,8 @@ var crawler = new CeL.work_crawler({
 			// 選擇性屬性：須配合網站平台更改。
 			description : get_label(html.between(' id="comic-description">',
 					'</')),
-			latest_chapter : get_label(html.between('<p>最新话：', '</p>'))
+			latest_chapter : get_label(html.between('<p>最新话：', '</p>')),
+			latest_chapter_url : html.between('<p>最新话：<a href="', '"')
 		};
 
 		extract_work_data(work_data, html);
@@ -87,6 +88,7 @@ var crawler = new CeL.work_crawler({
 		Object.assign(work_data, {
 			author : work_data.作者,
 			status : work_data.状态,
+			last_update : work_data.更新时间
 		});
 
 		// console.log(work_data);

@@ -76,7 +76,8 @@ crawler = new CeL.work_crawler({
 			};
 			matched = token.match(/<td>(\d{1,2}-\d{1,2})<\/td>/);
 			if (matched) {
-				data.update = matched[1];
+				// update
+				data.date = matched[1];
 			}
 			work_data.chapter_list.push(data);
 		});

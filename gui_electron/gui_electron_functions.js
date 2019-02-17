@@ -270,6 +270,7 @@ function initializer() {
 				title : site_type + '/' + site_id,
 				onclick : function() {
 					site_used = this.title;
+					language_used = site_used.replace(/\/.+/, '');
 					reset_favorites();
 					reset_site_options();
 				}
@@ -689,25 +690,69 @@ function reset_favorites(crawler) {
 	if (!crawler)
 		crawler = get_crawler();
 
-	var favorites = get_favorites(crawler);
+	var favorites = get_favorites(crawler),
+	// search cache
+	search_result = crawler.get_search_result();
 
+	function get_if_of_title(work_title, is_id) {
+		var work_id = is_id ? work_title : search_result[work_title];
+		if (crawler.id_of_search_result) {
+			work_id = typeof crawler.id_of_search_result === 'function'
+			// @see function finish(no_cache) @ work_crawler.js
+			? crawler.id_of_search_result(work_id)
+					: work_id[crawler.id_of_search_result];
+		}
+		return work_id;
+	}
+
+	// TODO: 解析及操作列表檔案的功能。
 	var favorites_nodes = favorites.map(function(work_title) {
+		var nodes = {
+			a : work_title,
+			href : '#',
+			onclick : function() {
+				add_new_download_job(crawler, work_title);
+			}
+		};
+
+		var work_id;
+		if (!search_result) {
+		} else {
+			if (work_id = search_result[work_title]) {
+				work_id = get_if_of_title(work_title);
+			} else {
+				for ( var title in search_result) {
+					if (work_title === get_if_of_title(title)) {
+						// input id
+						work_id = work_title;
+						work_title = title;
+						break;
+					}
+				}
+			}
+			if (work_id) {
+				var work_directory = crawler.main_directory
+				// @see work_data.directory @ function
+				// process_work_data(XMLHttp) @ work_crawler.js
+				+ work_id + ' ' + work_title;
+				if (CeL.directory_exists(work_directory)) {
+					nodes = [ nodes, {
+						span : '📂',
+						R : (old_Unicode_support ? '' : '🗁 ') + _('開啓作品下載目錄'),
+						onclick : function() {
+							open_external(work_directory);
+						},
+						S : 'cursor: pointer;'
+					} ];
+				}
+			} else {
+				nodes.S = 'color: #c00;';
+			}
+		}
+
 		return {
-			li : [ {
-				a : work_title,
-				href : '#',
-				onclick : function() {
-					add_new_download_job(crawler, work_title);
-				}
-			}, {
-				span : '📂',
-				R : (old_Unicode_support ? '' : '🗁 ') + _('開啓作品下載目錄'),
-				C : 'task_controller',
-				onclick : function() {
-					// TODO: 解析及操作列表檔案的功能。
-					open_external(crawler.main_directory);
-				}
-			} && '' ]
+			li : nodes,
+			title : work_id || ''
 		};
 	});
 
@@ -717,7 +762,7 @@ function reset_favorites(crawler) {
 	favorites_nodes = [ favorites.length > 0 ? {
 		ol : favorites_nodes,
 		C : 'favorite_ol',
-		S : 'column-count: ' + Math.min(Math.round(favorites.length / 30),
+		S : 'column-count: ' + Math.min(Math.ceil(favorites.length / 35),
 		// e.g., avg 1: 10
 		// 2: 9
 		// 3: 8
@@ -894,69 +939,192 @@ setup_crawler.prepare = prepare_crawler;
 // ----------------------------------------------
 // 搜尋功能。
 
+var search_result_columns = {
+	No : null,
+
+	網站 : function(crawler, work_data, work_title) {
+		return {
+			b : crawler.site_name ? {
+				span : crawler.site_name
+			} : crawler.site_id,
+			title : crawler.site_id,
+			onclick : function() {
+				add_new_download_job(get_crawler(this.title), work_title);
+			},
+			C : 'download_searched'
+		};
+	},
+
+	標題 : [ '僅於所獲得之作品標題特殊，不同於所查詢之作品標題時，才會標示。',
+	//
+	function(crawler, work_data, work_title) {
+		return work_title === work_data.title ? '' : work_data.title;
+	} ],
+
+	作者 : function(crawler, work_data) {
+		return {
+			small : work_data.author
+		};
+	},
+
+	最愛 : [ '😘: 在最愛清單中, ➕: 加入最愛清單', function(crawler, work_data) {
+		var favorite_list = get_favorites(crawler);
+		// ✓
+		return favorite_list.includes(work_data.title) ? '😘' : {
+			span : '➕',
+			title : crawler.site_id,
+			onclick : function() {
+				// var work_data = work_data_search_queue[this.title];
+
+				append_to_favorites(this.title,
+				//
+				work_data.title || work_data.id);
+				this.innerHTML = '😘';
+				this.onclick = null;
+				this.style.cursor = '';
+			},
+			S : 'cursor: pointer;'
+		};
+	} ],
+
+	話數 : [ '章節數量', function(crawler, work_data) {
+		this.S = 'text-align: right;';
+		return work_data.chapter_count;
+	} ],
+
+	曾下載 : [ '當之前下載過時，標示上次下載到第幾章節。', function(crawler, work_data) {
+		this.title = crawler.site_id;
+		return work_data.last_download
+		//
+		&& work_data.last_download.chapter >= 1 ? [ {
+			span : work_data.last_download.chapter,
+			title : new Date(work_data.last_download.date).format(),
+			C : work_data.last_download.chapter
+			//
+			=== work_data.chapter_count ? '' : 'different',
+		}, {
+			span : '📂',
+			R : (old_Unicode_support ? '' : '🗁 ') + _('開啓作品下載目錄'),
+			onclick : function() {
+				// var work_data =
+				// work_data_search_queue[this.parentNode.title];
+
+				open_external(work_data.directory);
+			},
+			S : 'cursor: pointer;'
+		} ] : '';
+	} ],
+
+	完 : [ '作品已完結。', function(crawler, work_data) {
+		return crawler.is_finished(work_data) ? {
+			T : '完'
+		} : '';
+	} ],
+
+	限 : [ '部份章節需要付費/被鎖住/被限制', function(crawler, work_data) {
+		return work_data.some_limited ? {
+			T : '限'
+		} : '';
+	} ],
+
+	狀況 : [ '作品狀況', function(crawler, work_data) {
+		var status = work_data.status, href = crawler.work_URL(work_data.id);
+		if (Array.isArray(status)) {
+			// tags
+			status = status.join();
+		} else if (status) {
+			status = status.replace(/[\s,;.，；。]+$/, '');
+		}
+		return {
+			a : status || '❓',
+			href : crawler.full_URL(href),
+			onclick : open_external
+		};
+	} ],
+
+	最新 : [ '最新章節', function(crawler, work_data) {
+		var latest_chapter = work_data.latest_chapter,
+		//
+		last_update = work_data.last_update,
+		//
+		url = work_data.latest_chapter_url,
+		//
+		latest_chapter_data = work_data.chapter_list;
+		latest_chapter_data = Array.isArray(latest_chapter_data)
+		// using work_data.chapter_list
+		&& latest_chapter_data.length > 0
+		//
+		&& latest_chapter_data[latest_chapter_data.length - 1];
+		if (typeof latest_chapter_data === 'string') {
+			url = url || latest_chapter_data;
+			latest_chapter_data = null;
+		} else {
+			// assert: CeL.is_Object(latest_chapter_data)
+			url = url || latest_chapter_data.url;
+			last_update = last_update || latest_chapter_data.date;
+			if (!latest_chapter) {
+				latest_chapter_data
+				// `!!latest_chapter_data` : using title @ latest_chapter_data
+				= latest_chapter = latest_chapter_data.title;
+			} else {
+				latest_chapter_data = null;
+			}
+		}
+
+		var node = latest_chapter && latest_chapter
+		// 不需包含作品標題
+		.replace(work_data.title, '');
+		if (node && latest_chapter_data)
+			node = [ {
+				span : '🧩',
+				R : '資訊來自章節清單'
+			}, node ];
+		else
+			node = node || last_update;
+
+		node = url ? [ {
+			a : node,
+			href : url ? crawler.full_URL(url) : '#',
+			onclick : url ? open_external : null
+		}, node === last_update ? '' : {
+			sub : last_update,
+		} ] : {
+			span : node
+		};
+
+		return node;
+	} ],
+
+};
+
 function show_search_result(work_data_search_queue) {
 	var work_title = work_data_search_queue.work_title, not_found_site_hash = CeL
-			.null_Object(), OK = 0, node_list = [ {
-		tr : [ {
-			th : {
-				T : '#'
-			}
-		}, {
-			th : {
-				T : '網站'
-			}
-		}, {
-			th : {
-				T : '標題',
-				R : '僅於所獲得之作品標題特殊，不同於所查詢之作品標題時，才會標示。'
-			}
-		}, {
-			th : {
-				T : '作者'
-			}
-		}, {
-			th : {
-				T : '最愛',
-				R : '✓: 在最愛清單中, ➕: 加入最愛清單'
-			}
-		}, {
-			th : {
-				small : {
-					T : '章節數'
-				},
-				R : '章節數量'
-			}
-		}, {
-			th : {
-				T : '最新',
-				R : '最新章節'
-			}
-		}, {
-			th : {
-				small : {
-					T : '上次下載'
-				},
-				R : '當之前下載過時，標示上次下載到第幾章節。'
-			}
-		}, {
-			th : {
-				T : '完',
-				R : '作品已完結。'
-			}
-		}, {
-			th : {
-				T : '限',
-				R : '部份章節需要付費/被鎖住/被限制'
-			}
-		}, {
-			th : {
-				T : '狀況',
-				R : '作品狀況'
-			}
-		} ]
-	} ];
+			.null_Object(), OK = 0, node_list = [], result_columns = [];
 	delete work_data_search_queue.work_title;
+	search_result_columns.No = function() {
+		this.S = 'text-align: right;';
+		return ++OK;
+	};
 
+	// title
+	for ( var column_title in search_result_columns) {
+		var column_generator = search_result_columns[column_title],
+		//
+		title = {
+			T : column_title
+		};
+		if (Array.isArray(column_generator)) {
+			title.R = _(column_generator[0]);
+			column_generator = column_generator[1];
+		}
+		// assert: typeof column_generator === 'function'
+		result_columns.push(column_generator);
+		node_list.push({
+			th : title
+		});
+	}
+
+	// content lines
 	for ( var site_id in work_data_search_queue) {
 		var work_data = work_data_search_queue[site_id];
 		if (!work_data || !(work_data.chapter_count >= 1)) {
@@ -964,99 +1132,20 @@ function show_search_result(work_data_search_queue) {
 			continue;
 		}
 
-		var crawler = get_crawler(site_id), favorite_list = get_favorites(crawler);
-		var list = [ {
-			td : ++OK
-		}, {
-			td : {
-				b : crawler.site_name ? {
-					span : crawler.site_name
-				} : crawler.site_id,
-				title : crawler.site_id,
-				onclick : function() {
-					add_new_download_job(get_crawler(this.title), work_title);
-				},
-				C : 'download_searched'
-			}
-		}, {
-			td : work_title === work_data.title ? '' : work_data.title
-		}, {
-			td : {
-				small : work_data.author
-			}
-		}, {
-			td : favorite_list.includes(work_data.title) ? '✓' : {
-				span : '➕',
-				title : site_id,
-				onclick : function() {
-					var work_data = work_data_search_queue[this.title];
-					append_to_favorites(this.title,
-					//
-					work_data.title || work_data.id);
-					this.innerHTML = '✓';
-					this.onclick = null;
-					this.style.cursor = '';
-				},
-				S : 'cursor: pointer;'
-			}
-		}, {
-			td : work_data.chapter_count
-		}, {
-			td : {
-				$ : work_data.latest_chapter_url ? 'a' : 'span',
-				I : work_data.latest_chapter && work_data.latest_chapter
-				// 不需包含作品標題
-				.replace(work_data.title, '') || work_data.last_update,
-				R : work_data.last_update,
-				href : work_data.latest_chapter_url
-				//
-				? crawler.full_URL(work_data.latest_chapter_url) : '#',
-				onclick : work_data.latest_chapter_url ? open_external : null
-			}
-		}, {
-			td : work_data.last_download
-			//
-			&& work_data.last_download.chapter >= 1 ? [ {
-				span : work_data.last_download.chapter,
-				title : new Date(work_data.last_download.date).format(),
-				C : work_data.last_download.chapter
-				//
-				=== work_data.chapter_count ? '' : 'different',
-			}, {
-				span : '📂',
-				R : (old_Unicode_support ? '' : '🗁 ') + _('開啓作品下載目錄'),
-				onclick : function() {
-					var work_data
-					//
-					= work_data_search_queue[this.parentNode.title];
-					// TODO: 解析及操作列表檔案的功能。
-					open_external(work_data.directory);
-				},
-				S : 'cursor: pointer;'
-			} ] : '',
-			title : site_id
-		}, {
-			td : crawler.is_finished(work_data) ? {
-				T : '完'
-			} : ''
-		}, {
-			td : work_data.some_limited ? {
-				T : '限'
-			} : ''
-		}, {
-			td : {
-				a : Array.isArray(work_data.status) ? work_data.status.join()
-				//
-				: (work_data.status || '').replace(/[\s,;.，；。]+$/, ''),
-				href : crawler.full_URL(crawler.work_URL(work_data.id)),
-				onclick : open_external
-			}
-		} ];
+		var crawler = get_crawler(site_id);
 		node_list.push({
-			tr : list
+			tr : result_columns.map(function(column_generator) {
+				var cell = {
+					td : null
+				};
+				cell.td = column_generator.call(cell, crawler, work_data,
+						work_title);
+				return cell;
+			})
 		});
 	}
 
+	// footer
 	if (OK > 0) {
 		node_list = [ {
 			table : node_list
@@ -1097,34 +1186,37 @@ function show_search_result(work_data_search_queue) {
 		} ]);
 	}
 
-	node_list.push({
-		// save
-		b : [ '📥', {
-			T : [ '下載所有%1個網站找到的作品', OK ]
-		} ],
-		onclick : function() {
-			for ( var site_id in work_data_search_queue) {
-				if (site_id in not_found_site_hash)
-					continue;
+	if (OK > 0) {
+		node_list.push({
+			// save
+			b : [ '📥', {
+				T : [ '下載所有%1個網站找到的作品', OK ]
+			} ],
+			onclick : function() {
+				for ( var site_id in work_data_search_queue) {
+					if (site_id in not_found_site_hash)
+						continue;
 
-				var work_data = work_data_search_queue[site_id];
-				var crawler = get_crawler(site_id);
-				add_new_download_job(crawler, work_data.title || work_data.id);
-			}
-		},
-		C : 'button'
-	}, {
-		// add, append
-		b : [ '➕', {
-			T : [ '將所有%1個網站找到的作品皆加入最愛清單', OK ]
-		} ],
-		onclick : function() {
-			for ( var site_id in work_data_search_queue) {
-				append_to_favorites(site_id, work_title);
-			}
-		},
-		C : 'button'
-	});
+					var work_data = work_data_search_queue[site_id];
+					var crawler = get_crawler(site_id);
+					add_new_download_job(crawler, work_data.title
+							|| work_data.id);
+				}
+			},
+			C : 'button'
+		}, {
+			// add, append
+			b : [ '➕', {
+				T : [ '將所有%1個網站找到的作品皆加入最愛清單', OK ]
+			} ],
+			onclick : function() {
+				for ( var site_id in work_data_search_queue) {
+					append_to_favorites(site_id, work_title);
+				}
+			},
+			C : 'button'
+		});
+	}
 
 	CeL.remove_all_child('search_results');
 	CeL.new_node(node_list, 'search_results');
@@ -1136,9 +1228,6 @@ function show_search_result(work_data_search_queue) {
 var language_used;
 // 自動搜尋不同的網站並選擇下載作品。
 function search_work_title() {
-	if (site_used) {
-		language_used = site_used.replace(/\/.+/, '');
-	}
 	if (!language_used) {
 		CeL.info({
 			// 點選
