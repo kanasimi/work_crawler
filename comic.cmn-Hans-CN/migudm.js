@@ -47,6 +47,7 @@ var crawler = new CeL.work_crawler({
 		/**
 		 * e.g., <code>
 		<a target="_blank" stat='index_search_comic;{"Key_Type":"search_keyword","Key_Word":"全物种进化","Position_ID":"1"}' href="/comic/090000004650.html"  title="全物种进化">
+		<img src="http://rsdown.migudm.cn/SFile/public/noprot/2019/1/2/1001865302_J8UGeo/1001865302_J8UGeo_verSmall1_210_280.jpg" alt="全物种进化">
 		</code>
 		 */
 		function(text) {
@@ -84,14 +85,18 @@ var crawler = new CeL.work_crawler({
 			author : get_label(text.between('<p class="author">', '</p>')
 					.replace('<span class="lineTit">作者</span>', '')),
 
-			// <span class="clickCountStr">
-			// <a class="status" target="_blank" href="/comic/update/">连载中</a>
-			// </span><span class="date">
-			// 2019-01-21
-			// </span>
-			// <span class="num">更新至119话</span>
-			// <span class="week"> [每周五更新一集，我们相约吧！] </span>
-			// </div>
+			/**
+			 * e.g., <code>
+			<span class="clickCountStr">
+			<a class="status" target="_blank" href="/comic/update/">连载中</a>
+			</span><span class="date">
+			2019-01-21
+			</span>
+			<span class="num">更新至119话</span>
+			<span class="week"> [每周五更新一集，我们相约吧！] </span>
+			</div>
+			</code>
+			 */
 			status : get_label(text.between('class="status"', '<')
 			//
 			.between('>')),
@@ -138,13 +143,24 @@ var crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
-		// 正序 <div class="ctSectionListBd" id="ctSectionListBd" style="display:
-		// none;">
+		/**
+		 * 取正序 e.g., <code>
+		<div class="ctSectionListBd" id="ctSectionListBd" style="display: none;">
+		 <div class="numberList clearfix">
+		</code>
+		 */
 		html = html.between('id="ctSectionListBd"', 'id="negCtSectionListBd"');
 
 		// reset work_data.chapter_list
 		work_data.chapter_list = [];
 
+		/**
+		 * e.g., <code>
+		<a stat='detail_comic_contentLabel;{"Position_ID":"6","Key_Word":"090000004650","Key_Type":"comic_part"}' href="/090000004650/chapter/1.html" class="item ellipsis" title="全物种进化 第1话" data-opusname="全物种进化" data-index="1" data-url="/090000004650/chapter/1.html" target="_blank">
+		 1.第1话
+		</a>
+		</code>
+		 */
 		var link, PATTERN = /<a ([\s\S]+?)>/g;
 		while (link = PATTERN.exec(html)) {
 			link = link[1];
@@ -152,7 +168,9 @@ var crawler = new CeL.work_crawler({
 				title : get_label(link.between(' title="', '"')),
 				url : link.between(' href="', '"')
 			}, matched = link.match(/stat='([^']+?)'/);
+
 			if (matched) {
+				// add additional information
 				matched = matched[1].between('{');
 				try {
 					Object.assign(chapter_data, JSON.parse('{' + matched));
@@ -160,6 +178,7 @@ var crawler = new CeL.work_crawler({
 					// TODO: handle exception
 				}
 			}
+
 			work_data.chapter_list.push(chapter_data);
 		}
 
@@ -183,11 +202,16 @@ var crawler = new CeL.work_crawler({
 
 		// console.log(chapter_data);
 
+		/**
+		 * e.g., <code>
+		<input type="hidden" id="playUrl" value="hwOpusId=090000004650&hwItemId=091000017549&index=119&opusType=2">
+
 		// http://www.migudm.cn/assets/build/main/index.min.js?v=1.1.15
-		// <input type="hidden" id="playUrl"
-		// value="hwOpusId=090000004650&hwItemId=091000017549&index=119&opusType=2">
-		// s = $(".basePath").val();
-		// s + "opus/webQueryWatchOpusInfo.html?" + $("#playUrl").val()
+		s = $(".basePath").val();
+
+		s + "opus/webQueryWatchOpusInfo.html?" + $("#playUrl").val()
+		</code>
+		 */
 		this.get_URL(chapter_data.basePath + "opus/webQueryWatchOpusInfo.html?"
 				+ chapter_data.playUrl, callback);
 	},

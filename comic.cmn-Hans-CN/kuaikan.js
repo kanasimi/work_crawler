@@ -43,6 +43,32 @@ crawler = new CeL.work_crawler({
 	id_of_search_result : 'id',
 	title_of_search_result : 'title',
 
+	search_URL_web : 's/result/',
+	parse_search_result_web : function(html, get_label) {
+		html = html.between('<div class="resultList cls">',
+		// <div class="footerBox"><div class="Footer">
+		'<div class="footerBox">');
+
+		var id_list = [], id_data = [];
+		/**
+		 * <code>
+		</p> <div class="resultList cls"><div class="TabW184 fl padding16"><a href="https://www.kuaikanmanhua.com/web/topic/3131" target="_blank" class="link  ">
+		</code>
+		 */
+		html.split('<div class="TabW184').forEach(function(token, index) {
+			var title = token.between('<span class="itemTitle">', '</span>');
+			if (!title) {
+				// Skip the first one.
+				return;
+			}
+			id_data.push(title);
+			var id = token.match(/<a [\s\S]*?href="[^<>"]+\/(\d+)"/);
+			id_list.push(id[1]);
+		});
+
+		return [ id_list, id_data ];
+	},
+
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
 		return 'web/topic/' + work_id;
@@ -69,7 +95,7 @@ crawler = new CeL.work_crawler({
 		html = html.between('<div class="article-list">', '</div>');
 
 		html.each_between('<tr>', '</tr>', function(token) {
-			var matched = token.match(PATTERN_chapter_item), data = {
+			var matched = token.match(PATTERN_chapter_item), chapter_data = {
 				url : matched[1],
 				title : matched[2],
 				like : get_label(token.between(' class="like">', '</td>'))
@@ -77,9 +103,14 @@ crawler = new CeL.work_crawler({
 			matched = token.match(/<td>(\d{1,2}-\d{1,2})<\/td>/);
 			if (matched) {
 				// update
-				data.date = matched[1];
+				chapter_data.date = matched[1];
 			}
-			work_data.chapter_list.push(data);
+			// <i class="ico-lockoff"></i>
+			if (token.includes('ico-lockoff')) {
+				chapter_data.limited = true;
+				work_data.some_limited = true;
+			}
+			work_data.chapter_list.push(chapter_data);
 		});
 
 		if (work_data.chapter_list.length > 1) {

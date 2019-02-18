@@ -50,7 +50,11 @@ var crawler = new CeL.work_crawler({
 			// 必要屬性：須配合網站平台更改。
 			title : work_data.comic.name,
 			// or use {Array}work_data.new_author
-			author : work_data.comic.sina_nickname
+			author : work_data.comic.sina_nickname,
+			status : work_data.comic.is_end
+			//
+			&& work_data.comic.is_end !== "0" ? '连载中' : '已完结',
+			some_limited : work_data.comic.chapter_default_price > 0
 		// 選擇性屬性：須配合網站平台更改。
 		});
 

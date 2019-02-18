@@ -8,8 +8,9 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-// [ all, chapter id, url, title + date, short title, page count ]
-var PATTERN_chapter = /<a id="cpt_(\d+)" href="([^<>"]+)"[\n\s]+title="([^<>"]+)"[^<>]*>([\s\S]+?)<\/a>([\s\S]*?)<\/li>/g,
+// [ all, chapter id, url, title + date, class="pay_chapter", short title, page
+// count ]
+var PATTERN_chapter = /<a id="cpt_(\d+)" href="([^<>"]+)"[\n\s]+title="([^<>"]+)"([^<>]*)>([\s\S]+?)<\/a>([\s\S]*?)<\/li>/g,
 //
 crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
@@ -39,13 +40,16 @@ crawler = new CeL.work_crawler({
 		var text = html.between('<div class="comic_info">',
 				'<div class="chapterlist">'), matched,
 		//
-		PATTERN_status = /static\.u17i\.com\/[^<>"]+" title="([^<>"]+)"/g,
+		PATTERN_tags = /static\.u17i\.com\/[^<>"]+" title="([^<>"]+)"/g,
 		//
 		work_data = {
+			author : get_label(text
+			//
+			.between('<div class="author_info">', '<p>')),
 			// 更新頻率
 			update_frequency : get_label(text.between('<i class="sign', '</i>')
 					.between('>')),
-			status : [],
+			tags : [],
 			last_update : get_label(html.between('最后更新时间：', '<'))
 		};
 		// must fit 镇魂街, 雏蜂
@@ -53,14 +57,14 @@ crawler = new CeL.work_crawler({
 				.replace(/var /g, 'work_data.').replace(/=\s*cfg_host_base/,
 						'=work_data.cfg_host_base'));
 
-		while (matched = PATTERN_status.exec(text)) {
-			work_data.status.push(matched[1]);
+		while (matched = PATTERN_tags.exec(text)) {
+			work_data.tags.push(matched[1]);
 		}
 
-		PATTERN_status = /class="class_tag">([^<>"]+)/g;
+		PATTERN_tags = /class="class_tag">([^<>"]+)/g;
 
-		while (matched = PATTERN_status.exec(text)) {
-			work_data.status.push(matched[1]);
+		while (matched = PATTERN_tags.exec(text)) {
+			work_data.tags.push(matched[1]);
 		}
 
 		extract_work_data(work_data, html);
@@ -75,10 +79,9 @@ crawler = new CeL.work_crawler({
 		// e.g., "<span>总月票：<em>446</em></span>"
 		/<span>([^<>]+)<em>([^<>]+)<\/em><\/span>/g);
 
-		work_data.status.unshift(work_data.状态);
-
 		Object.assign(work_data, {
 			title : work_data.comic_name,
+			status : work_data.状态,
 			作品简介 : get_label(html.between('<p class="ti2">', '</p>'))
 		});
 
@@ -89,10 +92,11 @@ crawler = new CeL.work_crawler({
 		work_data.chapter_list = [];
 
 		var matched;
-		// [ all, chapter id, url, title + date, short title, page count ]
+		// [ all, chapter id, url, title + date, pay_chapter,
+		// short title, page count ]
 		while (matched = PATTERN_chapter.exec(html)) {
 			matched[3] = get_label(matched[3]);
-			matched[5] = get_label(matched[5]);
+			matched[6] = get_label(matched[6]);
 			var title_date = matched[3].match(/^(.+)\s(\d{4}-\d{2}-\d{2})$/),
 			//
 			chapter_data = {
@@ -103,8 +107,11 @@ crawler = new CeL.work_crawler({
 						+ '&act=get_chapter_v5&chapter_id=' + matched[1],
 				title : (title_date ? title_date[1].trim() : matched[3])
 				// e.g., "(9p)"
-				+ (matched[5] ? ' ' + matched[5] : '')
+				+ (matched[6] ? ' ' + matched[6] : ''),
+				limited : matched[4].includes('pay_chapter')
 			};
+			if (chapter_data.limited)
+				work_data.some_limited = true;
 			if (title_date) {
 				chapter_data.date = title_date[2];
 			}

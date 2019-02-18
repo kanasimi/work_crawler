@@ -8,7 +8,14 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var crawler = new CeL.work_crawler({
+/**
+ * <code>
+ <li class="item newest" data-id="130097"><a href="130097.html" title="134话">134话</a><i class="ift-new"></i> <i class="ift-lock"></i></li>
+ </code>
+ */
+var PATTERN_chapter = /<li[^<>]*><a href="([^<>"]+)"[^<>]* title="([^<>"]+)">([\s\S]+?)<\/li>/g,
+//
+crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// {Natural}最小容許圖案檔案大小 (bytes)。
@@ -67,13 +74,7 @@ var crawler = new CeL.work_crawler({
 	get_chapter_list : function(work_data, html, get_label) {
 		html = html.between(' id="chapterList">', '</ul>');
 
-		var matched, PATTERN_chapter =
-		/**
-		 * <code>
-		<li class="item newest" data-id="130097"><a href="130097.html" title="134话">134话</a><i class="ift-new"></i> <i class="ift-lock"></i></li>
-		</code>
-		 */
-		/<li[^<>]*><a href="([^<>"]+)"[^<>]* title="([^<>"]+)">/g;
+		var matched;
 
 		work_data.chapter_list = [];
 		while (matched = PATTERN_chapter.exec(html)) {
@@ -81,6 +82,10 @@ var crawler = new CeL.work_crawler({
 				url : matched[1],
 				title : get_label(matched[2])
 			};
+			if (matched[3].includes('ift-lock')) {
+				chapter_data.limited = true;
+				work_data.some_limited = true;
+			}
 			work_data.chapter_list.push(chapter_data);
 		}
 		work_data.chapter_list.reverse();

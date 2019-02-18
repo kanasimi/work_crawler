@@ -116,7 +116,7 @@ crawler = new CeL.work_crawler({
 			}
 			++NO_in_part;
 			var chapter_data = {
-				// 使章節目錄名稱不包含 part_NO。
+				// 漫畫目錄名稱不須包含分部號碼。使章節目錄名稱不包含 part_NO。
 				// part_NO : part_NO,
 				part_title : part_title,
 				NO_in_part : NO_in_part,
@@ -166,6 +166,7 @@ crawler = new CeL.work_crawler({
 	// 必須自行保證執行 callback()，不丟出異常、中斷。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
 		// console.log(XMLHttp);
+		// console.log(work_data);
 		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
 		html = XMLHttp.responseText, _this = this, image_page_list = [];
@@ -202,6 +203,14 @@ crawler = new CeL.work_crawler({
 				CeL.debug(work_data.title + ' #' + chapter_NO + ' '
 						+ chapter_data.title + ': Already got ' + image_count
 						+ ' images.');
+				chapter_data.image_list = chapter_data.image_list
+				// .slice() 重建以節省記憶體用量。
+				.slice().map(function(image_data) {
+					// 僅保留網址資訊，節省記憶體用量。
+					return typeof image_data === 'string' ? image_data
+					// else assert: CeL.is_Object(image_data)
+					: image_data.url;
+				});
 				callback();
 				return;
 			}
@@ -220,9 +229,8 @@ crawler = new CeL.work_crawler({
 				_this.onerror('No image url got: #'
 						+ chapter_data.image_list.length + '/' + image_count);
 			}
-			chapter_data.image_list.push({
-				url : url
-			});
+			// 僅保留網址資訊，節省記憶體用量。
+			chapter_data.image_list.push(url);
 		}
 
 		chapter_data.image_list = [];
@@ -244,10 +252,8 @@ crawler = new CeL.work_crawler({
 			}, _this.get_URL_options));
 		}, image_count, 2, function() {
 			work_data.image_list[chapter_NO - 1] = chapter_data.image_list
-			// 僅保留網址資訊。
-			.map(function(image_data) {
-				return image_data.url;
-			});
+			// .slice() 重建以節省記憶體用量。
+			.slice();
 			callback();
 		});
 	},

@@ -90,10 +90,8 @@ var crawler = new CeL.work_crawler({
 		});
 
 		for (var index = 0; index < chapter_data.image_count;) {
-			chapter_data.image_list.push({
-				url : chapter_data.base_URL + 'books/images/2/' + ++index
-						+ '.jpg'
-			});
+			chapter_data.image_list.push(chapter_data.base_URL
+					+ 'books/images/2/' + ++index + '.jpg');
 		}
 
 		return chapter_data;
