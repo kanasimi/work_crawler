@@ -394,7 +394,7 @@ function initializer() {
 		});
 	}
 
-	// 獨立的最愛清單 / 圖書館
+	// 獨立的最愛清單 / 圖書館 / 書籤 / 書庫
 	var external_favorite_list = get_favorite_list_file_path(get_crawler(null,
 			true));
 	set_click_trigger('download_options_trigger', CeL.new_node({
@@ -740,7 +740,7 @@ function reset_favorites(crawler) {
 			}
 		} ];
 
-		var work_id;
+		var work_id, input_id;
 		if (!search_result) {
 		} else {
 			if (work_id = search_result[work_title]) {
@@ -749,7 +749,7 @@ function reset_favorites(crawler) {
 				for ( var title in search_result) {
 					// NG: "===": 可能有類型轉換的問題。
 					if (work_title == get_id_of_title(title)) {
-						// input id
+						input_id = true;
 						work_id = work_title;
 						work_title = title;
 						break;
@@ -757,7 +757,7 @@ function reset_favorites(crawler) {
 				}
 			}
 			if (!work_id) {
-				// 之前有下載過這些作品，應該就會變成藍色的了。
+				// 之前有下載成功過這些作品，應該就會變成藍色的了。
 				nodes[0].S = 'color: #c00;';
 
 			} else if (favorites.length < read_work_data_limit
@@ -819,7 +819,7 @@ function reset_favorites(crawler) {
 			// 從最愛名單中刪除本作品
 			R : _('從最愛名單中注解掉本作品'),
 			onclick : function() {
-				remove_favorite(crawler, work_title);
+				remove_favorite(crawler, input_id ? work_id : work_title);
 				reset_favorites(crawler);
 			},
 			S : 'color: red; cursor: pointer;'
@@ -940,7 +940,7 @@ function reset_favorites(crawler) {
 	//
 	|| crawler.read_work_data ? '' : [ {
 		b : [ '⌛️', {
-			T : '讀取作品資訊檔案以判別作品是否已下載過、是否完結。'
+			T : '讀取本網站作品資訊檔案以判別作品是否已下載過、是否完結。'
 		}, {
 			T : '選擇網站時，這可能造成幾十秒鐘無回應。',
 			S : 'color: red;'
