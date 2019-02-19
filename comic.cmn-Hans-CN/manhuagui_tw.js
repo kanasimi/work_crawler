@@ -62,7 +62,7 @@ crawler = new CeL.work_crawler({
 	// 60s 大致OK
 	// 2019/2/6: 40s: NG, ban 1 day.
 	// 50s 在下載過50章後一樣會 ban。.5 day?
-	chapter_time_interval : '70s',
+	chapter_time_interval : '180s',
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.
