@@ -689,7 +689,7 @@ function save_favorites(crawler, work_list_text) {
 	}
 
 	CeL.create_directory(favorite_list_file_path.replace(/[^\\\/]+$/g, ''));
-	// backup old favorite list file 預防一不小心操作錯誤時還可以補救。
+	// backup old favorite list file 備份最後一次修改前的書籤，預防一不小心操作錯誤時還可以補救。
 	CeL.move_file(favorite_list_file_path, favorite_list_file_path + '.bak');
 	CeL.write_file(favorite_list_file_path, work_list_text);
 }
@@ -747,7 +747,8 @@ function reset_favorites(crawler) {
 				work_id = get_id_of_title(work_title);
 			} else {
 				for ( var title in search_result) {
-					if (work_title === get_id_of_title(title)) {
+					// NG: "===": 可能有類型轉換的問題。
+					if (work_title == get_id_of_title(title)) {
 						// input id
 						work_id = work_title;
 						work_title = title;
@@ -938,13 +939,24 @@ function reset_favorites(crawler) {
 	}, favorites.length < read_work_data_limit
 	//
 	|| crawler.read_work_data ? '' : [ {
-		br : null
-	}, {
 		b : [ '⌛️', {
-			T : '讀取作品資訊檔案以判別作品是否已下載過、是否完結。選擇網站時，這可能造成幾十秒鐘無回應。'
+			T : '讀取作品資訊檔案以判別作品是否已下載過、是否完結。'
+		}, {
+			T : '選擇網站時，這可能造成幾十秒鐘無回應。',
+			S : 'color: red;'
 		} ],
 		onclick : function() {
 			crawler.read_work_data = true;
+			reset_favorites(crawler);
+		},
+		C : 'favorites_button'
+	}, {
+		b : [ '⌛️', {
+			T : '讀取所有網站之作品資訊檔案。',
+			S : 'color: red;'
+		} ],
+		onclick : function() {
+			read_work_data_limit = Infinity;
 			reset_favorites(crawler);
 		},
 		C : 'favorites_button'
@@ -1166,7 +1178,7 @@ var search_result_columns = {
 		.replace(work_data.title, '');
 		if (node && work_data.fill_from_chapter_list)
 			node = [ {
-				span : '🧩',
+				span : old_Unicode_support ? '' : '🧩',
 				R : '資訊來自章節清單'
 			}, node ];
 		else
@@ -1278,7 +1290,10 @@ function show_search_result(work_data_search_queue) {
 			C : 'button'
 		}, {
 			// add, append
-			b : [ '➕', {
+			b : [ {
+				span : '➕',
+				S : old_Unicode_support ? 'color: #888;' : ''
+			}, {
 				T : [ '將所有%1個網站找到的作品皆加入最愛清單', OK ]
 			} ],
 			onclick : function() {
@@ -1436,7 +1451,7 @@ function search_work_title() {
 		var crawler = get_crawler(site_id);
 		if (CeL.to_millisecond(crawler.chapter_time_interval) > 10 * 1000) {
 			all_done({
-				process_status : [ '本網站強制等待時間過長，因此不作搜尋以防被封鎖。' ]
+				process_status : [ '本網站強制等待時間過長，為防封鎖不作搜尋。' ]
 			});
 			return;
 		}
@@ -1557,7 +1572,7 @@ function Download_job(crawler, work_id) {
 		}, {
 			span : [ {
 				b : '✘',
-				S : 'color:red'
+				S : 'color: red;'
 			}, {
 				// 取消下載 (略稱)
 				T : '取消'
