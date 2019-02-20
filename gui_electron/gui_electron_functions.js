@@ -362,7 +362,16 @@ function initializer() {
 			label : [ {
 				b : download_option
 			}, ':', input_box, download_options_set[download_option],
-					arg_types ? ' (' + arg_types + ')' : '' ],
+			//
+			arg_types ? ' (' + Object.keys(arg_types).map(function(type) {
+				var condition = arg_types[type];
+				if (Array.isArray(condition)) {
+					condition = condition.join('; ');
+				} else {
+					condition = JSON.stringify(condition);
+				}
+				return type + (condition ? ': ' + condition : '');
+			}).join(' | ') + ')' : '' ],
 			C : className,
 			title : download_option
 		};
@@ -952,7 +961,7 @@ function reset_favorites(crawler) {
 		C : 'favorites_button'
 	}, {
 		b : [ '⌛️', {
-			T : '讀取所有網站之作品資訊檔案。',
+			T : '讀取所有網站之作品資訊檔案',
 			S : 'color: red;'
 		} ],
 		onclick : function() {
