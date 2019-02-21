@@ -13,6 +13,7 @@ var crawler = new CeL.work_crawler({
 
 	// 日本的線上漫畫網站習慣刪掉舊章節，因此每一次都必須從頭檢查。
 	// recheck : true,
+	// 這個網站以日本網站來說比較特別，所有章節皆列在列表上。
 
 	// one_by_one : true,
 	base_URL : 'https://cycomi.com/',

@@ -73,7 +73,7 @@ var crawler = new CeL.work_crawler({
 
 		Object.assign(work_data, {
 			author : work_data.作者,
-			status : [ work_data.状态, work_data.类型 ],
+			status : work_data.状态,
 			latest_chapter : work_data.最新章节
 		});
 
@@ -94,7 +94,7 @@ var crawler = new CeL.work_crawler({
 			// console.log(matched);
 			var chapter_data = {
 				url : matched[1],
-				title : matched[2]
+				title : get_label(matched[2])
 			};
 			work_data.chapter_list.push(chapter_data);
 		}
