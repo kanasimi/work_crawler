@@ -76,7 +76,10 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [八八读书网](http://www.88dus.com/) | 88dus.js | 88读书网(88dushu)，PTCMS? |
 | [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
 | [顶点小说](https://www.23us.cc/) | 23us.js | [WMCMS](http://www.weimengcms.com/index.html) (未梦开源小说程序) [仿电脑顶点小说模板](http://www.weimengcms.com/html/temple/article/141.html) or PTCMS? |
-| [恋上你看书网](http://www.630book.la/) | 630book.js | |
+| [恋上你看书网](http://www.630book.la/) | 630book.js | PTCMS |
+| [看书神站](https://www.kanshushenzhan.com/) | kanshushenzhan.js | [杰奇小说连载系统](https://www.jieqi.com/files/page/html/product/article.html) |
+| [花香居](https://www.huaxiangju.com/) | huaxiangju.js | 杰奇小说连载系统 |
+| [追书帮](http://www.zhuishubang.com/) | zhuishubang.js | 杰奇小说连载系统 |
 | [飘天文学](http://www.piaotian.com/) | piaotian.js | NOT PTCMS |
 | [落霞小说网](http://www.luoxia.com/) | luoxia.js | WordPress，數量少、速度較慢但品質較高，較少錯字和自我審查。 |
 | [努努书坊](https://www.kanunu8.com/) | kanunu.js | 有些非流行網路小說的書。 |

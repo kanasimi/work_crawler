@@ -92,12 +92,22 @@ download_sites_set = {
 		Rocaca : 'rocaca (不再維護)'
 	},
 	'novel.cmn-Hans-CN' : {
+		ck101 : '卡提諾論壇 小說頻道',
+
 		qidian : '起点中文网',
+
+		// PTCMS
 		'23us' : '顶点小说',
 		'81xsw' : '八一中文网',
 		'88dus' : '八八读书网',
 		'630book' : '恋上你看书网',
-		ck101 : '卡提諾論壇 小說頻道',
+
+		// 杰奇小说连载系统
+		kanshushenzhan : '看书神站',
+		huaxiangju : '花香居',
+		zhuishubang : '追书帮',
+
+		daocaoren : '稻草人书屋',
 		luoxia : '落霞小说网',
 		kanunu : '努努书坊',
 		piaotian : '飘天文学'
