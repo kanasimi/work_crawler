@@ -237,15 +237,20 @@ function initializer() {
 	CeL.info({
 		T : [ 'Default download location: %1', global.data_directory ]
 	});
-	if (false)
-		CeL.info({
-			// 🚧
-			span : [ '請幫助我們', {
-				a : '翻譯介面文字',
-				href : 'https://github.com/kanasimi/work_crawler/issues/185',
-				onclick : open_external
-			}, '，謝謝您！' ]
-		});
+	CeL.info({
+		// 🚧
+		span : [ {
+			T : '歡迎與我們一同翻譯介面文字！#1'
+		}, {
+			a : {
+				T : '歡迎與我們一同翻譯介面文字！#2'
+			},
+			href : 'https://github.com/kanasimi/work_crawler/issues/185',
+			onclick : open_external
+		}, {
+			T : '歡迎與我們一同翻譯介面文字！#3'
+		} ]
+	});
 	// read default configuration
 	default_configuration = CeL.get_JSON(global.data_directory
 			+ default_configuration_file_name)
@@ -323,11 +328,14 @@ function initializer() {
 
 	var options_nodes = [];
 	for ( var download_option in download_options_set) {
-		var arg_types = CeL.work_crawler.prototype
+		var arg_type_data = CeL.work_crawler.prototype
 		//
 		.import_arg_hash[download_option],
 		//
+		arg_types = arg_type_data && Object.keys(arg_type_data).join(),
+		//
 		className = 'download_options', input_box = '';
+
 		if (arg_types === 'number' || arg_types === 'string') {
 			className += ' non_select';
 			input_box = {
@@ -373,8 +381,10 @@ function initializer() {
 				b : download_option
 			}, ':', input_box, download_options_set[download_option],
 			//
-			arg_types ? ' (' + Object.keys(arg_types).map(function(type) {
-				var condition = arg_types[type];
+			arg_type_data ? ' ('
+			//
+			+ Object.keys(arg_type_data).map(function(type) {
+				var condition = arg_type_data[type];
 				if (Array.isArray(condition)) {
 					condition = condition.join('; ');
 				} else {
@@ -420,9 +430,9 @@ function initializer() {
 		div : [ options_nodes, {
 			b : [ '📥', {
 				// 本次執行期間不儲存選項設定
-				T : '自動儲存選項設定'
+				T : '自動儲存選項設定與最愛作品清單#1'
 			}, external_favorite_list ? {
-				T : '與最愛作品清單',
+				T : '自動儲存選項設定與最愛作品清單#2',
 				S : 'color: orange;'
 			} : '' ],
 			onclick : function() {
@@ -439,9 +449,9 @@ function initializer() {
 			C : 'button' + (save_config_this_time ? '' : ' ' + 'not_set')
 		}, {
 			b : [ '🔙', {
-				T : '重設下載選項'
+				T : '重設下載選項與最愛作品清單#1'
 			}, external_favorite_list ? {
-				T : '與最愛作品清單',
+				T : '重設下載選項與最愛作品清單#2',
 				S : 'color: orange;'
 			} : '' ],
 			onclick : function() {
@@ -835,8 +845,8 @@ function reset_favorites(crawler) {
 		// add 解析及操作列表檔案的功能。
 		nodes.push({
 			b : '✗',
-			// 從最愛名單中刪除本作品
-			R : _('從最愛名單中注解掉本作品'),
+			// 從最愛名單中刪除本作品。
+			R : _('從最愛名單中注解掉本作品。'),
 			onclick : function() {
 				remove_favorite(crawler, input_id ? work_id : work_title);
 				reset_favorites(crawler);
@@ -880,7 +890,7 @@ function reset_favorites(crawler) {
 	} : '', {
 		div : [ favorites.length > 0 ? {
 			b : [ '✅', {
-				T : '檢查所有最愛作品之更新並下載更新作品'
+				T : '檢查所有最愛作品之更新，並下載更新作品。'
 			} ],
 			onclick : function() {
 				favorites.forEach(function(work_title) {
@@ -904,7 +914,7 @@ function reset_favorites(crawler) {
 		|| favorites.duplicated > 0 ? {
 			// abandon
 			b : [ old_Unicode_support ? '❌' : '🛑', {
-				T : [ '刪除所有%1個注解、%2個重複與%3個空白行',
+				T : [ '刪除所有%1個注解、%2個重複與%3個空白行。',
 				//
 				favorites.comments, favorites.duplicated, favorites.blank ]
 			} ],
@@ -997,7 +1007,9 @@ function reset_site_options() {
 	for ( var download_option in download_options_nodes) {
 		var download_options_node = download_options_nodes[download_option],
 		//
-		arg_types = CeL.work_crawler.prototype.import_arg_hash[download_option];
+		arg_type_data = CeL.work_crawler.prototype.import_arg_hash[download_option],
+		//
+		arg_types = arg_type_data && Object.keys(arg_type_data).join();
 		CeL.set_class(download_options_node, 'selected', {
 			remove : arg_types === 'number' || arg_types === 'string'
 					|| !crawler[download_option]

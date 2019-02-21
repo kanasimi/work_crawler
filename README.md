@@ -23,7 +23,7 @@
 
 ## Features 特點
 * 具備最愛清單功能。
-* 能一鍵從各網站下載搜尋與下載作品。
+* 能一鍵搜尋各網站與下載作品。
 * 可自動下載小說封面以及章節中的插圖。
 * 本工具會盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
 * 跨平臺支援：支援 Windows, Linux, Mac。
@@ -159,11 +159,11 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 ## Installation 安裝
 
-若是想要使用系統安裝的方法，或者您的系統並未提供命令列介面，您可以 **[直接下載📦安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版修正次數：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。欲採用最新版本，或研究開發、想要使用命令列介面作批次處理，請採用下列步驟。
+若是想要使用系統安裝的方法，或者您的系統並未提供命令列介面，您可以 **[直接下載📦安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**並且安裝 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版修正次數：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。欲採用最新版本，或研究開發、想要使用命令列介面作批次處理，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
-1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->（已經安裝過的可以跳過）
+1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->已經安裝過的可以跳過。Node.js 用以執行本工具。7-Zip 在更新本工具，或者打包漫畫章節，以及製作電子書時使用。
 2. 下載並儲存本工具安裝檔 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>（按右鍵另存新檔）。本工具安裝檔 **預設會將所有組件放在 <code>work_crawler-master</code> 目錄下**。
 3. <details><summary>在命令列介面下執行安裝檔 <code>work_crawler.updater.js</code>。（點擊本行可獲得更詳細的說明）</summary>
 
