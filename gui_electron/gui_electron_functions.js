@@ -215,8 +215,6 @@ function initializer() {
 	// --------------------------------
 
 	_ = CeL.gettext;
-	// .set_fallback(): failed
-	// _.set_fallback([ 'en', 'TW', 'CN', 'ja' ]);
 
 	_.create_menu('language_menu', [ 'TW', 'CN', 'ja', 'en', 'ko' ],
 	// 預設介面語言繁體中文+...
@@ -233,6 +231,7 @@ function initializer() {
 	// --------------------------------
 
 	var force_convert = 'en,zh';
+	_.load_domain('en');
 	if (!global.data_directory) {
 		global.data_directory = CeL.determin_download_directory();
 	}
@@ -757,7 +756,7 @@ function reset_favorites(crawler) {
 
 	function get_id_of_title(work_title, is_id) {
 		var work_id = is_id ? work_title : search_result[work_title];
-		if (crawler.id_of_search_result) {
+		if (work_id !== undefined && crawler.id_of_search_result) {
 			work_id = typeof crawler.id_of_search_result === 'function'
 			// @see function finish(no_cache) @ work_crawler.js
 			? crawler.id_of_search_result(work_id)
@@ -773,6 +772,7 @@ function reset_favorites(crawler) {
 			href : '#',
 			onclick : function() {
 				add_new_download_job(crawler, work_title);
+				return false;
 			}
 		} ];
 

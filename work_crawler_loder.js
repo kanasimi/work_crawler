@@ -171,7 +171,18 @@ if (is_CLI && !work_id && process.mainModule
 	+ Object.entries(CeL.work_crawler.prototype.import_arg_hash)
 	//
 	.map(function(pair) {
-		return '\n	' + pair[0] + '	(' + pair[1] + ')';
+		var arg_type_data = pair[1];
+		return '\n	' + pair[0] + '	('
+		// @see function initializer() @ gui_electron_functions.js
+		+ Object.keys(arg_type_data).map(function(type) {
+			var condition = arg_type_data[type];
+			if (Array.isArray(condition)) {
+				condition = condition.join('; ');
+			} else {
+				condition = JSON.stringify(condition);
+			}
+			return type + (condition ? ': ' + condition : '');
+		}).join(' | ') + ')';
 	}).join(''));
 
 	process.exit();

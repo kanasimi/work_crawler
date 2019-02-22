@@ -35,8 +35,9 @@ var crawler = new CeL.work_crawler({
 	// one_by_one : true,
 
 	// 2018/6/4 6:34 最後一次成功存取 http://www.733mh.com/
-	// 之後更改域名
-	base_URL : 'http://www.mh160.com/',
+	// 之後更改域名→ http://www.mh160.com/
+	// 2019/2/22?更改域名與名稱→ 来漫画 https://www.laimanhua.com/
+	base_URL : 'https://www.laimanhua.com/',
 	charset : 'gb2312',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -82,6 +83,7 @@ var crawler = new CeL.work_crawler({
 
 		work_data.author = work_data.原著作者;
 		work_data.last_update = work_data.更新时间;
+		// console.log(work_data);
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
@@ -117,7 +119,9 @@ var crawler = new CeL.work_crawler({
 			// use String.prototype.splic
 			chapter_data = eval(chapter_data).between("picTree='", "'");
 		} else {
-			chapter_data = html.between('picTree ="', '"');
+			chapter_data = html.between("picTree ='", "'")
+			// 2019/2/23 改用 picTree ='~~'
+			|| html.between('picTree ="', '"');
 		}
 		// console.log(chapter_data);
 		if (chapter_data) {
