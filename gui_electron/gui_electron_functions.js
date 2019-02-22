@@ -215,11 +215,12 @@ function initializer() {
 	// --------------------------------
 
 	_ = CeL.gettext;
+	// .set_fallback(): failed
+	// _.set_fallback([ 'en', 'TW', 'CN', 'ja' ]);
 
 	_.create_menu('language_menu', [ 'TW', 'CN', 'ja', 'en', 'ko' ],
 	// 預設介面語言繁體中文+...
 	function() {
-		;
 	});
 
 	// handle with document.title in IE 8.
@@ -231,6 +232,7 @@ function initializer() {
 
 	// --------------------------------
 
+	var force_convert = 'en,zh';
 	if (!global.data_directory) {
 		global.data_directory = CeL.determin_download_directory();
 	}
@@ -240,15 +242,18 @@ function initializer() {
 	CeL.info({
 		// 🚧
 		span : [ {
-			T : '歡迎與我們一同翻譯介面文字！#1'
+			T : '歡迎與我們一同翻譯介面文字！#1',
+			force_convert : force_convert
 		}, {
 			a : {
-				T : '歡迎與我們一同翻譯介面文字！#2'
+				T : '歡迎與我們一同翻譯介面文字！#2',
+				force_convert : force_convert
 			},
 			href : 'https://github.com/kanasimi/work_crawler/issues/185',
 			onclick : open_external
 		}, {
-			T : '歡迎與我們一同翻譯介面文字！#3'
+			T : '歡迎與我們一同翻譯介面文字！#3',
+			force_convert : force_convert
 		} ]
 	});
 	// read default configuration
@@ -425,14 +430,16 @@ function initializer() {
 
 	// 獨立的最愛清單 / 圖書館 / 書籤 / 書庫
 	var external_favorite_list = get_favorite_list_file_path(get_crawler(null,
-			true));
+			true)), force_convert = 'en,zh';
 	set_click_trigger('download_options_trigger', CeL.new_node({
 		div : [ options_nodes, {
 			b : [ '📥', {
 				// 本次執行期間不儲存選項設定
-				T : '自動儲存選項設定與最愛作品清單#1'
+				T : '自動儲存選項設定與最愛作品清單#1',
+				force_convert : force_convert
 			}, external_favorite_list ? {
 				T : '自動儲存選項設定與最愛作品清單#2',
+				force_convert : force_convert,
 				S : 'color: orange;'
 			} : '' ],
 			onclick : function() {
