@@ -192,6 +192,8 @@ function check_max_logs() {
 CeL.env.domain_location = 'resource/';
 // declaration for gettext()
 var _;
+// language force convert
+var force_convert = 'en';
 
 // initialization
 function initializer() {
@@ -230,8 +232,7 @@ function initializer() {
 
 	// --------------------------------
 
-	var force_convert = 'en,zh';
-	_.load_domain('en');
+	_.load_domain(force_convert);
 	if (!global.data_directory) {
 		global.data_directory = CeL.determin_download_directory();
 	}
@@ -429,7 +430,7 @@ function initializer() {
 
 	// 獨立的最愛清單 / 圖書館 / 書籤 / 書庫
 	var external_favorite_list = get_favorite_list_file_path(get_crawler(null,
-			true)), force_convert = 'en,zh';
+			true));
 	set_click_trigger('download_options_trigger', CeL.new_node({
 		div : [ options_nodes, {
 			b : [ '📥', {
@@ -725,7 +726,8 @@ function save_favorites(crawler, work_list_text) {
 
 	CeL.create_directory(favorite_list_file_path.replace(/[^\\\/]+$/g, ''));
 	// backup old favorite list file 備份最後一次修改前的書籤，預防一不小心操作錯誤時還可以補救。
-	CeL.move_file(favorite_list_file_path, favorite_list_file_path + '.bak');
+	CeL.move_file(favorite_list_file_path, favorite_list_file_path + '.'
+			+ crawler.backup_file_extension);
 	CeL.write_file(favorite_list_file_path, work_list_text);
 }
 

@@ -119,7 +119,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [扑飞漫画](http://www.pufei.net/) | pufei.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [塔多漫画](http://www.taduo.net/) | taduo.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
-| [漫画160](http://www.mh160.com/) | mh160.js | 與 733mh.js 相同系統 |
+| [漫画160](https://www.laimanhua.com/) | mh160.js | 與 733mh.js 相同系統 |
 | [哦漫画](http://www.omanhua.net/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
@@ -159,7 +159,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 ## Installation 安裝
 
-若是想要使用系統安裝的方法，或者您的系統並未提供命令列介面，您可以 **[直接下載📦安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**並且安裝 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版修正次數：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。欲採用最新版本，或研究開發、想要使用命令列介面作批次處理，請採用下列步驟。
+若是想要使用系統安裝的方法，或者您的系統並未提供命令列介面，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**並且安裝 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。📦安裝包現在落後最新測試版修正次數：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。欲採用最新版本，或研究開發、想要使用命令列介面作批次處理，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
