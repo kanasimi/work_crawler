@@ -69,7 +69,13 @@ var crawler = new CeL.work_crawler({
 			part_list[matched[1]] = get_label(matched[2]);
 		}
 
-		matched = text.between('最新').match(/<a [^<>]*?title="([^<>"]+)"/);
+		matched = text.between('最新').match(
+		/**
+		 * <code>
+		<span class="s">最新<span>&nbsp;<a href="/m779600/" title="妖神记 第212回" style="color:#ff3f60;" target="_blank">第212回 龙煞（上）</a>&nbsp;02月27号 </span></span>
+		 </code>
+		 */
+		/<a [^<>]*?title="([^<>"]+)"[^<>]*>.+?<\/a>(?:(.+?)<\/span>)?/);
 
 		html = html.between('<div class="banner_detail_form">',
 				'<div class="bottom"');
@@ -93,12 +99,16 @@ var crawler = new CeL.work_crawler({
 			part_list : part_list
 		};
 
-		if (!/[:：][^:：]+?[:：]/.test(work_data.author)) {
-			work_data.author = work_data.author.replace(/^.*?[:：]/, '');
+		if (matched) {
+			// dm5.js: 2019/3/1前 改版。
+			Object.assign(work_data, {
+				latest_chapter : get_label(matched[1]),
+				last_update : get_label(matched[2])
+			});
 		}
 
-		if (matched) {
-			work_data.latest_chapter = matched[1];
+		if (!/[:：][^:：]+?[:：]/.test(work_data.author)) {
+			work_data.author = work_data.author.replace(/^.*?[:：]/, '');
 		}
 
 		html.between('<p class="tip">', '<p class="content"').split(
@@ -113,7 +123,7 @@ var crawler = new CeL.work_crawler({
 
 		Object.assign(work_data, {
 			status : work_data.状态,
-			last_update : work_data.更新时间
+			last_update : work_data.更新时间 || work_data.last_update
 		});
 
 		return work_data;
