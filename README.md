@@ -159,7 +159,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 ## Installation 安裝
 
-若是想要使用系統安裝的方法，或者您的系統並未提供命令列介面，您可以 **[直接下載安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**並且安裝 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。📦安裝包現在落後最新測試版修正次數：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。欲採用最新版本，或研究開發、想要使用命令列介面作批次處理，請採用下列步驟。
+若是想要使用系統安裝的方法，或者您的系統並未提供命令列介面，您可以 **[直接下載📦安裝包![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)**，並且安裝 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。惟 **安裝包不含最新的功能**，有些網站下載起來會出問題。安裝包現在落後最新測試版修正次數：![Github commits (since latest release)](https://img.shields.io/github/commits-since/kanasimi/work_crawler/latest.svg)。欲採用最新版本，或研究開發、想要使用命令列介面作批次處理，請採用下列步驟。
 
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
@@ -227,7 +227,11 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
    ```
 2. 在本工具安裝的目錄下，執行 <code>start_gui_electron.sh</code> 或 <code>start_gui_electron.bat</code>。
 
-   ![視窗型態介面](https://lh3.googleusercontent.com/3dGaOZnsMNrCr6OrYdSg_Ia6dgQBZHBbwplgbOAaQn4RQkLcxGJbly3IDRicw6PbZFwG97TfJuHl3EeAqc3Nl34Tc6LmntqrxwCZl6djLfOqfZnnlo_6aCwUGS0rraGf8xBTd8JEYg=w852-h896-no)
+   ![視窗型態介面](https://lh3.googleusercontent.com/L0wxAGlxz0G9fvQQNamoXugC3WeJdnYaxqaxPnNE_3gnUtH0VBlGNScH_Y44MpkbiYYmLgajHMFt6desqDYYJbYT0RuMvAyrGlDGx9uWuYH-dEm6T6B9SG9dgUSG6uQAFrPATo1llw=w2400)
+
+   ![支援不同語系](https://lh3.googleusercontent.com/-EOQgYAap6YPw7iKQRlvlA4-fr37-4SddypCw44H2uhgpgmQ6FtpjjJ-qg_gJHbwfNRn8GNvvoYqE46yIQwg3xOVzR-5mzfqX8tPhOM06iYdF2gXOuIddcN5rNlCMhmmIxYye7SX8g=w2400)
+
+   ![有許多可調整的下載選項](https://lh3.googleusercontent.com/uEUr-iYs1JKoZukar44sOqxSL908uPTSjSG4eDco-O8bFjjIFkxSRsPy2UMkcnI3Z7Hfn-zZ2wdE9OjRr1CQZs_DfoGjvJLBCoRg9g4GH-JxG9ZpwT8fX8srn958jBzJzNbWcMvdIg=w2400)
 
 ## Execution 執行
 所有操作都必須進到工具檔所在的目錄，在命令列介面下執行。
@@ -256,11 +260,17 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 4. 若是下載出錯，**重新執行即可接續下載**。
 
 ## Workflow 工作流程
-* 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 <code>manhuatai</code>），每套漫畫一個目錄。
+* 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 <code>qq</code>），每套漫畫一個目錄。
 
    ![folder](https://lh3.googleusercontent.com/-Gu8klHdiKfm9c3IKkYLVLd26Wc5W2Fz2QX7--7QNgjewXZRoRDf3uCNxTqRqmYfdzZxly7BRFPhdYWE2bZXKweer_QaC5T2Wxv5fVGuVC2vGxMtG2szUqFgHKx7n9uMaRKCOfWU7A=w589-h386-no)
 
-   ![folder inside work](https://lh3.googleusercontent.com/qEzhnefvmuTdt1o3jR68uhJOkkGafSPiov1QwfuMyDp2AJesQ6sSpBQnUdT_T5-3qbb-u_R48gm_biNWvNT8NNIb-UtvbsUnF02_ADoTXdy-YjhlFCWr4QYigeZ0fGBmv7swnb8GXA=w225-h343-no)
+* 預設每個章節一個壓縮檔。
+
+   ![folder inside work - 預設每個章節一個壓縮檔](https://lh3.googleusercontent.com/80uuGJ0pW8XaVW5aTg_KHp-2HM96ObftI01zYfCUXPUJihqdEf-CSn93cutws3A4ryBvF4jUHFRzn0DzlDxWPuctsrCB5cEC-6oCVchzgTp8uRB8kT97iPr166Lr02AG83ipXwuVlA=w2400)
+
+* 若設定不壓縮章節圖片，則每個章節一個目錄。
+
+   ![folder inside work - 每個章節一個目錄](https://lh3.googleusercontent.com/qEzhnefvmuTdt1o3jR68uhJOkkGafSPiov1QwfuMyDp2AJesQ6sSpBQnUdT_T5-3qbb-u_R48gm_biNWvNT8NNIb-UtvbsUnF02_ADoTXdy-YjhlFCWr4QYigeZ0fGBmv7swnb8GXA=w225-h343-no)
 
    ![folder inside chapter](https://lh3.googleusercontent.com/DsQ4d1Px6WXJWrARFQhnVz5DfCAYkJleDsbeku4LVSJjJuvHjAncDccoqq9ML45KtLgkmOzjhJlaUYyy7C6Sg2KwMRx56yxK1fp9wJTJlAciH8ybkYLcSz05LtbJyrHxv50PZIsrSg=w333-h265-no)
 
