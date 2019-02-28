@@ -1945,7 +1945,10 @@ function check_update() {
 	var update_panel = CeL.new_node({
 		div : {
 			T : '檢查更新中……',
-			C : 'waiting'
+			C : 'waiting',
+			onclick : function() {
+				CeL.toggle_display(update_panel, false);
+			}
 		},
 		id : 'update_panel'
 	}, [ document.body, 'first' ]);
@@ -1994,7 +1997,7 @@ function check_update() {
 		CeL.error({
 			T : [ '更新檢測失敗：%1', e ]
 		});
-		CeL.node_value(update_panel, gettext('更新失敗！'));
+		CeL.node_value(update_panel, _('更新失敗！'));
 		CeL.set_class(update_panel, 'check_failed', {
 			reset : true
 		});

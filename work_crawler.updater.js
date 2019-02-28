@@ -52,7 +52,7 @@ function download_update_tool(update_script_url, callback) {
 	});
 }
 
-function install_npm(package_name, message) {
+function install_npm(package_name, message, dev) {
 	try {
 		require(package_name);
 	} catch (e) {
@@ -62,11 +62,12 @@ function install_npm(package_name, message) {
 		show_info(message || ('安裝需要用到的組件 [' + package_name + ']...'));
 		if (!node_fs.existsSync('node_modules'))
 			node_fs.mkdirSync('node_modules');
-		require('child_process').execSync(
+		require('child_process').execSync('npm install '
 		// https://github.com/kanasimi/work_crawler/issues/104
+		// https://docs.npmjs.com/cli/install
 		// npm install electron --save-dev
 		// sudo npm install -g electron --unsafe-perm=true --allow-root
-		'npm i -D ' + package_name + '@latest', {
+		+ (dev ? '--save-dev ' : '') + package_name + '@latest', {
 			stdio : 'inherit'
 		});
 	}
@@ -94,9 +95,11 @@ function update_components(update_script_name) {
 			// 下載並更新本工具需要用到的組件 gh-updater...
 			install_npm('gh-updater');
 			// 配置圖形使用者介面。
-			install_npm('electron', '下載並更新圖形介面需要用到的組件 electron...');
+			install_npm('electron', '下載並更新圖形介面需要用到的組件 electron...', true);
 			// install_npm('electron-builder');
 			install_npm('electron-updater');
+
+			node_fs.chmodSync('start_gui_electron.sh', '0755');
 
 			show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
 		});

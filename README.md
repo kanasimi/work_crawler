@@ -229,8 +229,10 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
    ![視窗型態介面](https://lh3.googleusercontent.com/L0wxAGlxz0G9fvQQNamoXugC3WeJdnYaxqaxPnNE_3gnUtH0VBlGNScH_Y44MpkbiYYmLgajHMFt6desqDYYJbYT0RuMvAyrGlDGx9uWuYH-dEm6T6B9SG9dgUSG6uQAFrPATo1llw=w2400)
 
+   支援不同語系：
    ![支援不同語系](https://lh3.googleusercontent.com/-EOQgYAap6YPw7iKQRlvlA4-fr37-4SddypCw44H2uhgpgmQ6FtpjjJ-qg_gJHbwfNRn8GNvvoYqE46yIQwg3xOVzR-5mzfqX8tPhOM06iYdF2gXOuIddcN5rNlCMhmmIxYye7SX8g=w2400)
 
+   有許多可調整的下載選項：
    ![有許多可調整的下載選項](https://lh3.googleusercontent.com/uEUr-iYs1JKoZukar44sOqxSL908uPTSjSG4eDco-O8bFjjIFkxSRsPy2UMkcnI3Z7Hfn-zZ2wdE9OjRr1CQZs_DfoGjvJLBCoRg9g4GH-JxG9ZpwT8fX8srn958jBzJzNbWcMvdIg=w2400)
 
 ## Execution 執行

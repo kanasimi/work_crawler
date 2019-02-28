@@ -109,7 +109,7 @@ function build_package(update_script_name) {
 	show_info('安裝打包時需要的套件...');
 	// @see "dependencies" @ package.json
 	// npm install electron-builder
-	child_process.execSync('npm install electron-builder', {
+	child_process.execSync('npm install --save-dev electron-builder', {
 		stdio : 'inherit'
 	});
 
