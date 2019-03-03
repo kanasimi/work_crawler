@@ -130,6 +130,8 @@ function start_update(event_sender) {
 		// nsis可允許用戶自定義安裝位置、添加桌面快捷方式、安裝完成立即啟動、配置安裝圖標等。
 
 		var updater = require("electron-updater"), autoUpdater = updater.autoUpdater;
+		event_sender
+				.send('send_message_isPackaged', autoUpdater.app.isPackaged);
 		if (!autoUpdater.app.isPackaged) {
 			event_sender.send('send_message_log',
 					'所執行的並非安裝包版本，因此不執行安裝包版本的升級檢查。');
@@ -155,7 +157,8 @@ function start_update(event_sender) {
 		});
 		autoUpdater.on('update-not-available', function(info) {
 			event_sender.send('send_message_log', [ '沒有新安裝包：%1',
-					JSON.stringify(info) ]);
+			// {Object}info 會包含 .releaseNotes
+			JSON.stringify(info && info.version) ]);
 		});
 		autoUpdater.on('error', function(error) {
 			event_sender.send('send_message_warn', [ '安裝包更新出錯：%1', error ]);
@@ -169,14 +172,14 @@ function start_update(event_sender) {
 		});
 		autoUpdater.on('update-downloaded', function(event, releaseNotes,
 				releaseName, releaseDate, updateUrl, quitAndUpdate) {
-			event_sender.send('send_message_log', [ '新的安裝包下載完成：%1',
+			event_sender.send('send_message_log', [ '新版安裝包下載完成：%1',
 					JSON.stringify(event) ]);
 
 			require('electron').ipcMain.on('start-install-now',
 			//
 			function(e, arg) {
 				console.log(arguments);
-				console.log("關閉程式以更新安裝包……");
+				console.log("重新啟動應用程式即可更新。");
 				// some code here to handle event
 				autoUpdater.quitAndInstall();
 			});

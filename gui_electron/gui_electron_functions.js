@@ -25,6 +25,7 @@ download_sites_set = {
 		dajiaochong : '大角虫漫画',
 		kuaikan : '快看漫画',
 		weibo : '微博动漫',
+		bilibili : '哔哩哔哩漫画',
 
 		katui : '卡推漫画',
 		pufei : '扑飞漫画',
@@ -97,7 +98,7 @@ download_sites_set = {
 		qidian : '起点中文网',
 
 		// PTCMS
-		'23us' : '顶点小说',
+		// '23us' : '顶点小说',
 		'81xsw' : '八一中文网',
 		'88dus' : '八八读书网',
 		'630book' : '恋上你看书网',
@@ -189,7 +190,19 @@ function check_max_logs() {
 // for i18n: define gettext() user domain resource location.
 // gettext() will auto load (CeL.env.domain_location + language + '.js').
 // e.g., resource/cmn-Hant-TW.js, resource/ja-JP.js
-CeL.env.domain_location = 'resource/';
+CeL.env.domain_location = function() {
+	is_installation_package = CeL.is_installation_package();
+
+	return CeL.env.domain_location
+	// CeL.env.script_base_path: 形如 ...'/work_crawler/gui_electron/'
+	= CeL.env.script_base_path.replace(/gui_electron[\\\/]$/, '')
+	// resource/
+	+ CeL.env.resource_directory_name + '/';
+	// 在安裝包中， `process.cwd()` 可能為
+	// C:\Users\user\AppData\Local\Programs\work_crawler
+// 因此 CeL.env.domain_location 必須提供完整路徑。
+};
+
 // declaration for gettext()
 var _;
 // language force convert
@@ -197,6 +210,7 @@ var force_convert = 'en';
 
 // initialization
 function initializer() {
+
 	CeL.Log.set_board('log_panel');
 	// CeL.set_debug();
 	// 設置完成
@@ -223,10 +237,6 @@ function initializer() {
 	function() {
 	});
 
-	// handle with document.title in IE 8.
-	if (CeL.set_text.need_check_title)
-		_.document_title = document_title;
-
 	// translate all nodes to show in specified language (or default domain).
 	_.translate_nodes();
 
@@ -240,7 +250,7 @@ function initializer() {
 		T : [ 'Default download location: %1', global.data_directory ]
 	});
 	CeL.info({
-		// 🚧
+		// 🚧 https://weblate.org/zh-hant/
 		span : [ {
 			T : '歡迎與我們一同翻譯介面文字！#1',
 			force_convert : force_convert
@@ -262,8 +272,6 @@ function initializer() {
 			|| CeL.null_Object();
 
 	// --------------------------------
-
-	is_installation_package = CeL.is_installation_package();
 
 	// 初始化 initialization: download_site_nodes
 	Object.assign(download_site_nodes, {
@@ -541,6 +549,10 @@ function initializer() {
 			});
 		});
 	});
+	node_electron.ipcRenderer.on('send_message_isPackaged', function(event,
+			isPackaged) {
+		is_installation_package = isPackaged;
+	});
 
 	process.title = _('CeJS 線上小說漫畫下載工具');
 
@@ -553,6 +565,7 @@ function initializer() {
 
 	// 延遲檢測更新，避免 hang 住。
 	setTimeout(check_update, 80);
+	// CeL.set_debug();
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -1207,6 +1220,7 @@ var search_result_columns = {
 		}
 		return {
 			a : status || '❓',
+			R : work_data.id,
 			href : crawler.full_URL(href),
 			onclick : open_external
 		};
@@ -1342,6 +1356,24 @@ function show_search_result(work_data_search_queue) {
 				}
 			},
 			C : 'button'
+		}, {
+			b : [ '📥😘', {
+				T : '下載所有最愛清單中的本作品'
+			} ],
+			onclick : function() {
+				for ( var site_id in work_data_search_queue) {
+					if (site_id in not_found_site_hash)
+						continue;
+
+					var work_data = work_data_search_queue[site_id];
+					var crawler = get_crawler(site_id);
+					var favorite_list = get_favorites(crawler);
+					var title = work_data.title || work_data.id;
+					if (favorite_list.includes(title))
+						add_new_download_job(crawler, title);
+				}
+			},
+			C : 'button'
 		});
 	}
 
@@ -1414,8 +1446,8 @@ var language_used;
 function search_work_title() {
 	if (!language_used) {
 		CeL.info({
-			// 點選
-			T : '請先指定要搜尋的語言或網站。'
+			// 點選 語言
+			T : '請先指定要搜尋的作品類別或網站。'
 		});
 		return;
 	}
@@ -1488,8 +1520,9 @@ function search_work_title() {
 		}
 
 		site_id = language_used + '/' + site_id;
-		var crawler = get_crawler(site_id);
-		if (CeL.to_millisecond(crawler.chapter_time_interval) > 10 * 1000) {
+		var crawler = get_crawler(site_id), chapter_time_interval = crawler
+				.get_chapter_time_interval('search');
+		if (chapter_time_interval > 10 * 1000) {
 			all_done({
 				process_status : [ '本網站強制等待時間過長，為防封鎖不作搜尋。' ]
 			});
@@ -1955,20 +1988,25 @@ function check_update() {
 
 	function update_process(version_data) {
 		// console.log(version_data);
-		var package_data = is_installation_package ? process.resourcesPath
-				+ '\\app.asar\\' : CeL.work_crawler.prototype.main_directory;
-		package_data = JSON.parse(CeL.read_file(package_data + 'package.json')
-				.toString());
-
 		if (!version_data.has_new_version) {
 			// check completed
-			CeL.toggle_display(update_panel, false);
 			CeL.log({
 				T : '未發現新版本。'
 			});
+			CeL.toggle_display(update_panel, false);
 			return;
 		}
 
+		var package_data = is_installation_package ? process.resourcesPath
+				+ '\\app.asar\\' : CeL.work_crawler.prototype.main_directory;
+		package_data = CeL.read_file(package_data + 'package.json');
+		if (!package_data) {
+			console.error('無法讀取版本資訊 package.json！');
+			CeL.toggle_display(update_panel, false);
+			return;
+		}
+
+		package_data = JSON.parse(package_data.toString());
 		var has_version = version_data.has_version || package_data
 				&& package_data.package_data.version;
 		CeL.new_node([ {

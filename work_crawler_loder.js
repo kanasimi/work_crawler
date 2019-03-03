@@ -111,7 +111,9 @@ if (!CeL.random_id)
 
 // CeL.set_debug(6);
 
-CeL.run([
+// 先載入 application.platform.nodejs 是為了
+// CeL.env.domain_location @ gui_electron_functions.js
+CeL.run('application.platform.nodejs', [
 // Add color to console messages. 添加主控端報告的顏色。
 'interact.console',
 // 載入批量下載小說、漫畫的主要功能。
