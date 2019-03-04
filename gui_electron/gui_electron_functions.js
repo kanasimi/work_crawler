@@ -273,6 +273,22 @@ function initializer() {
 
 	// --------------------------------
 
+	select_theme(default_configuration.CSS_theme);
+
+	CeL.new_node([ {
+		T : '布景主題：'
+	}, {
+		T : 'light',
+		C : 'light',
+		onclick : select_theme
+	}, {
+		T : 'dark',
+		C : 'dark',
+		onclick : select_theme
+	} ], 'select_theme_panel');
+
+	// --------------------------------
+
 	// 初始化 initialization: download_site_nodes
 	Object.assign(download_site_nodes, {
 		link_of_site : CeL.null_Object(),
@@ -1522,7 +1538,9 @@ function search_work_title() {
 		site_id = language_used + '/' + site_id;
 		var crawler = get_crawler(site_id), chapter_time_interval = crawler
 				.get_chapter_time_interval('search');
-		if (chapter_time_interval > 10 * 1000) {
+		CeL.debug(crawler.site_id + ' chapter_time_interval: '
+				+ chapter_time_interval);
+		if (chapter_time_interval > 60 * 1000) {
 			all_done({
 				process_status : [ '本網站強制等待時間過長，為防封鎖不作搜尋。' ]
 			});
@@ -2061,4 +2079,16 @@ function set_taskbar_progress(progress) {
 function open_DevTools() {
 	node_electron.ipcRenderer.send('open_DevTools', true);
 	return false;
+}
+
+// ----------------------------------------------
+
+// Select CSS theme
+function select_theme(style) {
+	if (typeof style !== 'string' && !(style = this.innerHTML)) {
+		return;
+	}
+	default_configuration.CSS_theme = style;
+	save_default_configuration();
+	document.body.className = style;
 }
