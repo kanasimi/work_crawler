@@ -152,7 +152,9 @@ download_options_set = {
 	preserve_download_work_layer : '下載完成後保留下載進度條'
 },
 // const `global.data_directory`/`default_configuration_file_name`
-default_configuration_file_name = 'work_crawler.configuration.json';
+default_configuration_file_name = 'work_crawler.configuration.json',
+//
+theme_list = 'light|dark'.split('|');
 
 var save_config_this_time = true;
 
@@ -275,17 +277,19 @@ function initializer() {
 
 	select_theme(default_configuration.CSS_theme);
 
-	CeL.new_node([ {
+	var theme_nodes = [ {
 		T : '布景主題：'
-	}, {
-		T : 'light',
-		C : 'light',
-		onclick : select_theme
-	}, {
-		T : 'dark',
-		C : 'dark',
-		onclick : select_theme
-	} ], 'select_theme_panel');
+	} ];
+	theme_list.forEach(function(theme_name) {
+		theme_nodes.push({
+			T : theme_name,
+			C : theme_name,
+			onclick : select_theme
+		});
+	});
+	CeL.new_node(theme_nodes, 'select_theme_panel');
+	// free
+	theme_nodes = null;
 
 	// --------------------------------
 
@@ -2026,7 +2030,7 @@ function check_update() {
 
 		package_data = JSON.parse(package_data.toString());
 		var has_version = version_data.has_version || package_data
-				&& package_data.package_data.version;
+				&& package_data.version;
 		CeL.new_node([ {
 			a : {
 				T : [ '有新版本：%1', version_data.latest_version ]
@@ -2084,11 +2088,21 @@ function open_DevTools() {
 // ----------------------------------------------
 
 // Select CSS theme
-function select_theme(style) {
-	if (typeof style !== 'string' && !(style = this.innerHTML)) {
+function select_theme(theme) {
+	if (typeof theme !== 'string') {
+		theme = this.innerHTML;
+	}
+	if (!theme_list.includes(theme)) {
+		CeL.warn('select_theme: Invalid theme name: ' + theme);
 		return;
 	}
-	default_configuration.CSS_theme = style;
+
+	theme_list.forEach(function(theme_name) {
+		CeL.set_class(document.body, theme_name, {
+			remove : theme_name !== theme
+		});
+	});
+
+	default_configuration.CSS_theme = theme;
 	save_default_configuration();
-	document.body.className = style;
 }
