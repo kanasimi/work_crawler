@@ -17,7 +17,9 @@ var crawler = CeL.SinMH({
 
 	base_URL : 'http://www.duzhez.com/',
 
-	extract_work_id : CeL.is_digits,
+	extract_work_id : function(work_information) {
+		return CeL.is_digits(work_information) && work_information;
+	},
 
 	// for 年轻人脱离黑魔法虽然刻不容缓、但试着就业之后待遇却很好、社长和使魔也非常可爱真是棒极了！
 	acceptable_types : 'images',
