@@ -80,8 +80,12 @@ var crawler = new CeL.work_crawler({
 	},
 	get_chapter_list : function(work_data, html) {
 		work_data.chapter_list = [];
+		// <a data-order="34" class="episode RentalContent"
+		// <a data-order="35" class="episode "
 		html = html.between('<div class="episode', '<div class="scroll')
-		//
+		// <div class="scroll scroll-up" id="ScrollUp"><img
+		// src="/img/official_manga/under_arrow.svg?1543454323"
+		// alt="最上部へ"/></div>
 		.between('>').split('href="/manga/official/').slice(1)
 		//
 		.forEach(function(text) {
@@ -90,17 +94,23 @@ var crawler = new CeL.work_crawler({
 				url : '/manga/official/'
 				//
 				+ text.between(null, '"'),
-				date : text.between('<div class="up-time">', '</span>')
+				date : text.between('<div class="up-time">', '</div>')
 				//
 				.replace('更新', ''),
-				// '<div class="title">', '</div>'
-				title : text.between(' class="title">', '</')
+				// <div class="title">第1回</div>
+				title : text.between(' class="title">', '</'),
+				// <div class="rental-coin">70AC</div>
+				limited : text.between(' class="rental-coin">', '</'),
+				// <div class="volume"> 1巻収録 </div>
+				収録 : text.between(' class="volume">', '</')
 			});
 		});
 		work_data.chapter_list.reverse();
+		// console.log(work_data.chapter_list);
 	},
 
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		// console.log(html);
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
 		Object.assign(chapter_data, {
 			// 設定必要的屬性。
