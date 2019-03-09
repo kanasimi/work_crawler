@@ -99,7 +99,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [有妖气](http://www.u17.com/) | u17.js | **本工具無法下載VIP付費內容** |
 | [知音漫客](https://www.zymk.cn/) | zymk.js | |
 | [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
-| [哔哩哔哩漫画](https://manga.bilibili.com/m) | bilibili.js | **本工具無法下載 APP only & 付費內容** 收費作品太多，PC端只給看10話，感覺很難用。並且系統太複雜，每次改版恐怕得花許多時間來修正。 |
+| [哔哩哔哩漫画](https://manga.bilibili.com/m) | bilibili.js | 收費作品太多，PC端只給看10話，感覺很難用。並且系統太複雜，每次改版得花許多時間來修正，恐不再維護。 **本工具無法下載 APP only & 付費內容** |
+| [SF漫画](https://manhua.sfacg.com/) | sfacg.js | |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。拿來下載日本漫畫的人好像比較多。  **本工具無法下載付费章节** |
 | [土豪漫画](https://www.tohomh123.com/) | tohomh.js | 系統似 dm5。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | **本工具無法下載VIP付費內容** |

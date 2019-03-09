@@ -26,6 +26,7 @@ download_sites_set = {
 		kuaikan : '快看漫画',
 		weibo : '微博动漫',
 		bilibili : '哔哩哔哩漫画',
+		sfacg : 'SF漫画',
 
 		katui : '卡推漫画',
 		pufei : '扑飞漫画',
@@ -1519,7 +1520,7 @@ function search_work_title() {
 	} ], 'search_results');
 
 	sites = download_sites_set[language_used];
-	var work_data_search_queue = CeL.null_Object(), sites = Object.keys(sites), site_count = sites.length, done = 0;
+	var work_data_search_queue = CeL.null_Object(), sites = Object.keys(sites), site_count = sites.length, done = 0, found = 0;
 	sites.forEach(function(site_id) {
 		function all_done(work_data) {
 			if (!work_data_search_queue) {
@@ -1531,6 +1532,8 @@ function search_work_title() {
 			// for debug
 			if (CeL.is_debug())
 				console.log(work_data);
+			if (work_data.chapter_count >= 0)
+				found++;
 			if (++done === site_count) {
 				// all done
 				work_data_search_queue.work_title = work_title;
@@ -1558,7 +1561,7 @@ function search_work_title() {
 
 			CeL.remove_all_child('searching_process');
 			CeL.new_node({
-				T : [ '已完成 %1', done + ' / ' + site_count ]
+				T : [ '已完成 %1', found + ' / ' + done + ' / ' + site_count ]
 			}, 'searching_process');
 
 			if (site_count - done < 12) {
@@ -1626,7 +1629,9 @@ function Download_job(crawler, work_id) {
 	this.work_id = work_id;
 	// 顯示下載進度條。
 	this.progress_layer = CeL.new_node({
-		div : '0%',
+		div : {
+			T : '下載任務初始化中……'
+		},
 		C : 'progress_layer'
 	});
 	var this_job = this;
@@ -1852,6 +1857,18 @@ function after_download_chapter(work_data, chapter_NO) {
 	work_data.downloaded_chapters = chapter_NO;
 	var percent = Math.round(1000 * chapter_NO / work_data.chapter_count) / 10
 			+ '%', job = Download_job.job_list[work_data.job_index];
+
+	// add link to work
+	var title_tag = job.layer.childNodes[0];
+	if (!title_tag.href) {
+		job.layer.replaceChild(CeL.new_node({
+			a : title_tag.childNodes,
+			href : job.crawler.full_URL(job.crawler.work_URL, work_data.id),
+			onclick : open_external,
+			C : title_tag.className
+		}), title_tag);
+	}
+
 	job.progress_layer.style.width = percent;
 	if (work_data.error_list) {
 		job.progress_layer.style.backgroundColor = '#f88';
