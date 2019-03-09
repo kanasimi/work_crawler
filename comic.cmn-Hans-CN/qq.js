@@ -21,6 +21,8 @@ var crawler = new CeL.work_crawler({
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	// skip_error : true,
 
+	acceptable_types : 'images',
+
 	// {Natural}MIN_LENGTH:最小容許圖案檔案大小 (bytes)。
 	MIN_LENGTH : 900,
 
