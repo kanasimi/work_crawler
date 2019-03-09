@@ -98,8 +98,15 @@ crawler = new CeL.work_crawler({
 			var matched = token.match(PATTERN_chapter_item), chapter_data = {
 				url : matched[1],
 				title : matched[2],
-				like : get_label(token.between(' class="like">', '</td>'))
+				like : token.between(' class="like">', '</td>')
 			};
+			// <td width="15%" class="like">
+			// <i class="iconfont">&#xe613</i>
+			// 4806
+			// </td>
+			chapter_data.like = get_label(chapter_data.like.between('</i>')
+					|| chapter_data.like);
+
 			matched = token.match(/<td>(\d{1,2}-\d{1,2})<\/td>/);
 			if (matched) {
 				// update
@@ -117,19 +124,22 @@ crawler = new CeL.work_crawler({
 			// 轉成由舊至新之順序。
 			work_data.chapter_list.reverse();
 		}
-		// console.log(work_data.chapter_list);
+		// console.log(work_data.chapter_list.slice(-2));
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	parse_chapter_data : function(html, work_data, get_label) {
-		var chapter_data = {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		var chapter_data = Object.assign(
+		//
+		work_data.chapter_list[chapter_NO - 1], {
 			// 赞我
 			praise : +html.between('<li class="praise-comic">', '</li>')
 					.between('<span class="num">', '</span>'),
 			// 评论
 			comment : +html.between('"去评论"', '</li>').between('</i>', '</a>'),
 			image_list : []
-		}, PATTERN_IMAGE = / data-kksrc="([^<>"]+)"([^<>]+)/g, matched;
+		}), PATTERN_IMAGE = / data-kksrc="([^<>"]+)"([^<>]+)/g, matched;
+		// console.log(chapter_data);
 
 		// 201805 快看漫画改版。
 		html = html.between(' comic-imgs"', '</div>');
