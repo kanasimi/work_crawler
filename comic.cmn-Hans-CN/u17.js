@@ -18,6 +18,10 @@ crawler = new CeL.work_crawler({
 	// one_by_one : true,
 	base_URL : 'http://www.u17.com/',
 
+	// https://github.com/kanasimi/work_crawler/issues/250
+	// e.g., 97661 破例婚约（全彩）
+	acceptable_types : 'png',
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'www/ajax.php?mod=comic&act=comic_suggest&q=',
 	parse_search_result : function(html) {

@@ -24,6 +24,10 @@ crawler = new CeL.work_crawler({
 	// one_by_one : true,
 	base_URL : 'https://www.zymk.cn/',
 
+	// https://github.com/kanasimi/work_crawler/issues/247
+	// e.g., 93 洛小妖
+	acceptable_types : 'png',
+
 	// 取得伺服器列表。
 	// use_server_cache : true,
 	server_URL : 'https://server.zymkcdn.com/mhpic.asp'
