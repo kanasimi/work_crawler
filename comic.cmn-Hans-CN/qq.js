@@ -16,6 +16,10 @@ var crawler = new CeL.work_crawler({
 	// one_by_one : true,
 	base_URL : 'http://ac.qq.com/',
 
+	// https://github.com/kanasimi/work_crawler/issues/251
+	// e.g., 630166 19天
+	acceptable_types : 'png',
+
 	// allow .jpg without EOI mark.
 	// allow_EOI_error : true,
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
