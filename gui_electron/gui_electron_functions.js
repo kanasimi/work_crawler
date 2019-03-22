@@ -1,6 +1,11 @@
 ﻿/**
+ * @fileoverview 圖形介面主要執行機制。
+ * 
  * 新增或更新網站的時候，除了.js 工具檔功能寫完之外，還必須要更改 README.md、本檔案中的 download_sites_set 以及
  * GitHub 上的簡介。
+ * 
+ * 增加下載選項的時候，必須同步更改本檔案中的 download_options_set、CeL.application.net.work_crawler
+ * 中的 Work_crawler_prototype, import_arg_hash。
  */
 
 // const
@@ -99,10 +104,13 @@ download_sites_set = {
 		qidian : '起点中文网',
 
 		// PTCMS
-		// '23us' : '顶点小说',
+		'23us' : '顶点小说',
 		'81xsw' : '八一中文网',
 		'88dus' : '八八读书网',
 		'630book' : '恋上你看书网',
+		biquge : '笔趣阁',
+		'xbiquge.cc' : '笔趣阁.cc',
+		xbiquge : '新笔趣阁',
 
 		// 杰奇小说连载系统
 		kanshushenzhan : '看书神站',
@@ -144,6 +152,7 @@ download_options_set = {
 	skip_chapter_data_error : '當無法取得 chapter 資料時，直接嘗試下一章節。',
 
 	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。',
+	// overwrite_old_file : '當新獲取的檔案比較大時，覆寫舊的檔案。',
 	main_directory : '下載檔案儲存目錄路徑。圖片檔+紀錄檔下載位置。',
 	user_agent : '瀏覽器識別。運行前後始終維持相同的瀏覽器識別，應該就不會影響到下載。',
 
@@ -1232,15 +1241,22 @@ var search_result_columns = {
 	} ],
 
 	狀況 : [ '作品狀況', function(crawler, work_data) {
-		var status = work_data.status, href = crawler.work_URL(work_data.id);
+		var status = work_data.status,
+		//
+		href = crawler.full_URL(crawler.work_URL, work_data.id);
 		if (Array.isArray(status)) {
 			// tags
 			status = status.join();
 		} else if (status) {
 			status = status.replace(/[\s,;.，；。]+$/, '');
 		}
-		return {
-			a : status || '❓',
+		status = status || '❓';
+		return Array.isArray(href) ? {
+			// 對於必須要POST才能獲得的網址，不設定連結。
+			span : status,
+			R : work_data.id
+		} : {
+			a : status,
 			R : work_data.id,
 			href : crawler.full_URL(href),
 			onclick : open_external
@@ -1259,7 +1275,9 @@ var search_result_columns = {
 		else
 			node = node || work_data.last_update;
 
-		node = work_data.latest_chapter_url ? [ {
+		node = work_data.latest_chapter_url
+		//
+		&& !Array.isArray(work_data.latest_chapter_url) ? [ {
 			a : node,
 			href : crawler.full_URL(work_data.latest_chapter_url),
 			onclick : open_external
