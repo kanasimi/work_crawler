@@ -11,10 +11,10 @@
 -->
 
 # CeJS 線上小說漫畫下載工具 online novels / comics downloader
-- [en] Download novels (→ epub) and comics with [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) and [command-line interface](https://en.wikipedia.org/wiki/Command-line_interface).
-- [TW] 批量下載小說 (→ epub)、漫畫網站的工具。視窗+命令列介面。
-- [CN] 批量下载小说 (→ epub)、漫画网站的网络爬虫。图形+命令行界面。
-- [ja] ウェブ小説 (→ epub)、ウェブ漫画作品を一括ダウンロードツール。グラフィカル+コマンドラインインターフェース。
+- [en] Tools to download novels (→ epub) and comics.
+- [TW] 批量下載小說 (→ epub)、漫畫網站的工具。
+- [CN] 批量下载小说 (→ epub)、漫画网站的网络爬虫。
+- [ja] ウェブ小説 (→ epub)、ウェブ漫画作品を一括ダウンロードツール。
 
 ## TOC 快速瀏覽
 * [Installation 安裝](#installation-安裝)
@@ -37,6 +37,13 @@
 | macOS | ✔️ |
 | UNIX, Linux | ✔️ |
 <!-- | Android | ❌ | -->
+
+## Interface 支援介面
+| Interface 介面/界面<br />インターフェース | support 支援狀況 |
+| --- | --- |
+| [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface)<br />視窗/图形<br />グラフィカル | ✔️ |
+| [CLI](https://en.wikipedia.org/wiki/Command-line_interface)<br />命令列/命令行<br />コマンドライン | ✔️ |
+| API<br />應用程式介面 | ✔️ |
 
 ## Language support 多語言支援
 Welcome to join [the translating project](https://github.com/kanasimi/work_crawler/issues/185)!
@@ -71,12 +78,14 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
+| [卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180) | ck101.js | Discuz! X3 |
 | [起点中文网](https://www.qidian.com/) | qidian.js | **本工具無法下載 VIP章节內容** |
 | [八一中文网](http://www.81xsw.com/) | 81xsw.js | [PTCMS](https://www.ptcms.com/)系统 |
 | [八八读书网](http://www.88dus.com/) | 88dus.js | 88读书网(88dushu)，PTCMS? |
-| [顶点小说](http://www.23us.com/) | ~~archive/23us.com.js~~ | PTCMS，限制了取得頁面的數量和頻率，暫時放棄。 |
+| [顶点小说](https://www.x23us.com/) | 23us.js<br />~~archive/23us.com.js~~ | PTCMS? 有許多無內容/空章節 |
 | [顶点小说](https://www.23us.cc/) | ~~archive/23us.2018.js~~ | [WMCMS](http://www.weimengcms.com/index.html) (未梦开源小说程序) [仿电脑顶点小说模板](http://www.weimengcms.com/html/temple/article/141.html) or PTCMS? 自 2018/12/9 23:56 最後一次連接 |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | PTCMS |
+| [笔趣阁](https://www.xs.la/)<br />[笔趣阁.cc](http://www.xbiquge.cc/)<br />[新笔趣阁](https://www.xbiquge6.com/) | biquge.js<br />xbiquge.js<br />xbiquge.cc.js | PTCMS |
 | [看书神站](https://www.kanshushenzhan.com/) | kanshushenzhan.js | [杰奇小说连载系统](https://www.jieqi.com/files/page/html/product/article.html) |
 | [花香居](https://www.huaxiangju.com/) | huaxiangju.js | 杰奇小说连载系统 |
 | [追书帮](http://www.zhuishubang.com/) | zhuishubang.js | 杰奇小说连载系统 |
@@ -84,7 +93,6 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [落霞小说网](http://www.luoxia.com/) | luoxia.js | WordPress，數量少、速度較慢但品質較高，較少錯字和自我審查。 |
 | [努努书坊](https://www.kanunu8.com/) | kanunu.js | 有些非流行網路小說的書。 |
 | [稻草人书屋](http://www.daocaorenshuwu.com/) | daocaoren.js | 有些非流行網路小說的書 |
-| [卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180) | ck101.js | Discuz! X3 |
 
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
@@ -110,7 +118,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [360漫画](http://www.xatxwh.com/) | 360taofu.js | 有頻率限制。有些漫畫畫質較高，然而本站有太多缺圖、亂序、錯漏話。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) |
 | [365漫画网](http://www.iqg365.com/) | iqg365.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
 | [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
-| [看漫画](https://www.manhuagui.com/) | manhuagui.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
+| [看漫画](https://www.manhuagui.com/) | manhuagui.js<br />manhuagui_tw.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [亲亲漫画网](http://www.duzhez.com/) | 930mh.js | 有些韓國漫畫。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
@@ -236,6 +244,12 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
    有許多可調整的下載選項：
    ![有許多可調整的下載選項](https://lh3.googleusercontent.com/uEUr-iYs1JKoZukar44sOqxSL908uPTSjSG4eDco-O8bFjjIFkxSRsPy2UMkcnI3Z7Hfn-zZ2wdE9OjRr1CQZs_DfoGjvJLBCoRg9g4GH-JxG9ZpwT8fX8srn958jBzJzNbWcMvdIg=w2400)
+
+   可選用暗色系主題：
+   ![暗色系主題](https://lh3.googleusercontent.com/qS2i8iJTQ21bY8_IbHkBDG0__svP_zJIaYXKREbXW3lNmYA4XyJVLfJ0eyvJ6mb_k0jmGXNLRmKsngfdob-lkrLrHq9HLkcP3vVgXxx4ZQLbA85o7bRAurPiN_-Py3t7AZoop5S78g=w2400)
+
+   能一鍵搜尋各網站與下載作品：
+   ![一鍵搜尋各網站與下載作品](https://lh3.googleusercontent.com/pz0zKuF5-kxFle8EgoUMfNAF7V8Kq6M_Dw9HVBvbXrF3hIW94voHHstMSsoZXmmmuVCxCk-Tfev6g0OJ2Ee7aZViYGiCB9hi5lJRlJ0r0eY9KjYkgW-BV2OOq8fPwp0Hi8RylR-YQQ=w2400)
 
 ## Execution 執行
 所有操作都必須進到工具檔所在的目錄，在命令列介面下執行。
