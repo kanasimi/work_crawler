@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載ハーメルン - SS･小説投稿サイト- 小説的工具。 Download Hameln novels.
+ * 批量下載 ハーメルン - SS･小説投稿サイト- 小説的工具。 Download Hameln novels.
  */
 
 'use strict';
@@ -62,10 +62,12 @@ var crawler = new CeL.work_crawler({
 			throw matched[1].trim();
 		}
 
-		html = html.between('<table width=100% class=table1>', '</div>');
+		// <table class="table1">
+		// <table width=100% class=table1>
+		html = html.between('<table class="table1">', '</div>');
 		var work_data = CeL.null_Object(), PATTERN =
-		//
-		/<td bgcolor=#DDDDDD[^<>]*>([^<>]+)<\/td><td[^<>]*>(.+?)<\/td>/g;
+		// 2019/3/10 ハーメルン 改版
+		/<td class="label"[^<>]*>([^<>]+)<\/td><td[^<>]*>(.+?)<\/td>/g;
 
 		while (matched = PATTERN.exec(html)) {
 			work_data[matched[1]] = get_label(matched[2]);
@@ -76,7 +78,7 @@ var crawler = new CeL.work_crawler({
 			title : work_data.タイトル,
 
 			// 選擇性屬性：須配合網站平台更改。
-			// e.g., 連載(連載中), 連載(完結)
+			// e.g., 連載(連載中) 2話, 連載(完結)
 			status : work_data.話数.replace(/連載\(([^()]+)\)/, '$1').split(/\s+/),
 			author : work_data.作者,
 			last_update : work_data.最新投稿,
@@ -119,7 +121,11 @@ var crawler = new CeL.work_crawler({
 		work_data.chapter_list = [];
 		var part_title;
 		html.between('<table width=100%>', '</div>')
-		//
+		/**
+		 * <code>
+		<tr bgcolor="#FFFFFF" class="bgcolor3"><td width=60%><span id="7">　</span> <a href=./7.html style="text-decoration:none;">第１話 始まり</a></td><td><NOBR>2017年04月15日(土) 17:45<span title="2018年12月28日(金) 11:17改稿">(<u>改</u>)</span></NOBR></td></tr>
+		</code>
+		 */
 		.each_between('<tr', '</tr>', function(text) {
 			if (text.includes('<td colspan=2><strong>')) {
 				part_title = text.between('<strong>', '</strong>');
