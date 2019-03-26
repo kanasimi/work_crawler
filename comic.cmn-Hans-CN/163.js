@@ -120,6 +120,16 @@ var crawler = new CeL.work_crawler({
 		var seedLength = html.between('window.DATA.seedLength = ', ';') | 0,
 		//
 		chapter_data = html.between('window.PG_CONFIG', '</script>');
+		if (!seedLength && !chapter_data) {
+			chapter_data = html
+			// e.g., 太子: <h3>因版权限制，您所在的地区无法观看，敬请海涵</h3>
+			.between('<div class="error-nodata">', '</div>');
+			chapter_data = get_label(chapter_data.between('<h3>', '</h3>')
+					|| chapter_data);
+			this.onerror(chapter_data || 'No chapter data get', work_data);
+			return;
+		}
+
 		chapter_data = 'chapter_data'
 		//
 		+ chapter_data.replace(/window\.PG_CONFIG/g, 'chapter_data')
@@ -131,7 +141,7 @@ var crawler = new CeL.work_crawler({
 		// 設定必要的屬性。
 		chapter_data.title = chapter_data.section.fullTitle;
 		chapter_data.image_list = chapter_data.images;
-		// 2017/6/15 改版
+		// 2017/6/15 改版。
 		chapter_data.images.forEach(function(image) {
 			image.url = image.url.slice(0, -seedLength);
 		});
