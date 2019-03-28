@@ -58,9 +58,9 @@ crawler = new CeL.work_crawler({
 	// 10s, 15s 在下載過100章(1 hr)之後一樣會 ban 5hr。
 	// 20s, 30s 在下載過200章(~2 hr)之後一樣會 ban。
 	// 60s 大致OK
-	// 2019/2/6: 40s: NG, ban 1 day.
-	// 50s 在下載過50章後一樣會 ban。.5 day?
-	chapter_time_interval : '180s',
+	// 2019/2/6: 40s: NG, ban 1 day. 50s 在下載過50章後一樣會 ban。.5 day?
+	// 2019/3/1: 181s: NG. 3~4min 時，似乎會不固定時間檢查、平均每天被封鎖一次，每次封鎖一日？
+	chapter_time_interval : '4min',
 
 	// 2018/3/3 已經不再有常常出現錯誤的情況。
 	// allow .jpg without EOI mark.
@@ -160,8 +160,10 @@ crawler = new CeL.work_crawler({
 
 			chapter_data = {
 				url : matched[1],
-				title : get_label(matched[2] + ' '
-						+ matched[3].between('<i>', '</i>'))
+				title : get_label(matched[2]
+				// .check_downloaded_chapters() 必須先確保已獲得最終之 chapter_data.title。
+				// + ' ' + matched[3].between('<i>', '</i>')
+				)
 			};
 			if (matched = matched[1].match(/(\d+)\.html$/)) {
 				chapter_data.id = matched[1] | 0;
@@ -211,9 +213,11 @@ crawler = new CeL.work_crawler({
 				}
 				// console.log(chapter_list);
 
+				// set latest/max part_NO
+				chapter_list.part_NO = part_NO;
+
 				if (part_NO > 1) {
 					// rearrange part_NO
-					chapter_list.part_NO = part_NO;
 					// 初始化 NO_in_part
 					var NO_in_part_hash = new Array(part_NO + 1).fill(0);
 					chapter_list.forEach(function(chapter_data) {
@@ -232,11 +236,19 @@ crawler = new CeL.work_crawler({
 					});
 				}
 			}
+
 			// console.log(chapter_list);
 			// console.log(JSON.stringify(chapter_list));
 			// console.log(chapter_list.slice(0, 20));
 			// console.log(chapter_list.slice(-20));
+
+			// console.log(work_data.chapter_list);
 			work_data.chapter_list = chapter_list;
+
+			if (this.recheck === 'multi_parts_changed'
+					&& chapter_list.part_NO > 1) {
+				this.check_downloaded_chapters(work_data, chapter_list);
+			}
 		}
 	},
 
