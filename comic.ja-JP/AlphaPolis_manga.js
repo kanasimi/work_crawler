@@ -86,8 +86,13 @@ var crawler = new CeL.work_crawler({
 		// <div class="scroll scroll-up" id="ScrollUp"><img
 		// src="/img/official_manga/under_arrow.svg?1543454323"
 		// alt="最上部へ"/></div>
-		.between('>').split('href="/manga/official/').slice(1)
-		//
+		.between('>').split(' href="/manga/official/').slice(1)
+		// <a href="/manga/official/462000159/1705" data-order="16"
+		// class="episode RentalContent" target="_blank"
+		// data-href="/manga/official/462000159/1705"><div class="thumbnail
+		// lazyloading"><img src="/?1553506644" alt=""
+		// data-src="https://cdn-image.alphapolis.co.jp/official_manga/rental_episode/462000159/1705/5af0f21a-8f08-4111-adcf-109dac113c05/thumbnail.png"
+		// class="lazyload"/></div>
 		.forEach(function(text) {
 			// console.log(JSON.stringify(text));
 			work_data.chapter_list.push({
