@@ -89,12 +89,14 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 		work_data.chapter_list = work_data.official_work.stories.map(
 		//
 		function(chapter_data) {
-			if (!chapter_data.story)
+			var story = chapter_data.story;
+			if (!story)
 				return;
 			return {
-				id : chapter_data.story.id,
-				title : chapter_data.story.short_name,
-				url : 'viewer/stories/' + chapter_data.story.id
+				id : story.id,
+				title : story.short_name,
+				limited : !chapter_data.readable && chapter_data.message,
+				url : 'viewer/stories/' + story.id
 			};
 		}).filter(function(chapter_data) {
 			return !!chapter_data;
@@ -103,7 +105,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 		// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
 		this.set_chapter_NO_via_title(work_data);
 
-		// console.log(work_data);
+		// console.log(work_data.official_work.stories);
 	},
 
 	pre_parse_chapter_data
@@ -135,7 +137,12 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 		// /api/v1/viewer/token/d220bbe0ed815ceea5fd0308021fff9f.json
 		'"'), function(XMLHttp) {
 			try {
-				html = JSON.parse(XMLHttp.responseText);
+				html = XMLHttp.responseText;
+				if (/<html/.test(html)) {
+					callback();
+					return;
+				}
+				html = JSON.parse(html);
 				if (html.error)
 					throw html.error;
 			} catch (e) {
@@ -160,6 +167,12 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 			if (html.error)
 				throw html.error;
 		} catch (e) {
+			// エピソードの公開期限が過ぎました
+			if (html.includes('期限')) {
+				return {
+					limited : html
+				};
+			}
 			if (this.skip_error)
 				this.onwarning(e);
 			else
