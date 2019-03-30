@@ -16,18 +16,18 @@ var crawler = new CeL.work_crawler({
 
 	// one_by_one : true,
 	base_URL : 'https://manga.bilibili.com/',
+	API_BASE : 'twirp/comic.v1.Comic/',
 	// 圖床主機
 	BFS_URL : 'https://i0.hdslb.com',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
-		return [ this.base_URL + 'twirp/comic.v1.Comic/Search',
 		// https://github.com/kanasimi/work_crawler/issues/233
-		Buffer.from(JSON.stringify({
+		return [ this.API_BASE + 'Search', {
 			"page_num" : 1,
 			"page_size" : 10,
 			"key_word" : work_title
-		})), {
+		}, {
 			headers : {
 				'Content-Type' : 'application/json;charset=UTF-8'
 			}
@@ -47,7 +47,7 @@ var crawler = new CeL.work_crawler({
 	// e.g., 'https://manga.bilibili.com/m/detail/mc25852'
 	// work_URL : 'm/detail/mc',
 	work_URL : function(work_id) {
-		return [ 'twirp/comic.v1.Comic/ComicDetail?device=h5&platform=h5', {
+		return [ this.API_BASE + 'ComicDetail?device=h5&platform=h5', {
 			comic_id : work_id
 		} ];
 	},
@@ -62,6 +62,7 @@ var crawler = new CeL.work_crawler({
 			image : work_data.vertical_cover,
 			update_frequency : work_data.renewal_time,
 			is_finished : work_data.is_finish,
+			status : work_data.is_finish ? '完结' : '连载',
 			// is_limit=1: 在中國以外區域觀看日本漫畫?
 			// comic_type=1: 收費漫畫? 此章节为付费章节
 			some_limited : work_data.is_limit || work_data.comic_type,
@@ -72,11 +73,11 @@ var crawler = new CeL.work_crawler({
 					title : /* chapter_data.title || */
 					chapter_data.short_title,
 					limited : chapter_data.is_locked,
-					url : [ 'twirp/comic.v1.Comic/Index?device=h5&platform=h5',
+					url : [ this.API_BASE + 'Index?device=h5&platform=h5',
 					//
-					JSON.stringify({
+					{
 						ep_id : chapter_data.id
-					}), {
+					}, {
 						headers : {
 							Accept : 'application/json, text/plain, */*',
 							'Content-Type' : 'application/json;charset=UTF-8',
@@ -111,29 +112,28 @@ var crawler = new CeL.work_crawler({
 		data_URL = this.BFS_URL + data_URL.data;
 		this.get_URL(data_URL, function(XMLHttp) {
 			// console.log(XMLHttp);
-			var seasonId = work_data.id, episodeId = chapter_data.id,
-			// .slice(9): skip "BILICOMIC"...
-			indexData = XMLHttp.buffer.slice(9);
 
-			if (indexData.length === 0) {
-				// 或可由 pwork_data.age_allow 來檢查。
+			var indexData = XMLHttp.buffer;
+			if (!indexData || (indexData = indexData
+			// .slice(9): skip "BILICOMIC"...
+			.slice(9)).length === 0) {
+				// PC端只給看10話？或可由 pwork_data.age_allow 來檢查？
 				// chapter_data.image_list = [];
 				callback();
 				return;
 			}
 
-			unhashContent(episodeId, seasonId, indexData);
+			unhashContent(chapter_data.id, work_data.id, indexData);
 
-			data_file_directory = work_data.directory
-			//
-			+ chapter_NO.pad(4) + '/';
+			data_file_directory = work_data.directory + chapter_NO.pad(4)
+					+ '.tmp' + CeL.env.path_separator;
 			CeL.create_directory(data_file_directory);
 			data_file_path = data_file_directory + chapter_NO.pad(4)
 					+ '.data.zip';
 			CeL.write_file(data_file_path, indexData);
-			var data_archive = new CeL.storage.archive(data_file_path);
 
 			// using 7-Zip to extract data file
+			var data_archive = new CeL.storage.archive(data_file_path);
 			data_archive.extract({
 				output : data_file_directory
 			}, parse_data_file);
@@ -159,12 +159,11 @@ var crawler = new CeL.work_crawler({
 			});
 			// console.log(chapter_data);
 
+			var get_URL_options = chapter_data.url[2];
 			_this.get_URL_options.headers.Referer
-			//
-			= chapter_data.url[2].headers.Referer;
-			_this.get_URL(
-			//
-			'twirp/comic.v1.Comic/ImageToken?device=h5&platform=h5',
+			// @see parse_work_data() above
+			= get_URL_options.headers.Referer;
+			_this.get_URL(_this.API_BASE + 'ImageToken?device=h5&platform=h5',
 			//
 			function(XMLHttp) {
 				// console.log(XMLHttp);
@@ -177,9 +176,9 @@ var crawler = new CeL.work_crawler({
 				// console.log(chapter_data);
 				callback();
 
-			}, JSON.stringify({
+			}, {
 				urls : JSON.stringify(chapter_data.image_list)
-			}), chapter_data.url[2]);
+			}, get_URL_options);
 		}
 	}
 
@@ -209,7 +208,7 @@ function generateHashKey(t, e) {
 function unhashContent(episodeId, seasonId, indexData) {
 	var hashKey = generateHashKey(episodeId, seasonId);
 	for (var t = 0, e = indexData.length; t < e; t++)
-		indexData[t] = indexData[t] ^ hashKey[t % 8];
+		indexData[t] ^= hashKey[t % 8];
 }
 
 start_crawler(crawler, typeof module === 'object' && module);
