@@ -168,7 +168,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 				throw html.error;
 		} catch (e) {
 			// エピソードの公開期限が過ぎました
-			if (html.includes('期限')) {
+			if (typeof html === 'string' && html.includes('期限')) {
 				return {
 					limited : html
 				};
