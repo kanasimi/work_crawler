@@ -61,8 +61,14 @@ var crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
+		// console.log(work_data.chapter_list);
+		// console.log(JSON.stringify(work_data.chapter_list));
+		var free_chapter_hash = work_data.is_allow_read.comic.try_read_chapters
+				.to_hash();
+		// console.log(free_chapter_hash);
 		work_data.chapter_list.forEach(function(chapter_data) {
 			Object.assign(chapter_data, {
+				limited : !(chapter_data.chapter_id in free_chapter_hash),
 				title : chapter_data.chapter_name,
 				url : this.API_URL + 'comic/comic_play?chapter_id='
 						+ chapter_data.chapter_id + '&_request_from=pc'
