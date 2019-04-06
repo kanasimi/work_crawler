@@ -82,7 +82,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 			recheck_days : 400
 		});
 
-		// console.log(work_data);
+		// console.log(work_data.official_work.stories);
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
@@ -94,7 +94,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 				return;
 			return {
 				id : story.id,
-				title : story.short_name,
+				title : story.name || story.short_name,
 				limited : !chapter_data.readable && chapter_data.message,
 				url : 'viewer/stories/' + story.id
 			};
