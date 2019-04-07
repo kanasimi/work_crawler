@@ -39,11 +39,11 @@
 <!-- | Android | ❌ | -->
 
 ## Interface 支援介面
-| Interface 介面/界面<br />インターフェース | support 支援狀況 |
+| Interface 介面/界面 インターフェース | support 支援狀況 |
 | --- | --- |
-| [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface)<br />視窗/图形<br />グラフィカル | ✔️ |
-| [CLI](https://en.wikipedia.org/wiki/Command-line_interface)<br />命令列/命令行<br />コマンドライン | ✔️ |
-| API<br />應用程式介面 | ✔️ |
+| [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) 視窗/图形 グラフィカル | ✔️ |
+| [CLI](https://en.wikipedia.org/wiki/Command-line_interface) 命令列/命令行 コマンドライン | ✔️ |
+| API 應用程式介面 | ✔️ |
 
 ## Language support 多語言支援
 Welcome to join [the translating project](https://github.com/kanasimi/work_crawler/issues/185)!
@@ -85,7 +85,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [顶点小说](https://www.x23us.com/) | 23us.js<br />~~archive/23us.com.js~~ | PTCMS? 有許多無內容/空章節 |
 | [顶点小说](https://www.23us.cc/) | ~~archive/23us.2018.js~~ | [WMCMS](http://www.weimengcms.com/index.html) (未梦开源小说程序) [仿电脑顶点小说模板](http://www.weimengcms.com/html/temple/article/141.html) or PTCMS? 自 2018/12/9 23:56 最後一次連接 |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | PTCMS |
-| [笔趣阁](https://www.xs.la/)<br />[笔趣阁.cc](http://www.xbiquge.cc/)<br />[新笔趣阁](https://www.xbiquge6.com/) | biquge.js<br />xbiquge.js<br />xbiquge.cc.js | PTCMS |
+| [笔趣阁](https://www.xs.la/)<br />[笔趣阁.cc](http://www.xbiquge.cc/)<br />[新笔趣阁](https://www.xbiquge6.com/) | biquge.js<br />xbiquge.cc.js<br />xbiquge.js | PTCMS |
 | [看书神站](https://www.kanshushenzhan.com/) | kanshushenzhan.js | [杰奇小说连载系统](https://www.jieqi.com/files/page/html/product/article.html) |
 | [花香居](https://www.huaxiangju.com/) | huaxiangju.js | 杰奇小说连载系统 |
 | [追书帮](http://www.zhuishubang.com/) | zhuishubang.js | 杰奇小说连载系统 |
