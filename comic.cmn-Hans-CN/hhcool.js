@@ -130,7 +130,12 @@ var crawler = new CeL.work_crawler({
 			save_to = work_data.cache_directory + chapter_NO.pad(3) + '-'
 					+ NO.pad(3) + '.html';
 			// 沒 cache 的話，每一次都要重新取得每個圖片的頁面，速度比較慢。
-			CeL.get_URL_cache(url, function(html) {
+			CeL.get_URL_cache(url, function(html, error) {
+				if (error) {
+					_this.onerror(error);
+					return;
+				}
+
 				var image_data = html.match(
 				//
 				/<img (?:.*?) name="([^<>"]+)" (?:.*?)hdNextImg" value="([^<>"]+)"/
@@ -211,7 +216,7 @@ setup_crawler(crawler, typeof module === 'object' && module);
 CeL.create_directory(crawler.main_directory);
 
 var decode_filename = 'script/view.js', unsuan;
-CeL.get_URL_cache(crawler.base_URL + decode_filename, function(contents) {
+CeL.get_URL_cache(crawler.base_URL + decode_filename, function(contents, error) {
 	// eval('unsuan=function' + contents.between('function unsuan', '\nvar'));
 	start_crawler(crawler, typeof module === 'object' && module);
 }, crawler.main_directory + decode_filename.match(/[^\\\/]+$/)[0]);
