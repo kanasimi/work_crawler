@@ -333,7 +333,16 @@ crawler = new CeL.work_crawler({
 			}
 		}
 		// "|| []": e.g., 悟空傳
-		work_data.status = (work_data.status || []).append(tags).unique();
+		work_data.tags = (work_data.status || []).append(tags).unique();
+		work_data.status = work_data.tags.filter(function(tag) {
+			// 連載中
+			return /完本|完結|連載/.test(tag);
+		});
+		if (work_data.status.length === 0) {
+			// 無法判別作品是否完結。
+			work_data.status = work_data.tags;
+			delete work_data.tags;
+		}
 
 		// 去掉預設的廣告圖片 "超過一百分・卡提諾不意外"
 		if (work_data.image && work_data.image.includes('ZMZHjmd')) {
