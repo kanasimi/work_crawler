@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載快看漫画的工具。 Download kuaikanmanhua comics.
+ * 
+ * @since 2018/10/20-11/8 改版. 2019/4/7-12 快看漫画改版，重寫程式碼。
  */
 
 'use strict';
@@ -8,13 +10,7 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-// <a class="" href="/web/comic/0000/" title="~">
-// <a class="btn_lock" href="/web/comic/0000/" title="~">
-// 2018/10/20-11/8 改版
-// <a class="" href="/web/comic/101893/" title="~" data-vip="0">
-var PATTERN_chapter_item = /<a class="(?:[^<>"]*)" href="([^<>"]+)" title="([^<>"]+)"[^<>]*>/,
-//
-crawler = new CeL.work_crawler({
+var crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 	// one_by_one : true,
@@ -31,7 +27,6 @@ crawler = new CeL.work_crawler({
 	// skip_error : true,
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL_201805 : 'web/topic/search?keyword=',
 	search_URL : function(work_title, get_label) {
 		return 'v1/search/topic?q=' + encodeURIComponent(work_title)
 				+ '&since=0&size=20&f=3';
@@ -76,82 +71,45 @@ crawler = new CeL.work_crawler({
 	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
-			title : get_label(html
-					.between('<div class="comic-name">', '</div>')),
-			author : get_label(html.between('<div class="author-nickname">',
-					'</div>')),
+			title : get_label(html.between('<h3 class="title">', '</h3>')),
+			author : get_label(html.between('<div class="nickname">',
+			//
+			'</div>')),
 
-			// 選擇性屬性：須配合網站平台更改。
-			总热度 : get_label(html.between('<span class="hot-num">', '</span>')
-					.replace(//, '')),
-			赞 : get_label(html.between('<span class="tip-txt">', '</span>')
-					.replace(/赞:/, ''))
+		// 選擇性屬性：須配合網站平台更改。
+		// 2019/3: 总热度 <span class="hot-num">12.83亿</span>, 2019/4: 人气值
 		};
-		extract_work_data(work_data, html);
+		// extract_work_data(work_data, html);
+
+		html = eval(html
+		//
+		.between('<script>window.__NUXT__=', ';</script>')).data[0];
+		Object.assign(work_data, html.topicInfo);
+		work_data.chapter_list = html.comics.reverse().map(
+				function(chapter_data) {
+					chapter_data.url = 'web/comic/' + chapter_data.id;
+					if (chapter_data.locked)
+						chapter_data.limited = true;
+					return chapter_data;
+				});
+		// console.log(work_data);
 		return work_data;
-	},
-	get_chapter_list : function(work_data, html, get_label) {
-		work_data.chapter_list = [];
-		html = html.between('<div class="article-list">', '</div>');
-
-		html.each_between('<tr>', '</tr>', function(token) {
-			var matched = token.match(PATTERN_chapter_item), chapter_data = {
-				url : matched[1],
-				title : matched[2],
-				like : token.between(' class="like">', '</td>')
-			};
-			// <td width="15%" class="like">
-			// <i class="iconfont">&#xe613</i>
-			// 4806
-			// </td>
-			chapter_data.like = get_label(chapter_data.like.between('</i>')
-					|| chapter_data.like);
-
-			matched = token.match(/<td>(\d{1,2}-\d{1,2})<\/td>/);
-			if (matched) {
-				// update
-				chapter_data.date = matched[1];
-			}
-			// <i class="ico-lockoff"></i>
-			if (token.includes('ico-lockoff')) {
-				chapter_data.limited = true;
-				work_data.some_limited = true;
-			}
-			work_data.chapter_list.push(chapter_data);
-		});
-
-		if (work_data.chapter_list.length > 1) {
-			// 轉成由舊至新之順序。
-			work_data.chapter_list.reverse();
-		}
-		// console.log(work_data.chapter_list.slice(-2));
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
-		var chapter_data = Object.assign(
+		html = eval(html
 		//
-		work_data.chapter_list[chapter_NO - 1], {
-			// 赞我
-			praise : +html.between('<li class="praise-comic">', '</li>')
-					.between('<span class="num">', '</span>'),
-			// 评论
-			comment : +html.between('"去评论"', '</li>').between('</i>', '</a>'),
-			image_list : []
-		}), PATTERN_IMAGE = / data-kksrc="([^<>"]+)"([^<>]+)/g, matched;
+		.between('<script>window.__NUXT__=', ';</script>')).data[0];
+
+		var chapter_data = work_data.chapter_list[chapter_NO - 1];
+
+		chapter_data.image_list = html.comicInfo.comicImages;
+		// delete html.comicInfo.comicImages;
+
+		// `comicInfo` 的資訊較不精確!
+		// Object.assign(chapter_data, html.comicInfo);
 		// console.log(chapter_data);
-
-		// 201805 快看漫画改版。
-		html = html.between(' comic-imgs"', '</div>');
-
-		while (matched = PATTERN_IMAGE.exec(html)) {
-			var title = matched[2].match(/title="([^<>"]+)"/), image_data = {
-				url : get_label(matched[1])
-			};
-			if (title)
-				image_data.title = title[1];
-			chapter_data.image_list.push(image_data);
-		}
 
 		return chapter_data;
 	}
