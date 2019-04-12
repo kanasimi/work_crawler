@@ -1,5 +1,11 @@
 ﻿/**
- * @fileoverview 檢測篩選並且列出可能是 快压（kuaiZip） 檔案
+ * @fileoverview 檢測目標目錄中所有壓縮檔案，並且篩選列出可能是 快压（kuaiZip） 檔案。
+ * 
+ * @example<code>
+
+node list_kuaiZip.js target_directory
+
+</code>
  * 
  * @since 2018/11/4 13:49:0
  */

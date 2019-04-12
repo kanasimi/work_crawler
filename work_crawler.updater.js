@@ -52,14 +52,18 @@ function download_update_tool(update_script_url, callback) {
 	});
 }
 
-function install_npm(package_name, message, dev) {
+function install_npm(package_name, message, for_development) {
 	try {
 		require(package_name);
 	} catch (e) {
 		// e.code: 'MODULE_NOT_FOUND'
 		// console.error(e);
 
-		show_info(message || ('安裝需要用到的組件 [' + package_name + ']...'));
+		show_info(message || ('安裝'
+		// for development purpose
+		+ (for_development ? '開發時' : '執行時')
+		//
+		+ '需要用到的組件 [' + package_name + ']...'));
 		if (!node_fs.existsSync('node_modules'))
 			node_fs.mkdirSync('node_modules');
 		require('child_process').execSync('npm install '
@@ -67,7 +71,7 @@ function install_npm(package_name, message, dev) {
 		// https://docs.npmjs.com/cli/install
 		// npm install electron --save-dev
 		// sudo npm install -g electron --unsafe-perm=true --allow-root
-		+ (dev ? '--save-dev ' : '') + package_name + '@latest', {
+		+ (for_development ? '--save-dev ' : '') + package_name + '@latest', {
 			stdio : 'inherit'
 		});
 	}

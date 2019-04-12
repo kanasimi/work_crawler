@@ -203,14 +203,18 @@ var crawler = new CeL.work_crawler({
 		//
 		DM5 = work_data.DM5 = CeL.null_Object(), matched,
 		//
-		PATTERN_data =
-		//
-		/\sDM5_([a-zA-Z\d_]+)\s*=\s*(\d+|(["'])(?:\\.|[^\\"']+)*\3)/g;
+		PATTERN_assignment =
+		// [ expression, variable name, value, quote ]
+		/\sDM5_([a-zA-Z\d_]+)\s*=\s*(\d+|true|false|(["'])(?:\\.|[^\\"']+)*\3)/g
+		// @see sfacg.js
+		;
 		// console.log(text);
-		while (matched = PATTERN_data.exec(text)) {
+		while (matched = PATTERN_assignment.exec(text)) {
 			// console.log(matched);
 			DM5[matched[1]] = JSON.parse(matched[3] === "'" ? matched[2]
-					.replace(/^'|'$/g, '"') : matched[2]);
+					.replace(/^'([\s\S]*?)'$/g, function(all, inner) {
+						return '"' + inner.replace(/"/g, '\\"') + '"';
+					}) : matched[2]);
 		}
 		// console.log(DM5);
 		if (!(DM5.IMAGE_COUNT > 0)) {

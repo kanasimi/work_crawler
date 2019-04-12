@@ -84,6 +84,7 @@ function build_package(update_script_name) {
 	var directory_name = repository + '-' + branch;
 	if (node_fs.existsSync(directory_name)) {
 		show_info('清理戰場...');
+		// node_fs.renameSync(directory_name, directory_name + '.old');
 		remove_directory(directory_name);
 	}
 	// clean previous cache

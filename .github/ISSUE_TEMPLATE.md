@@ -6,7 +6,7 @@
 若是您使用後問題已解決，請記得回來關掉本議題。仍發現有相關問題的話，可重開這個議題。
 遇到不同的問題，請另外開個議題來修正。
 
-本工具以修正錯誤為主，由於人力有限，只能把精力放在維護常用的網站。新增網站僅在行有餘力時為之，請見諒。
+本工具以修正錯誤為主，由於人力有限，這邊主要把精力放在維護常用的網站。新增網站僅在行有餘力時為之，請見諒。
 英語或韓語的網站煩請利用 Free Manga Downloader 之類軟體會比較好。這邊幾乎不會上英語或者韓語網站，就算做了出來也很少在做維護，沒有專門看英語韓語網站的工具維護得勤勞。
 I am sorry that for English or Korean sites, using Free Manga Downloader is much suitable. For the deficiency of time, it is hard to maintain the tools instantly.
 新增網站時，請 **一個網站開一個議題，除了在標題說明要新增網站，並加上網站名稱**。

@@ -110,7 +110,7 @@ setup_crawler(crawler, typeof module === 'object' && module);
 CeL.create_directory(crawler.main_directory);
 
 var decode_filename = 'scripts/show/ssncore.js';
-CeL.get_URL_cache(crawler.base_URL + decode_filename, function(contents) {
+CeL.get_URL_cache(crawler.base_URL + decode_filename, function(contents, error) {
 	// var servs = [{...
 	start_crawler(crawler, typeof module === 'object' && module);
 }, crawler.main_directory + decode_filename.match(/[^\\\/]+$/)[0]);

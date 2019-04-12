@@ -103,7 +103,7 @@ var crawler = new CeL.work_crawler({
 		var _this = this, media_data = this.media_list[0];
 		CeL.log('get_media_file: ' + media_data.file + ' ('
 				+ this.media_list.length + ' left)');
-		CeL.get_URL_cache(media_data.url, function(data) {
+		CeL.get_URL_cache(media_data.url, function(data, error) {
 			// CeL.info('get_media_file: OK: ' + media_data.file);
 			_this.media_list.shift();
 			if (_this.media_list.length > 0) {

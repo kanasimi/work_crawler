@@ -94,8 +94,9 @@ var crawler = new CeL.work_crawler({
 					.replace(/\/(?:180|90|300)$/, '/600'),
 			author : get_label(text.between(' class="writer"', '</a>').between(
 					'>')),
-			status : text.between('<p class="tag">', '</p>').split(
+			tags : text.between('<p class="tag">', '</p>').split(
 					/<\/(?:span|a)>/).append(
+					// 作者自定义标签
 					html.between(' class="book-intro"', ' class="update"')
 							.between(' class="detail"', '</div>').between('>')
 							.split('</a>')).map(
@@ -119,11 +120,20 @@ var crawler = new CeL.work_crawler({
 		};
 
 		if (work_data.is_free) {
-			work_data.status.push('限免');
+			work_data.tags.push('限免');
 			// 將限免作品移至特殊目錄下。
 			work_data.base_directory_name = 'free';
 			work_data.directory_name_extension = '.'
 					+ (new Date).format('%Y%2m%2d');
+		}
+
+		work_data.status = work_data.tags.filter(function(tag) {
+			return tag === '连载' || tag === '完本';
+		});
+		if (work_data.status.length === 0) {
+			// 無法判別作品是否完結。
+			work_data.status = work_data.tags;
+			delete work_data.tags;
 		}
 
 		// console.log(work_data);

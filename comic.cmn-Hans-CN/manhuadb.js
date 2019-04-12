@@ -259,6 +259,8 @@ crawler = new CeL.work_crawler({
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
+		// console.log(chapter_data);
+
 		// 已在 pre_parse_chapter_data() 設定完 {Array}chapter_data.image_list
 		return chapter_data;
 	}

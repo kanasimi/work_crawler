@@ -344,7 +344,7 @@ CeL.create_directory(crawler.main_directory);
 var LZString;
 CeL.get_URL_cache(crawler.script_base_URL + decode_filename,
 // 2017/3/3? ikanman 改版
-function(contents) {
+function(contents, error) {
 	contents = contents.between('\nwindow["\\x65\\x76\\x61\\x6c"]', ';\n')
 	//
 	.replace(/window\[([^\[\]]+)\]/g, function($0, key) {

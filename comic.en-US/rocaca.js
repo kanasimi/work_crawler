@@ -156,7 +156,7 @@ CeL.get_URL_cache(crawler.base_URL + chapter_init_filename,
 				+ chapter_init_filename.match(/[^\\\/]+$/)[0].replace(/\?.*/,
 						''));
 
-function get_chapter_filename(contents) {
+function get_chapter_filename(contents, error) {
 	decode_function += contents;
 	CeL.get_URL_cache(crawler.base_URL + chapter_filename,
 			patch_decoder_and_start_crawler, crawler.main_directory
@@ -164,7 +164,7 @@ function get_chapter_filename(contents) {
 							.replace(/\?.*/, ''));
 }
 
-function patch_decoder_and_start_crawler(contents_2) {
+function patch_decoder_and_start_crawler(contents_2, error) {
 	if (false) {
 		console
 				.log(contents_2
