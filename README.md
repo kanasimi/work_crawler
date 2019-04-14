@@ -46,7 +46,7 @@
 | API 應用程式介面 | ✔️ |
 
 ## Language support 多語言支援
-Welcome to join [the translating project](https://github.com/kanasimi/work_crawler/issues/185)!
+Welcome to join [the translating project](https://github.com/kanasimi/work_crawler/issues/185)! [一緒に翻訳しましょう](https://github.com/kanasimi/work_crawler/issues/185)！
 
 | Language 語言 | support 支援狀況 |
 | --- | --- |
