@@ -141,12 +141,12 @@ function get_file_list(callback, id) {
 		}
 		CeL.get_URL_cache(base_URL + '?page=view&tid=' + id + '&' + matched[0],
 		// 取得 .torrent 的檔案列表。
-		function(html, is_cache) {
+		function(html, error, XMLHttp) {
 			var file_list = [], matched, PATTERN_file
 			//
 			= /<td class="fileentryname">([^<>]+)<\/td>/g;
 			html = html.between('<table class="viewfiletable">', '</table>');
-			if (!is_cache) {
+			if (XMLHttp) {
 				_this.new_files++;
 			}
 			// 就算利用的是 cache，依然檢查檔案而不直接跳出。

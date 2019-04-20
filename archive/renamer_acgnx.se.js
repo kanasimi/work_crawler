@@ -201,14 +201,14 @@ function get_label(html) {
 }
 
 // 取得 .torrent 的檔案列表。
-function parse_file_list(html, is_cache) {
+function parse_file_list(html, error, XMLHttp) {
 	var name = get_label(html.between('<div class="location">', '</div>')), file_list = [], matched;
 	if (!name && html.includes('DDOS Protection')) {
 		CeL.fs_remove(base_directory + this.id + '.html');
 		throw 'DDOS Protection';
 	}
 	html = html.between('<div class="torrent_files">', '</div>');
-	if (!is_cache) {
+	if (XMLHttp) {
 		this.new_files++;
 	}
 	// 就算利用的是 cache，依然檢查檔案而不直接跳出。

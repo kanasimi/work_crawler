@@ -230,7 +230,7 @@ function get_label(html) {
 }
 
 // 取得 .torrent 的檔案列表。
-function parse_file_list(html, is_cache, got_torrent) {
+function parse_file_list(html, error, XMLHttp, got_torrent) {
 	if (torrent_directory && !got_torrent) {
 		var _this = this, matched = html.match(/ href="([^<>"']+\.torrent)"/);
 		if (matched) {
@@ -240,7 +240,7 @@ function parse_file_list(html, is_cache, got_torrent) {
 			function(_html, error, XMLHttp) {
 				if (error)
 					CeL.error(error);
-				parse_file_list.call(_this, html, is_cache, true);
+				parse_file_list.call(_this, html, error, XMLHttp, true);
 			}, {
 				reget : reget,
 				get_URL_options : get_URL_options,
@@ -270,7 +270,7 @@ function parse_file_list(html, is_cache, got_torrent) {
 		return;
 	}
 
-	if (!is_cache) {
+	if (XMLHttp) {
 		this.new_files++;
 	}
 	// 就算利用的是 cache，依然檢查檔案而不直接跳出。

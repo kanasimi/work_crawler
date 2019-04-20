@@ -132,6 +132,8 @@ var crawler = new CeL.work_crawler({
 			// 沒 cache 的話，每一次都要重新取得每個圖片的頁面，速度比較慢。
 			CeL.get_URL_cache(url, function(html, error) {
 				if (error) {
+					CeL.error('下載時發生錯誤，無法順利取得檔案內容！');
+					CeL.error(error);
 					_this.onerror(error);
 					return;
 				}
@@ -149,8 +151,15 @@ var crawler = new CeL.work_crawler({
 					if (!this_image_list[index]) {
 						this_image_list[index] = image_data[0];
 					} else if (this_image_list[index] !== image_data[0]) {
-						throw 'Different url: ' + this_image_list[index]
-								+ ' !== ' + image_data[0];
+						_this.onerror('Different url: '
+						//
+						+ this_image_list[index] + ' !== ' + image_data[0]
+						//
+						+ '\n或許是下載的檔案出現錯誤？'
+						//
+						+ '您可以嘗試選用 "recheck" 選項來忽略 cache、重新下載每個圖片的頁面。');
+						run_next();
+						return;
 					}
 				}
 				if (image_data[1] !== '\x00') {
@@ -216,7 +225,9 @@ setup_crawler(crawler, typeof module === 'object' && module);
 CeL.create_directory(crawler.main_directory);
 
 var decode_filename = 'script/view.js', unsuan;
-CeL.get_URL_cache(crawler.base_URL + decode_filename, function(contents, error) {
-	// eval('unsuan=function' + contents.between('function unsuan', '\nvar'));
-	start_crawler(crawler, typeof module === 'object' && module);
-}, crawler.main_directory + decode_filename.match(/[^\\\/]+$/)[0]);
+CeL.get_URL_cache(crawler.base_URL + decode_filename,
+		function(contents, error) {
+			// eval('unsuan=function' + contents.between('function unsuan',
+			// '\nvar'));
+			start_crawler(crawler, typeof module === 'object' && module);
+		}, crawler.main_directory + decode_filename.match(/[^\\\/]+$/)[0]);
