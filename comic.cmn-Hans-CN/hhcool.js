@@ -10,7 +10,18 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var crawler = new CeL.work_crawler({
+/**
+ * e.g., <code>
+ <div class='cVolTag'>周刊杂志每周每月连载单集</div><ul class='cVolUl'><li>...</a></li></ul>
+ <div class='cVolTag'>漫画正片外的剧情之番外篇</div><ul class='cVolUl'><li>...</a></li></ul>
+
+ <li><a class='l_s' href='/cool282192/1.html?s=7' target='_blank' title='双星之阴阳师09卷'>双星之阴阳师09卷</a></li>
+ </code>
+ */
+// matched: [all, part_title, url, title, inner]
+var PATTERN_chapter = /<div class='cVolTag'>([^<>]+)|<li><a [^<>]*?href='([^'<>]+)'[^<>]*? title='([^'<>]+)'[^<>]*>(.+?)<\/a>/g,
+//
+crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// 本站常常無法取得圖片，因此得多重新檢查。
@@ -80,23 +91,28 @@ var crawler = new CeL.work_crawler({
 		html = html.between('<div class="cVolList">', '<div id="foot">');
 
 		work_data.chapter_list = [];
-		/**
-		 * e.g., <code>
-		<li><a class='l_s' href='/cool282192/1.html?s=7' target='_blank' title='双星之阴阳师09卷'>双星之阴阳师09卷</a></li>
-		</code>
-		 */
-		var matched, PATTERN_chapter =
-		// [all,href,title,inner]
-		/<li><a [^<>]*?href='([^'<>]+)'[^<>]*? title='([^'<>]+)'[^<>]*>(.+?)<\/a>/g
-		//
-		;
+		// 漫畫目錄名稱不須包含分部號碼。使章節目錄名稱不包含 part_NO。
+		work_data.chapter_list.add_part_NO = false;
+		work_data.chapter_list.part_NO = 0;
+
+		var matched, part_title;
 		while (matched = PATTERN_chapter.exec(html)) {
+			// delete matched.input;
+			// console.log(matched);
+			if (matched[1]) {
+				part_title = get_label(matched[1]);
+				work_data.chapter_list.part_NO++;
+				continue;
+			}
+
 			work_data.chapter_list.unshift({
-				title : get_label(matched[2].replace(work_data.title, '')),
-				url : matched[1]
+				part_title : part_title,
+				title : get_label(matched[3].replace(work_data.title, '')),
+				url : matched[2]
 			});
 		}
 
+		// console.log(work_data.chapter_list);
 		return;
 	},
 
@@ -183,14 +199,13 @@ var crawler = new CeL.work_crawler({
 		matched = html.match(PATTERN);
 		this.server_list = matched[1].split('|');
 
+		var chapter_data = work_data.chapter_list[chapter_NO - 1];
+
 		// console.log(work_data.image_list[chapter_NO]);
-		var chapter_data = {
-			image_list : work_data.image_list[chapter_NO].map(function(url) {
-				return {
-					url : encodeURI(CeL.HTML_to_Unicode(url))
-				}
-			})
-		};
+		chapter_data.image_list = work_data.image_list[chapter_NO]
+				.map(function(url) {
+					return encodeURI(CeL.HTML_to_Unicode(url));
+				});
 
 		return chapter_data;
 	}
