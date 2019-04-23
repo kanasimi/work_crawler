@@ -25,8 +25,8 @@ crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// 本站常常無法取得圖片，因此得多重新檢查。
-	// recheck:從頭檢測所有作品之所有章節與所有圖片。不會重新擷取圖片。對漫畫應該僅在偶爾需要從頭檢查時開啟此選項。
-	// recheck : true,
+	// 當有多個分部的時候才重新檢查。
+	recheck : 'multi_parts_changed',
 	// 當無法取得chapter資料時，直接嘗試下一章節。在手動+監視下recheck時可併用此項。
 	// skip_chapter_data_error : true,
 
@@ -171,9 +171,9 @@ crawler = new CeL.work_crawler({
 						//
 						+ this_image_list[index] + ' !== ' + image_data[0]
 						//
-						+ '\n或許是下載的檔案出現錯誤？'
+						+ '\n或許是下載的檔案出現錯誤？您可嘗試過段時間再下載，'
 						//
-						+ '您可以嘗試選用 "recheck" 選項來忽略 cache、重新下載每個圖片的頁面。');
+						+ '或選用 "recheck" 選項來忽略 cache、重新下載每個圖片的頁面。');
 						run_next();
 						return;
 					}
