@@ -60,8 +60,10 @@ download_sites_set = {
 		'36mh' : '36漫画网',
 		'930mh' : '亲亲漫画网',
 
-		hhcool : '汗汗酷漫',
 		omanhua : '哦漫画',
+
+		hhcool : '汗汗酷漫',
+		dmeden : '動漫伊甸園',
 
 		migudm : '咪咕圈圈',
 
@@ -2028,6 +2030,12 @@ function check_update() {
 		return;
 	}
 
+	// 📦安裝包圖形介面自動更新功能交由 start_update() @ gui_electron.js，
+	// 不在此處處理。
+	if (is_installation_package) {
+		return;
+	}
+
 	CeL.debug({
 		T : '檢查更新中……'
 	});
@@ -2076,11 +2084,7 @@ function check_update() {
 			br : null
 		}, '← ' + has_version ] : '' ], [ update_panel, 'clean' ]);
 
-		// 📦安裝包圖形介面自動更新功能交由 start_update() @ gui_electron.js，
-		// 不在此處處理。
-		if (!is_installation_package) {
-			check_update_NOT_package();
-		}
+		check_update_NOT_package();
 	}
 
 	try {

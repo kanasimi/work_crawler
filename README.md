@@ -131,7 +131,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
 | [漫画160](https://www.laimanhua.com/) | mh160.js | 與 733mh.js 相同系統 |
 | [哦漫画](http://www.omanhua.net/) | omanhua.js | |
-| [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
+| [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
+| [動漫伊甸園](http://dmeden.net/) | dmeden.js | 日本漫畫較多。 採用與汗汗酷漫相同系統。 |
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
 | [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
@@ -235,11 +236,11 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
    ``` sh
    npm i -D electron@latest
    ```
-2. 在本工具安裝的目錄下，執行 <code>start_gui_electron.sh</code> 或 <code>start_gui_electron.bat</code>。
+2. 在本工具安裝的目錄下，執行 <code>start_gui_electron.bat</code> 或 <code>start_gui_electron.sh</code>。
 
    ![視窗型態介面](https://lh3.googleusercontent.com/L0wxAGlxz0G9fvQQNamoXugC3WeJdnYaxqaxPnNE_3gnUtH0VBlGNScH_Y44MpkbiYYmLgajHMFt6desqDYYJbYT0RuMvAyrGlDGx9uWuYH-dEm6T6B9SG9dgUSG6uQAFrPATo1llw=w2400)
 
-   支援不同語系：
+   視窗型態介面支援不同語系：
    ![支援不同語系](https://lh3.googleusercontent.com/-EOQgYAap6YPw7iKQRlvlA4-fr37-4SddypCw44H2uhgpgmQ6FtpjjJ-qg_gJHbwfNRn8GNvvoYqE46yIQwg3xOVzR-5mzfqX8tPhOM06iYdF2gXOuIddcN5rNlCMhmmIxYye7SX8g=w2400)
 
    有許多可調整的下載選項：
