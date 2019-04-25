@@ -23,7 +23,8 @@ var crawler = CeL.qTcms2017({
 	// one_by_one : true,
 
 	// old: http://www.360taofu.com/ 360桃符??
-	base_URL : 'http://www.xatxwh.com/'
+	// 2019/4/24-25? 360漫畫網址更動: http://www.xatxwh.com/ → http://www.xueshine.com/
+	base_URL : 'http://www.xueshine.com/'
 });
 
 // ----------------------------------------------------------------------------
