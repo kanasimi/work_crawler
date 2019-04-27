@@ -1915,7 +1915,8 @@ function after_download_chapter(work_data, chapter_NO) {
 
 function onerror(error, work_data) {
 	// e.g., work_data is image_data
-	work_data = initialize_work_data(this, work_data);
+	work_data = initialize_work_data(this, work_data) || this
+			&& this.downloading_work_data;
 
 	// work_data 可能為 undefined/image_data
 	if (work_data) {
@@ -1923,9 +1924,11 @@ function onerror(error, work_data) {
 			work_data.error_list = [];
 		}
 		work_data.error_list.push(error);
+		console.trace(error);
+	} else {
+		CeL.error(error);
 	}
 
-	console.trace(error);
 	// 會在 .finish_up() 執行。
 	// destruct_download_job(this);
 	return CeL.work_crawler.THROWED;
