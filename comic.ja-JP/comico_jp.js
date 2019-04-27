@@ -19,7 +19,11 @@ CeL.run('application.net.work_crawler.comico');
 CeL.comico({
 	base_URL : 'https://www.comico.jp/',
 
-	search_head_token : ' data-result-type="manga">',
+	// <div class="list-search-result">
+	// <ul class="list-search-result__list _searchList">
+	// <li class="list-search-result__item" data-result-type="official">
+	// 每個項目的<li>開頭。
+	search_head_token : ' data-result-type="official">',
 	PATTERN_search : /<a href="[^<>"]*?titleNo=(\d+)"[\s\S]*? alt="([^"]+)"/,
 
 	// 取得作品的章節資料。 get_work_data()

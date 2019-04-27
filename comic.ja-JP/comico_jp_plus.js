@@ -19,7 +19,8 @@ CeL.run('application.net.work_crawler.comico');
 CeL.comico({
 	base_URL : 'http://plus.comico.jp/',
 
-	search_head_token : ' data-result-type="manga">',
+	// 每個項目的<li>開頭。
+	search_head_token : ' data-result-type="official">',
 	PATTERN_search : /<a href="[^<>"]*?titleNo=(\d+)"[\s\S]*? alt="([^"]+)"/,
 
 	// 取得作品的章節資料。 get_work_data()
