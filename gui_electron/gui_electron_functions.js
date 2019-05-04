@@ -1855,7 +1855,7 @@ function initialize_work_data(crawler, work_data) {
 
 	// 初始化 initialization: crawler.downloading_work_data, job.work_data
 
-	if (work_data) {
+	if (typeof work_data === 'object') {
 		// reset error list 下載出錯的作品
 		delete work_data.error_list;
 
