@@ -161,7 +161,8 @@ download_options_set = {
 	write_chapter_metadata : '將每個章節壓縮檔的資訊寫入同名(添加.json延伸檔名)的JSON檔，方便其他工具匯入用。',
 	write_image_metadata : '將每個圖像的資訊寫入同名(添加.json延伸檔名)的JSON檔，方便其他工具匯入用。',
 
-	preserve_download_work_layer : '下載完成後保留下載進度條'
+	preserve_download_work_layer : '下載完成後保留下載進度條。',
+	play_finished_sound : '任務完成後播放音效。'
 },
 // const `global.data_directory`/`default_configuration_file_name`
 default_configuration_file_name = 'work_crawler.configuration.json',
@@ -171,10 +172,10 @@ theme_list = 'light|dark'.split('|');
 var save_config_this_time = true;
 
 var site_used, default_configuration, download_site_nodes = [], download_options_nodes = {},
-// 為 electron-builder 📦安裝包
+// 為 electron-builder 📦安裝包/發行版
 is_installation_package,
 // 會儲存到 crawler.preference.crawler_configuration 的選項。
-save_to_preference = Object.assign({}, download_options_set), preserve_download_work_layer,
+save_to_preference = Object.assign({}, download_options_set),
 // Windows 10: Windows NT 10.0; Win64; x64
 old_Unicode_support = navigator.appVersion.match(/Windows NT (\d+(?:\.\d))/);
 if (old_Unicode_support) {
@@ -593,6 +594,14 @@ function initializer() {
 	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
 	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
 
+	CeL.DOM.add_listener('focus', function(event) {
+		// console.log(event);
+
+		// 當原先沒有東西的時候就自動貼上系統剪貼簿字串內容。
+		if (!CeL.DOM.set_text('input_work_id')) {
+			paste_text();
+		}
+	});
 	CeL.get_element('input_work_id').focus();
 
 	// 延遲檢測更新，避免 hang 住。
@@ -614,6 +623,15 @@ function set_click_trigger(trigger, panel, callback) {
 }
 
 // ----------------------------------------------
+
+function paste_text() {
+	// https://electronjs.org/docs/api/clipboard
+	var text = require('electron').clipboard.readText();
+	if (text) {
+		// 貼上系統剪貼簿字串內容。
+		CeL.DOM.set_text('input_work_id', text);
+	}
+}
 
 function open_external(URL) {
 	node_electron.shell.openExternal(typeof URL === 'string' ? URL : this.href);
@@ -1763,6 +1781,8 @@ function toggle_download_job_panel() {
 	}
 }
 
+var latest_play_finished_sound = Date.now();
+
 function destruct_download_job(crawler) {
 	var work_data = crawler.downloading_work_data;
 	if (!work_data) {
@@ -1778,9 +1798,7 @@ function destruct_download_job(crawler) {
 		delete Download_job.job_list[job_index];
 		CeL.DOM.remove_node(job.layer);
 	}
-	if (work_data.error_list
-			|| ('preserve_download_work_layer' in crawler ? crawler.preserve_download_work_layer
-					: preserve_download_work_layer)) {
+	if (work_data.error_list || crawler.preserve_download_work_layer) {
 		// remove "暫停"
 		// job.layer.removeChild(job.layer.firstChild);
 		CeL.new_node([ {
@@ -1834,6 +1852,13 @@ function destruct_download_job(crawler) {
 		add_new_download_job(crawler, crawler.download_queue.shift());
 	} else
 		toggle_download_job_panel();
+
+	if (crawler.play_finished_sound
+			&& (Date.now() - latest_play_finished_sound > 2000)) {
+		// 播放任務完成的音效。
+		document.getElementById("finished_sound").play();
+		latest_play_finished_sound = Date.now();
+	}
 }
 
 function initialize_work_data(crawler, work_data) {
@@ -1855,6 +1880,7 @@ function initialize_work_data(crawler, work_data) {
 
 	// 初始化 initialization: crawler.downloading_work_data, job.work_data
 
+	// 可能輸入 work_id or work_title。
 	if (typeof work_data === 'object') {
 		// reset error list 下載出錯的作品
 		delete work_data.error_list;

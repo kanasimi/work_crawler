@@ -13,8 +13,9 @@
 	<div class="panel">
 		<label>📘<span data-gettext="作品名稱或 id"></span> <input
 			id="input_work_id" value="" title="快速鍵: Ctrl + V 貼上作品名稱或 id" /></label> <b
-			class="button" onclick="start_gui_crawler();">▶<span
-			data-gettext="開始下載"></span></b>
+			class="button" onclick="paste_text();" title="貼上作品名稱或 id">📋<span
+			data-gettext="貼上"></span></b> <b class="button"
+			onclick="start_gui_crawler();">▶<span data-gettext="開始下載"></span></b>
 		<!--  <b class="button"
 			onclick="stop_task();">暫停下載</b> <b class="button"
 			onclick="continue_task();">繼續下載</b> <b class="button"
@@ -89,5 +90,12 @@
 	<div id="select_theme_panel"></div>
 
 	<div id="log_panel"></div>
+
+	<audio id="finished_sound" controls="false" style="display: none;">
+		<source
+			src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Artu_speech_03.ogg"
+			type="audio/ogg" autoplay="false" />
+		Your browser does not support the audio tag.
+	</audio>
 </body>
 </html>
