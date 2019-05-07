@@ -42,6 +42,7 @@ download_sites_set = {
 		nokiacn : '乙女漫画',
 		iqg365 : '365漫画网',
 		'360taofu' : '360漫画',
+		'517' : '我要去漫画',
 		dagu : '大古漫画网',
 		manhuadb : '漫画DB',
 
@@ -594,14 +595,16 @@ function initializer() {
 	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
 	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
 
-	CeL.DOM.add_listener('focus', function(event) {
-		// console.log(event);
+	if (false) {
+		CeL.DOM.add_listener('focus', function(event) {
+			// console.log(event);
 
-		// 當原先沒有東西的時候就自動貼上系統剪貼簿字串內容。
-		if (!CeL.DOM.set_text('input_work_id')) {
-			paste_text();
-		}
-	});
+			// 當原先沒有東西的時候就自動貼上系統剪貼簿字串內容。
+			if (!CeL.DOM.set_text('input_work_id')) {
+				paste_text();
+			}
+		});
+	}
 	CeL.get_element('input_work_id').focus();
 
 	// 延遲檢測更新，避免 hang 住。
