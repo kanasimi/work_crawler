@@ -59,6 +59,7 @@ download_sites_set = {
 		manhuagui_tw : '繁體版漫畫櫃',
 		gufengmh : '古风漫画网',
 		'36mh' : '36漫画网',
+		manhuaniu : '漫画牛',
 		'930mh' : '亲亲漫画网',
 
 		omanhua : '哦漫画',
