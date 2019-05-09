@@ -80,7 +80,6 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | --- | --- | --- |
 | [卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180) | ck101.js | Discuz! X3 |
 | [起点中文网](https://www.qidian.com/) | qidian.js | **本工具無法下載 VIP章节內容** |
-| [八一中文网](http://www.81xsw.com/) | 81xsw.js | [PTCMS](https://www.ptcms.com/)系统 |
 | [八八读书网](http://www.88dus.com/) | 88dus.js | 88读书网(88dushu)，PTCMS? |
 | [顶点小说](https://www.x23us.com/) | 23us.js<br />~~archive/23us.com.js~~ | PTCMS? 有許多無內容/空章節 |
 | [顶点小说](https://www.23us.cc/) | ~~archive/23us.2018.js~~ | [WMCMS](http://www.weimengcms.com/index.html) (未梦开源小说程序) [仿电脑顶点小说模板](http://www.weimengcms.com/html/temple/article/141.html) or PTCMS? 自 2018/12/9 23:56 最後一次連接 |
@@ -93,6 +92,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [落霞小说网](http://www.luoxia.com/) | luoxia.js | WordPress，數量少、速度較慢但品質較高，較少錯字和自我審查。 |
 | [努努书坊](https://www.kanunu8.com/) | kanunu.js | 有些非流行網路小說的書。 |
 | [稻草人书屋](http://www.daocaorenshuwu.com/) | daocaoren.js | 有些非流行網路小說的書 |
+| ~~[八一中文网](http://www.81xsw.com/)~~ | ~~archive/81xsw.js~~ | 最後一次成功下載此網站作品日期: 2019/1/12。[PTCMS](https://www.ptcms.com/)系统 |
 
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
