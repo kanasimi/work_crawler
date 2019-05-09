@@ -61,6 +61,7 @@ download_sites_set = {
 		'36mh' : '36漫画网',
 		manhuaniu : '漫画牛',
 		'930mh' : '亲亲漫画网',
+		'50mh' : '50漫画网',
 
 		omanhua : '哦漫画',
 
