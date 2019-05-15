@@ -110,7 +110,8 @@ download_sites_set = {
 
 		// PTCMS
 		'23us' : '顶点小说',
-		'81xsw' : '八一中文网',
+		zwdu : '八一中文网',
+		x81zw : '新八一中文网',
 		'88dus' : '八八读书网',
 		'630book' : '恋上你看书网',
 		biquge : '笔趣阁',
@@ -298,8 +299,11 @@ function initializer() {
 	} ];
 	theme_list.forEach(function(theme_name) {
 		theme_nodes.push({
-			T : theme_name,
+			T : theme_name + ' theme',
 			C : theme_name,
+			D : {
+				theme_label : theme_name
+			},
 			onclick : select_theme
 		});
 	});
@@ -2050,6 +2054,7 @@ function check_update_NOT_package() {
 			});
 		} else {
 			CeL.log({
+				// 重新啟動應用程式或重新整理網頁(Ctrl-R)
 				T : '非安裝包版本更新完畢。您需要重新啟動程式以使用新版本。'
 			});
 		}
@@ -2163,7 +2168,7 @@ function open_DevTools() {
 // Select CSS theme
 function select_theme(theme) {
 	if (typeof theme !== 'string') {
-		theme = this.innerHTML;
+		theme = CeL.DOM_data(this).theme_label;
 	}
 	if (!theme_list.includes(theme)) {
 		CeL.warn('select_theme: Invalid theme name: ' + theme);
