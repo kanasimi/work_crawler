@@ -152,7 +152,7 @@ function start_update(event_sender) {
 			event_sender.send('send_message_log', '開始檢測安裝包更新……');
 		});
 		autoUpdater.on('update-available', function(info) {
-			event_sender.send('send_message_info', [ '新安裝包出來了：%1',
+			event_sender.send('send_message_info', [ '有新版安裝包：%1',
 					JSON.stringify(info) ]);
 		});
 		autoUpdater.on('update-not-available', function(info) {
