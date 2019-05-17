@@ -18,8 +18,8 @@ crawler = new CeL.work_crawler({
 	// Manga Mew 一些圖片在檔案最後會多加個字元 0A，因此被判別為非正規圖片檔。似無缺損。
 	allow_EOI_error : true,
 	// 最小容許圖案檔案大小 (bytes)。
-	// e.g., Tower of God Chapter 390
-	MIN_LENGTH : 3e3,
+	// e.g., Tower of God Chapter 423
+	MIN_LENGTH : 800,
 
 	// one_by_one : true,
 	base_URL : 'https://www1.mangamew.com/',

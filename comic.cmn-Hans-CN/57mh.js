@@ -2,6 +2,8 @@
  * 批量下載 57漫画网 的工具。 Download 57mh comics.
  * 
  * modify from archive/2manhua.js
+ * 
+ * 與 36mh 類似
  */
 
 'use strict';

@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載 comico (韓國 NHN Taiwan Corp.) 的工具。 Download comico comics.
+ * 批量下載 comico - 全彩長條漫畫 (韓國 NHN Taiwan Corp.) 的工具。 Download comico comics.
  * (comic.cmn-Hant-TW)
  */
 

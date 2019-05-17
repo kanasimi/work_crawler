@@ -179,7 +179,7 @@ function start_update(event_sender) {
 			//
 			function(e, arg) {
 				console.log(arguments);
-				console.log("重新啟動應用程式即可更新。");
+				console.log("重新啟動程式即可更新。");
 				// some code here to handle event
 				autoUpdater.quitAndInstall();
 			});

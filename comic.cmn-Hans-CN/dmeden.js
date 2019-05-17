@@ -1,7 +1,5 @@
 ﻿/**
- * 批量下載 動漫伊甸園 漫畫 的工具。 Download dmeden.net comics.
- * 
- * zh-cmn-Hant-TW
+ * 批量下載 動漫伊甸園 漫畫 的工具。 Download dmeden.net comics. (comic.cmn-Hant-TW)
  */
 
 'use strict';

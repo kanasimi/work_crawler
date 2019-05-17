@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載 新笔趣阁 小说 的工具。 Download xbiquge novels.
+ * 
+ * @see x81zw
  */
 
 'use strict';

@@ -95,9 +95,10 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 			return {
 				id : story.id,
 				// 名稱顯示成兩行。
+				title : story.short_name + (story.name ?
 				// e.g., https://comic.pixiv.net/works/4252
 				// .short_name="第13話", .name="（４）"
-				title : story.short_name + (story.name || ''),
+				/^[(（]/.test(story.name) ? story.name : ' ' + story.name : ''),
 				limited : !chapter_data.readable && chapter_data.message,
 				url : 'viewer/stories/' + story.id
 			};

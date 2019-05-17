@@ -1,7 +1,7 @@
 {
 	"name" : "work_crawler",
 	"title" : "CeJS online novels and comics downloader",
-	"version" : "v1.11.0",
+	"version" : "v2.0.0",
 	"description" : "A tool using CeJS library to download online novels / comics.",
 	"keywords" : [ "comic-downloader", "novel-downloader", "cejs",
 			"downloader", "download-comic", "epub", "ebook", "comics",
