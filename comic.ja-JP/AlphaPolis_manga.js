@@ -136,6 +136,9 @@ var crawler = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-// for 年齢確認
-crawler.get_URL_options.cookie = 'confirm=' + Math.floor(Date.now() / 1000);
+// for 年齢確認 eternityConfirm()
+crawler.get_URL_options.cookie = 'confirm=' + Math.floor(Date.now() / 1000)
+// location.hostname
++ ';domain=' + crawler.base_URL.match(/\/\/([^\/]+)/)[1] + ';path=/;';
+
 start_crawler(crawler, typeof module === 'object' && module);
