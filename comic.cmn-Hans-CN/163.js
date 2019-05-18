@@ -12,7 +12,10 @@ var crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 	// one_by_one : true,
-	base_URL : 'https://manhua.163.com/',
+
+	// 2017/4: https://manhua.163.com/
+	// 2019/5: 網易漫畫網址更動 → https://163.bilibili.com/
+	base_URL : 'https://163.bilibili.com/',
 
 	// allow .jpg without EOI mark.
 	// allow_EOI_error : true,
@@ -33,9 +36,7 @@ var crawler = new CeL.work_crawler({
 	title_of_search_result : 'title',
 
 	// 取得作品的章節資料。 get_work_data()
-	work_URL : function(work_id) {
-		return 'source/' + work_id;
-	},
+	work_URL : 'source/',
 	parse_work_data : function(html, get_label) {
 		var title = get_label(html.between(
 				'<h1 class="f-toe sr-detail__heading">', '</h1>')),
