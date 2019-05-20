@@ -156,12 +156,13 @@ function start_update(event_sender) {
 					JSON.stringify(info) ]);
 		});
 		autoUpdater.on('update-not-available', function(info) {
-			event_sender.send('send_message_log', [ '沒有新安裝包：%1',
+			event_sender.send('send_message_log', [ '沒有新安裝包。當前版本：%1',
 			// {Object}info 會包含 .releaseNotes
 			JSON.stringify(info && info.version) ]);
 		});
 		autoUpdater.on('error', function(error) {
-			event_sender.send('send_message_warn', [ '安裝包更新出錯：%1', error ]);
+			event_sender.send('send_message_warn', [ '安裝包更新出錯：%1',
+					JSON.stringify(error) ]);
 		});
 		autoUpdater.on('download-progress', function(progressObj) {
 			event_sender.send('send_message_debug', [
