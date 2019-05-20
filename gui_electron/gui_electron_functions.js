@@ -230,6 +230,11 @@ var force_convert = 'en';
 
 // initialization
 function initializer() {
+	// 將更新程序放在一開始，確保一定會執行更新程序，避免後面出現錯誤時不作更新。
+	// 延遲檢測更新，避免 hang 住。
+	setTimeout(check_update, 80);
+
+	// --------------------------------
 
 	CeL.Log.set_board('log_panel');
 	// CeL.set_debug();
@@ -293,7 +298,8 @@ function initializer() {
 
 	// --------------------------------
 
-	select_theme(default_configuration.CSS_theme);
+	if (default_configuration.CSS_theme)
+		select_theme(default_configuration.CSS_theme);
 
 	var theme_nodes = [ {
 		T : '布景主題：'
@@ -615,8 +621,6 @@ function initializer() {
 	}
 	CeL.get_element('input_work_id').focus();
 
-	// 延遲檢測更新，避免 hang 住。
-	setTimeout(check_update, 80);
 	// CeL.set_debug();
 }
 
@@ -2178,7 +2182,8 @@ function open_DevTools() {
 // Select CSS theme
 function select_theme(theme) {
 	if (typeof theme !== 'string') {
-		theme = CeL.DOM_data(this).theme_label;
+		theme = CeL.DOM_data(this);
+		theme = theme && theme.theme_label;
 	}
 	if (!theme_list.includes(theme)) {
 		CeL.warn('select_theme: Invalid theme name: ' + theme);
