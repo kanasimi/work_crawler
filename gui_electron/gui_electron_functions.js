@@ -31,6 +31,7 @@ download_sites_set = {
 		kuaikan : '快看漫画',
 		weibo : '微博动漫',
 		bilibili : '哔哩哔哩漫画',
+		buka : '布卡漫画',
 		sfacg : 'SF漫画',
 
 		katui : '卡推漫画',
@@ -300,6 +301,7 @@ function initializer() {
 	theme_list.forEach(function(theme_name) {
 		theme_nodes.push({
 			T : theme_name + ' theme',
+			force_convert : force_convert,
 			C : theme_name,
 			D : {
 				theme_label : theme_name
@@ -643,7 +645,15 @@ function paste_text() {
 }
 
 function open_external(URL) {
-	node_electron.shell.openExternal(typeof URL === 'string' ? URL : this.href);
+	if (typeof URL !== 'string')
+		URL = this.href;
+
+	node_electron.shell.openExternal(URL)
+	//
+	['catch'](function(error) {
+		CeL.error(String(error) + ': ' + URL);
+	});
+
 	return false;
 }
 
