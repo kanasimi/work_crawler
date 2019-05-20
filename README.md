@@ -28,7 +28,7 @@
 * 本工具會盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
 * 跨平臺支援：支援 Windows, Linux, Mac。
 * 採用 CeJS [線上作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
-* 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料，僅更新有問題的圖檔。（請注意：必須先安裝 7-Zip **18.01 以上的版本**）
+* 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料，僅更新有問題的圖檔。（👉請注意：必須先安裝 7-Zip **18.01 以上的版本**）
 
 ## OS support 作業系統支援
 | Platform 作業系統平臺 | support 支援狀況 |
@@ -57,7 +57,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | 한국어 | 🚧 |
 
 ## Supported sites 已完成之網站工具
-* For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 請注意：必須先安裝 7-Zip **18.01 以上的版本**，這樣才能製作 .epub 小說電子書、壓縮漫畫章節。
+* For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 👉請注意：必須先安裝 7-Zip **18.01 以上的版本**，這樣才能製作 .epub 小說電子書、壓縮漫畫章節。
 * 各線上作品網站往往不時改版（更改結構），同時造成本工具無法正常作動；因此若有無法正常運作的情況請見諒，這通常得要更改原始碼方能回復正常。
 
 已撰寫完的各大小說漫畫網站工具包括：
@@ -110,6 +110,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [知音漫客](https://www.zymk.cn/) | zymk.js | |
 | [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
 | [哔哩哔哩漫画](https://manga.bilibili.com/m) | bilibili.js | 收費作品太多，PC端只給看10話，感覺很難用。並且系統太複雜，每次改版得花許多時間來修正，恐不再維護。 **本工具無法下載 APP only & 付費內容** |
+| [布卡漫画](http://www.buka.cn/) | buka.js | 有少數遺失圖片。請注意：搜索某些名稱，如包含"纪元"一詞之作品時，會造成連線重設。對於這類作品必須輸入id而非標題。 **本工具無法下載VIP付費內容** |
 | [SF漫画](https://manhua.sfacg.com/) | sfacg.js | |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。拿來下載日本漫畫的人好像比較多。  **本工具無法下載付费章节** |
 | [土豪漫画](https://www.tohomh123.com/) | tohomh.js | 系統似 dm5。 |
@@ -354,7 +355,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 非常歡迎[提供使用意見與改善建議](https://github.com/kanasimi/work_crawler/issues/new)。
 
 ## Announce 聲明
-* 本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容版權屬原作者所有，請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
+* ⚠本工具僅供同好學習和研究，嚴禁傳播或用於任何商業、非法用途！請小心利用本工具。所下載或備分之內容版權屬原作者所有，請勿公開散布傳播。利用本工具可能引起的任何糾紛或損失損害，本人恕不負責。
 
 <!--
 TODO:
