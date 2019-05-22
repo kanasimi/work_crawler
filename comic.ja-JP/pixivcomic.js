@@ -121,6 +121,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 		// content="/api/v1/viewer/stories/JXXtyieE41/50811.json">
 		'<meta name="viewer-api-url" content="', '"');
 		work_data.token_options = {
+			error_retry : this.MAX_ERROR_RETRY,
 			headers : {
 				// work_data['csrf-token']
 				'X-CSRF-Token' : html.between(
@@ -135,17 +136,33 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 			return;
 		}
 
+		var chapter_data = work_data.chapter_list[chapter_NO - 1];
+
+		url = html.between('<meta name="token-api-url" content="',
+		// /api/v1/viewer/token/d220bbe0ed815ceea5fd0308021fff9f.json
+		'"');
+		if (!url) {
+			if (typeof html === 'string' && html.includes('期限')) {
+				// e.g., html==="エピソードの公開期限が過ぎました"
+				chapter_data.limited = html;
+			}
+			callback();
+			return;
+		}
+
 		// https://comic.pixiv.net/assets/viewer-ae2940cef41fd61c265fde4c14916a3f49e96326e5542df3a12cc9a06fce8678.js
 		// 'X-CSRF-Token': e('meta[name="csrf-token"]').attr('content')
-		this.get_URL(html.between('<meta name="token-api-url" content="',
-		// /api/v1/viewer/token/d220bbe0ed815ceea5fd0308021fff9f.json
-		'"'), function(XMLHttp) {
+		this.get_URL(url, function(XMLHttp, error) {
 			try {
 				html = XMLHttp.responseText;
 				if (/<html/.test(html)) {
 					callback();
 					return;
 				}
+				if (html === undefined) {
+					console.log(XMLHttp);
+				}
+
 				html = JSON.parse(html);
 				if (html.error)
 					throw html.error;
@@ -157,7 +174,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 				callback();
 				return;
 			}
-			var chapter_data = work_data.chapter_list[chapter_NO - 1];
+
 			chapter_data.token_data = html.data;
 			_this.get_URL('/api/v1/viewer/stories/'
 			// /api/v1/viewer/stories/___token___/00000.json
@@ -166,25 +183,22 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 		}, {}, work_data.token_options);
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		var chapter_data = work_data.chapter_list[chapter_NO - 1];
 		try {
 			html = JSON.parse(html);
 			if (html.error)
 				throw html.error;
 		} catch (e) {
-			// エピソードの公開期限が過ぎました
 			if (typeof html === 'string' && html.includes('期限')) {
-				return {
-					limited : html
-				};
-			}
-			if (this.skip_error)
+				// e.g., html==="エピソードの公開期限が過ぎました"
+				chapter_data.limited = html;
+			} else if (this.skip_error)
 				this.onwarning(e);
 			else
 				this.onerror(e);
-			return;
+			return chapter_data;
 		}
 
-		var chapter_data = work_data.chapter_list[chapter_NO - 1];
 		// 避免覆寫 chapter_data.title
 		chapter_data = Object.assign(html.data, chapter_data);
 		html = html.data.contents;
