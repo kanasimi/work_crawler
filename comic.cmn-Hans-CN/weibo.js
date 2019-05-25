@@ -32,7 +32,7 @@ var crawler = new CeL.work_crawler({
 	},
 	parse_search_result : function(html, get_label) {
 		// console.log(html);
-		html = JSON.parse(html).data.data;
+		html = JSON.parse(html.trim()).data.data;
 		return [ html, html ];
 	},
 	id_of_search_result : 'comic_id',
@@ -44,7 +44,8 @@ var crawler = new CeL.work_crawler({
 				+ '&_request_from=pc';
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
-		var work_data = JSON.parse(html).data;
+		// .trim(): 去除 BOM。
+		var work_data = JSON.parse(html.trim()).data;
 		// console.log(work_data);
 		Object.assign(work_data, {
 			// 必要屬性：須配合網站平台更改。
@@ -79,7 +80,7 @@ var crawler = new CeL.work_crawler({
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label) {
 		// console.log(html);
-		var chapter_data = JSON.parse(html).data, site_ver = 'site_ver='
+		var chapter_data = JSON.parse(html.trim()).data, site_ver = 'site_ver='
 				+ chapter_data.site_ver;
 
 		// console.log(chapter_data);
