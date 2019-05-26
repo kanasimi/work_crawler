@@ -4,7 +4,16 @@
  */
 
 // const
-var app = require('electron').app, BrowserWindow = require('electron').BrowserWindow, path = require('path'), url = require('url');
+var path = require('path'), url = require('url');
+
+if (process.env.USERPROFILE
+		&& !module.paths.includes(process.env.USERPROFILE + path.sep
+				+ 'node_modules')) {
+	module.paths.push(process.env.USERPROFILE + path.sep + 'node_modules');
+}
+
+// const
+var app = require('electron').app, BrowserWindow = require('electron').BrowserWindow;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
