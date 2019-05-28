@@ -20,7 +20,9 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 var crawler = CeL.SinMH({
 	// one_by_one : true,
 
-	base_URL : 'https://www.50mh.com/',
+	// 201/5/10: https://www.50mh.com/
+	// 201/5/29 前: https://www.manhuadui.com/
+	base_URL : 'https://www.manhuadui.com/',
 
 	search_URL : 'API',
 	api_base_URL : 'https://450.manhuadang.net/',
