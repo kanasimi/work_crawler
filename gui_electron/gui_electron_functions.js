@@ -54,7 +54,7 @@ download_sites_set = {
 		dm5 : '动漫屋',
 		tohomh : '土豪漫画',
 
-		manhuatai : '漫画台',
+		// manhuatai : '漫画台',
 
 		manhuagui : '看漫画/漫画柜',
 		manhuagui_tw : '繁體版漫畫櫃',
@@ -139,40 +139,17 @@ download_sites_set = {
 },
 // const 下載選項。有順序。常用的排前面。
 // @see CeL.application.net.work_crawler
-download_options_set = {
-	// 亮著的原因可能是因為設定成了 'changed'，此時請取消勾選後重新勾選可強制從頭檢測。
-	recheck : '從頭檢測所有作品之所有章節與所有圖片。',
-	start_chapter : '將開始/接續下載的章節編號。對已下載過的章節，必須配合 .recheck。',
-	chapter_filter : '篩選想要下載的章節標題關鍵字。例如"單行本"。',
-	// 重新擷取用的相關操作設定。
-	// 漫畫不需要重建電子書檔案
-	regenerate : '章節數量無變化時依舊利用 cache 重建資料(如下載小說時不重新取得網頁資料，只重建ebook檔)。',
-	reget_chapter : '重新取得每個所檢測的章節內容。',
-
-	archive_images : '漫畫下載完畢後壓縮圖像檔案。',
-
-	// 容許錯誤用的相關操作設定。
-	MAX_ERROR_RETRY : '出錯時重新嘗試的次數。',
-	allow_EOI_error : '當圖像不存在 EOI (end of image) 標記，或是被偵測出非圖像時，依舊強制儲存檔案。',
-	MIN_LENGTH : '最小容許圖案檔案大小 (bytes)。若值太小，傳輸到一半壞掉的圖片可能被當作正常圖片而不會出現錯誤。',
-	skip_error : '忽略/跳過圖像錯誤。',
-	skip_chapter_data_error : '當無法取得 chapter 資料時，直接嘗試下一章節。',
-
-	one_by_one : '循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。',
-	// overwrite_old_file : '當新獲取的檔案比較大時，覆寫舊的檔案。',
-	main_directory : '下載檔案儲存目錄路徑。圖片檔+紀錄檔下載位置。',
-	user_agent : '瀏覽器識別。運行前後始終維持相同的瀏覽器識別，應該就不會影響到下載。',
-
-	write_chapter_metadata : '將每個章節壓縮檔的資訊寫入同名(添加.json延伸檔名)的JSON檔，方便其他工具匯入用。',
-	write_image_metadata : '將每個圖像的資訊寫入同名(添加.json延伸檔名)的JSON檔，方便其他工具匯入用。',
-
-	preserve_download_work_layer : '下載完成後保留下載進度條。',
-	play_finished_sound : '任務完成後播放音效。'
-},
+download_options_set = {},
 // const `global.data_directory`/`default_configuration_file_name`
 default_configuration_file_name = 'work_crawler.configuration.json',
 //
 theme_list = 'light|dark'.split('|');
+
+'recheck,start_chapter,chapter_filter,regenerate,reget_chapter,archive_images,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,skip_error,skip_chapter_data_error,one_by_one,main_directory,user_agent,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
+// @see work_crawler/resource/locale of work_crawler - locale.csv
+.split(',').forEach(function(item) {
+	download_options_set[item] = 'download_options.' + item;
+});
 
 var save_config_this_time = true;
 
@@ -440,7 +417,9 @@ function initializer() {
 		var option_object = {
 			label : [ {
 				b : download_option
-			}, ':', input_box, download_options_set[download_option],
+			}, ':', input_box, {
+				T : download_options_set[download_option]
+			},
 			//
 			arg_type_data ? ' ('
 			//
@@ -1691,7 +1670,7 @@ function Download_job(crawler, work_id) {
 	// 顯示下載進度條。
 	this.progress_layer = CeL.new_node({
 		div : {
-			T : '下載任務初始化中……'
+			T : '下載任務初始化、讀取作品資訊中……'
 		},
 		C : 'progress_layer'
 	});

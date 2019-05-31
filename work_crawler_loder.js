@@ -61,19 +61,6 @@ try {
 } catch (e) {
 }
 
-if (data_directory
-// && !CeL.directory_exists(data_directory)
-) {
-	try {
-		// 若是目標目錄無法存取，那就放在當前目錄下。
-		require('fs').accessSync(data_directory);
-	} catch (e) {
-		console.warn('Warning: Can not access [' + data_directory
-				+ ']!\n下載的檔案將放在工具檔所在的目錄下。');
-		data_directory = '';
-	}
-}
-
 // ----------------------------------------------------------------------------
 // Load CeJS library.
 
@@ -128,6 +115,23 @@ CeL.run('application.platform.nodejs', [
 
 // console.log(process.argv);
 
+if (data_directory
+// && !CeL.directory_exists(data_directory)
+) {
+	try {
+		// 若是目標目錄無法存取，那就放在當前目錄下。
+		require('fs').accessSync(data_directory);
+	} catch (e) {
+		// 只 call 一次 CeL.warn()，這樣在 GUI 會顯示在同一行。
+		CeL.warn([ {
+			T : [ '警告：無法存取作品存放目錄 [%1]！', data_directory ]
+		}, '\n', {
+			T : '下載的檔案將放在工具檔所在的目錄下。'
+		} ]);
+		data_directory = '';
+	}
+}
+
 // GUI: CeL.platform.browser === 'electron'
 var is_CLI = CeL.platform.browser === 'node';
 
@@ -159,33 +163,73 @@ if (is_CLI && !work_id && process.mainModule
 	var main_script = process.mainModule
 			&& process.mainModule.filename.match(/[^\\\/]+$/)[0],
 	//
-	options_arguments = ' [option=true] ["option=value"]';
+	options_arguments = ' [' + CeL.gettext('option=true') + '] ["'
+			+ CeL.gettext('option=value') + '"]';
 
-	CeL.log(CeL.gettext('Usage:') + '\n	node ' + main_script
-	//
-	+ ' "work title / work id"'
-	// 顯示幫助信息/用法說明。
-	+ options_arguments + '\n' + '	node ' + main_script + ' "l=work list file"'
-			+ options_arguments);
+	CeL.log({
+		T : 'Usage:'
+	});
+	CeL.log({
+		T : '	node ' + main_script + ' "' + CeL.gettext('作品標題或 id') + '"'
+		// 顯示幫助信息/用法說明。
+		+ options_arguments + '\n' + '	node ' + main_script + ' "l='
+				+ CeL.gettext('作品列表檔案') + '"' + options_arguments,
+		S : {
+			color : 'white',
+			backgroundColor : 'magenta'
+		}
+	});
 
-	CeL.log(CeL.gettext('Options:')
+	CeL.log({
+		T : 'Options:'
+	});
+	Object.entries(CeL.work_crawler.prototype.import_arg_hash)
 	//
-	+ Object.entries(CeL.work_crawler.prototype.import_arg_hash)
-	//
-	.map(function(pair) {
-		var arg_type_data = pair[1];
-		return '\n	' + pair[0] + '	('
-		// @see function initializer() @ gui_electron_functions.js
-		+ Object.keys(arg_type_data).map(function(type) {
+	.forEach(function(pair) {
+		var arg_type_data = pair[1], types = [];
+
+		Object.keys(arg_type_data).forEach(function(type) {
 			var condition = arg_type_data[type];
 			if (Array.isArray(condition)) {
 				condition = condition.join('; ');
 			} else {
 				condition = JSON.stringify(condition);
 			}
-			return type + (condition ? ': ' + condition : '');
-		}).join(' | ') + ')';
-	}).join(''));
+			types.push({
+				T : type,
+				S : {
+					color : 'green'
+				}
+			});
+			if (condition) {
+				types.push(': ', {
+					T : condition,
+					S : {
+						color : 'yellow'
+					}
+				});
+			}
+			types.push(' | ');
+		});
+		// remove last separator
+		types.pop();
+
+		CeL.log([ '  ', {
+			T : pair[0],
+			S : {
+				color : 'magenta',
+				backgroundColor : 'cyan'
+			}
+		}, '	(',
+		// @see function initializer() @ gui_electron_functions.js
+		types, ')' ]);
+		CeL.log([ '    ', {
+			T : CeL.gettext('download_options.' + pair[0]),
+			S : {
+				color : 'white'
+			}
+		} ]);
+	});
 
 	process.exit();
 }
