@@ -89,9 +89,25 @@ if (typeof CeL !== 'function') {
 	throw 'No CeJS library';
 }
 
+// ----------------------------------------------------------------------------
+// Setup CeJS before loading modules.
+
 // 判別是否運行了多個 CeL 實體使用。
 if (!CeL.random_id)
 	CeL.random_id = Math.random();
+
+// GUI: CeL.platform.browser === 'electron'
+var is_CLI = CeL.platform.browser === 'node';
+
+if (is_CLI) {
+	// for i18n: define gettext() user domain resource location.
+	// gettext() will auto load (CeL.env.domain_location + language + '.js').
+	// e.g., resource/cmn-Hant-TW.js, resource/ja-JP.js
+	CeL.env.domain_location = module.filename.replace(/[^\\\/]*$/, 'resource'
+			+ CeL.env.path_separator);
+
+	// CeL.gettext.use_domain('GUESS', true);
+}
 
 // ----------------------------------------------------------------------------
 // Load modules.
@@ -115,6 +131,10 @@ CeL.run('application.platform.nodejs', [
 
 // console.log(process.argv);
 
+global.work_id = is_CLI
+		&& (CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id) || process.argv[2])
+		|| global.work_id;
+
 if (data_directory
 // && !CeL.directory_exists(data_directory)
 ) {
@@ -129,31 +149,6 @@ if (data_directory
 			T : '下載的檔案將放在工具檔所在的目錄下。'
 		} ]);
 		data_directory = '';
-	}
-}
-
-// GUI: CeL.platform.browser === 'electron'
-var is_CLI = CeL.platform.browser === 'node';
-
-global.work_id = is_CLI
-		&& (CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id) || process.argv[2])
-		|| global.work_id;
-
-if (is_CLI) {
-	// for i18n: define gettext() user domain resource location.
-	// gettext() will auto load (CeL.env.domain_location + language + '.js').
-	// e.g., resource/cmn-Hant-TW.js, resource/ja-JP.js
-	CeL.gettext.use_domain_location(module.filename.replace(/[^\\\/]*$/,
-			'resource' + CeL.env.path_separator));
-
-	try {
-		CeL.env.code_page = require('child_process').execSync('CHCP')
-				.toString().match(/(\d+)[^\d]*$/)[1];
-	} catch (e) {
-		// TODO: handle exception
-	}
-	if (CeL.env.code_page > 0) {
-		CeL.gettext.use_domain.via_code_page(CeL.env.code_page, true);
 	}
 }
 
