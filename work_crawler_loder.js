@@ -155,6 +155,19 @@ if (data_directory
 if (is_CLI && !work_id && process.mainModule
 // 檔案整理工具不需要下載作品，因此也不需要作品名稱。
 && (typeof need_work_id === 'undefined' || need_work_id)) {
+	CeL.info({
+		T : 'CeJS 線上小說漫畫下載工具'
+	});
+	CeL.log({
+		T : [
+				'欲採用圖形介面請執行 `%1`。',
+				'start_gui_electron.'
+						+ (CeL.platform.is_Windows() ? 'bat' : 'sh') ]
+	});
+
+	CeL.log('');
+	// --------------------------------
+
 	var main_script = process.mainModule
 			&& process.mainModule.filename.match(/[^\\\/]+$/)[0],
 	//
@@ -174,6 +187,9 @@ if (is_CLI && !work_id && process.mainModule
 			backgroundColor : 'magenta'
 		}
 	});
+
+	CeL.log('');
+	// --------------------------------
 
 	CeL.log({
 		T : 'Options:'
@@ -225,6 +241,8 @@ if (is_CLI && !work_id && process.mainModule
 			}
 		} ]);
 	});
+
+	// --------------------------------
 
 	process.exit();
 }

@@ -1,7 +1,7 @@
 @ECHO OFF
 REM parallelly
 REM chcp 65001
-REM chcp 936
+REM chcp 932
 REM cd/d D:\USB\cgi-bin\program\comic
 
 REM CD "%~n0"

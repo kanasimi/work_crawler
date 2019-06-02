@@ -1,8 +1,9 @@
+# https://hub.docker.com/_/node/
 FROM node:12
 
-WORKDIR /work_crawler
+WORKDIR /app
 # copy files
-COPY . /work_crawler
+COPY work_crawler.updater.js /app
 RUN ["node", "work_crawler.updater.js"]
 
 EXPOSE 80
