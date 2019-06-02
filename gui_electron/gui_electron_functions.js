@@ -61,6 +61,7 @@ download_sites_set = {
 		gufengmh : '古风漫画网',
 		'36mh' : '36漫画网',
 		manhuaniu : '漫画牛',
+		mhkan : '漫画看',
 		'930mh' : '亲亲漫画网',
 		'50mh' : '50漫画网',
 

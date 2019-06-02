@@ -125,6 +125,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [漫画牛](https://www.manhuaniu.com/) | manhuaniu.js | 速度稍微慢。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
+| [漫画看](https://www.mhkan.com/) | mhkan.js | 水管太小？總是卡住，下載圖片時常出現 status 522，很難用。<br />採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [亲亲漫画网](http://www.duzhez.com/) | 930mh.js | 有些韓國漫畫。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
 | [50漫画网](https://www.manhuadui.com/) | 50mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。可能為早期[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板？ |
@@ -146,7 +147,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |
-| ~~[漫画台](http://www.manhuatai.com/)~~ | ~~archive/manhuatai.2018.js~~ | 2019/5 改版過大並開始收費，不再維護。 |
+| ~~[漫画台](http://www.manhuatai.com/)~~ | ~~archive/manhuatai.2018.js~~ | 2019/5/25-28 間改版，改版幅度過大並開始收費，不再維護。 |
 
 ### Japanese webcomics 日語網路漫畫 日本語のウェブコミック
 [comic.ja-JP/](comic.ja-JP/)*.js, images → zip
