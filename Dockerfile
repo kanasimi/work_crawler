@@ -3,8 +3,7 @@ FROM node:12
 WORKDIR /work_crawler
 # copy files
 COPY . /work_crawler
-#RUN ["node", "work_crawler_loder.js"]
-RUN npm install
+RUN ["node", "work_crawler.updater.js"]
 
 EXPOSE 80
 
