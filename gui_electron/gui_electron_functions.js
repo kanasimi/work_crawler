@@ -403,8 +403,7 @@ function initializer() {
 
 					} else if (key === 'main_directory') {
 						if (!default_configuration[crawler.site_id]) {
-							default_configuration[crawler.site_id] = CeL
-									.null_Object();
+							default_configuration[crawler.site_id] = Object.create(null);
 						}
 						default_configuration
 						//
@@ -1316,8 +1315,7 @@ var search_result_columns = {
 };
 
 function show_search_result(work_data_search_queue) {
-	var work_title = work_data_search_queue.work_title, not_found_site_hash = CeL
-			.null_Object(), OK = 0, node_list = [], result_columns = [];
+	var work_title = work_data_search_queue.work_title, not_found_site_hash = Object.create(null), OK = 0, node_list = [], result_columns = [];
 	delete work_data_search_queue.work_title;
 	search_result_columns.No = function() {
 		this.S = 'text-align: right;';
