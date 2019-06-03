@@ -1,5 +1,6 @@
 # https://hub.docker.com/_/node/
-FROM node:12
+# FROM node:12
+FROM electronuserland/builder
 
 WORKDIR /app
 # copy files
@@ -8,7 +9,7 @@ RUN ["node", "work_crawler.updater.js"]
 
 EXPOSE 80
 
-CMD ["sh", "start_gui_electron.sh"]
+CMD ["sh", "-c", "cd work_crawler-master && sh start_gui_electron.sh"]
 
 # docker build .
 # docker image ls
