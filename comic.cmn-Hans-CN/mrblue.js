@@ -35,7 +35,7 @@ var crawler = new CeL.work_crawler({
 		return 'MrBlueComicsData_04/webtoon/' + work_id + '/';
 	},
 	parse_work_data : function(html, get_label) {
-		return CeL.null_Object();
+		return Object.create(null);
 	},
 	get_chapter_list : function(work_data, html, get_label) {
 		if (!Object.hasOwnProperty(this, 'start_chapter')

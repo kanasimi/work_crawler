@@ -42,7 +42,7 @@ var crawler = new CeL.work_crawler({
 		.replace(/：.+$/g, ''));
 	},
 	parse_search_result : function(html) {
-		var id_data = CeL.null_Object(),
+		var id_data = Object.create(null),
 		// {Array}id_list = [id,id,...]
 		id_list = [], matched, PATTERN_work_id =
 		//
@@ -60,7 +60,7 @@ var crawler = new CeL.work_crawler({
 		// e.g., `echo 今日限免： && node qq free`
 		free : function(insert_id_list, get_label) {
 			var _this = this;
-			this.free_title = CeL.null_Object();
+			this.free_title = Object.create(null);
 
 			function parse_html(XMLHttp) {
 				XMLHttp.responseText.each_between('mod-tag-zt-3', '</p>',
@@ -78,7 +78,7 @@ var crawler = new CeL.work_crawler({
 				//
 				free_file = _this.main_directory + 'free.json',
 				//
-				free = CeL.get_JSON(free_file) || CeL.null_Object();
+				free = CeL.get_JSON(free_file) || Object.create(null);
 
 				for ( var title in _this.free_title) {
 					if (_this.free_title.hasOwnProperty(title)) {

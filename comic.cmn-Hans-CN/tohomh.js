@@ -125,8 +125,6 @@ var crawler = new CeL.work_crawler({
 
 		// reset work_data.chapter_list
 		work_data.chapter_list = [];
-		// 漫畫目錄名稱不須包含分部號碼。使章節目錄名稱不包含 part_NO。
-		work_data.chapter_list.add_part_NO = false;
 
 		var PATTERN_chapter = /<li>([\s\S]+?)<\/li>|<ul ([^<>]+)>/g, matched;
 		while (matched = PATTERN_chapter.exec(html)) {

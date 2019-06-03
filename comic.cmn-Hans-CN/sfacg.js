@@ -128,7 +128,7 @@ crawler = new CeL.work_crawler({
 
 		html.between('<script language="javascript">', '</script>');
 
-		chapter_data.page_variables = CeL.null_Object();
+		chapter_data.page_variables = Object.create(null);
 
 		var matched, PATTERN_assignment =
 		// [ expression, variable name, value, quote ]

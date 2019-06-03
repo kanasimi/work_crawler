@@ -8,7 +8,7 @@ require('../work_crawler_loder.js');
 
 // ----------------------------------------------------------------------------
 
-var server_list_hash = CeL.null_Object(),
+var server_list_hash = Object.create(null),
 // [ , chapter_title, chapter_url, chapter_id, chapter_title_and_pages ]
 PATTERN_chapter_data = /<li><a title="([^"]+)" href="((\d{0,4})[^"]*)"><span>(.+?)<\/span><\/a><\/li>/g,
 //

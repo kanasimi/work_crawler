@@ -656,7 +656,7 @@ function compress_each_directory(config, index) {
 	// config: [ directory_path, profile_name, message ]
 	var directory_path = config[0], profile_name = config[1], message = config[2],
 	// profile configuration
-	profile = Object.assign(CeL.null_Object(),
+	profile = Object.assign(Object.create(null),
 	//
 	compress_each_directory.profiles[profile_name.profile || profile_name]);
 	Object.assign(profile, {

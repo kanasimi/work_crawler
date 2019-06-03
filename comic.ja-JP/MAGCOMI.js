@@ -16,6 +16,10 @@ var crawler = new CeL.work_crawler({
 	// 日本的線上漫畫網站習慣刪掉舊章節，因此每一次都必須從頭檢查。
 	recheck : true,
 
+	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
+	// 常常下載到十幾二十個作品後中斷連線出現錯誤。
+	chapter_time_interval : '1s',
+
 	// one_by_one : true,
 	base_URL : 'https://comic.mag-garden.co.jp/',
 

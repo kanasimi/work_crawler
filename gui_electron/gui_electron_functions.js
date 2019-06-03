@@ -272,7 +272,7 @@ function initializer() {
 	// read default configuration
 	default_configuration = CeL.get_JSON(global.data_directory
 			+ default_configuration_file_name)
-			|| CeL.null_Object();
+			|| Object.create(null);
 
 	// --------------------------------
 
@@ -301,8 +301,8 @@ function initializer() {
 
 	// 初始化 initialization: download_site_nodes
 	Object.assign(download_site_nodes, {
-		link_of_site : CeL.null_Object(),
-		node_of_id : CeL.null_Object()
+		link_of_site : Object.create(null),
+		node_of_id : Object.create(null)
 	});
 
 	var site_nodes = [];
@@ -503,7 +503,7 @@ function initializer() {
 					return;
 				}
 				Object.assign(crawler, crawler.default_save_to_preference);
-				crawler.preference.crawler_configuration = CeL.null_Object();
+				crawler.preference.crawler_configuration = Object.create(null);
 				// Skip .main_directory
 
 				save_preference(crawler);
@@ -1137,14 +1137,14 @@ function prepare_crawler(crawler, crawler_module) {
 
 	crawler.preference = Object.assign({
 		// 因為會'重設下載選項'，一般使用不應 cache 這個值。
-		crawler_configuration : CeL.null_Object(),
+		crawler_configuration : Object.create(null),
 		// 我的最愛 my favorite 書庫 library
 		favorites : []
 	}, CeL.get_JSON(crawler.main_directory + 'preference.json'));
 
 	// import crawler.preference.crawler_configuration
 	var crawler_configuration = crawler.preference.crawler_configuration;
-	crawler.default_save_to_preference = CeL.null_Object();
+	crawler.default_save_to_preference = Object.create(null);
 	Object.keys(save_to_preference).forEach(function(key) {
 		// Skip .main_directory
 		crawler.default_save_to_preference[key] = crawler[key];
@@ -1444,7 +1444,7 @@ function show_search_result(work_data_search_queue) {
 	if (!CeL.is_empty_object(not_found_site_hash)) {
 		var not_found_list = Object.keys(not_found_site_hash),
 		//
-		status_hash = CeL.null_Object();
+		status_hash = Object.create(null);
 		node_list.push({
 			hr : null
 		}, {
@@ -1561,7 +1561,7 @@ function search_work_title() {
 	} ], 'search_results');
 
 	sites = download_sites_set[language_used];
-	var work_data_search_queue = CeL.null_Object(), sites = Object.keys(sites), site_count = sites.length, done = 0, found = 0;
+	var work_data_search_queue = Object.create(null), sites = Object.keys(sites), site_count = sites.length, done = 0, found = 0;
 	sites.forEach(function(site_id) {
 		function all_done(work_data) {
 			if (!work_data_search_queue) {

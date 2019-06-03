@@ -44,7 +44,7 @@ var crawler = new CeL.work_crawler({
 				+ '&_request_from=pc';
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
-		// .trim(): 去除 BOM。
+		// .trim(): 去除不可見的空白字元。
 		var work_data = JSON.parse(html.trim()).data;
 		// console.log(work_data);
 		Object.assign(work_data, {

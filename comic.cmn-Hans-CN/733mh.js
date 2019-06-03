@@ -148,11 +148,7 @@ var crawler = new CeL.work_crawler({
 
 		// 設定必要的屬性。
 		chapter_data = {
-			image_list : chapter_data.map(function(url) {
-				return {
-					url : url
-				};
-			})
+			image_list : chapter_data
 		};
 		// console.log(JSON.stringify(chapter_data));
 

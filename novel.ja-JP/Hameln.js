@@ -65,7 +65,7 @@ var crawler = new CeL.work_crawler({
 		// <table class="table1">
 		// <table width=100% class=table1>
 		html = html.between('<table class="table1">', '</div>');
-		var work_data = CeL.null_Object(), PATTERN =
+		var work_data = Object.create(null), PATTERN =
 		// 2019/3/10 ハーメルン 改版
 		/<td class="label"[^<>]*>([^<>]+)<\/td><td[^<>]*>(.+?)<\/td>/g;
 
@@ -166,7 +166,7 @@ var crawler = new CeL.work_crawler({
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 儲存單一檔案之全篇文字。
 		if (!this.got_all) {
-			this.got_all = CeL.null_Object();
+			this.got_all = Object.create(null);
 		}
 		if (!this.got_all[work_data.id]) {
 			// 避免多章節時重複get。

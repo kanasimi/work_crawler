@@ -117,7 +117,7 @@ var crawler = new CeL.work_crawler({
 			image : text.between('<div class="inner">', '</div>').between(
 			// <img class="" src="...
 			'<img ', '>').between('src="', '"'),
-			characters : CeL.null_Object()
+			characters : Object.create(null)
 		};
 
 		Array.from(text.matchAll(/>([^<>]+)<\/a>/)).forEach(function(matched) {

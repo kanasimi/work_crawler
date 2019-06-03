@@ -52,7 +52,7 @@ function parse_topic_title(title, work_data) {
 		return;
 	}
 
-	work_data = work_data || CeL.null_Object();
+	work_data = work_data || Object.create(null);
 	work_data.status = [];
 	var _author = parse_genre(matched[2]);
 	if (!work_data.author) {
@@ -165,7 +165,7 @@ crawler = new CeL.work_crawler({
 			var work_data = parse_topic_title(get_label(title));
 			// console.log([ work_title, work_data ]);
 			if (work_data && work_data.title.trim() === work_title.trim()) {
-				id_data = CeL.null_Object();
+				id_data = Object.create(null);
 				id_data[matched[1]] = work_title;
 				return true;
 			}
@@ -290,7 +290,7 @@ crawler = new CeL.work_crawler({
 			book_chapter_count : 0,
 
 			raw : raw_data
-		} : CeL.null_Object();
+		} : Object.create(null);
 
 		parse_topic_title(get_label(mainEntity && mainEntity.headline
 		// 2018/2/9 改版
@@ -484,6 +484,8 @@ crawler = new CeL.work_crawler({
 			// ----------------------------------
 			// 嘗試解析章節號碼與章節標題。
 			// @see function set_chapter_NO_via_title()
+			// TODO: https://ck101.com/thread-2995922-90-1.html#post_99817050
+			// <font color="#01579B">第896章放棄還是投降？<strong></strong></font><br />
 
 			if (matched) {
 				// add <h2>...</h2>

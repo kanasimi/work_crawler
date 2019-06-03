@@ -131,10 +131,7 @@ crawler = new CeL.work_crawler({
 	get_chapter_list : function(work_data, html, get_label) {
 		var data, chapter_list = [], matched,
 		//
-		part_title, part_title_hash = CeL.null_Object(), part_NO = 0;
-
-		// 漫畫目錄名稱不須包含分部號碼。使章節目錄名稱不包含 part_NO。
-		chapter_list.add_part_NO = false;
+		part_title, part_title_hash = Object.create(null), part_NO = 0;
 
 		// 有些尚使用舊模式。
 		// @see http://www.ikanman.com/comic/8004/
