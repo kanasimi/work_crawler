@@ -17,7 +17,7 @@ CeL.run('application.net.work_crawler.comico');
 // CeL.set_debug(3);
 
 CeL.comico({
-	base_URL : 'http://plus.comico.jp/',
+	base_URL : 'https://plus.comico.jp/',
 
 	// 每個項目的<li>開頭。
 	search_head_token : ' data-result-type="official">',
