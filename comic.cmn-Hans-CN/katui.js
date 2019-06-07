@@ -13,7 +13,11 @@ CeL.run('application.net.work_crawler.qTcms2014');
 // ----------------------------------------------------------------------------
 
 var crawler = CeL.qTcms2014({
-	base_URL : 'http://www.katui.net/'
+	// e.g., 蓝翅 http://www.700mh.com/manhua/736/
+	acceptable_types : 'webp',
+
+	// 2019/6: 改 http://www.katui.net/
+	base_URL : 'http://www.700mh.com/'
 });
 
 // ----------------------------------------------------------------------------

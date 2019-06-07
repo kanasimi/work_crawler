@@ -146,7 +146,7 @@ default_configuration_file_name = 'work_crawler.configuration.json',
 //
 theme_list = 'light|dark'.split('|');
 
-'recheck,start_chapter,chapter_filter,regenerate,reget_chapter,archive_images,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,skip_error,skip_chapter_data_error,one_by_one,main_directory,user_agent,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
+'recheck,start_chapter,chapter_filter,regenerate,reget_chapter,archive_images,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,main_directory,user_agent,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
 // @see work_crawler/resource/locale of work_crawler - locale.csv
 .split(',').forEach(function(item) {
 	download_options_set[item] = 'download_options.' + item;
@@ -365,34 +365,42 @@ function initializer() {
 
 	// --------------------------------
 
+	// @seealso function reset_site_options()
+
 	var options_nodes = [];
 	for ( var download_option in download_options_set) {
 		var arg_type_data = CeL.work_crawler.prototype
 		//
 		.import_arg_hash[download_option],
 		//
-		arg_types = arg_type_data && Object.keys(arg_type_data).join(),
-		//
 		className = 'download_options', input_box = '';
 
-		if (arg_types === 'number' || arg_types === 'string') {
+		if (arg_type_data
+				&& (('number' in arg_type_data) || ('string' in arg_type_data)
+						&& !('boolean' in arg_type_data))) {
 			className += ' non_select';
 			input_box = {
 				input : null,
 				id : download_option + '_input',
-				C : 'type_' + arg_types,
-				type : arg_types,
+				C : arg_type_data ? Object.keys(arg_type_data).map(
+				//
+				function(type) {
+					return 'type_' + type;
+				}).join(' ') : '',
+				type : arg_type_data && Object.keys(arg_type_data).join(),
 				onchange : function() {
 					var crawler = get_crawler();
 					if (!crawler) {
 						return;
 					}
 					var key = this.parentNode.title;
-					if (this.type === 'number') {
+					if (this.type === 'number' || this.type
+							&& this.type.includes('number')
+							&& !isNaN(+this.value)) {
 						if (this.value)
-							crawler[key] = +this.value;
+							crawler.setup_value(key, +this.value);
 					} else {
-						crawler[key] = this.value;
+						crawler.setup_value(key, this.value);
 					}
 
 					if (key in save_to_preference) {
@@ -403,7 +411,8 @@ function initializer() {
 
 					} else if (key === 'main_directory') {
 						if (!default_configuration[crawler.site_id]) {
-							default_configuration[crawler.site_id] = Object.create(null);
+							default_configuration[crawler.site_id] = Object
+									.create(null);
 						}
 						default_configuration
 						//
@@ -1081,14 +1090,15 @@ function reset_site_options() {
 	for ( var download_option in download_options_nodes) {
 		var download_options_node = download_options_nodes[download_option],
 		//
-		arg_type_data = CeL.work_crawler.prototype.import_arg_hash[download_option],
-		//
-		arg_types = arg_type_data && Object.keys(arg_type_data).join();
+		arg_type_data = CeL.work_crawler.prototype.import_arg_hash[download_option];
 		CeL.set_class(download_options_node, 'selected', {
-			remove : arg_types === 'number' || arg_types === 'string'
-					|| !crawler[download_option]
+			remove : arg_type_data ? ('number' in arg_type_data)
+					|| ('string' in arg_type_data)
+					|| ('boolean' in arg_type_data)
+					&& !crawler[download_option] : !crawler[download_option]
 		});
-		if (arg_types === 'number' || arg_types === 'string') {
+		if (arg_type_data
+				&& (('number' in arg_type_data) || ('string' in arg_type_data))) {
 			CeL.DOM.set_text(download_option + '_input',
 			//
 			crawler[download_option] || crawler[download_option] === 0
@@ -1315,7 +1325,8 @@ var search_result_columns = {
 };
 
 function show_search_result(work_data_search_queue) {
-	var work_title = work_data_search_queue.work_title, not_found_site_hash = Object.create(null), OK = 0, node_list = [], result_columns = [];
+	var work_title = work_data_search_queue.work_title, not_found_site_hash = Object
+			.create(null), OK = 0, node_list = [], result_columns = [];
 	delete work_data_search_queue.work_title;
 	search_result_columns.No = function() {
 		this.S = 'text-align: right;';
@@ -1559,7 +1570,8 @@ function search_work_title() {
 	} ], 'search_results');
 
 	sites = download_sites_set[language_used];
-	var work_data_search_queue = Object.create(null), sites = Object.keys(sites), site_count = sites.length, done = 0, found = 0;
+	var work_data_search_queue = Object.create(null), sites = Object
+			.keys(sites), site_count = sites.length, done = 0, found = 0;
 	sites.forEach(function(site_id) {
 		function all_done(work_data) {
 			if (!work_data_search_queue) {
