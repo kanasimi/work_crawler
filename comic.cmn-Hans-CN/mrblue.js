@@ -34,33 +34,41 @@ var crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'MrBlueComicsData_04/webtoon/' + work_id + '/';
 	},
+	// 解析出作品資料/作品詳情。
 	parse_work_data : function(html, get_label) {
+		// 先給一個空的初始化作品資料以便後續作業。
 		return Object.create(null);
 	},
+	// 解析出章節列表。
 	get_chapter_list : function(work_data, html, get_label) {
 		if (!Object.hasOwnProperty(this, 'start_chapter')
-				&& work_data.last_download.chapter >= 1) {
-			// 接續上一次的下載。
+				&& work_data.last_download.chapter > this.start_chapter) {
+			// 未設定 .start_chapter 且之前下載過，則接續上一次的下載。
 			this.start_chapter = work_data.last_download.chapter;
 		}
 
-		if (!Array.isArray(work_data.chapter_list))
+		if (!Array.isArray(work_data.chapter_list)) {
+			// 先給一個空的章節列表以便後續作業。
 			work_data.chapter_list = [];
+		}
 
 		// reuse work_data.chapter_list
-		while (work_data.chapter_list.length < this.start_chapter)
+		while (work_data.chapter_list.length < this.start_chapter) {
+			// 隨便墊入作品資料網址 給本次下載開始下載章節前所有未設定的章節資料，
+			// 這樣才能準確從 .start_chapter 開始下載。後續章節網址會動態增加。
 			work_data.chapter_list.push(this.work_URL(work_data.id));
+		}
 		// console.log(work_data);
 	},
 
+	// 解析出章節資料。
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 設定必要的屬性。
 		var chapter_data = {
-			image_list : [ {
-				url : this.work_URL(work_data.id) + chapter_NO
-				// 1.pad(3)
-				+ '/001.jpg'
-			} ]
+			// 先給好第一張圖片的網址。後續圖片網址會動態增加。
+			image_list : [ this.work_URL(work_data.id) + chapter_NO
+			// 1.pad(3)
+			+ '/001.jpg' ]
 		};
 
 		// console.log(chapter_data);
@@ -80,7 +88,7 @@ var crawler = new CeL.work_crawler({
 		}
 
 		if (image_list.length === 1) {
-			// CeL.debug(work_data.id + ': 第一張圖就失敗了。結束下載本作品。');
+			// CeL.debug(work_data.id + ': 第一張圖就下載失敗了。結束下載本作品。');
 			return;
 		}
 
@@ -89,7 +97,7 @@ var crawler = new CeL.work_crawler({
 		// 動態增加章節，必須手動增加章節數量。
 		work_data.chapter_count++;
 	},
-	// 動態改變章節中的圖片數量。
+	// 設定動態改變章節中的圖片數量。
 	dynamical_count_images : true
 });
 
