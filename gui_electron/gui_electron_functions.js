@@ -439,7 +439,9 @@ function initializer() {
 			title : download_option
 		};
 		if (!className.includes('non_select')) {
-			option_object.onclick = function() {
+			option_object.onclick = function(event) {
+				CeL.DOM.stop_event(event, true);
+
 				var crawler = get_crawler();
 				if (!crawler) {
 					return;
@@ -2054,9 +2056,19 @@ function check_update_NOT_package() {
 			});
 		} else {
 			CeL.log({
-				// 重新啟動應用程式或重新整理網頁(Ctrl-R)
 				T : '非安裝包版本更新完畢。您需要重新啟動程式以使用新版本。'
 			});
+
+			CeL.new_node({
+				b : {
+					// 重新啟動應用程式或重新整理網頁(Ctrl-R)
+					T : '重新讀取應用程式之網頁部分'
+				},
+				R : gettext('建議重新啟動應用程式以使用完整更新後的程式。'),
+				onclick : function() {
+					history.go(0);
+				}
+			}, [ update_panel, 'clean' ]);
 		}
 	});
 }
@@ -2082,12 +2094,12 @@ function check_update() {
 	var update_panel = CeL.new_node({
 		div : {
 			T : '檢查更新中……',
-			C : 'waiting',
-			onclick : function() {
-				CeL.toggle_display(update_panel, false);
-			}
+			C : 'waiting'
 		},
-		id : 'update_panel'
+		id : 'update_panel',
+		onclick : function() {
+			CeL.toggle_display(update_panel, false);
+		}
 	}, [ document.body, 'first' ]);
 
 	function update_process(version_data) {
