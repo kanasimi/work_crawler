@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載 미스터블루 (Mr.Blue) 漫画 的工具。 Download mrblue comics.
+ * 批量下載 e북포털 북큐브 漫畫 的工具。 Download bookcube comics.
  * 
  * 本檔案為僅僅利用可預測的圖片網址序列去下載漫畫作品，不 fetch 作品與章節頁面的範例。
  */
@@ -21,18 +21,18 @@ var crawler = new CeL.work_crawler({
 	// http://www.mrblue.com/webtoon/all
 	base_URL : 'http://comics.mrblue.com/',
 
-	extract_work_id : function(work_information) {
-		// e.g., "wt_HQ0005"
-		if (/^[a-z_\-\d]+$/i.test(work_information))
-			return work_information;
-	},
-
 	skip_get_work_page : true,
 	skip_get_chapter_page : true,
+	// 設定動態改變章節中的圖片數量。
+	dynamical_count_images : true,
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return 'MrBlueComicsData_04/webtoon/' + work_id + '/';
+		// 必須是圖片網址的一部分。
+		// e.g.,
+		// https://toon.bookcube.com/toon/viewer/image.asp?webtoon_num=150087
+		return 'https://toon.bookcube.com/toon/viewer/image.asp?webtoon_num='
+				+ work_id;
 	},
 	// 解析出作品資料/作品詳情。
 	parse_work_data : function(html, get_label) {
@@ -65,10 +65,11 @@ var crawler = new CeL.work_crawler({
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 設定必要的屬性。
 		var chapter_data = {
-			// 先給好第一張圖片的網址。後續圖片網址會動態增加。
-			image_list : [ this.work_URL(work_data.id) + chapter_NO
-			// 1.pad(3)
-			+ '/001.jpg' ]
+			// 先給好本章節第一張圖片的網址。後續圖片網址會動態增加。
+			// e.g.,
+			// https://toon.bookcube.com/toon/viewer/image.asp?webtoon_num=150087&split_num=001&file_idx=1
+			image_list : [ this.work_URL(work_data.id) + '&split_num='
+					+ chapter_NO.pad(3) + '&file_idx=' + (0 + 1) ]
 		};
 
 		// console.log(chapter_data);
@@ -82,8 +83,9 @@ var crawler = new CeL.work_crawler({
 		// console.log(latest_image_data);
 		if (!latest_image_data.has_error) {
 			// CeL.debug(work_data.id + ': 本章節上一張圖片下載成功。下載本章節下一幅圖片。');
-			image_list.push(this.work_URL(work_data.id) + chapter_NO + '/'
-					+ (image_list.length + 1).pad(3) + '.jpg');
+			image_list.push(this.work_URL(work_data.id) + '&split_num='
+					+ chapter_NO.pad(3) + '&file_idx='
+					+ (image_list.length + 1));
 			return;
 		}
 
@@ -96,9 +98,7 @@ var crawler = new CeL.work_crawler({
 		work_data.chapter_list.push(this.work_URL(work_data.id));
 		// 動態增加章節，必須手動增加章節數量。
 		work_data.chapter_count++;
-	},
-	// 設定動態改變章節中的圖片數量。
-	dynamical_count_images : true
+	}
 });
 
 // ----------------------------------------------------------------------------
