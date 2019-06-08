@@ -365,20 +365,24 @@ function initializer() {
 
 	// --------------------------------
 
+	// Setup GUI-only options
+	var import_arg_hash = CeL.work_crawler.setup_argument_conditions({
+		preserve_download_work_layer : 'boolean',
+		play_finished_sound : 'boolean'
+	}, true);
+
 	// @seealso function reset_site_options()
 
 	var options_nodes = [];
 	for ( var download_option in download_options_set) {
-		var arg_type_data = CeL.work_crawler.prototype
+		var arg_type_data = import_arg_hash[download_option], input_box = '',
 		//
-		.import_arg_hash[download_option],
-		//
-		className = 'download_options', input_box = '';
+		className = 'download_options'
+				+ (arg_type_data && !('boolean' in arg_type_data) ? ' non_select'
+						: '');
 
 		if (arg_type_data
-				&& (('number' in arg_type_data) || ('string' in arg_type_data)
-						&& !('boolean' in arg_type_data))) {
-			className += ' non_select';
+				&& (('number' in arg_type_data) || ('string' in arg_type_data))) {
 			input_box = {
 				input : null,
 				id : download_option + '_input',
@@ -429,18 +433,8 @@ function initializer() {
 			}, ':', input_box, {
 				T : download_options_set[download_option]
 			},
-			//
-			arg_type_data ? ' ('
-			//
-			+ Object.keys(arg_type_data).map(function(type) {
-				var condition = arg_type_data[type];
-				if (Array.isArray(condition)) {
-					condition = condition.join('; ');
-				} else {
-					condition = JSON.stringify(condition);
-				}
-				return type + (condition ? ': ' + condition : '');
-			}).join(' | ') + ')' : '' ],
+			// option_type_token() @ work_crawler_loder.js
+			option_type_token(arg_type_data, [ , '#871' ]) ],
 			C : className,
 			title : download_option
 		};
@@ -1090,21 +1084,23 @@ function reset_site_options() {
 	for ( var download_option in download_options_nodes) {
 		var download_options_node = download_options_nodes[download_option],
 		//
-		arg_type_data = CeL.work_crawler.prototype.import_arg_hash[download_option];
-		CeL.set_class(download_options_node, 'selected', {
-			remove : arg_type_data ? ('number' in arg_type_data)
-					|| ('string' in arg_type_data)
-					|| ('boolean' in arg_type_data)
-					&& !crawler[download_option] : !crawler[download_option]
-		});
-		if (arg_type_data
-				&& (('number' in arg_type_data) || ('string' in arg_type_data))) {
-			CeL.DOM.set_text(download_option + '_input',
-			//
-			crawler[download_option] || crawler[download_option] === 0
-			//
-			? crawler[download_option] : '');
+		arg_type_data = CeL.work_crawler.prototype.import_arg_hash[download_option],
+		//
+		arg_types = arg_type_data && Object.keys(arg_type_data).join();
+
+		if (!CeL.has_class(download_options_node, 'non_select')) {
+			CeL.set_class(download_options_node, 'selected', {
+				// 只要為可選擇之選項，便依照是否為空值設定選擇狀態。
+				// assert: 純粹為數字或者字串則不設定 'selected'。
+				remove : !crawler[download_option]
+			});
 		}
+
+		CeL.DOM.set_text(download_option + '_input',
+		//
+		crawler[download_option] || crawler[download_option] === 0
+		//
+		? crawler[download_option] : '');
 	}
 }
 
@@ -2164,6 +2160,8 @@ function set_taskbar_progress(progress) {
 
 function open_DevTools() {
 	node_electron.ipcRenderer.send('open_DevTools', true);
+	console.warn('-'.repeat(80));
+	console.warn(_('本欄基本上僅供調試使用。若您有下載功能方面的需求，煩請提報議題，謝謝。'));
 	return false;
 }
 

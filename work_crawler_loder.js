@@ -152,6 +152,48 @@ if (data_directory
 	}
 }
 
+// used in: function initializer() @ gui_electron_functions.js
+function option_type_token(arg_type_data, colors) {
+	if (!arg_type_data)
+		return '';
+
+	var option_types = [ '	(' ];
+
+	Object.keys(arg_type_data).forEach(function(type) {
+		var condition = arg_type_data[type];
+		if (Array.isArray(condition)) {
+			condition = condition.join('; ');
+		} else {
+			condition = JSON.stringify(condition);
+		}
+		option_types.push({
+			T : type,
+			S : {
+				color : colors && colors[0] || 'green'
+			}
+		});
+		if (condition) {
+			option_types.push(': ', {
+				T : condition,
+				S : {
+					color : colors && colors[1] || 'yellow'
+				}
+			});
+		}
+		option_types.push(' | ');
+	});
+
+	if (option_types.length === 1) {
+		// assert: There is no types indecated within `arg_type_data`.
+		option_types = '';
+	} else {
+		// remove last separator
+		option_types.splice(-1, 1, ')');
+	}
+
+	return option_types;
+}
+
 if (is_CLI && !work_id && process.mainModule
 // 檔案整理工具不需要下載作品，因此也不需要作品名稱。
 && (typeof need_work_id === 'undefined' || need_work_id)) {
@@ -197,43 +239,13 @@ if (is_CLI && !work_id && process.mainModule
 	Object.entries(CeL.work_crawler.prototype.import_arg_hash)
 	//
 	.forEach(function(pair) {
-		var arg_type_data = pair[1], types = [];
-
-		Object.keys(arg_type_data).forEach(function(type) {
-			var condition = arg_type_data[type];
-			if (Array.isArray(condition)) {
-				condition = condition.join('; ');
-			} else {
-				condition = JSON.stringify(condition);
-			}
-			types.push({
-				T : type,
-				S : {
-					color : 'green'
-				}
-			});
-			if (condition) {
-				types.push(': ', {
-					T : condition,
-					S : {
-						color : 'yellow'
-					}
-				});
-			}
-			types.push(' | ');
-		});
-		// remove last separator
-		types.pop();
-
 		CeL.log([ '  ', {
 			T : pair[0],
 			S : {
 				color : 'magenta',
 				backgroundColor : 'cyan'
 			}
-		}, '	(',
-		// @see function initializer() @ gui_electron_functions.js
-		types, ')' ]);
+		}, option_type_token(pair[1]) ]);
 		CeL.log([ '    ', {
 			T : CeL.gettext('download_options.' + pair[0]),
 			S : {
@@ -246,6 +258,8 @@ if (is_CLI && !work_id && process.mainModule
 
 	process.exit();
 }
+
+global.option_type_token = option_type_token;
 
 // ----------------------------------------------------------------------------
 
