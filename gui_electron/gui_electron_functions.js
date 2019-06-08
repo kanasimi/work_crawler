@@ -438,7 +438,7 @@ function initializer() {
 			C : className,
 			title : download_option
 		};
-		if (!input_box) {
+		if (!className.includes('non_select')) {
 			option_object.onclick = function() {
 				var crawler = get_crawler();
 				if (!crawler) {
