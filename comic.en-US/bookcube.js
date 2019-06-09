@@ -17,9 +17,10 @@ var crawler = new CeL.work_crawler({
 	skip_error : true,
 	preserve_bad_image : false,
 	MAX_ERROR_RETRY : 2,
+	// 設定預設可容許的最小圖像大小。
+	MIN_LENGTH : 6000,
 
-	// http://www.mrblue.com/webtoon/all
-	base_URL : 'http://comics.mrblue.com/',
+	base_URL : 'https://toon.bookcube.com/',
 
 	skip_get_work_page : true,
 	skip_get_chapter_page : true,
@@ -28,11 +29,10 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		// 必須是圖片網址的一部分。
+		// 必須是圖片網址的起始部分。
 		// e.g.,
 		// https://toon.bookcube.com/toon/viewer/image.asp?webtoon_num=150087
-		return 'https://toon.bookcube.com/toon/viewer/image.asp?webtoon_num='
-				+ work_id;
+		return 'toon/viewer/image.asp?webtoon_num=' + work_id;
 	},
 	// 解析出作品資料/作品詳情。
 	parse_work_data : function(html, get_label) {
