@@ -446,16 +446,23 @@ function initializer() {
 				if (!crawler) {
 					return;
 				}
-				var key = this.title;
-				crawler[key] = !crawler[key];
+				var key = this.title, value = crawler[key] = !crawler[key];
 				CeL.set_class(this, 'selected', {
-					remove : !crawler[key]
+					remove : !value
 				});
+
+				var input = this.getElementsByTagName('input');
+				if (input && input.length === 1) {
+					// download_option + '_input'
+					// this.title + '_input'
+					CeL.DOM.set_text(input[0], value || value === 0 ? value
+							: '');
+				}
 
 				if (key in save_to_preference) {
 					crawler.preference
 					//
-					.crawler_configuration[key] = crawler[key];
+					.crawler_configuration[key] = value;
 					save_preference(crawler);
 				}
 			};
