@@ -32,7 +32,7 @@
 
 ## OS support 作業系統支援
 | Platform 作業系統平臺 | support 支援狀況 |
-| --- |: --- :|
+|---|:---:|
 | Windows | ✔️ |
 | macOS | ✔️ |
 | UNIX, Linux | ✔️ |
@@ -40,7 +40,7 @@
 
 ## Interface 支援介面
 | Interface 介面/界面 インターフェース | support 支援狀況 |
-| --- |: --- :|
+|---|:---:|
 | [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) 視窗/图形 グラフィカル | ✔️ |
 | [CLI](https://en.wikipedia.org/wiki/Command-line_interface) 命令列/命令行 コマンドライン | ✔️ |
 | API 應用程式介面 | ✔️ |
@@ -49,7 +49,7 @@
 Welcome to join [the translating project](https://github.com/kanasimi/work_crawler/issues/185)! [一緒に翻訳しましょう](https://github.com/kanasimi/work_crawler/issues/185)！
 
 | Language 語言 | support 支援狀況 |
-| --- |: --- :|
+|---|:---:|
 | 繁體中文 | ✔️ |
 | 简体中文 | ✔️ |
 | 日本語 | 🚧 |
