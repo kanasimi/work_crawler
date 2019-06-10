@@ -269,6 +269,13 @@ function initializer() {
 			force_convert : force_convert
 		} ]
 	});
+	if (+_('untranslated message count') > 0) {
+		CeL.info({
+			T : [ '現有%1條%2訊息尚未翻譯，歡迎您一同參與翻譯訊息！',
+					_('untranslated message count'),
+					CeL.gettext.get_alias(CeL.gettext.default_domain) ]
+		});
+	}
 	// read default configuration
 	default_configuration = CeL.get_JSON(global.data_directory
 			+ default_configuration_file_name)
@@ -320,7 +327,8 @@ function initializer() {
 			var site_node = CeL.new_node({
 				span : sites[site_id],
 				C : 'download_sites'
-						+ (old_Unicode_support ? ' old_Unicode_support' : ''),
+						+ (old_Unicode_support ? ' ' + 'old_Unicode_support'
+								: ''),
 				title : site_type + '/' + site_id,
 				onclick : function() {
 					site_used = this.title;
@@ -378,8 +386,8 @@ function initializer() {
 		var arg_type_data = import_arg_hash[download_option], input_box = '',
 		//
 		className = 'download_options'
-				+ (arg_type_data && !('boolean' in arg_type_data) ? ' non_select'
-						: '');
+				+ (arg_type_data && !('boolean' in arg_type_data) ? ' '
+						+ 'non_select' : '');
 
 		if (arg_type_data
 				&& (('number' in arg_type_data) || ('string' in arg_type_data))) {
@@ -397,20 +405,29 @@ function initializer() {
 					if (!crawler) {
 						return;
 					}
-					var key = this.parentNode.title;
+					var key = this.parentNode.title, value = this.value;
 					if (this.type === 'number' || this.type
-							&& this.type.includes('number')
-							&& !isNaN(+this.value)) {
-						if (this.value)
-							crawler.setup_value(key, +this.value);
+					// TODO: parse other values
+					&& this.type.includes('number') && !isNaN(+value)) {
+						value = +value;
+						if (!isNaN(value))
+							crawler.setup_value(key, value);
 					} else {
-						crawler.setup_value(key, this.value);
+						if ((!this.type || this.type === 'boolean' || this.type
+								.includes('boolean')
+								&& (value === 'true' || value === 'false'))) {
+							value = value === 'true';
+						} else if (this.type.includes('string')) {
+							// TODO: verify the value
+						} else {
+							// TODO: verify the value
+						}
+						crawler.setup_value(key, value);
 					}
+					value = crawler[key];
 
 					if (key in save_to_preference) {
-						crawler.preference
-						//
-						.crawler_configuration[key] = crawler[key];
+						crawler.preference.crawler_configuration[key] = value;
 						save_preference(crawler);
 
 					} else if (key === 'main_directory') {
@@ -418,9 +435,7 @@ function initializer() {
 							default_configuration[crawler.site_id] = Object
 									.create(null);
 						}
-						default_configuration
-						//
-						[crawler.site_id][key] = crawler[key];
+						default_configuration[crawler.site_id][key] = value;
 						save_default_configuration();
 					}
 				}
@@ -451,13 +466,11 @@ function initializer() {
 					remove : !value
 				});
 
-				var input = this.getElementsByTagName('input');
-				if (input && input.length === 1) {
-					// download_option + '_input'
-					// this.title + '_input'
-					CeL.DOM.set_text(input[0], value || value === 0 ? value
-							: '');
-				}
+				// 即時更改空格內容。
+				// @see function reset_site_options()
+				// download_option + '_input'
+				CeL.DOM.set_text(this.title + '_input',
+						value || value === 0 ? value : '');
 
 				if (key in save_to_preference) {
 					crawler.preference
