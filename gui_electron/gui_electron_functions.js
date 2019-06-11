@@ -273,7 +273,8 @@ function initializer() {
 		CeL.info({
 			T : [ '現有%1條%2訊息尚未翻譯，歡迎您一同參與翻譯訊息！',
 					_('untranslated message count'),
-					CeL.gettext.get_alias(CeL.gettext.default_domain) ]
+					// CeL.gettext.get_alias(CeL.gettext.default_domain)
+					_('using language') ]
 		});
 	}
 	// read default configuration
