@@ -663,10 +663,12 @@ function setup_download_options() {
 // ------------------------------------
 
 function setup_DOM_events() {
-	document.addEventListener('drop', function(event) {
-		// event.preventDefault();
-		console.log(event);
-	});
+	if (false) {
+		document.addEventListener('drop', function(event) {
+			// event.preventDefault();
+			console.log(event);
+		});
+	}
 
 	if (false) {
 		CeL.DOM.add_listener('focus', function(event) {
@@ -851,7 +853,9 @@ function get_favorites(crawler, get_parsed, remove_list) {
 
 	work_list = crawler.preference.favorites;
 	if (Array.isArray(work_list) && work_list.length > 0) {
-		CeL.info('儲存最愛作品清單的檔案不存在或者沒有內容。採用舊有的最愛作品列表。');
+		CeL.info({
+			T : '儲存最愛作品清單的檔案不存在或者沒有內容。採用舊有的最愛作品列表。'
+		});
 		return work_list;
 	}
 
@@ -1217,8 +1221,10 @@ function prepare_crawler(crawler, crawler_module) {
 	// 只是下次下載的時候還會再重新擷取並且儲存一次。
 	if (default_configuration[site_id]) {
 		// e.g., crawler.main_directory
-		CeL.info('import configuration of ' + site_id + ': '
-				+ JSON.stringify(default_configuration[site_id]));
+		CeL.info({
+			T : [ 'import configuration of %1: %2', site_id,
+					JSON.stringify(default_configuration[site_id]) ]
+		});
 		Object.assign(crawler, default_configuration[site_id]);
 	}
 
@@ -1236,9 +1242,11 @@ function prepare_crawler(crawler, crawler_module) {
 		// Skip .main_directory
 		crawler.default_save_to_preference[key] = crawler[key];
 		if (key in crawler_configuration) {
-			CeL.info('import preference of ' + site_id + ': '
-			//
-			+ key + '=' + crawler_configuration[key] + '←' + crawler[key]);
+			CeL.info({
+				T : [ 'import preference of %1: %2', site_id,
+				//
+				key + '=' + crawler_configuration[key] + '←' + crawler[key] ]
+			});
 			crawler[key] = crawler_configuration[key];
 		}
 	});
@@ -1380,7 +1388,7 @@ var search_result_columns = {
 		if (node && work_data.fill_from_chapter_list)
 			node = [ {
 				span : old_Unicode_support ? '' : '🧩',
-				R : '資訊來自章節清單'
+				R : _('資訊來自章節清單')
 			}, node ];
 		else
 			node = node || work_data.last_update;
@@ -1550,9 +1558,13 @@ function show_search_result(work_data_search_queue) {
 
 		not_found_list = [ {
 			tr : [ {
-				th : '錯誤原因'
+				th : {
+					T : '錯誤原因'
+				}
 			}, {
-				th : '作品網站',
+				th : {
+					T : '作品網站'
+				},
 				S : 'max-width: 50%;'
 			} ]
 		} ];
@@ -1629,7 +1641,9 @@ function search_work_title() {
 		div : '',
 		id : 'still_searching'
 	}, {
-		b : '取消搜尋',
+		b : {
+			T : '取消搜尋'
+		},
 		onclick : function() {
 			CeL.toggle_display('search_results_panel', false);
 			work_data_search_queue = null;
@@ -1638,7 +1652,9 @@ function search_work_title() {
 		},
 		C : 'button'
 	}, {
-		b : '放棄還沒搜尋完成的網站',
+		b : {
+			T : '放棄還沒搜尋完成的網站'
+		},
 		onclick : function() {
 			work_data_search_queue.work_title = work_title;
 			show_search_result(work_data_search_queue);
@@ -1648,8 +1664,8 @@ function search_work_title() {
 	} ], 'search_results');
 
 	sites = download_sites_set[language_used];
-	var work_data_search_queue = Object.create(null), sites = Object
-			.keys(sites), site_count = sites.length, done = 0, found = 0;
+	sites = Object.keys(sites);
+	var work_data_search_queue = Object.create(null), site_count = sites.length, done = 0, found = 0;
 	sites.forEach(function(site_id) {
 		function all_done(work_data) {
 			if (!work_data_search_queue) {
@@ -1725,8 +1741,12 @@ function get_crawler(site_id, just_test) {
 	}
 
 	var crawler = base_directory + site_id + '.js';
-	CeL.debug('當前路徑: ' + CeL.storage.working_directory(), 1, 'get_crawler');
-	CeL.debug('Load ' + crawler, 1, 'get_crawler');
+	CeL.debug({
+		T : [ '當前路徑：%1', CeL.storage.working_directory() ]
+	}, 1, 'get_crawler');
+	CeL.debug({
+		T : [ '載入並使用下載工具 %1', crawler ]
+	}, 1, 'get_crawler');
 
 	var old_site_used = site_used;
 	// Will used in function prepare_crawler()
@@ -1840,13 +1860,14 @@ function add_new_download_job(crawler, work_id, no_message) {
 				&& !crawler.download_queue.includes(work_id)) {
 			crawler.download_queue.push(work_id);
 			if (!no_message) {
-				CeL.info('正在從' + crawler.site_name + '下載 "'
-				//
-				+ (crawler.downloading_work_data.title
-				//
-				|| crawler.downloading_work_data.id)
-				//
-				+ '" 這個作品。將等到這個作品下載完畢，或者取消下載後，再下載 ' + work_id + '。');
+				CeL.info([ {
+					T : [
+							'正在從%1下載《%2》這個作品。將等到這個作品下載完畢，或者取消下載後，再下載 %3。',
+							crawler.site_name,
+							crawler.downloading_work_data.title
+									|| crawler.downloading_work_data.id,
+							work_id ]
+				} ]);
 			}
 		}
 		return;
@@ -1894,7 +1915,7 @@ function destruct_download_job(crawler) {
 		// job.layer.removeChild(job.layer.firstChild);
 		CeL.new_node([ {
 			T : '↻',
-			R : '重新下載',
+			R : _('重新下載'),
 			C : 'task_controller',
 			onclick : function() {
 				remove_download_work_layer();
@@ -1922,9 +1943,9 @@ function destruct_download_job(crawler) {
 			// 顯示最後一個錯誤。
 			+ work_data.error_list[work_data.error_list.length - 1] + '</span>'
 			//
-			+ (work_data.error_list.length > 1 ? ' <small>(總共有'
+			+ (work_data.error_list.length > 1 ? ' <small>'
 			//
-			+ work_data.error_list.length + '個錯誤)</small>' : '');
+			+ _('（總共有%1個錯誤）', work_data.error_list.length) + '</small>' : '');
 			job.layer.title = work_data.error_list.join(CeL.env.line_separator);
 			if (false)
 				CeL.new_node([ {
@@ -2144,7 +2165,7 @@ function check_update_NOT_package() {
 					// 重新啟動應用程式或重新整理網頁(Ctrl-R)
 					T : '重新讀取應用程式之網頁部分'
 				},
-				R : gettext('建議重新啟動應用程式以使用完整更新後的程式。'),
+				R : _('建議重新啟動應用程式以使用完整更新後的程式。'),
 				onclick : function() {
 					history.go(0);
 				}
@@ -2197,7 +2218,9 @@ function check_update() {
 				+ '\\app.asar\\' : CeL.work_crawler.prototype.main_directory;
 		package_data = CeL.read_file(package_data + 'package.json');
 		if (!package_data) {
-			console.error('無法讀取版本資訊 package.json！');
+			CeL.error({
+				T : '無法讀取版本資訊 package.json！'
+			});
 			CeL.toggle_display(update_panel, false);
 			return;
 		}
@@ -2266,7 +2289,9 @@ function select_theme(theme) {
 		theme = theme && theme.theme_label;
 	}
 	if (!theme_list.includes(theme)) {
-		CeL.warn('select_theme: Invalid theme name: ' + theme);
+		CeL.warn([ 'select_theme: ', {
+			T : [ 'Invalid theme name: %1', theme ]
+		} ]);
 		return;
 	}
 
