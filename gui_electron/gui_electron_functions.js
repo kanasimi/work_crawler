@@ -171,20 +171,12 @@ delete save_to_preference.main_directory;
 
 require(base_directory + 'work_crawler_loder.js');
 
-CeL.run([ 'application.debug.log', 'interact.DOM' ], initializer);
+// declaration for gettext(). @see setup_language_menu()
+var _;
+// language force convert. @see setup_language_menu()
+var force_convert = 'en';
 
-// ---------------------------------------------------------------------//
-
-function check_max_logs() {
-	var panel = CeL.get_element('max_logs'), show = CeL.toggle_display(panel) !== 'none';
-	CeL.Log.set_max_logs(show ? panel.value : undefined);
-	CeL.set_class(this, 'disabled', {
-		remove : show
-	});
-	this.innerHTML = _(CeL.DOM_data(this).gettext = show ? '限制訊息行數' : '不限制訊息行數');
-	CeL.node_value(this.parentNode.firstChild, show ? '✂️' : '');
-}
-
+// @see setup_language_menu()
 // for i18n: define gettext() user domain resource location.
 // gettext() will auto load (CeL.env.domain_location + language + '.js').
 // e.g., resource/cmn-Hant-TW.js, resource/ja-JP.js
@@ -201,10 +193,19 @@ CeL.env.domain_location = function() {
 // 因此 CeL.env.domain_location 必須提供完整路徑。
 };
 
-// declaration for gettext()
-var _;
-// language force convert
-var force_convert = 'en';
+CeL.run([ 'application.debug.log', 'interact.DOM' ], initializer);
+
+// ---------------------------------------------------------------------//
+
+function check_max_logs() {
+	var panel = CeL.get_element('max_logs'), show = CeL.toggle_display(panel) !== 'none';
+	CeL.Log.set_max_logs(show ? panel.value : undefined);
+	CeL.set_class(this, 'disabled', {
+		remove : show
+	});
+	this.innerHTML = _(CeL.DOM_data(this).gettext = show ? '限制訊息行數' : '不限制訊息行數');
+	CeL.node_value(this.parentNode.firstChild, show ? '✂️' : '');
+}
 
 // initialization
 function initializer() {
@@ -214,6 +215,101 @@ function initializer() {
 
 	// --------------------------------
 
+	setup_language_menu();
+
+	if (!global.data_directory) {
+		global.data_directory = CeL.determin_download_directory();
+	}
+
+	setup_initial_messages();
+
+	// --------------------------------
+
+	// read default configuration
+	default_configuration = CeL.get_JSON(global.data_directory
+			+ default_configuration_file_name)
+			|| Object.create(null);
+
+	// --------------------------------
+
+	setup_theme_selecter();
+
+	// --------------------------------
+
+	setup_download_sites();
+
+	// --------------------------------
+
+	var user_agent = navigator.userAgent.replace(
+			/(?:work_crawler|Electron)[\/.\d ]*/ig, '');
+	if (user_agent)
+		CeL.work_crawler.prototype.user_agent = user_agent;
+
+	Object.assign(CeL.work_crawler.prototype, {
+		after_download_chapter : after_download_chapter,
+		onwarning : onerror,
+		onerror : onerror
+	});
+
+	// --------------------------------
+
+	setup_download_options();
+
+	// --------------------------------
+
+	set_click_trigger('favorites_trigger', 'favorite_list');
+
+	set_click_trigger('search_results_trigger', 'search_results');
+
+	set_click_trigger('download_job_trigger', 'download_job_queue');
+
+	// --------------------------------
+
+	setup_ipcRenderer();
+
+	// https://developer.mozilla.org/en-US/docs/Web/API/Notification/permission
+	// https://electronjs.org/docs/tutorial/desktop-environment-integration
+	// https://electronjs.org/docs/api/notification
+	if (true || !window.Notification) {
+	} else if (Notification.permission === 'granted') {
+	} else if (Notification.permission !== 'denied') {
+		// assert: Notification.permission === 'default' ||
+		// Notification.permission === 'undefined'
+		Notification.requestPermission(function(permission) {
+			if (permission === 'granted') {
+				var notification = new Notification('');
+			}
+		});
+	}
+
+	process.title = _('CeJS 線上小說漫畫下載工具');
+
+	// --------------------------------
+
+	setup_DOM_events();
+
+	// CeL.set_debug();
+}
+
+// ------------------------------------
+
+function setup_language_menu() {
+	_ = CeL.gettext;
+
+	_.create_menu('language_menu', [ 'TW', 'CN', 'ja', 'en', 'ko' ],
+	// 預設介面語言繁體中文+...
+	function() {
+	});
+
+	// translate all nodes to show in specified language (or default domain).
+	_.translate_nodes();
+
+	// --------------------------------
+
+	_.load_domain(force_convert);
+}
+
+function setup_initial_messages() {
 	CeL.Log.set_board('log_panel');
 	// CeL.set_debug();
 	// 設置完成
@@ -228,30 +324,21 @@ function initializer() {
 		}
 	}, 'max_logs');
 
-	CeL.debug('當前目錄: ' + CeL.storage.working_directory(), 1);
-	CeL.debug('環境變數: ' + JSON.stringify(process.env), 1);
+	CeL.debug({
+		T : [ '當前目錄：%1', CeL.storage.working_directory() ]
+	}, 1);
+	CeL.debug({
+		T : [ '環境變數：%1', JSON.stringify(process.env) ]
+	}, 1);
 
 	// --------------------------------
 
-	_ = CeL.gettext;
-
-	_.create_menu('language_menu', [ 'TW', 'CN', 'ja', 'en', 'ko' ],
-	// 預設介面語言繁體中文+...
-	function() {
-	});
-
-	// translate all nodes to show in specified language (or default domain).
-	_.translate_nodes();
-
-	// --------------------------------
-
-	_.load_domain(force_convert);
-	if (!global.data_directory) {
-		global.data_directory = CeL.determin_download_directory();
-	}
 	CeL.info({
-		T : [ 'Default download location: %1', global.data_directory ]
+		T : [ 'Default download location: %1', data_directory ]
 	});
+
+	// --------------------------------
+
 	CeL.info({
 		// 🚧 https://weblate.org/zh-hant/
 		span : [ {
@@ -277,13 +364,55 @@ function initializer() {
 					_('using language') ]
 		});
 	}
-	// read default configuration
-	default_configuration = CeL.get_JSON(global.data_directory
-			+ default_configuration_file_name)
-			|| Object.create(null);
 
 	// --------------------------------
 
+	if (CeL.platform.is_Windows()) {
+		CeL.new_node([ {
+			a : {
+				T : '複製貼上快速鍵'
+			},
+			href : 'https://en.wikipedia.org/wiki/'
+			//
+			+ 'Cut,_copy,_and_paste#Common_keyboard_shortcuts',
+			onclick : open_external
+		}, ' - ', {
+			T : '複製選取的項目：'
+		}, {
+			kbd : 'Ctrl+C'
+		}, ' ', {
+			span : ' | ',
+			S : "color: blue;"
+		}, {
+			T : '貼上項目：'
+		}, {
+			kbd : 'Ctrl+V'
+		} ], 'small_tips');
+	}
+}
+
+function setup_ipcRenderer() {
+	'debug,log,info,warn,error'.split(',').forEach(function(log_type) {
+		node_electron.ipcRenderer
+		//
+		.on('send_message_' + log_type, function(event, message) {
+			CeL[log_type]({
+				T : message
+			});
+		});
+	});
+	node_electron.ipcRenderer.on('send_message_isPackaged', function(event,
+			isPackaged) {
+		is_installation_package = isPackaged;
+	});
+
+	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
+	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
+}
+
+// ------------------------------------
+
+function setup_theme_selecter() {
 	if (default_configuration.CSS_theme)
 		select_theme(default_configuration.CSS_theme);
 
@@ -304,9 +433,11 @@ function initializer() {
 	CeL.new_node(theme_nodes, 'select_theme_panel');
 	// free
 	theme_nodes = null;
+}
 
-	// --------------------------------
+// ------------------------------------
 
+function setup_download_sites() {
 	// 初始化 initialization: download_site_nodes
 	Object.assign(download_site_nodes, {
 		link_of_site : Object.create(null),
@@ -358,23 +489,12 @@ function initializer() {
 	CeL.new_node(site_nodes, 'download_sites_list');
 
 	set_click_trigger('download_sites_trigger', 'download_sites_list');
+}
 
-	// --------------------------------
+// ------------------------------------
 
-	var user_agent = navigator.userAgent.replace(
-			/(?:work_crawler|Electron)[\/.\d ]*/ig, '');
-	if (user_agent)
-		CeL.work_crawler.prototype.user_agent = user_agent;
-
-	Object.assign(CeL.work_crawler.prototype, {
-		after_download_chapter : after_download_chapter,
-		onwarning : onerror,
-		onerror : onerror
-	});
-
-	// --------------------------------
-
-	// Setup GUI-only options
+// Setup GUI-only options
+function setup_download_options() {
 	var import_arg_hash = CeL.work_crawler.setup_argument_conditions({
 		preserve_download_work_layer : 'boolean',
 		play_finished_sound : 'boolean'
@@ -538,81 +658,15 @@ function initializer() {
 			C : 'button'
 		} ]
 	}, 'download_options_panel'));
+}
 
-	// --------------------------------
+// ------------------------------------
 
-	set_click_trigger('favorites_trigger', 'favorite_list');
-
-	set_click_trigger('search_results_trigger', 'search_results');
-
-	set_click_trigger('download_job_trigger', 'download_job_queue');
-
-	// --------------------------------
-
-	CeL.get_element('input_work_id').onkeypress = function(this_event) {
-		if (this_event.keyCode === 13) {
-			start_gui_crawler();
-		}
-	};
-
-	if (CeL.platform.is_Windows()) {
-		CeL.new_node([ {
-			a : {
-				T : '複製貼上快速鍵'
-			},
-			href : 'https://en.wikipedia.org/wiki/'
-			//
-			+ 'Cut,_copy,_and_paste#Common_keyboard_shortcuts',
-			onclick : open_external
-		}, ' - ', {
-			T : '複製選取的項目：'
-		}, {
-			kbd : 'Ctrl+C'
-		}, ' ', {
-			span : ' | ',
-			S : "color: blue;"
-		}, {
-			T : '貼上項目：'
-		}, {
-			kbd : 'Ctrl+V'
-		} ], 'small_tips');
-	}
-
-	// https://developer.mozilla.org/en-US/docs/Web/API/Notification/permission
-	// https://electronjs.org/docs/tutorial/desktop-environment-integration
-	// https://electronjs.org/docs/api/notification
-	if (true || !window.Notification) {
-	} else if (Notification.permission === 'granted') {
-	} else if (Notification.permission !== 'denied') {
-		// assert: Notification.permission === 'default' ||
-		// Notification.permission === 'undefined'
-		Notification.requestPermission(function(permission) {
-			if (permission === 'granted') {
-				var notification = new Notification('');
-			}
-		});
-	}
-
-	'debug,log,info,warn,error'.split(',').forEach(function(log_type) {
-		node_electron.ipcRenderer
-		//
-		.on('send_message_' + log_type, function(event, message) {
-			CeL[log_type]({
-				T : message
-			});
-		});
+function setup_DOM_events() {
+	document.addEventListener('drop', function(event) {
+		// event.preventDefault();
+		console.log(event);
 	});
-	node_electron.ipcRenderer.on('send_message_isPackaged', function(event,
-			isPackaged) {
-		is_installation_package = isPackaged;
-	});
-
-	process.title = _('CeJS 線上小說漫畫下載工具');
-
-	// --------------------------------
-
-	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
-	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
 
 	if (false) {
 		CeL.DOM.add_listener('focus', function(event) {
@@ -624,9 +678,14 @@ function initializer() {
 			}
 		});
 	}
-	CeL.get_element('input_work_id').focus();
 
-	// CeL.set_debug();
+	CeL.get_element('input_work_id').onkeypress = function(this_event) {
+		if (this_event.keyCode === 13) {
+			start_gui_crawler();
+		}
+	};
+
+	CeL.get_element('input_work_id').focus();
 }
 
 // --------------------------------------------------------------------------------------------------------------------
