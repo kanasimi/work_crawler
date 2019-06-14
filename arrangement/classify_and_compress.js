@@ -437,7 +437,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		CeL.info(CeL.display_align([
 				[ CeL.gettext('Move %1: ', catalog), fso_path ],
 				[ '→ ', move_to_path ] ]));
-		add_log(CeL.gettext('Move %1:	', catalog) + fso_path + '	→	'
+		add_log(CeL.gettext('Move %1:', catalog) + '	' + fso_path + '	→	'
 				+ move_to_path);
 		CeL.move_fso(fso_path, move_to_path);
 	}

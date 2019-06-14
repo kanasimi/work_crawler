@@ -325,10 +325,10 @@ function setup_initial_messages() {
 	}, 'max_logs');
 
 	CeL.debug({
-		T : [ '當前目錄：%1', CeL.storage.working_directory() ]
+		T : [ 'Working directory: %1', CeL.storage.working_directory() ]
 	}, 1);
 	CeL.debug({
-		T : [ '環境變數：%1', JSON.stringify(process.env) ]
+		T : [ '所有環境變數：%1', JSON.stringify(process.env) ]
 	}, 1);
 
 	// --------------------------------
@@ -758,7 +758,7 @@ function edit_favorites(crawler) {
 
 	CeL.new_node([ {
 		div : {
-			T : '請在每一行鍵入一個作品名稱或 id：'
+			T : '請在每一行鍵入一個作品名稱或🆔：'
 		}
 	}, favorites_node, {
 		br : null
@@ -1025,7 +1025,7 @@ function reset_favorites(crawler) {
 
 	if (finished_work_title_list.length > 0) {
 		CeL.info({
-			T : [ '%1 已完結的作品名稱或 id：%2', crawler.site_name || crawler.site_id,
+			T : [ '%1 已完結的作品名稱或🆔：%2', crawler.site_name || crawler.site_id,
 					finished_work_title_list.join(', ') ]
 		});
 	}
@@ -1094,7 +1094,7 @@ function reset_favorites(crawler) {
 			// 我的最愛
 			b : [ '🔨', {
 				// 重新整理列表檔案
-				T : '注解掉重複的作品名稱或 id',
+				T : '注解掉重複的作品名稱或🆔',
 			} ],
 			onclick : function() {
 				crawler.parse_favorite_list_file(
@@ -1106,7 +1106,7 @@ function reset_favorites(crawler) {
 		}, {
 			// 我的最愛
 			b : [ '❌', {
-				T : '刪除重複的作品名稱或 id'
+				T : '刪除重複的作品名稱或🆔'
 			} ],
 			onclick : function() {
 				crawler.parse_favorite_list_file(
@@ -1120,7 +1120,7 @@ function reset_favorites(crawler) {
 			C : 'favorites_button'
 		} ] : '', finished_work_title_list.length > 0 ? {
 			b : [ '❌', {
-				T : [ '注解掉%1個已完結的作品名稱或 id', finished_work_title_list.length ]
+				T : [ '注解掉%1個已完結的作品名稱或🆔', finished_work_title_list.length ]
 			} ],
 			onclick : function() {
 				remove_favorite(crawler, finished_work_title_list);
@@ -1616,7 +1616,7 @@ function search_work_title() {
 	var work_title = CeL.node_value('#input_work_id').trim();
 	if (!work_title) {
 		CeL.info({
-			T : '請輸入作品名稱或 id。'
+			T : '請先輸入作品名稱或🆔。'
 		});
 		CeL.get_element('input_work_id').focus();
 		return;
@@ -2089,7 +2089,7 @@ function start_gui_crawler() {
 		add_new_download_job(crawler, work_id);
 	} else {
 		CeL.info({
-			T : '請輸入作品名稱或 id。'
+			T : '請先輸入作品名稱或🆔。'
 		});
 		CeL.get_element('input_work_id').focus();
 	}
