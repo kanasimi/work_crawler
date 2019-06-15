@@ -196,9 +196,9 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 			if (!CeL.directory_exists(sub_catalog_directory)) {
 				var message = CeL.gettext(
 				//
-				'Create directory of sub-catalog [%1]:	%2',
+				'Create directory of sub-catalog [%1]:',
 				//
-				sub_catalog, sub_catalog_directory);
+				sub_catalog) + '	' + sub_catalog_directory;
 				add_log(message);
 				CeL.debug(message);
 				auto_created_directory_list.push(sub_catalog_directory);
@@ -712,7 +712,7 @@ function compress_each_directory(config, index) {
 		return;
 	}
 
-	add_log(CeL.gettext('Compress %1:	%2', profile_name, profile.archive));
+	add_log(CeL.gettext('Compress %1:', profile_name) + '	' + profile.archive);
 
 	var command = '"'
 			+ p7zip_path

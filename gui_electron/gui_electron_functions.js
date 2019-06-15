@@ -174,7 +174,7 @@ require(base_directory + 'work_crawler_loder.js');
 // declaration for gettext(). @see setup_language_menu()
 var _;
 // language force convert. @see setup_language_menu()
-var force_convert = 'en';
+var force_convert = [ 'en' ];
 
 // @see setup_language_menu()
 // for i18n: define gettext() user domain resource location.
@@ -306,7 +306,7 @@ function setup_language_menu() {
 
 	// --------------------------------
 
-	_.load_domain(force_convert);
+	_.load_domain(force_convert[0]);
 }
 
 function setup_initial_messages() {
@@ -502,7 +502,15 @@ function setup_download_options() {
 
 	// @seealso function reset_site_options()
 
-	var options_nodes = [];
+	var options_nodes = [], _force_convert;
+	// 當前僅有繁體中文已具備所有說明。
+	if (force_convert.includes('TW')) {
+		_force_convert = force_convert;
+	} else {
+		_force_convert = force_convert.clone();
+		_force_convert.push('TW');
+	}
+
 	for ( var download_option in download_options_set) {
 		var arg_type_data = import_arg_hash[download_option], input_box = '',
 		//
@@ -567,7 +575,8 @@ function setup_download_options() {
 			label : [ {
 				b : download_option
 			}, ':', input_box, {
-				T : download_options_set[download_option]
+				T : download_options_set[download_option],
+				force_convert : _force_convert
 			},
 			// option_type_token() @ work_crawler_loder.js
 			option_type_token(arg_type_data, [ , '#871' ]) ],
