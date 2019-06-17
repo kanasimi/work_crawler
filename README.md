@@ -121,6 +121,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [我要去漫画](http://www.517manhua.com/) | 517.js | 採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | [365漫画网](http://www.iqg365.com/) | iqg365.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
 | [友绘漫画网](http://m.wuyouhui.net/) | wuyouhui.js | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
+| [188漫画网](http://m.88bag.net/) | 88bag.js | 有些缺圖，圖片似乎多從其他網站採集而來。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
 | [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
 | [看漫画](https://www.manhuagui.com/) | manhuagui.js<br />manhuagui_tw.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |

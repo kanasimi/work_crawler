@@ -43,6 +43,7 @@ download_sites_set = {
 		nokiacn : '乙女漫画',
 		iqg365 : '365漫画网',
 		wuyouhui : '友绘漫画网',
+		'88bag' : '188漫画网',
 		'360taofu' : '360漫画',
 		'517' : '我要去漫画',
 		dagu : '大古漫画网',
@@ -1519,7 +1520,7 @@ function show_search_result(work_data_search_queue) {
 				span : '➕',
 				S : old_Unicode_support ? 'color: #888;' : ''
 			}, {
-				T : [ '將所有%1個網站找到的作品皆加入最愛清單', OK ]
+				T : [ '將所有%1個網站找到的作品全部加入網站各自之最愛清單', OK ]
 			} ],
 			onclick : function() {
 				for ( var site_id in work_data_search_queue) {
