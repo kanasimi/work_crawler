@@ -42,6 +42,7 @@ download_sites_set = {
 		mh160 : '漫画160',
 		nokiacn : '乙女漫画',
 		iqg365 : '365漫画网',
+		wuyouhui : '友绘漫画网',
 		'360taofu' : '360漫画',
 		'517' : '我要去漫画',
 		dagu : '大古漫画网',
@@ -763,6 +764,10 @@ function edit_favorites(crawler) {
 		textarea : '',
 		S : 'width: 99%; height: 20em;'
 	});
+	if (favorites[favorites.length - 1]) {
+		// 在最後添上換行。
+		favorites.push('');
+	}
 	favorites_node.value = favorites_toString(favorites);
 
 	CeL.new_node([ {
@@ -1617,7 +1622,7 @@ function search_work_title() {
 	if (!language_used) {
 		CeL.info({
 			// 點選 語言
-			T : '請先指定要搜尋的作品類別或網站。'
+			T : '請先在線上作品區指定要搜尋的作品類別。'
 		});
 		return;
 	}
@@ -2170,11 +2175,10 @@ function check_update_NOT_package() {
 			});
 
 			CeL.new_node({
-				b : {
-					// 重新啟動應用程式或重新整理網頁(Ctrl-R)
-					T : '重新讀取應用程式之網頁部分'
-				},
+				// 重新啟動應用程式或重新整理網頁(Ctrl-R)
+				T : '重新讀取應用程式之網頁部分',
 				R : _('建議重新啟動應用程式以使用完整更新後的程式。'),
+				S : 'cursor: pointer;',
 				onclick : function() {
 					history.go(0);
 				}
