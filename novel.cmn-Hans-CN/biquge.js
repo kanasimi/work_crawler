@@ -17,40 +17,7 @@ var crawler = CeL.PTCMS({
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'https://sou.xanbhx.com/search?siteid=xsla&q=',
-	parse_search_result : function(html, get_label) {
-		// console.log(html);
-		var matched = html
-				.match(/og:url" content="[^<>"]+?\/(?:\d+_)?(\d+)\/"/);
-		if (matched) {
-			return [ [ +matched[1] ],
-					[ get_label(html.between('og:title" content="', '"')) ] ];
-		}
-
-		var id_list = [], id_data = [];
-		html.each_between('<li>', '</li>', function(text) {
-			matched = text.match(
-			/**
-			 * <code>
-
-			// biquge.js:
-			<span class="s2"><a href="https://www.xs.la/211_211278/" target="_blank">
-			万古剑神</a>
-			</span>
-
-			// xbiquge.js:
-			<span class="s2"><a href="http://www.xbiquge.cc/book/24276/">元尊</a></span>
-
-			</code>
-			 */
-			/<a href="[^<>"]+?\/(?:\d+_)?(\d+)\/"[^<>]*>([\s\S]+?)<\/a>/);
-			// console.log([ text, matched ]);
-			if (matched) {
-				id_list.push(+matched[1]);
-				id_data.push(get_label(matched[2]));
-			}
-		});
-		return [ id_list, id_data ];
-	},
+	parse_search_result : 'biquge',
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
