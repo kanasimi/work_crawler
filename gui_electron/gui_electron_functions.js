@@ -51,6 +51,7 @@ download_sites_set = {
 
 		// '2manhua' : '爱漫画',
 		'57mh' : '57漫画网',
+		'999comics' : '99漫畫網',
 
 		dmzj : '动漫之家',
 		dm5 : '动漫屋',
