@@ -173,6 +173,7 @@ function option_type_token(arg_type_data, colors) {
 			}
 		});
 		if (condition) {
+			// TODO: onclick
 			option_types.push(': ', {
 				T : condition,
 				S : {

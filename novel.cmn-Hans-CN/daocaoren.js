@@ -118,7 +118,7 @@ var crawler = new CeL.work_crawler({
 		text = text.between(null, {
 			tail : '</div>'
 		}).replace(/<script[^<>]*>[\s\S]*?<\/script>/g, '').replace(
-		// 去除廣告
+		// 去除廣告。
 		/<(i|p|span) class='[a-z]{3}\d{3}'>[^<>]{0,30}<\/\1>/ig, '').trim();
 		// console.log(text);
 

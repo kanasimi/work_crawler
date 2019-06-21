@@ -49,7 +49,7 @@ var crawler = CeL.SinMH2013({
 	image_preprocessor : function(contents, image_data) {
 		var index = contents.length - 2;
 		if (contents[index] === 0x0D && contents[index + 1] === 0x0A) {
-			// 去掉最後的換行符號：有些圖片會被加上換行符號 "\r\n"。
+			// 去掉最後的換行符號：有些圖片在檔案最後會添加上換行符號 "\r\n"，因此被判別為非正規圖片檔。
 			// r.g., 34444 異世界精靈的奴隸醬, 33485 會歪掉的啊
 			return contents.slice(0, -2);
 		}

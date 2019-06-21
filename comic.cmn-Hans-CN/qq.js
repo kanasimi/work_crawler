@@ -14,7 +14,7 @@ var crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 	// one_by_one : true,
-	base_URL : 'http://ac.qq.com/',
+	base_URL : 'https://ac.qq.com/',
 
 	// https://github.com/kanasimi/work_crawler/issues/251
 	// e.g., 630166 19天
@@ -116,7 +116,7 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return 'Comic/comicInfo/id/' + (work_id | 0);
+		return 'Comic/comicInfo/id/' + work_id;
 	},
 	parse_work_data : function(html, get_label) {
 		// work_data={id,title,author,authors,chapter_count,last_update,last_download:{date,chapter}}

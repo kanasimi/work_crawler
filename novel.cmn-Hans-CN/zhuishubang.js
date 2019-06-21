@@ -17,7 +17,7 @@ var PATTERN_ads = /免-费-首-发→【追】【书】【帮】|★首发追书
 //
 crawler = CeL.jieqi_article({
 
-	base_URL : 'http://www.zhuishubang.com/',
+	base_URL : 'https://www.zhuishubang.com/',
 
 	inverted_order : true,
 

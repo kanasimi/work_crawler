@@ -365,7 +365,7 @@ crawler = new CeL.work_crawler({
 				+ '&extra=page%3D1&page=' + chapter_NO;
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
-		//
+		// TODO: book_chapter, work_data, as arguments
 		function book_chapter_is_OK(matched, diff) {
 			if (false) {
 				console.log([ 'book_chapter_is_OK', book_chapter, matched,
@@ -391,7 +391,7 @@ crawler = new CeL.work_crawler({
 		// /<div id="(post_\d+)" class="plhin">/g
 		PATTERN_chapter = /<div id="(post_\d+)"/g,
 		//
-		matched, matched_list = [];
+		matched, topic_index_list = [];
 
 		// 處理實際頁數與之前得到頁數不同的問題。
 		if (raw_data.pagination < chapter_NO
@@ -434,13 +434,22 @@ crawler = new CeL.work_crawler({
 		}
 
 		while (matched = PATTERN_chapter.exec(html)) {
-			matched_list.push([ matched.index, matched[1] ]);
+			topic_index_list.push([ matched.index, matched[1] ]);
 		}
-		matched_list.push([ html.length ]);
+		topic_index_list.push([ html.length ]);
 
-		for (var index = 0; index < matched_list.length - 1; index++) {
-			var text = html.slice(matched_list[index][0],
-					matched_list[index + 1][0]),
+		if (false) {
+			topic_index_list
+			// TODO: book_chapter
+			.forEach(function(topic_index, index, topic_index_list) {
+				for_each_topic.call(this, html, work_data, mainEntity,
+						topic_index, index, topic_index_list);
+			});
+		}
+
+		for (var index = 0; index < topic_index_list.length - 1; index++) {
+			var text = html.slice(topic_index_list[index][0],
+					topic_index_list[index + 1][0]),
 			//
 			date = text.between(' class="postDateLine">', '</span>');
 			if (date) {
@@ -631,20 +640,20 @@ crawler = new CeL.work_crawler({
 			text = text.trim();
 
 			if (this.latest_chapter_title === chapter_title
-			// && this.latest_chapter_hash === matched_list[index][1]
+			// && this.latest_chapter_hash === topic_index_list[index][1]
 			&& this.latest_chapter_text === text) {
 				CeL.log('偵測到重複章節，將跳過: ' + chapter_title);
 				continue;
 			}
 			this.latest_chapter_title = chapter_title;
-			// this.latest_chapter_hash = matched_list[index][1];
+			// this.latest_chapter_hash = topic_index_list[index][1];
 			this.latest_chapter_text = text;
 
 			this.add_ebook_chapter(work_data, work_data.book_chapter_count, {
 				title : chapter_title,
 				text : text,
 				url : this.full_URL(this.chapter_URL(work_data, chapter_NO))
-						+ '#' + matched_list[index][1],
+						+ '#' + topic_index_list[index][1],
 				date : date || new Date(mainEntity.dateModified)
 			});
 		}
