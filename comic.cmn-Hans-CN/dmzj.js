@@ -57,27 +57,8 @@ var crawler = new CeL.work_crawler({
 		html = html.between('wrap_list_con').between('<ul', '</ul>');
 		// console.log(html);
 
-		// @see luoxia.js, dmzj.js
-		var PATTERN = /<li(?:[^<>]*)>([\s\S]+?)<\/li>/g,
-		// {Array}id_list = [id,id,...]
-		id_list = [], id_data = [], matched;
-
-		while (matched = PATTERN.exec(html)) {
-			// console.log(matched);
-			matched = matched[1].match(/<a ([^<>]+)>([\s\S]+)<\/a>/i);
-			if (!matched)
-				continue;
-			var title = matched[1].match(/title="([^"<>]+)"/),
-			// dmzj.js: title=""href="" 中間沒有空格
-			id = matched[1]
-					.match(/href="[^"<>]+?\/([a-z\d\-_]+)(?:\/|\.html)?"/);
-			if (id) {
-				id_list.push(id[1]);
-				id_data.push(title[1] || get_label(matched[2]));
-			}
-		}
-
-		return [ id_list, id_data ];
+		return CeL.work_crawler.extract_work_id_from_search_result_link(
+				/<li(?:[^<>]*)>([\s\S]+?)<\/li>/g, html);
 	},
 
 	// 取得作品的章節資料。 get_work_data()
