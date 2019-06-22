@@ -155,9 +155,11 @@ var crawler = new CeL.work_crawler({
 		// バックナンバー
 		// <ul class="acBacknumber-list first-preview clearfix" id="reversible">
 		html = html.between('<ul class="acBacknumber-list', '<section>');
+		// console.log(html);
 		work_data.chapter_list = [];
 		html.each_between('<li', '</li>', function(text) {
-			var matched = text.match(/<a title="([^<>"]+)" href="([^<>"]+)"/);
+			// 不可用 /title="([^<>"]+)"/：《クロウ・レコード <Infinite Dendrogram Another>》
+			var matched = text.match(/<a title="([^"]+)" href="([^<>"]+)"/);
 			work_data.chapter_list.push({
 				// matched[1].replace(work_data.title, '')
 				title : get_label(text.between(
