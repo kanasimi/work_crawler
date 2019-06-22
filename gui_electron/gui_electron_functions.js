@@ -1651,7 +1651,9 @@ function search_work_title() {
 	CeL.new_node([ {
 		T : [ '正在搜尋[%1]中……', work_title ]
 	}, {
-		span : '',
+		span : {
+			T : '尚無任何網站回傳結果……'
+		},
 		id : 'searching_process'
 	}, {
 		div : '',
