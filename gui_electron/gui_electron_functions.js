@@ -134,15 +134,16 @@ download_sites_set = {
 		piaotian : '飘天文学'
 	},
 	'novel.ja-JP' : {
-		yomou : '小説を読もう！',
-		noc : 'ノクターンノベルズ',
-		mnlt : 'ムーンライトノベルズ',
-
 		AlphaPolis : 'アルファポリス',
 
 		Hameln : 'ハーメルン',
 
-		kakuyomu : 'カクヨム'
+		kakuyomu : 'カクヨム',
+
+		yomou : '小説を読もう！',
+		noc : 'ノクターンノベルズ',
+		mid : 'ミッドナイトノベルズ',
+		mnlt : 'ムーンライトノベルズ'
 	}
 },
 // const 下載選項。有順序。常用的排前面。

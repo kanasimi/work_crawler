@@ -72,6 +72,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [ハーメルン](https://syosetu.org/) | Hameln.js | |
 | [小説を読もう！](https://yomou.syosetu.com/) | yomou.js | [小説家になろう](http://syosetu.com/) |
 | [ノクターンノベルズ](https://noc.syosetu.com/) | noc.js | [小説家になろう](http://syosetu.com/)の[男性読者向けの18禁部門サイト](http://noc.syosetu.com/site/faq/) |
+| [ミッドナイトノベルズ](https://mid.syosetu.com/) | mid.js | [小説家になろう](http://syosetu.com/)の[男性読者向けの『官能を主目的としない』R18作品を探すことができるサイト](http://noc.syosetu.com/site/faq/) |
 | [ムーンライトノベルズ](https://mnlt.syosetu.com/top/top/) | mnlt.js | [小説家になろう](http://syosetu.com/)の[女性読者向けのR18作品を探すことができるサイト](http://noc.syosetu.com/site/faq/) |
 
 ### Chinese web fictions / novels 中国内地小说 中国のオンライン小説
