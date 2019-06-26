@@ -47,7 +47,9 @@ download_sites_set = {
 		'360taofu' : '360漫画',
 		'517' : '我要去漫画',
 		dagu : '大古漫画网',
+
 		manhuadb : '漫画DB',
+		cartoonmad : '動漫狂',
 
 		// '2manhua' : '爱漫画',
 		'57mh' : '57漫画网',
