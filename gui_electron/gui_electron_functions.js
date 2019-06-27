@@ -21,7 +21,7 @@ site_type_description = {
 	'novel.cmn-Hans-CN' : '中国内地小说',
 	'novel.ja-JP' : '日本語のオンライン小説'
 },
-// const
+// const 縱使語言不同，也應該採用不同的 site id。否則檔案會存放到同一個目錄底下，可能造成檔案錯亂。
 download_sites_set = {
 	'comic.cmn-Hant-TW' : {
 		'999comics' : '99漫畫網',
@@ -107,7 +107,7 @@ download_sites_set = {
 		comico_jp_plus : 'オトナ限定 コミコ'
 	},
 	'comic.en-US' : {
-		webtoon : 'WEBTOON en',
+		webtoon_en : 'WEBTOON en',
 
 		mangamew : 'Manga Mew (不再維護)',
 		manganew : 'Manga New (不再維護)',
