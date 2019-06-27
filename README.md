@@ -110,6 +110,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [繁體版漫畫櫃](https://tw.manhuagui.com/) | manhuagui_tw.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [動漫狂](https://www.cartoonmad.com/) | cartoonmad.js | 以臺灣翻譯日本的漫畫單行本為主。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
 | [動漫伊甸園](http://dmeden.net/) | dmeden.js | 日本漫畫較多。 採用與汗汗酷漫相同系統。 |
+| [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 
 ### Simplified Chinese webcomics 中国内地漫画 中国簡体字のウェブコミック
@@ -155,7 +156,6 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [哦漫画](http://www.omanhua.net/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
-| [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | [57漫画网](http://www.wuqimh.com/) | 57mh.js | 缺話眾多。系統同 2manhua.js。可能是2013年版本的 圣樱漫画管理系统？ MHD模板？ |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |

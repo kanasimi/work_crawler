@@ -32,6 +32,8 @@ download_sites_set = {
 
 		dmeden : '動漫伊甸園',
 
+		comico : 'comico',
+
 		webtoon : 'WEBTOON'
 	},
 	'comic.cmn-Hans-CN' : {
@@ -83,8 +85,6 @@ download_sites_set = {
 		hhcool : '汗汗酷漫',
 
 		migudm : '咪咕圈圈',
-
-		comico : 'comico',
 
 		dongman : '咚漫'
 	},
