@@ -152,6 +152,8 @@ crawler = new CeL.work_crawler({
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		// <!--头部结束-->
+		// <!--漫画主体内容开始-->
 		html = html.between('<div class="manga-imgs" id="manga-imgs">',
 				'<div class="ewm-hook" id="ewm-hook">');
 
@@ -163,6 +165,19 @@ crawler = new CeL.work_crawler({
 			matched[2] = matched[2].match(/[\s\n]data-original="([^<>"]+)"/);
 			chapter_data.image_list.push(matched[2] ? matched[2][1]
 					: matched[1]);
+		}
+		if (chapter_data.image_list.length === 0
+		// <div class="download-area">
+		&& html.includes('<div class="download-area">')
+		// <div class="title">
+		// 此章节需要使用客户端观看
+		// </div>
+		&& (matched = get_label(html
+		// <div class="title title-small">
+		// 请下载客户端(｡・`ω´･)
+		// </div>
+		.between('<div class="title">', '</div>')))) {
+			chapter_data.limited = matched;
 		}
 
 		return chapter_data;
