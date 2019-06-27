@@ -1,6 +1,5 @@
 ﻿/**
  * 批量下載 WEBTOON 中文官網 韓國漫畫 的工具。 Download NAVER WEBTOON comics.
- * (comic.cmn-Hant-TW)
  */
 
 'use strict';

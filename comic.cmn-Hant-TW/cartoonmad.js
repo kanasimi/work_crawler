@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載 動漫狂 漫畫 的工具。 Download cartoonmad comics. (comic.cmn-Hant-TW)
+ * 批量下載 動漫狂 漫畫 的工具。 Download cartoonmad comics.
  */
 
 'use strict';
@@ -106,6 +106,7 @@ var crawler = new CeL.work_crawler({
 			// ...
 			// </td>
 			.between('簡介&nbsp;</legend>', '</td>')
+			// tag: 限制級
 			// <td width=100><img src=/image/TICRF.jpg width=87 height=121>
 			.replace('/image/TICRF.jpg', function(all) {
 				work_data.is_adult = true;
@@ -153,12 +154,15 @@ var crawler = new CeL.work_crawler({
 				matched = '/comic/comicpic.asp?file=/'
 				// assert: matched[1] == work_data.id
 				+ matched[1] + '/'
-				// chapter_NO @see 名偵探柯南
+				// chapter_NO 可能為\d{4} @see 名偵探柯南
 				+ (+matched[2]).pad(3) + '/';
 				for (var index = 1; index <= image_count; index++) {
 					chapter_data.image_list.push(matched + index.pad(3)
+					// 有的章節必須加上這一項才能正常下載。 e.g.,
 					// https://www.cartoonmad.com/comic/242100012033001.html
 					+ '&rimg=1'
+					// TODO: 有的是這一項。 e.g.,
+					// https://www.cartoonmad.com/comic/102905562015001.html
 					// + '&rimg=3'
 					);
 				}

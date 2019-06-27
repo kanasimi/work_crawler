@@ -25,6 +25,7 @@
 * 具備最愛清單功能。
 * 能一鍵搜尋各網站與下載作品。
 * 可自動下載小說封面以及章節中的插圖。
+* 小說漫畫自動分部(part)。
 * 本工具會盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
 * 跨平臺支援：支援 Windows, Linux, Mac。
 * 採用 CeJS [線上作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
@@ -75,7 +76,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [ミッドナイトノベルズ](https://mid.syosetu.com/) | mid.js | [小説家になろう](http://syosetu.com/)の[男性読者向けの『官能を主目的としない』R18作品を探すことができるサイト](http://noc.syosetu.com/site/faq/) |
 | [ムーンライトノベルズ](https://mnlt.syosetu.com/top/top/) | mnlt.js | [小説家になろう](http://syosetu.com/)の[女性読者向けのR18作品を探すことができるサイト](http://noc.syosetu.com/site/faq/) |
 
-### Chinese web fictions / novels 中国内地小说 中国のオンライン小説
+### Simplified Chinese web fictions / novels 中国内地小说 中国簡体字のオンライン小説
 [novel.cmn-Hans-CN/](novel.cmn-Hans-CN/)*.js, web pages → epub
 
 | Site 平臺名稱 | Tool file | Note 說明 |
@@ -100,7 +101,18 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
-### Chinese webcomics 中国内地漫画 中国のウェブコミック
+### Traditional Chinese webcomics 繁體字漫畫 中国繁体字のウェブコミック
+[comic.cmn-Hant-TW/](comic.cmn-Hant-TW/)*.js, images → zip
+
+| Site 平臺名稱 | Tool file | Note 說明 |
+| --- | --- | --- |
+| [99漫畫網](https://www.999comics.com/) | 999comics.js | 可能是2013年版本的 圣樱漫画管理系统？ MHD模板（漫画岛）？2019/6/18 19:46 測試中陸續發現PC端有頁面404。 |
+| [繁體版漫畫櫃](https://tw.manhuagui.com/) | manhuagui_tw.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
+| [動漫狂](https://www.cartoonmad.com/) | cartoonmad.js | 以臺灣翻譯日本的漫畫單行本為主。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
+| [動漫伊甸園](http://dmeden.net/) | dmeden.js | 日本漫畫較多。 採用與汗汗酷漫相同系統。 |
+| [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
+
+### Simplified Chinese webcomics 中国内地漫画 中国簡体字のウェブコミック
 [comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, images → zip
 * 本工具無法下載需VIP付費、已屏蔽或刪除的內容。
 
@@ -125,7 +137,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [友绘漫画网](http://m.wuyouhui.net/) | wuyouhui.js | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
 | [188漫画网](http://m.88bag.net/) | 88bag.js | 有些缺圖，圖片似乎多從其他網站採集而來。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
 | [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
-| [看漫画](https://www.manhuagui.com/) | manhuagui.js<br />manhuagui_tw.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
+| [看漫画](https://www.manhuagui.com/) | manhuagui.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [漫画牛](https://www.manhuaniu.com/) | manhuaniu.js | 速度稍微慢。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
@@ -139,17 +151,13 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [扑飞漫画](http://www.pufei.net/) | pufei.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [塔多漫画](http://www.taduo.net/) | taduo.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
-| [動漫狂](https://www.cartoonmad.com/) | cartoonmad.js | 以臺灣翻譯日本的漫畫單行本為主 |
 | [漫画160](https://www.laimanhua.com/) | mh160.js | 與 733mh.js 相同系統 |
 | [哦漫画](http://www.omanhua.net/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
-| [動漫伊甸園](http://dmeden.net/) | dmeden.js | 日本漫畫較多。 採用與汗汗酷漫相同系統。 |
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
 | [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
-| [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | [57漫画网](http://www.wuqimh.com/) | 57mh.js | 缺話眾多。系統同 2manhua.js。可能是2013年版本的 圣樱漫画管理系统？ MHD模板？ |
-| [99漫畫網](https://www.999comics.com/) | 999comics.js | 可能是2013年版本的 圣樱漫画管理系统？ MHD模板（漫画岛）？2019/6/18 19:46 測試中陸續發現PC端有頁面404。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |

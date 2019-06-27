@@ -12,8 +12,9 @@
 var node_electron = require('electron'),
 // const: work_crawler/
 base_directory = '../',
-// const
+// const. 主要以搜尋時使用的語言來區分。
 site_type_description = {
+	'comic.cmn-Hant-TW' : '繁體字漫畫',
 	'comic.cmn-Hans-CN' : '中国内地漫画',
 	'comic.ja-JP' : '日本語のウェブコミック',
 	'comic.en-US' : 'English webcomics',
@@ -22,6 +23,17 @@ site_type_description = {
 },
 // const
 download_sites_set = {
+	'comic.cmn-Hant-TW' : {
+		'999comics' : '99漫畫網',
+
+		manhuagui_tw : '繁體版漫畫櫃',
+
+		cartoonmad : '動漫狂',
+
+		dmeden : '動漫伊甸園',
+
+		webtoon : 'WEBTOON'
+	},
 	'comic.cmn-Hans-CN' : {
 		qq : '腾讯漫画',
 		'163' : '网易漫画',
@@ -47,13 +59,10 @@ download_sites_set = {
 		'360taofu' : '360漫画',
 		'517' : '我要去漫画',
 		dagu : '大古漫画网',
-
 		manhuadb : '漫画DB',
-		cartoonmad : '動漫狂',
 
 		// '2manhua' : '爱漫画',
 		'57mh' : '57漫画网',
-		'999comics' : '99漫畫網',
 
 		dmzj : '动漫之家',
 		dm5 : '动漫屋',
@@ -62,7 +71,6 @@ download_sites_set = {
 		// manhuatai : '漫画台',
 
 		manhuagui : '看漫画/漫画柜',
-		manhuagui_tw : '繁體版漫畫櫃',
 		gufengmh : '古风漫画网',
 		'36mh' : '36漫画网',
 		manhuaniu : '漫画牛',
@@ -73,16 +81,12 @@ download_sites_set = {
 		omanhua : '哦漫画',
 
 		hhcool : '汗汗酷漫',
-		dmeden : '動漫伊甸園',
 
 		migudm : '咪咕圈圈',
 
 		comico : 'comico',
 
-		webtoon : 'WEBTOON',
 		dongman : '咚漫'
-
-	// mrblue : 'Mr.Blue (不再維護)'
 	},
 	'comic.ja-JP' : {
 		ComicWalker : 'ComicWalker',
@@ -109,6 +113,8 @@ download_sites_set = {
 		manganew : 'Manga New (不再維護)',
 
 		Rocaca : 'rocaca (不再維護)'
+
+		// mrblue : 'Mr.Blue (不再維護)'
 	},
 	'novel.cmn-Hans-CN' : {
 		ck101 : '卡提諾論壇 小說頻道',
