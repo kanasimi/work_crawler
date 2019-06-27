@@ -114,7 +114,7 @@ download_sites_set = {
 
 		Rocaca : 'rocaca (不再維護)'
 
-		// mrblue : 'Mr.Blue (不再維護)'
+	// mrblue : 'Mr.Blue (不再維護)'
 	},
 	'novel.cmn-Hans-CN' : {
 		ck101 : '卡提諾論壇 小說頻道',
@@ -544,25 +544,29 @@ function setup_download_options() {
 				function(type) {
 					return 'type_' + type;
 				}).join(' ') : '',
-				type : arg_type_data && Object.keys(arg_type_data).join(),
+				// data_type : arg_type_data &&
+				// Object.keys(arg_type_data).join(),
 				onchange : function() {
 					var crawler = get_crawler();
 					if (!crawler) {
 						return;
 					}
-					var key = this.parentNode.title, value = this.value;
-					if (this.type === 'number' || this.type
+					var key = this.parentNode.title, value = this.value,
+					//
+					type = Object.keys(CeL.set_class(this)).map(function(c) {
+						c = c.match(/^type_(.+)$/);
+						return c ? c[1] : '';
+					});
 					// TODO: parse other values
-					&& this.type.includes('number') && !isNaN(+value)) {
+					if (type.includes('number') && !isNaN(+value)) {
 						value = +value;
 						if (!isNaN(value))
 							crawler.setup_value(key, value);
 					} else {
-						if ((!this.type || this.type === 'boolean' || this.type
-								.includes('boolean')
+						if ((!type.join('') || type.includes('boolean')
 								&& (value === 'true' || value === 'false'))) {
 							value = value === 'true';
-						} else if (this.type.includes('string')) {
+						} else if (type.includes('string')) {
 							// TODO: verify the value
 						} else {
 							// TODO: verify the value
