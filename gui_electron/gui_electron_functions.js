@@ -28,6 +28,8 @@ download_sites_set = {
 
 		manhuagui_tw : '繁體版漫畫櫃',
 
+		comicbus : '無限動漫',
+
 		cartoonmad : '動漫狂',
 
 		dmeden : '動漫伊甸園',
