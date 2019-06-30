@@ -91,7 +91,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [顶点小说](https://www.x23us.com/) | 23us.js<br />~~archive/23us.com.js~~ | PTCMS? 有許多無內容/空章節 |
 | [顶点小说](https://www.23us.cc/) | ~~archive/23us.2018.js~~ | [WMCMS](http://www.weimengcms.com/index.html) (未梦开源小说程序) [仿电脑顶点小说模板](http://www.weimengcms.com/html/temple/article/141.html) or PTCMS? 自 2018/12/9 23:56 最後一次連接 |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | PTCMS |
-| [看书神站](https://www.kanshushenzhan.com/) | kanshushenzhan.js | [杰奇小说连载系统](https://www.jieqi.com/files/page/html/product/article.html) |
+| [看书神站](https://www.kanshushenzhan.com/) | kanshushenzhan.js | 部分章節被腰斬。[杰奇小说连载系统](https://www.jieqi.com/files/page/html/product/article.html) |
 | [花香居](https://www.huaxiangju.com/) | huaxiangju.js | 杰奇小说连载系统 |
 | [追书帮](http://www.zhuishubang.com/) | zhuishubang.js | 杰奇小说连载系统 |
 | [飘天文学](http://www.piaotian.com/) | piaotian.js | NOT PTCMS. 杰奇小说连载系统? |
@@ -108,8 +108,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | --- | --- | --- |
 | [99漫畫網](https://www.999comics.com/) | 999comics.js | 可能是2013年版本的 圣樱漫画管理系统？ MHD模板（漫画岛）？2019/6/18 19:46 測試中陸續發現PC端有頁面404。 |
 | [繁體版漫畫櫃](https://tw.manhuagui.com/) | manhuagui_tw.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
-| [無限動漫](https://www.comicbus.com/) | comicbus.js | 以臺灣翻譯日本的漫畫單行本為主，還有些港漫。僅免費漫畫，無法下載VIP動畫。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
-| [動漫狂](https://www.cartoonmad.com/) | cartoonmad.js | 以臺灣翻譯日本的漫畫單行本為主。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
+| [無限動漫](https://www.comicbus.com/comic/) | comicbus.js | 以臺灣翻譯日本的漫畫為主，還有些港漫。僅免費漫畫，無法下載VIP動畫。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
+| [動漫狂](https://www.cartoonmad.com/) | cartoonmad.js | 以臺灣翻譯日本的漫畫為主。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
 | [動漫伊甸園](http://dmeden.net/) | dmeden.js | 日本漫畫較多。 採用與汗汗酷漫相同系統。 |
 | [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
@@ -231,7 +231,12 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 </details>
 
 5. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
-6. 您可設定 <code>work_crawler_loder.configuration.js</code> 以指定下載的作品檔案要放到哪個目錄底下。 (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js))
+6. 您可設定 `work_crawler_loder.configuration.js` 以指定下載的作品檔案要放到哪個目錄底下。最簡便的方法是直接用文字編輯器打開 `work_crawler_loder.js`，把 `global.data_directory = '';` 這一段修改成您需要的標的資料夾；例如：
+   ```
+   global.data_directory = 'D:\\動漫\\';
+   ```
+   **請記得最後必須加上目錄分隔號 `\\’，並且在引號中，目錄分隔號必須輸入兩次！**
+
 7. 每次要更新到最新版本時，只要進到工具安裝檔所在目錄，重新執行一次本工具安裝檔即可。
    ``` sh
    node work_crawler.updater.js
@@ -364,7 +369,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 ## Purpose 公開目的
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [線上作品爬蟲程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
-* 展示程式撰寫當時，各線上小說漫畫網站之網站資料結構。
+* 展示程式撰寫當時，各線上小說漫畫網站之網站結構。
 * 提供離線瀏覽小說漫畫功能，以利個人化閱覽方式。增進閱覽體驗、掌控閱覽環境。
 * 增加對閱讀權的掌控能力，預防暫時無法連接網頁，或者數十年後找不到記憶中閱覽過的作品。
 
