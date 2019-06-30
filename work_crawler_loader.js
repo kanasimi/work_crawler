@@ -6,7 +6,10 @@
 
 // ----------------------------------------------------------------------------
 
-var node_fs = require('fs'), default_configuration_file = './work_crawler.default_configuration.js', user_configuration_file = './work_crawler.configuration.js';
+var node_fs = require('fs');
+
+var default_configuration_file = './work_crawler.default_configuration.js';
+var user_configuration_file = './work_crawler.configuration.js';
 
 try {
 	// Load default configuration.
@@ -14,19 +17,22 @@ try {
 } catch (e) {
 }
 
-if (node_fs.existsSync(user_configuration_file)) {
-	try {
-		// Load configuration.
-		require(user_configuration_file);
-	} catch (e) {
+try {
+	// Load configuration.
+	require(user_configuration_file);
+} catch (e) {
+	if (false) {
+		// File not exists?
 		console.error('無法載入 ' + user_configuration_file + ' 裡的設定。或許是因為程式碼有錯誤？');
 	}
-} else {
-	// 將 default_configuration_file 改名成 user_configuration_file。
-	try {
-		node_fs.renameSync(default_configuration_file, user_configuration_file);
-	} catch (e) {
-		// e.g., released package version?
+	if (false) {
+		// 將 default_configuration_file 改名成 user_configuration_file。
+		try {
+			// node_fs.renameSync(default_configuration_file,
+			// user_configuration_file);
+		} catch (e) {
+			// e.g., released package version?
+		}
 	}
 }
 
