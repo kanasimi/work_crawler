@@ -1,10 +1,10 @@
 ﻿/**
- * 批量下載漫畫櫃繁體的工具。 Download manhuagui comics. (comic.cmn-Hant-TW)
+ * 批量下載漫畫櫃繁體的工具。 Download manhuagui comics.
  */
 
 'use strict';
 
-require('../work_crawler_loder.js');
+require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 

@@ -12,7 +12,7 @@
 var node_electron = require('electron'),
 // const: work_crawler/
 base_directory = '../',
-// const. 主要以搜尋時使用的語言來區分。
+// const. 主要以搜尋時使用的語言來區分，而非作品出產國。
 site_type_description = {
 	'comic.cmn-Hant-TW' : '繁體字漫畫',
 	'comic.cmn-Hans-CN' : '中国内地漫画',
@@ -164,7 +164,7 @@ default_configuration_file_name = 'work_crawler.configuration.json',
 //
 theme_list = 'light|dark'.split('|');
 
-'recheck,start_chapter,chapter_filter,regenerate,reget_chapter,archive_images,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,main_directory,user_agent,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
+'recheck,start_chapter,chapter_filter,regenerate,reget_chapter,search_again,archive_images,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,main_directory,user_agent,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
 // @see work_crawler/resource/locale of work_crawler - locale.csv
 .split(',').forEach(function(item) {
 	download_options_set[item] = 'download_options.' + item;
@@ -187,7 +187,7 @@ if (old_Unicode_support) {
 // save_to_preference 不可包含 main_directory，因為已來不及，且會二次改變 main_directory。
 delete save_to_preference.main_directory;
 
-require(base_directory + 'work_crawler_loder.js');
+require(base_directory + 'work_crawler_loader.js');
 
 // declaration for gettext(). @see setup_language_menu()
 var _;
@@ -600,7 +600,7 @@ function setup_download_options() {
 				T : download_options_set[download_option],
 				force_convert : _force_convert
 			},
-			// option_type_token() @ work_crawler_loder.js
+			// option_type_token() @ work_crawler_loader.js
 			option_type_token(arg_type_data, [ , '#871' ]) ],
 			C : className,
 			title : download_option
@@ -1225,7 +1225,7 @@ function reset_site_options() {
 	}
 }
 
-// will called by setup_crawler() @ work_crawler_loder.js
+// will called by setup_crawler() @ work_crawler_loader.js
 function prepare_crawler(crawler, crawler_module) {
 	var site_id = site_used;
 	if (site_id in download_site_nodes.link_of_site) {
@@ -1239,15 +1239,15 @@ function prepare_crawler(crawler, crawler_module) {
 
 	/**
 	 * 會從以下檔案匯入使用者 preference:<code>
-	# work_crawler_loder.js
-	# work_crawler_loder.configuration.js → site_configuration
+	# work_crawler_loader.js
+	# work_crawler.default_configuration.js → work_crawler.configuration.js → site_configuration
 	# global.data_directory + default_configuration_file_name → default_configuration
 	# site script .js → crawler.*
 	# setup_crawler.prepare() call setup_crawler.prepare() call default_configuration[site_id] → crawler.*
 	# crawler.main_directory + 'preference.json' → crawler.preference
 	 </code>
 	 * 
-	 * TODO: 將 default_configuration_file_name 轉入 work_crawler_loder.js
+	 * TODO: 將 default_configuration_file_name 轉入 work_crawler_loader.js
 	 */
 
 	// 在這邊引入最重要的設定是儲存的目錄 crawler.main_directory。
@@ -1714,7 +1714,8 @@ function search_work_title() {
 			// for debug
 			if (CeL.is_debug())
 				console.log(work_data);
-			if (work_data.chapter_count >= 0)
+			// work_data maybe `undefined`
+			if (work_data && work_data.chapter_count >= 0)
 				found++;
 			if (++done === site_count) {
 				// all done
@@ -1790,7 +1791,7 @@ function get_crawler(site_id, just_test) {
 	site_used = site_id;
 
 	// include site script .js
-	// 這個過程會執行 setup_crawler() @ work_crawler_loder.js
+	// 這個過程會執行 setup_crawler() @ work_crawler_loader.js
 	// 以及 setup_crawler.prepare()
 	crawler = require(crawler);
 	if (old_site_used !== site_used) {

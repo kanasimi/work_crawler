@@ -1,9 +1,9 @@
 ﻿/**
  * CeJS 線上小說漫畫下載工具的主要設定。
  * 
- * 請注意：`work_crawler_loder.default_configuration.js`
- * 這個檔案每次更新都會被覆寫成新版本，若欲更改設定，請編輯 `work_crawler_loder.configuration.js` 這個檔案，不要編輯
- * `work_crawler_loder.default_configuration.js`！
+ * 請注意：`work_crawler.default_configuration.js`
+ * 這個檔案每次更新都會被覆寫成新版本，若欲更改設定，請編輯 `work_crawler.configuration.js` 這個檔案，不要編輯
+ * `work_crawler.default_configuration.js`！
  */
 
 // default directory to place comic images and novels. 指定下載的檔案要放置的標的目錄。

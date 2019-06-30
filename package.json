@@ -44,7 +44,9 @@
 		} ],
 		"files" : [ "package.json", "node_modules/*", "resource/*",
 				"_CeL.loader.nodejs.js", "gui_electron/**/*",
-				"work_crawler_loder.js", "comic.*/**/*", "novel.*/**/*" ],
+				"work_crawler_loader.js",
+				"work_crawler.default_configuration.js", "comic.*/**/*",
+				"novel.*/**/*" ],
 
 		"mac" : {
 			"category" : "Network",

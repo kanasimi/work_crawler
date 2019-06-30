@@ -14,7 +14,7 @@ node list_kuaiZip.js target_directory
 
 global.need_work_id = false;
 
-require('../work_crawler_loder.js');
+require('../work_crawler_loader.js');
 
 var log_file = CeL.env.script_name + '.log.txt';
 

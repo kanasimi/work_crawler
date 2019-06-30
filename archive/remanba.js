@@ -6,7 +6,7 @@
 
 'use strict';
 
-require('./comic loder.js');
+require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 

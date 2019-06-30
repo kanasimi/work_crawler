@@ -4,7 +4,7 @@
 
 'use strict';
 
-require('../work_crawler_loder.js');
+require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
@@ -15,7 +15,10 @@ var crawler = new CeL.work_crawler({
 	recheck : 'multi_parts_changed',
 
 	// 圖像檔案下載失敗處理方式：忽略/跳過圖像錯誤。當404圖像不存在、檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。default:false
-	skip_error : true,
+	// skip_error : true,
+
+	// e.g., 精靈來日
+	acceptable_types : 'png',
 
 	// one_by_one : true,
 	base_URL : 'https://www.cartoonmad.com/',
@@ -23,8 +26,14 @@ var crawler = new CeL.work_crawler({
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
+		// CeL.set_debug(9);
 		return [ 'search.html', {
-			keyword : work_title,
+			// maxlength="12" for "最強的職業不是勇者也不是賢者好像是鑑定士(偽)的樣子"
+			keyword : work_title.slice(0, 12)
+			// for pure Big5, no 香港增補字符集
+			.replace(/[―喰蔃瀞靝鼗弌鍮蠏覩瑨牐]/g, function(char) {
+				return '&#' + char.charCodeAt(0) + ';';
+			}),
 			// all:全部 ctname:作品名稱 ctag:動漫標籤 author:原創作者
 			searchtype : 'all'
 		} ];
@@ -37,9 +46,11 @@ var crawler = new CeL.work_crawler({
 		id_data = [];
 
 		html = html.between('搜尋結果');
+		// console.log(html);
 
 		html.each_between('<td align="center"><table ', '</table>', function(
 				token) {
+			// console.log(token);
 			var matched = token
 					.match(/<a href=comic\/(\d+).html title="([^<>"]+)">/);
 			id_list.push(+matched[1]);
@@ -70,13 +81,13 @@ var crawler = new CeL.work_crawler({
 					'<input type="hidden" name="name" value="', '">')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			last_update : new Date(matched[1])
+			last_update : matched[1]
 		};
 
 		extract_work_data(work_data, html.between('瀏覽記錄', '我要推薦').replace(
 				/<span class=vstar(\d+)>/, '$1')
 		// </font> &nbsp;<img src="/image/chap1.gif" align="absmiddle">
-		.replace(/image\/chap([189])\.gif/, function(url, no) {
+		.replace(/\/image\/chap([189])\.gif/, function(url, no) {
 			// e.g., https://www.cartoonmad.com/image/chap1.gif
 			// 5: unknown
 			work_data.status = no === '1' ? '連載中' : /* 8, 9: 已載完 */'已完結';
@@ -135,20 +146,22 @@ var crawler = new CeL.work_crawler({
 		;
 
 		html.each_between('<table width="800" align="center">', '</table>',
-		//
+		// for each part
 		function(token) {
 			var matched, part_title;
 			while (matched = PATTERN_chapter.exec(token)) {
+				matched[2] = matched[2].trim();
 				if (!part_title) {
 					part_title = matched[2].match(/([^\s])\s*$/)[1];
 					this.set_part(work_data, part_title);
 				}
+				matched[3] = matched[3].trim();
 				var chapter_data = {
 					title : get_label((matched[2] + ' ' + matched[3])).replace(
 							/(第)\s*(\d+)\s*/, '$1$2').replace(/\(\s+/g, '('),
-					url : matched[1]
+					url : matched[1],
+					image_list : []
 				};
-				chapter_data.image_list = [];
 				var image_count = +matched[3].match(/(\d+)頁/)[1];
 				matched = matched[1].match(/\/(\d{4})(\d{4})/);
 				matched = '/comic/comicpic.asp?file=/'
@@ -175,7 +188,18 @@ var crawler = new CeL.work_crawler({
 		// console.log(work_data.chapter_list[0]);
 	},
 
-	skip_get_chapter_page : true
+	// 在取得作品資料時，就能分析出整個作品的圖片網址，因此不需要再取得每個章節。
+	skip_get_chapter_page : true,
+
+	image_preprocessor : function(contents, image_data) {
+		// 檢查是否下載到 padding 用的 404 檔案。
+		// 2019/6/27: ct.png 14963 bytes
+		if (image_data.responseURL
+		// https://www.cartoonmad.com/image/ct.png
+		&& image_data.responseURL.endsWith('/image/ct.png')) {
+			return false;
+		}
+	}
 });
 
 // ----------------------------------------------------------------------------

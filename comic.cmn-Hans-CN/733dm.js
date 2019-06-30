@@ -6,7 +6,7 @@
 
 'use strict';
 
-require('../work_crawler_loder.js');
+require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
@@ -25,6 +25,9 @@ var crawler = CeL.qTcms2017({
 	// allow_EOI_error : true,
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	skip_error : true,
+
+	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
+	chapter_time_interval : '2s',
 
 	// 2018/3: https://www.733dm.net/
 	base_URL : 'https://www.733.so/',

@@ -79,7 +79,7 @@ function install_npm(package_name, message, for_development) {
 
 function update_components(update_script_name) {
 	var executing_at_tool_directory = node_fs
-			.existsSync('work_crawler_loder.js'), updater = require('./'
+			.existsSync('work_crawler_loader.js'), updater = require('./'
 			+ update_script_name);
 
 	show_info('下載並更新 CeJS 線上小說漫畫下載工具...');

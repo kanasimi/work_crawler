@@ -231,7 +231,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 </details>
 
 5. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
-6. 您可設定 `work_crawler_loder.configuration.js` 以指定 **下載的作品檔案要放到哪個目錄底下**。最簡便的方法是：直接用文字編輯器打開 `work_crawler_loder.configuration.js`，找到 `global.data_directory = '';` 這一段，把引號中修改成您要的所有網站下載目錄；例如：
+6. 您可設定 `work_crawler.configuration.js` 以指定 **下載的作品檔案要放到哪個目錄底下**。最簡便的方法是：直接用文字編輯器打開 `work_crawler.configuration.js`，找到 `global.data_directory = '';` 這一段，把引號中修改成您要的所有網站下載目錄；例如：
    ```
    global.data_directory = 'D:\\web_works\\';
    ```
@@ -256,7 +256,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 ### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage--nodejs-運行方式) for detail.
 2. Setup [_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt) if necessary.
-3. Setup `work_crawler_loder.configuration.js` (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js)). 最後設定好設定檔 `work_crawler_loder.configuration.js`。例如指定 `global.data_directory`。
+3. Setup `work_crawler.configuration.js` (see [work_crawler_loader.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loader.js)). 最後設定好設定檔 `work_crawler.configuration.js`。例如指定 `global.data_directory`。
 
 #### Setup GUI 設定視窗型態介面
 若是您在作研究開發時，希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，那麼您還需要安裝 [Electron](https://electronjs.org/)。若是您採用懶人安裝法，應該已經安裝過 Electron，可以直接採用圖形使用者介面。
@@ -302,7 +302,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
    ![命令列介面下執行命令](https://lh3.googleusercontent.com/r1-jB1Cmaznb5kseN97xUQyGzrsJJgek25Ifyvey8scMm311WjnjIAy-FpmiTtIVupyimDTWrVL7aI2cI7i2FRllR_QWMiLsRgF-kzDJnYMRaTRMVXrG2XkfEhHPh5Qvns0XQjROcw=w2400)
 
-2. 下載的檔案將放在設定檔 `work_crawler_loder.configuration.js` 的 `global.data_directory` 所設定的目錄下。若採[懶人安裝法](#lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
+2. 下載的檔案將放在設定檔 `work_crawler.configuration.js` 的 `global.data_directory` 所設定的目錄下。若採[懶人安裝法](#lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
 3. 本工具會循序下載每個章節，對於漫畫基本上每個章節的圖片會並行下載。不可並行下載同一個網站的同一個作品，否則會出現衝突。若是想要並行下載不同網站或是不同的作品，那麼您就需要再開一個命令列介面來執行工具檔。
 4. 若是下載出錯，**重新執行即可接續下載**。
 

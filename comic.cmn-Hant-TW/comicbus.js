@@ -45,7 +45,7 @@ https://m.comicbus.com/
 
 'use strict';
 
-require('../work_crawler_loder.js');
+require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 

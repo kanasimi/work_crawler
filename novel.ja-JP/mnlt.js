@@ -4,7 +4,7 @@
 
 'use strict';
 
-require('../work_crawler_loder.js');
+require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
@@ -15,10 +15,7 @@ CeL.run('application.net.work_crawler.yomou');
 var crawler = CeL.yomou({
 	site_name : 'ムーンライトノベルズ',
 	base_URL : 'https://mnlt.syosetu.com/',
-	novel_base_URL : 'https://novel18.syosetu.com/',
-
-	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'search/search/?word=',
+	isR18 : true
 });
 
 // ----------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 
 'use strict';
 
-require('../work_crawler_loder.js');
+require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
@@ -18,7 +18,8 @@ var crawler = new CeL.work_crawler({
 
 	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
 	// 2019/6/16: 0-4s 常常下載到十幾二十個作品後中斷連線出現錯誤。
-	chapter_time_interval : '5s',
+	// 2019/6/26 6:11:38	5s 依然會出現 ECONNRESET: socket hang up
+	chapter_time_interval : '6s',
 
 	// one_by_one : true,
 	base_URL : 'https://comic.mag-garden.co.jp/',
