@@ -197,8 +197,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 ### Lazy installation 懶人安裝法
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
 1. 先安裝 [Node.js](https://nodejs.org/) 與 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 -->已經安裝過的可以跳過。Node.js 用以執行本工具。7-Zip 在更新本工具，或者打包漫畫章節，以及製作電子書時使用。
-2. 下載並儲存本工具安裝檔 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>（按右鍵另存新檔）。本工具安裝檔 **預設會將所有組件放在 <code>work_crawler-master</code> 目錄下**。
-3. <details><summary>在命令列介面下以 Node.js 執行安裝檔 <code>work_crawler.updater.js</code>。（本安裝檔不能直接點擊兩下執行。點擊本行可獲得更詳細的說明。）</summary>
+2. 下載並儲存本工具安裝檔 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>（按右鍵另存新檔）。本工具安裝檔 **預設會將所有組件放在 `work_crawler-master` 目錄下**。
+3. <details><summary>在命令列介面下以 Node.js 執行安裝檔 `work_crawler.updater.js`。（本安裝檔不能直接點擊兩下執行。點擊本行可獲得更詳細的說明。）</summary>
 
    1. **進入[命令列介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下**：
       * Windows 10 下，請按下<kbd>[⊞ Windows鍵](https://zh.wikipedia.org/wiki/Windows%E9%94%AE)</kbd> + <kbd>X</kbd> → 選擇 **命令提示字元**。（如下圖的示範）
@@ -206,9 +206,9 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
       ![Windows 10 下，進入命令列介面](https://lh3.googleusercontent.com/yFKRG6LTfvbJhMljgIXrEUFivGl4LRYgs0FlNBCBZ1KmwUW2paSoubLhyWGhS7S9GsHe1ef7Bt3TRyf5IHWRLdFL_SqywkPikecwlSpYtPHM6KRlyEaFWsWZqrS7DF3JzzcycnfxfQ=w2400)
 
-   2. **進到本工具安裝檔 <code>work_crawler.updater.js</code> 所在的目錄**：
+   2. **進到本工具安裝檔 `work_crawler.updater.js` 所在的目錄**：
       * 若是您視窗的 **背景為藍色**，表示您使用的可能是 [PowerShell](https://zh.wikipedia.org/wiki/Windows_PowerShell)，您應該使用這種形式的指令來切換目錄：<code style="color:#888;background-color:#008b8b;">cd "本工具安裝檔所在的目錄"</code>。
-      * 若是您視窗的 **背景為黑色**，表示您使用的可能是 [Command Prompt 命令提示字元](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E6%8F%90%E7%A4%BA%E5%AD%97%E5%85%83)，您應該使用這種形式的指令來切換目錄：<code>cd/d "本工具安裝檔所在的目錄"</code>（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
+      * 若是您視窗的 **背景為黑色**，表示您使用的可能是 [Command Prompt 命令提示字元](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E6%8F%90%E7%A4%BA%E5%AD%97%E5%85%83)，您應該使用這種形式的指令來切換目錄：`cd/d "本工具安裝檔所在的目錄"`（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
 
    3. **執行命令以下載最新版本組件**（本安裝檔必須以 `node` 執行， **不能直接點擊兩下執行**。）：
       ``` sh
@@ -216,7 +216,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
       ```
 </details>
 
-4. 然後就能[開始試用](#execution-執行)囉。若是您希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，請執行 <code>work_crawler-master</code> 目錄下面的 <code>start_gui_electron.bat</code> 或 <code>start_gui_electron.sh</code>。
+4. 然後就能[開始試用](#execution-執行)囉。若是您希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，請執行 `work_crawler-master` 目錄下面的 `start_gui_electron.bat` 或 `start_gui_electron.sh`。
    <details><summary>下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子：</summary>
 
    ![下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
@@ -231,11 +231,12 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 </details>
 
 5. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
-6. 您可設定 `work_crawler_loder.configuration.js` 以指定下載的作品檔案要放到哪個目錄底下。最簡便的方法是直接用文字編輯器打開 `work_crawler_loder.js`，把 `global.data_directory = '';` 這一段修改成您需要的標的資料夾；例如：
+6. 您可設定 `work_crawler_loder.configuration.js` 以指定 **下載的作品檔案要放到哪個目錄底下**。最簡便的方法是：直接用文字編輯器打開 `work_crawler_loder.configuration.js`，找到 `global.data_directory = '';` 這一段，把引號中修改成您要的所有網站下載目錄；例如：
    ```
-   global.data_directory = 'D:\\動漫\\';
+   global.data_directory = 'D:\\web_works\\';
    ```
-   **請記得最後必須加上目錄分隔號 `\\’，並且在引號中，目錄分隔號必須輸入兩次！**
+   **請記得在引號中，目錄分隔號必須輸入兩次！**
+   這不會影響到您之前曾手動改變過的標的目錄。
 
 7. 每次要更新到最新版本時，只要進到工具安裝檔所在目錄，重新執行一次本工具安裝檔即可。
    ``` sh
@@ -249,13 +250,13 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
    npm install cejs
    ```
 4. 然後就能[開始試用](#execution-執行)囉。
-* 請注意：採用 <code>npm install cejs</code> 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。**建議採用下方一般正常安裝方法**，下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 <code>npm install</code> 安裝舊版的程式庫。
+* 請注意：採用 `npm install cejs` 安裝的可能不是最新版的 CeJS，尚未加入最新功能。當採用新版下載工具與舊版 CeJS 程式庫時，執行起來會出錯，請見諒。**建議採用下方一般正常安裝方法**，下載最新版本 [CeJS](https://github.com/kanasimi/CeJS) 壓縮檔，解開後配置；而不是直接執行 `npm install` 安裝舊版的程式庫。
 -->
 
 ### Normal installation 一般正常安裝方法
 1. Please see [Node.js usage section at CeJS](https://github.com/kanasimi/CeJS#nodejs-usage--nodejs-運行方式) for detail.
 2. Setup [_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt) if necessary.
-3. Setup <code>work_crawler_loder.configuration.js</code> (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js)). 最後設定好設定檔 <code>work_crawler_loder.configuration.js</code>。例如指定 <code>global.data_directory</code>。
+3. Setup `work_crawler_loder.configuration.js` (see [work_crawler_loder.js](https://github.com/kanasimi/work_crawler/blob/master/work_crawler_loder.js)). 最後設定好設定檔 `work_crawler_loder.configuration.js`。例如指定 `global.data_directory`。
 
 #### Setup GUI 設定視窗型態介面
 若是您在作研究開發時，希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，那麼您還需要安裝 [Electron](https://electronjs.org/)。若是您採用懶人安裝法，應該已經安裝過 Electron，可以直接採用圖形使用者介面。
@@ -263,7 +264,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
    ``` sh
    npm i -D electron@latest
    ```
-2. 在本工具安裝的目錄下，執行 <code>start_gui_electron.bat</code> 或 <code>start_gui_electron.sh</code>。
+2. 在本工具安裝的目錄下，執行 `start_gui_electron.bat` 或 `start_gui_electron.sh`。
 
    ![視窗型態介面](https://lh3.googleusercontent.com/L0wxAGlxz0G9fvQQNamoXugC3WeJdnYaxqaxPnNE_3gnUtH0VBlGNScH_Y44MpkbiYYmLgajHMFt6desqDYYJbYT0RuMvAyrGlDGx9uWuYH-dEm6T6B9SG9dgUSG6uQAFrPATo1llw=w2400)
 
@@ -301,12 +302,12 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
    ![命令列介面下執行命令](https://lh3.googleusercontent.com/r1-jB1Cmaznb5kseN97xUQyGzrsJJgek25Ifyvey8scMm311WjnjIAy-FpmiTtIVupyimDTWrVL7aI2cI7i2FRllR_QWMiLsRgF-kzDJnYMRaTRMVXrG2XkfEhHPh5Qvns0XQjROcw=w2400)
 
-2. 下載的檔案將放在設定檔 <code>work_crawler_loder.configuration.js</code> 的 <code>global.data_directory</code> 所設定的目錄下。若採[懶人安裝法](#lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
+2. 下載的檔案將放在設定檔 `work_crawler_loder.configuration.js` 的 `global.data_directory` 所設定的目錄下。若採[懶人安裝法](#lazy-installation-懶人安裝法)，則預設放在解壓縮後工具檔所在的目錄下。
 3. 本工具會循序下載每個章節，對於漫畫基本上每個章節的圖片會並行下載。不可並行下載同一個網站的同一個作品，否則會出現衝突。若是想要並行下載不同網站或是不同的作品，那麼您就需要再開一個命令列介面來執行工具檔。
 4. 若是下載出錯，**重新執行即可接續下載**。
 
 ## Workflow 工作流程
-* 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 <code>qq</code>），每套漫畫一個目錄。
+* 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 `qq`），每套漫畫一個目錄。
 
    ![folder](https://lh3.googleusercontent.com/-Gu8klHdiKfm9c3IKkYLVLd26Wc5W2Fz2QX7--7QNgjewXZRoRDf3uCNxTqRqmYfdzZxly7BRFPhdYWE2bZXKweer_QaC5T2Wxv5fVGuVC2vGxMtG2szUqFgHKx7n9uMaRKCOfWU7A=w589-h386-no)
 

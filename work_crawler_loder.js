@@ -6,59 +6,28 @@
 
 // ----------------------------------------------------------------------------
 
-// npm: 若有 CeJS module 則用之。
-global.use_cejs_mudule = true;
-
-// default directory to place comic images and novels. 指定下載的檔案要放置的標的目錄。
-// '': the same directory as the .js running
-global.data_directory = '';
-
-// 自動更新功能。
-global.auto_update = true;
-
-// ------------------------------------
-// configuration for arrangement/*.js
-
-// ** 請別直接改變這邊的設定。在每次更新時，本檔案可能會被覆寫為預設設定。
-
-// default directory to place completed files
-// 將會被指定為第一個存在的目錄。
-global.completed_directory = [ '', '' ];
-
-// 檔案分類完後要放置的標的目錄。
-global.catalog_directory = '';
-
-// 各個網站獨特的設定/特別的個人化設定。
-global.site_configuration = {};
-
-// comico 搭配閱讀卷示範
-site_configuration.comico = site_configuration.comico_jp = site_configuration.comico_jp_plus = {
-	// 讓本工具自動使用閱讀卷。警告:閱讀券使用完就沒了。不可回復。
-	// auto_use_ticket : true,
-	// 警告:帳號資訊是用明碼存放在檔案中。
-	loginid : '',
-	password : ''
-};
-
-// 代理伺服器 "hostname:port"
-global.proxy_server = '';
-
-/** {String|Function}儲存最愛作品清單的目錄。可以把最愛作品清單放在獨立的檔案，便於編輯。 */
-global.favorite_list_directory = '';
-// 儲存最愛作品清單的目錄 @ .main_directory。
-favorite_list_directory = function() {
-	return this.main_directory + 'favorite.txt';
-};
-
-/** {String|Function}當只輸入 "l" 時的轉換。 */
-global.default_favorite_list = '';
-
-// ------------------------------------
+var node_fs = require('fs'), default_configuration_file = './work_crawler_loder.default_configuration.js', user_configuration_file = './work_crawler_loder.configuration.js';
 
 try {
-	// Load configuration.
-	require('./work_crawler_loder.configuration.js');
+	// Load default configuration.
+	require(default_configuration_file);
 } catch (e) {
+}
+
+if (node_fs.existsSync(user_configuration_file)) {
+	try {
+		// Load configuration.
+		require(user_configuration_file);
+	} catch (e) {
+		console.error('無法載入 ' + user_configuration_file + ' 裡的設定。或許是因為程式碼有錯誤？');
+	}
+} else {
+	// 將 `work_crawler_loder.default_configuration.js` 改名成
+	// `work_crawler_loder.configuration.js`。
+	try {
+		node_fs.renameSync(default_configuration_file, user_configuration_file);
+	} catch (e) {
+	}
 }
 
 // ----------------------------------------------------------------------------
@@ -140,13 +109,16 @@ if (data_directory
 ) {
 	try {
 		// 若是目標目錄無法存取，那就放在當前目錄下。
-		require('fs').accessSync(data_directory);
+		node_fs.accessSync(data_directory);
+		// 最後必須加上目錄分隔號 `\\’。
+		if (/^[\\\/]$/.test(data_directory))
+			data_directory += CeL.env.path_separator;
 	} catch (e) {
 		// 只 call 一次 CeL.warn()，這樣在 GUI 會顯示在同一行。
 		CeL.warn([ {
 			T : [ '警告：無法存取作品存放目錄 [%1]！', data_directory ]
 		}, '\n', {
-			T : '下載的檔案將放在工具檔所在的目錄下。'
+			T : '下載的檔案將放在預設目錄下。'
 		} ]);
 		data_directory = '';
 	}
