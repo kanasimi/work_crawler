@@ -71,8 +71,7 @@ if (typeof CeL !== 'function') {
 if (!CeL.random_id)
 	CeL.random_id = Math.random();
 
-// GUI: CeL.platform.browser === 'electron'
-var is_CLI = CeL.platform.browser === 'node';
+var is_CLI = CeL.platform.is_CLI;
 
 if (is_CLI) {
 	// for i18n: define gettext() user domain resource location.
@@ -195,14 +194,22 @@ if (is_CLI && !work_id && process.mainModule
 	options_arguments = ' [' + CeL.gettext('option=true') + '] ["'
 			+ CeL.gettext('option=value') + '"]';
 
+	// 顯示幫助信息/用法說明。
 	CeL.log({
 		T : 'Usage:'
 	});
+	// 分兩行顯示可以避免大螢幕上紫色背景不斷行問題。
 	CeL.log({
 		T : '	node ' + main_script + ' "' + CeL.gettext('作品標題或 id') + '"'
-		// 顯示幫助信息/用法說明。
-		+ options_arguments + '\n' + '	node ' + main_script + ' "l='
-				+ CeL.gettext('作品列表檔案') + '"' + options_arguments,
+				+ options_arguments,
+		S : {
+			color : 'white',
+			backgroundColor : 'magenta'
+		}
+	});
+	CeL.log({
+		T : '	node ' + main_script + ' "l=' + CeL.gettext('作品列表檔案') + '"'
+				+ options_arguments,
 		S : {
 			color : 'white',
 			backgroundColor : 'magenta'

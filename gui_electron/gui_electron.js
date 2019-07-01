@@ -65,7 +65,7 @@ function create_window() {
 		var id = options[0];
 		options = options[1];
 		var result = require('electron').dialog.showOpenDialog(options);
-		console.log(result);
+		// console.log(result);
 		event.sender.send('open_dialog', [ id, result ]);
 	});
 

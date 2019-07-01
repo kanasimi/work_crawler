@@ -1,34 +1,27 @@
 ﻿/**
  * CeJS 線上小說漫畫下載工具的主要設定。
  * 
- * 請注意：`work_crawler.default_configuration.js`
- * 這個檔案每次更新都會被覆寫成新版本，若欲更改設定，請編輯 `work_crawler.configuration.js` 這個檔案，不要編輯
- * `work_crawler.default_configuration.js`！
+ * 請注意：請別直接改變 `work_crawler.default_configuration.js` 的設定。
+ * 這個檔案在每次更新時，都會被覆寫成新版本的預設設定。若欲更改設定，請編輯 `work_crawler.configuration.js`
+ * 這個檔案，不要編輯 `work_crawler.default_configuration.js`！
  */
 
-// default directory to place comic images and novels. 指定下載的檔案要放置的標的目錄。
-// '': the same directory as the .js running, or default download location of
-// user.
+'use strict';
+
+// default directory to place comic images and novels.
+// 指定所有網站採用之預設主要下載目錄，所下載的作品檔案預設會放置到此主要目錄之工具檔名稱底下。
+// 請記得在引號中，目錄分隔號必須輸入兩次！
+// '': the same directory as the .js running,
+// or default download location of user.
 global.data_directory = '';
 
-// 自動更新功能。
+// 設定是否開啟自動更新功能。
 global.auto_update = true;
 
 // npm: 若有 CeJS module 則用之。
 global.use_cejs_mudule = true;
 
 // ------------------------------------
-// configuration for arrangement/*.js
-
-// ** 請別直接改變這邊的設定。在每次更新時，本檔案可能會被覆寫為預設設定。
-
-// default directory to place completed files
-// 將會被指定為第一個存在的目錄。
-global.completed_directory = [ '', '' ];
-
-// 檔案分類完後要放置的標的目錄。
-global.catalog_directory = '';
-
 // 各個網站獨特的設定/特別的個人化設定。
 global.site_configuration = {};
 
@@ -53,3 +46,13 @@ favorite_list_directory = function() {
 
 /** {String|Function}當只輸入 "l" 時的轉換。 */
 global.default_favorite_list = '';
+
+// ------------------------------------
+// configuration for arrangement/*.js
+
+// default directory to place completed files
+// 將會被指定為第一個存在的目錄。
+global.completed_directory = [ '', '' ];
+
+// 檔案分類完後要放置的標的目錄。
+global.catalog_directory = '';

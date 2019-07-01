@@ -158,12 +158,13 @@ download_sites_set = {
 },
 // 所有網站都使用相同值的下載選項。
 // will save at default_configuration_file_name
+// 請注意：這些設定將會被存在 `default_configuration_file_name`。因此若將這個檔案刪除，則設定將會被重設！
 global_options = {
 	preserve_download_work_layer : 'boolean',
 	play_finished_sound : 'boolean',
 	CSS_theme : 'string',
 	// fso:directory
-	data_directory : 'string'
+	data_directory : 'string:fso_directory'
 },
 // const 下載選項。有順序。常用的排前面。
 // @see CeL.application.net.work_crawler
@@ -572,6 +573,27 @@ function setup_download_options() {
 				// Object.keys(arg_type_data).join(),
 				onchange : change_download_option
 			};
+			if (('string' in arg_type_data)
+					&& Array.isArray(arg_type_data.string)
+					&& arg_type_data.string.length === 1
+					&& typeof arg_type_data.string[0] === 'string') {
+				var fso_type = arg_type_data.string[0]
+						.match(/^fso_(file|files|directory|directories)$/);
+				if (fso_type) {
+					fso_type = fso_type[1];
+					// 檔案或目錄的路徑常常較長。
+					input_box.S = 'width: 30em;';
+					input_box = [ input_box, {
+						T : '📂',
+						R : (old_Unicode_support ? '' : '🗁 ')
+						// append dialog
+						+ _('選擇%1路徑', _(fso_type)),
+						fso_type : fso_type,
+						onclick : select_download_options_fso,
+						S : 'cursor: pointer;'
+					} ];
+				}
+			}
 		}
 
 		var option_object = {
@@ -638,10 +660,6 @@ function setup_download_options() {
 }
 
 function change_download_option() {
-	var crawler = get_crawler();
-	if (!crawler) {
-		return;
-	}
 	var key = this.parentNode.title, value = this.value,
 	//
 	type = Object.keys(CeL.set_class(this)).map(function(c) {
@@ -656,6 +674,11 @@ function change_download_option() {
 			// recovery
 			this.value = data_directory;
 		}
+		return;
+	}
+
+	var crawler = get_crawler();
+	if (!crawler) {
 		return;
 	}
 
@@ -694,6 +717,36 @@ function change_download_option() {
 		default_configuration[crawler.site_id][key] = value;
 		save_default_configuration();
 	}
+}
+
+function select_download_options_fso() {
+	var _this = this, fso_type = this.getAttribute('fso_type'), properties = {
+		file : [ 'openFile' ],
+		files : [ 'openFile', 'multiSelections' ],
+		directory : [ 'openDirectory' ],
+		directories : [ 'openDirectory', 'multiSelections' ]
+	}[fso_type]
+	// 警告: 照理來說應該指明到底要什麼類別。
+	|| [ 'openFile', 'openDirectory', 'multiSelections' ];
+
+	open_dialog({
+		properties : properties
+	}, function(fso_path) {
+		if (!fso_path) {
+			// assert: fso_path === null
+			CeL.log({
+				T : '未選擇檔案或目錄。'
+			});
+			return;
+		}
+		// assert: Array.isArray(fso_path)
+		CeL.log([ 'select_download_options_fso: ', {
+			T : [ '選擇了%2的路徑：%1', JSON.stringify(fso_path), fso_type ]
+		} ]);
+		CeL.DOM.set_text(
+		// input_box
+		_this.previousElementSibling, fso_path.join('|'));
+	});
 }
 
 function click_download_option(event) {
@@ -811,15 +864,14 @@ function open_external(URL) {
 	return false;
 }
 
-// 改變預設主要下載目錄。並且維護 global.data_directory = default_configuration.data_directory
-// 這兩個值相同。
+// 改變預設主要下載目錄。
 function change_data_directory(data_directory) {
 	if (data_directory) {
 		default_configuration.data_directory = data_directory;
-		return;
 	}
 
-	global.data_directory = default_configuration.data_directory = data_directory;
+	// 維護 global.data_directory = default_configuration.data_directory 這兩個值相同。
+	global.data_directory = default_configuration.data_directory;
 	save_default_configuration();
 }
 
@@ -1913,22 +1965,7 @@ function Download_job(crawler, work_id) {
 			} ],
 			R : (old_Unicode_support ? '' : '⏯ ') + _('暫停/恢復下載'),
 			C : 'task_controller',
-			onclick : function() {
-				if (this.stopped) {
-					this.stopped = false;
-					continue_task(this_job);
-					CeL.DOM.set_text(this,
-					// pause
-					_((old_Unicode_support ? '' : '⏸') + _('暫停')));
-				} else {
-					this.stopped = true
-					stop_task(this_job);
-					CeL.DOM.set_text(this,
-					// resume ⏯ "恢復下載 (略稱)"
-					_('▶️' + _('繼續')));
-				}
-				return false;
-			}
+			onclick : pause_resume_job
 		}, {
 			span : [ {
 				b : '✘',
@@ -1954,6 +1991,23 @@ function Download_job(crawler, work_id) {
 	crawler.start(work_id, function(work_data) {
 		destruct_download_job(crawler);
 	});
+}
+
+function pause_resume_job() {
+	if (this.stopped) {
+		this.stopped = false;
+		continue_task(this_job);
+		CeL.DOM.set_text(this,
+		// pause
+		_((old_Unicode_support ? '' : '⏸') + _('暫停')));
+	} else {
+		this.stopped = true
+		stop_task(this_job);
+		CeL.DOM.set_text(this,
+		// resume ⏯ "恢復下載 (略稱)"
+		_('▶️' + _('繼續')));
+	}
+	return false;
 }
 
 // queue 佇列
