@@ -61,6 +61,14 @@ function create_window() {
 		win.setProgressBar(progress);
 	});
 
+	require('electron').ipcMain.on('open_dialog', function(event, options) {
+		var id = options[0];
+		options = options[1];
+		var result = require('electron').dialog.showOpenDialog(options);
+		console.log(result);
+		event.sender.send('open_dialog', [ id, result ]);
+	});
+
 	require('electron').ipcMain.on('open_DevTools', function(event, open) {
 		if (open)
 			// Open the DevTools.
