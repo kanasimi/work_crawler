@@ -22,7 +22,7 @@ var crawler = new CeL.work_crawler({
 	// skip_error : true,
 
 	one_by_one : true,
-	base_URL : 'http://www.dm5.com/',
+	base_URL : 'https://www.dm5.com/',
 
 	preserve_chapter_page : false,
 	// 提取出引數（如 URL）中的作品ID 以回傳。
@@ -43,6 +43,7 @@ var crawler = new CeL.work_crawler({
 		} ];
 	},
 	parse_search_result : function(html, get_label) {
+		// console.log(html);
 		var id_list = [], id_data = [];
 		html.each_between('<li onclick="window.location.href=', '</li>',
 		/**
@@ -209,10 +210,15 @@ var crawler = new CeL.work_crawler({
 		// console.log(text);
 		while (matched = PATTERN_assignment.exec(text)) {
 			// console.log(matched);
-			DM5[matched[1]] = JSON.parse(matched[3] === "'" ? matched[2]
-					.replace(/^'([\s\S]*?)'$/g, function(all, inner) {
-						return '"' + inner.replace(/"/g, '\\"') + '"';
-					}) : matched[2]);
+			var value = matched[2];
+			if (matched[3] === "'") {
+				value = value.replace(/^'([\s\S]*?)'$/g, function(all, inner) {
+					return '"' + inner.replace(/"/g, '\\"') + '"';
+				});
+			}
+			// for \t. e.g., '"03部65话\t"' https://www.dm5.com/m712588/
+			value = value.replace(/\t/g, '\\t');
+			DM5[matched[1]] = JSON.parse(value);
 		}
 		// console.log(DM5);
 		if (!(DM5.IMAGE_COUNT > 0)) {
