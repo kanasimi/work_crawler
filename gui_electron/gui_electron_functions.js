@@ -55,7 +55,8 @@ download_sites_set = {
 		taduo : '塔多漫画',
 		'733dm' : '733动漫网',
 		'733mh' : '733漫画网',
-		mh160 : '漫画160',
+		// mh160 (https://www.laimanhua.com/) 2019/7/2 起瀏覽器無法取得圖片，必須用 mobile 版。
+		// mh160 : '漫画160',
 		nokiacn : '乙女漫画',
 		iqg365 : '365漫画网',
 		wuyouhui : '友绘漫画网',
@@ -248,6 +249,7 @@ function initializer() {
 	if (!global.data_directory) {
 		global.data_directory = CeL.determin_download_directory();
 	}
+	/** const */
 	global.original_data_directory = data_directory;
 
 	setup_initial_messages();
@@ -441,16 +443,7 @@ function setup_ipcRenderer() {
 	node_electron.ipcRenderer.send('send_message', 'did-finish-load');
 	node_electron.ipcRenderer.send('send_message', 'check-for-updates');
 
-	node_electron.ipcRenderer.on('open_dialog',
-	//
-	function recerive_dialog_result(event, result) {
-		var id = result[0];
-		result = result[1];
-		var callback = open_dialog.queue[id];
-		delete open_dialog.queue[id];
-		if (callback)
-			callback(result);
-	});
+	node_electron.ipcRenderer.on('open_dialog', recerive_dialog_result);
 }
 
 // ------------------------------------
@@ -731,21 +724,31 @@ function select_download_options_fso() {
 
 	open_dialog({
 		properties : properties
-	}, function(fso_path) {
-		if (!fso_path) {
-			// assert: fso_path === null
+	}, function(fso_path_list) {
+		if (!fso_path_list) {
+			// assert: fso_path_list === null
 			CeL.log({
 				T : '未選擇檔案或目錄。'
 			});
 			return;
 		}
-		// assert: Array.isArray(fso_path)
+
+		// assert: Array.isArray(fso_path_list)
+		if (!fso_type.startsWith('file')) {
+			// assert: 選擇目錄。自動加上最後的目錄分隔符號。
+			fso_path_list = fso_path_list.map(function(fso_path) {
+				return /[\\\/]$/.test(fso_path) ? fso_path : fso_path
+						+ CeL.env.path_separator;
+			});
+		}
 		CeL.log([ 'select_download_options_fso: ', {
-			T : [ '選擇了%2的路徑：%1', JSON.stringify(fso_path), fso_type ]
+			T : [ '選擇了%2的路徑：%1', JSON.stringify(fso_path_list), fso_type ]
 		} ]);
-		CeL.DOM.set_text(
-		// input_box
-		_this.previousElementSibling, fso_path.join('|'));
+
+		var input_box = _this.previousElementSibling;
+		CeL.DOM.set_text(input_box, fso_path_list.join('|'));
+		// 有改變才 fire event。
+		input_box.onchange();
 	});
 }
 
@@ -864,10 +867,29 @@ function open_external(URL) {
 	return false;
 }
 
+// TODO: 重設所有網站的下載目錄。
 // 改變預設主要下載目錄。
 function change_data_directory(data_directory) {
+	if (!data_directory && original_data_directory) {
+		// recovery: 若全部清空將會重設下載目錄。
+		data_directory = original_data_directory;
+	}
+
 	if (data_directory) {
+		for_all_crawler_loaded(function(site_id) {
+			if (this.main_directory
+					.startsWith(default_configuration.data_directory)) {
+				var new_main_directory = this.main_directory.replace(
+						default_configuration.data_directory, data_directory);
+				CeL.info({
+					T : [ '同時更改已手動設定下載目錄的網站 %1：%2 → %3', site_id,
+							this.main_directory, new_main_directory ]
+				});
+				this.main_directory = new_main_directory;
+			}
+		});
 		default_configuration.data_directory = data_directory;
+		reset_site_options();
 	}
 
 	// 維護 global.data_directory = default_configuration.data_directory 這兩個值相同。
@@ -881,14 +903,14 @@ function save_default_configuration() {
 	// prepare work directory.
 	CeL.create_directory(original_data_directory);
 
-	var data_directory_no_change = data_directory === default_configuration.data_directory;
-	if (data_directory_no_change || !default_configuration.data_directory)
+	var data_directory_no_changed = original_data_directory === default_configuration.data_directory;
+	if (data_directory_no_changed /* || !default_configuration.data_directory */)
 		delete default_configuration.data_directory;
 	CeL.write_file(original_data_directory + default_configuration_file_name,
 			default_configuration);
 	// recovery
-	if (data_directory_no_change)
-		default_configuration.data_directory = data_directory;
+	if (data_directory_no_changed)
+		default_configuration.data_directory = original_data_directory;
 }
 
 // 保存下載偏好選項 + 最愛作品清單
@@ -1892,6 +1914,14 @@ function search_work_title() {
 
 // ----------------------------------------------
 
+var crawler_loaded = Object.create(null);
+
+function for_all_crawler_loaded(operator) {
+	for ( var site_id in crawler_loaded) {
+		operator.call(crawler_loaded[site_id], site_id);
+	}
+}
+
 function get_crawler(site_id, just_test) {
 	site_id = site_id || site_used;
 	if (!site_id) {
@@ -1919,6 +1949,7 @@ function get_crawler(site_id, just_test) {
 	// 這個過程會執行 setup_crawler() @ work_crawler_loader.js
 	// 以及 setup_crawler.prepare()
 	crawler = require(crawler);
+	crawler_loaded[site_id] = crawler;
 	if (old_site_used !== site_used) {
 		// recover
 		site_used = old_site_used;
@@ -2178,8 +2209,9 @@ function after_download_chapter(work_data, chapter_NO) {
 	initialize_work_data(this, work_data);
 
 	work_data.downloaded_chapters = chapter_NO;
-	var percent = Math.round(1000 * chapter_NO / work_data.chapter_count) / 10
-			+ '%', job = Download_job.job_list[work_data.job_index];
+	var percent = Math.round(1000 * chapter_NO / work_data.chapter_count)
+	// 將 "/ 10" 提到上一行會造成無法格式化程式碼的問題。
+	/ 10 + '%', job = Download_job.job_list[work_data.job_index];
 
 	// add link to work
 	var title_tag = job.layer.childNodes[0];
@@ -2438,9 +2470,6 @@ function set_taskbar_progress(progress) {
 }
 
 // https://electronjs.org/docs/api/dialog
-// open_dialog({ properties: ['openFile', 'openDirectory', 'multiSelections'] },
-// console.log)
-// callback(null or [])
 function open_dialog(options, callback) {
 	var id;
 	do {
@@ -2452,6 +2481,17 @@ function open_dialog(options, callback) {
 
 }
 open_dialog.queue = Object.create(null);
+
+function recerive_dialog_result(event, result) {
+	var id = result[0];
+	result = result[1];
+	var callback = open_dialog.queue[id];
+	delete open_dialog.queue[id];
+	if (!callback)
+		return;
+	// 注意: 選擇目錄時，不會自動加上最後的目錄分隔符號！
+	callback(result);
+}
 
 function open_DevTools() {
 	node_electron.ipcRenderer.send('open_DevTools', true);

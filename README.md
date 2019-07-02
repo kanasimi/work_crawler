@@ -153,12 +153,12 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [扑飞漫画](http://www.pufei.net/) | pufei.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [塔多漫画](http://www.taduo.net/) | taduo.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
-| [漫画160](https://www.laimanhua.com/) | mh160.js | 與 733mh.js 相同系統 |
 | [哦漫画](http://www.omanhua.net/) | omanhua.js | |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | [57漫画网](http://www.wuqimh.com/) | 57mh.js | 缺話眾多。系統同 2manhua.js。可能是2013年版本的 圣樱漫画管理系统？ MHD模板？ |
+| ~~[漫画160](https://www.laimanhua.com/)~~ | ~~archive/mh160.js~~ | 與 733mh.js 相同系統。2019/7/2 起瀏覽器無法取得圖片，必須用 mobile 版。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |
@@ -231,14 +231,13 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 </details>
 
 5. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
-6. 您可設定 `work_crawler.configuration.js` 以指定 **下載的作品檔案要放到哪個目錄底下**。簡便的方法是：
-   1. 將 `work_crawler.default_configuration.js` 改名成 `work_crawler.configuration.js`。
-   2. 直接用文字編輯器打開 `work_crawler.configuration.js`，找到 `global.data_directory = '';` 這一段，把引號中修改成您要的所有網站下載目錄；例如：
-   ```
-   global.data_directory = 'D:\\web_works\\';
-   ```
-   **請記得在引號中，目錄分隔號必須輸入兩次！**
-   這不會影響到您之前曾手動改變過的標的目錄。
+6. 您可設定 `work_crawler.configuration.js` 以指定 **所有網站採用之預設主要下載目錄**，所下載的作品檔案預設會放置到此主要目錄之工具檔名稱底下。簡便的方法是：
+   1. 將 `work_crawler.default_configuration.js` 改名成 `work_crawler.configuration.js`。只要在 `work_crawler.configuration.js` 檔案裡面，已將所有選項設定好；那麼是否有 `work_crawler.default_configuration.js` 並不影響程式運作，請不用擔心。
+   2. 直接用文字編輯器打開 `work_crawler.configuration.js`，找到 `global.data_directory = '';` 這一段，把引號中改成您要的 **所有網站採用之預設主要下載目錄**；例如：
+      ``` JavaScript
+      global.data_directory = 'D:\\web_works\\';
+      ```
+      **請記得在引號中，目錄分隔號必須輸入兩次！** 這不會影響到您之前曾手動改變過的標的目錄。
 
 7. 每次要更新到最新版本時，只要進到工具安裝檔所在目錄，重新執行一次本工具安裝檔即可。
    ``` sh
@@ -374,7 +373,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 * 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [線上作品爬蟲程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各線上小說漫畫網站。
 * 展示程式撰寫當時，各線上小說漫畫網站之網站結構。
 * 提供離線瀏覽小說漫畫功能，以利個人化閱覽方式。增進閱覽體驗、掌控閱覽環境。
-* 增加對閱讀權的掌控能力，預防暫時無法連接網頁，或者數十年後找不到記憶中閱覽過的作品。
+* 增加對閱讀權的掌控能力，預防暫時無法連接網頁，或者[數十年後找不到記憶中閱覽過的作品](https://www.bbc.com/ukchina/simp/vert-fut-48609293)。
 
 非常歡迎[提供使用意見與改善建議](https://github.com/kanasimi/work_crawler/issues/new)。
 
