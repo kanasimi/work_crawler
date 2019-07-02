@@ -159,7 +159,7 @@ download_sites_set = {
 },
 // 所有網站都使用相同值的下載選項。
 // will save at default_configuration_file_name
-// 請注意：這些設定將會被存在 `default_configuration_file_name`。因此若將這個檔案刪除，則設定將會被重設！
+// 請注意：這些設定將會被存在 default_configuration_file_name。因此若將這個檔案刪除，則設定將會被重設！
 global_options = {
 	preserve_download_work_layer : 'boolean',
 	play_finished_sound : 'boolean',
@@ -170,7 +170,10 @@ global_options = {
 // const 下載選項。有順序。常用的排前面。
 // @see CeL.application.net.work_crawler
 download_options_set = {},
-// const `global.data_directory`/`default_configuration_file_name`
+// const `global.original_data_directory`/`default_configuration_file_name`
+// 本設定檔案會放在 `global.original_data_directory` 這個目錄下。假如另外更動了
+// `global.data_directory`，那麼所有的作品資料以及圖片都會放在 `global.data_directory`
+// 下面，此時本檔案和作品資料就會放在不同的目錄下。
 default_configuration_file_name = 'work_crawler.configuration.json',
 //
 theme_list = 'light|dark'.split('|');
@@ -257,7 +260,7 @@ function initializer() {
 	// --------------------------------
 
 	// read default configuration
-	default_configuration = CeL.get_JSON(data_directory
+	default_configuration = CeL.get_JSON(original_data_directory
 			+ default_configuration_file_name)
 			|| Object.create(null);
 
@@ -756,8 +759,8 @@ function click_download_option(event) {
 	CeL.DOM.stop_event(event, true);
 
 	var key = this.title, value;
-	if (download_option in global_options) {
-		value = default_configuration[download_option] = !default_configuration[download_option];
+	if (key in global_options) {
+		value = default_configuration[key] = !default_configuration[key];
 		save_default_configuration();
 
 	} else {
@@ -1388,7 +1391,7 @@ function prepare_crawler(crawler, crawler_module) {
 	# work_crawler.default_configuration.js → work_crawler.configuration.js
 	#
 	# → site_configuration
-	# global.data_directory + default_configuration_file_name → default_configuration
+	# global.original_data_directory + default_configuration_file_name → default_configuration
 	# site script .js → crawler.*
 	# setup_crawler.prepare() call setup_crawler.prepare() call default_configuration[site_id] → crawler.*
 	# crawler.main_directory + 'preference.json' → crawler.preference
