@@ -677,8 +677,8 @@ function change_download_option() {
 		return;
 	}
 
-	if (download_option in global_options) {
-		default_configuration[download_option] = value;
+	if (key in global_options) {
+		default_configuration[key] = value;
 		save_default_configuration();
 		return;
 	}
