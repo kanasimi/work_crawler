@@ -25,7 +25,12 @@ var crawler = CeL.SinMH({
 	acceptable_types : 'images',
 
 	search_URL : 'API',
-	api_base_URL : 'https://api.acg.gd/'
+	api_base_URL : 'https://api.acg.gd/',
+
+	crypto : {
+		key : "9Xc4PMs2cvQinnbd",
+		iv : "ioXA45KJnv98ccSB"
+	}
 });
 
 // ----------------------------------------------------------------------------

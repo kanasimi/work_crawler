@@ -37,6 +37,7 @@ var crawler = new CeL.work_crawler({
 	// 2018/6/4 6:34 最後一次成功存取 http://www.733mh.com/
 	// 之後更改域名→ http://www.mh160.com/
 	// 2019/2/22?更改域名與名稱→ 来漫画 https://www.laimanhua.com/
+	// 2019/7/2 起瀏覽器無法取得圖片，必須用 mobile 版。
 	base_URL : 'https://www.laimanhua.com/',
 	charset : 'gb2312',
 
