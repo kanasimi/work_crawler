@@ -145,8 +145,9 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [漫画牛](https://www.manhuaniu.com/) | manhuaniu.js | 速度稍微慢。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [漫画看](https://www.mhkan.com/) | mhkan.js | 水管太小？總是卡住，下載圖片時常出現 status 522，很難用。<br />採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [亲亲漫画网](http://www.duzhez.com/) | 930mh.js | 有些韓國漫畫。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
-| [50漫画网](https://www.manhuadui.com/) | 50mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 |
+| [50漫画网](https://www.manhuadui.com/) | 50mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。可能為早期[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板？ |
+| [漫画160](https://www.laimanhua.com/) | mh160.js | 與 733mh.js 相同系統。 |
 | [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm內容類似...<br />可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板3](http://manhua4.qingtiancms.net/)?? |
 | [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。2018/11/9 之後 (11/16之後?) 改版成 晴天漫画系统 |
 | [卡推漫画](http://www.katui.net/) | katui.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
@@ -158,7 +159,6 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | [57漫画网](http://www.wuqimh.com/) | 57mh.js | 缺話眾多。系統同 2manhua.js。可能是2013年版本的 圣樱漫画管理系统？ MHD模板？ |
-| ~~[漫画160](https://www.laimanhua.com/)~~ | ~~archive/mh160.js~~ | 與 733mh.js 相同系統。2019/7/2 起瀏覽器無法取得圖片，必須用 mobile 版。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |

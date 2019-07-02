@@ -55,8 +55,7 @@ download_sites_set = {
 		taduo : '塔多漫画',
 		'733dm' : '733动漫网',
 		'733mh' : '733漫画网',
-		// mh160 (https://www.laimanhua.com/) 2019/7/2 起瀏覽器無法取得圖片，必須用 mobile 版。
-		// mh160 : '漫画160',
+		mh160 : '漫画160',
 		nokiacn : '乙女漫画',
 		iqg365 : '365漫画网',
 		wuyouhui : '友绘漫画网',
@@ -768,24 +767,23 @@ function click_download_option(event) {
 		if (!crawler) {
 			return;
 		}
-		value = crawler[key] = !crawler[key];
+		crawler.setup_value(key, !crawler[key]);
+		value = crawler[key];
 
 		if (key in save_to_preference) {
-			crawler.preference
-			//
-			.crawler_configuration[key] = value;
+			crawler.preference.crawler_configuration[key] = value;
 			save_preference(crawler);
 		}
 	}
 
-	CeL.set_class(this, 'selected', {
+	CeL.DOM.set_class(this, 'selected', {
 		remove : !value
 	});
 
 	// 即時更改空格內容。
 	// @see function reset_site_options()
 	// download_option + '_input'
-	CeL.DOM.set_text(this.title + '_input', value || value === 0 ? value : '');
+	CeL.DOM.set_text(key + '_input', value || value === 0 ? value : '');
 }
 
 function click_reset_download_option() {
