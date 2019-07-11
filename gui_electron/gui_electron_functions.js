@@ -71,11 +71,15 @@ download_sites_set = {
 		dmzj : '动漫之家',
 		dm5 : '动漫屋',
 		tohomh : '土豪漫画',
+		//ikmhw : '爱看漫画网',
+		//r2hm : '无双漫画',
+		//hanmanwo : '韩漫窝',
 
 		// manhuatai : '漫画台',
 
 		manhuagui : '看漫画/漫画柜',
 		gufengmh : '古风漫画网',
+		//duoduomh : '多多漫画',
 		'36mh' : '36漫画网',
 		manhuaniu : '漫画牛',
 		mhkan : '漫画看',
@@ -177,7 +181,7 @@ default_configuration_file_name = 'work_crawler.configuration.json',
 //
 theme_list = 'light|dark'.split('|');
 
-'data_directory,recheck,start_chapter,chapter_filter,regenerate,reget_chapter,search_again,archive_images,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,main_directory,user_agent,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
+'data_directory,recheck,start_chapter,chapter_filter,regenerate,reget_chapter,search_again,archive_images,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,chapter_time_interval,main_directory,user_agent,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
 // @see work_crawler/resource/locale of work_crawler - locale.csv
 .split(',').forEach(function(item) {
 	download_options_set[item] = 'download_options.' + item;
@@ -564,6 +568,13 @@ function setup_download_options() {
 						function(type) {
 							return 'type_' + type;
 						}).join(' ') : '',
+				type : arg_type_data && {
+					// date : 'date',
+					// time:'time',
+					// datetime : 'datetime-local',
+					// file : 'file',
+					number : 'number'
+				}[Object.keys(arg_type_data).join()] || 'text',
 				// data_type : arg_type_data &&
 				// Object.keys(arg_type_data).join(),
 				onchange : change_download_option
@@ -657,9 +668,9 @@ function setup_download_options() {
 function change_download_option() {
 	var key = this.parentNode.title, value = this.value,
 	//
-	type = Object.keys(CeL.set_class(this)).map(function(c) {
-		c = c.match(/^type_(.+)$/);
-		return c ? c[1] : '';
+	type = Object.keys(CeL.set_class(this)).map(function(_class) {
+		_class = _class.match(/^type_(.+)$/);
+		return _class ? _class[1] : '';
 	});
 
 	if (key === 'data_directory') {
@@ -899,8 +910,13 @@ function change_data_directory(data_directory) {
 }
 
 function save_default_configuration() {
-	if (!save_config_this_time)
+	if (!save_config_this_time) {
+		CeL.debug([ 'save_default_configuration: ', {
+			T : '已設定不自動儲存選項設定。'
+		} ], 1);
 		return;
+	}
+
 	// prepare work directory.
 	CeL.create_directory(original_data_directory);
 
@@ -917,8 +933,13 @@ function save_default_configuration() {
 // 保存下載偏好選項 + 最愛作品清單
 // @private
 function save_preference(crawler) {
-	if (!save_config_this_time)
+	if (!save_config_this_time) {
+		CeL.debug([ 'save_preference: ', {
+			T : '已設定不自動儲存選項設定。'
+		} ], 1);
 		return;
+	}
+
 	// prepare work directory.
 	CeL.create_directory(crawler.main_directory);
 	CeL.write_file(crawler.main_directory + 'preference.json',
@@ -926,11 +947,29 @@ function save_preference(crawler) {
 }
 
 function edit_favorites(crawler) {
+	function click_save_favorites() {
+		save_favorites(crawler, favorites_node.value);
+		reset_favorites(crawler);
+	}
+
 	var favorites = get_favorites(crawler, true),
 	//
 	favorites_node = CeL.new_node({
-		textarea : '',
-		S : 'width: 99%; height: 20em;'
+		textarea : null,
+		id : 'favorites_box',
+		onkeydown : function(event) {
+			// console.log(event);
+			// Escape
+			if (event.keyCode === 27) {
+				reset_favorites(crawler);
+				return false;
+			}
+			// Ctrl+Enter
+			if (event.keyCode === 13 && event.ctrlKey) {
+				click_save_favorites();
+				return false;
+			}
+		}
 	});
 	if (favorites[favorites.length - 1]) {
 		// 在最後添上換行。
@@ -949,17 +988,20 @@ function edit_favorites(crawler) {
 			// save
 			b : [ '💾', {
 				T : '儲存最愛作品清單'
-			} ],
-			onclick : function() {
-				save_favorites(crawler, favorites_node.value);
-				reset_favorites(crawler);
-			},
+			}, ' (', {
+				kbd : 'Ctrl'
+			}, '+', {
+				kbd : 'Enter'
+			}, ')' ],
+			onclick : click_save_favorites,
 			C : 'favorites_button'
 		}, {
 			// abandon
 			b : [ old_Unicode_support ? '❌' : '🛑', {
 				T : '放棄編輯最愛作品清單'
-			} ],
+			}, ' (', {
+				kbd : 'Escape'
+			}, ')' ],
 			onclick : function() {
 				reset_favorites(crawler);
 			},
@@ -1243,6 +1285,10 @@ function reset_favorites(crawler) {
 				});
 			},
 			C : 'favorites_button'
+		} : favorites.comments > 0 || favorites.blank > 0
+		//
+		|| favorites.duplicated > 0 ? {
+			T : '🈳 尚無最愛作品。'
 		} : {
 			T : '🈳 尚未設定最愛作品。'
 		}, {
@@ -2107,7 +2153,8 @@ function destruct_download_job(crawler) {
 		delete Download_job.job_list[job_index];
 		CeL.DOM.remove_node(job.layer);
 	}
-	if (work_data.error_list || crawler.preserve_download_work_layer) {
+	if (work_data.error_list
+			|| default_configuration.preserve_download_work_layer) {
 		// remove "暫停"
 		// job.layer.removeChild(job.layer.firstChild);
 		CeL.new_node([ {
