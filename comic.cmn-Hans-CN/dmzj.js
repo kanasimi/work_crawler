@@ -156,7 +156,9 @@ var crawler = new CeL.work_crawler({
 
 			pages = JSON.parse(pages.replace(/\r\n/g, '|')
 					.replace(/\t/g, '\\t'));
-			if (pages.page_url) {
+			// https://manhua.dmzj.com/zhongjirenjiajumbor/14030.shtml
+			// page_url:""
+			if ('page_url' in pages) {
 				// is_manhua===false
 				pages = pages.page_url.split('|');
 			}
