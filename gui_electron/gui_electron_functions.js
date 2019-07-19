@@ -36,7 +36,9 @@ download_sites_set = {
 
 		comico : 'comico',
 
-		webtoon : 'WEBTOON'
+		webtoon : 'WEBTOON',
+
+		//toomics_tc : 'Toomics 玩漫'
 	},
 	'comic.cmn-Hans-CN' : {
 		qq : '腾讯漫画',
@@ -70,6 +72,7 @@ download_sites_set = {
 
 		dmzj : '动漫之家',
 		dm5 : '动漫屋',
+		//'1kkk' : '漫画人',
 		tohomh : '土豪漫画',
 		//ikmhw : '爱看漫画网',
 		//r2hm : '无双漫画',
@@ -92,7 +95,9 @@ download_sites_set = {
 
 		migudm : '咪咕圈圈',
 
-		dongman : '咚漫'
+		dongman : '咚漫',
+
+		//toomics_sc : 'Toomics 玩漫'
 	},
 	'comic.ja-JP' : {
 		ComicWalker : 'ComicWalker',
@@ -114,6 +119,8 @@ download_sites_set = {
 	},
 	'comic.en-US' : {
 		webtoon_en : 'WEBTOON en',
+
+		//toomics_en : 'Toomics',
 
 		mangamew : 'Manga Mew (不再維護)',
 		manganew : 'Manga New (不再維護)',
@@ -879,7 +886,9 @@ function open_external(URL) {
 	return false;
 }
 
-// TODO: 重設所有網站的下載目錄。
+var need_create_data_directory;
+
+// TODO: 重設所有網站的下載目錄功能。
 // 改變預設主要下載目錄。
 function change_data_directory(data_directory) {
 	if (!data_directory && original_data_directory) {
@@ -901,6 +910,7 @@ function change_data_directory(data_directory) {
 			}
 		});
 		default_configuration.data_directory = data_directory;
+		need_create_data_directory = true;
 		reset_site_options();
 	}
 
@@ -2066,6 +2076,11 @@ function Download_job(crawler, work_id) {
 
 	CeL.toggle_display('download_job_panel', true);
 
+	if (need_create_data_directory) {
+		// prepare main download directory: create data_directory if needed.
+		CeL.create_directory(data_directory);
+		need_create_data_directory = false;
+	}
 	crawler.start(work_id, function(work_data) {
 		destruct_download_job(crawler);
 	});
