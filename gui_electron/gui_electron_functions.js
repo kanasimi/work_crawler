@@ -756,10 +756,7 @@ function select_download_options_fso() {
 		// assert: Array.isArray(fso_path_list)
 		if (!fso_type.startsWith('file')) {
 			// assert: 選擇目錄。自動加上最後的目錄分隔符號。
-			fso_path_list = fso_path_list.map(function(fso_path) {
-				return /[\\\/]$/.test(fso_path) ? fso_path : fso_path
-						+ CeL.env.path_separator;
-			});
+			fso_path_list = fso_path_list.map(CeL.append_path_separator);
 		}
 		CeL.log([ 'select_download_options_fso: ', {
 			T : [ '選擇了%2的路徑：%1', JSON.stringify(fso_path_list), fso_type ]
@@ -886,8 +883,6 @@ function open_external(URL) {
 	return false;
 }
 
-var need_create_data_directory;
-
 // TODO: 重設所有網站的下載目錄功能。
 // 改變預設主要下載目錄。
 function change_data_directory(data_directory) {
@@ -897,6 +892,7 @@ function change_data_directory(data_directory) {
 	}
 
 	if (data_directory) {
+		data_directory = CeL.append_path_separator(data_directory);
 		for_all_crawler_loaded(function(site_id) {
 			if (this.main_directory
 					.startsWith(default_configuration.data_directory)) {
@@ -909,8 +905,16 @@ function change_data_directory(data_directory) {
 				this.main_directory = new_main_directory;
 			}
 		});
+		CeL.warn({
+			T : [ '舊下載目錄 "%1" 為空目錄，將之移除。',
+			//
+			default_configuration.data_directory ]
+		});
+		CeL.remove_directory(default_configuration.data_directory);
 		default_configuration.data_directory = data_directory;
-		need_create_data_directory = true;
+		// prepare main download directory: create data_directory if needed.
+		// 因為不只是下載時，在編輯最愛列表時也必須寫入到資料目錄中，因此操作完畢就先造出來。
+		CeL.create_directory(data_directory);
 		reset_site_options();
 	}
 
@@ -1203,9 +1207,11 @@ function reset_favorites(crawler) {
 						S : 'cursor: pointer;'
 					});
 
-					var work_data = CeL.get_JSON(work_directory
+					var work_data = CeL.get_JSON(
 					//
-					+ CeL.env.path_separator + work_directory_name + '.json');
+					CeL.append_path_separator(work_directory)
+					//
+					+ work_directory_name + '.json');
 					// console.log(work_data);
 					if (crawler.is_finished(work_data)) {
 						nodes.push({
@@ -2076,11 +2082,6 @@ function Download_job(crawler, work_id) {
 
 	CeL.toggle_display('download_job_panel', true);
 
-	if (need_create_data_directory) {
-		// prepare main download directory: create data_directory if needed.
-		CeL.create_directory(data_directory);
-		need_create_data_directory = false;
-	}
 	crawler.start(work_id, function(work_data) {
 		destruct_download_job(crawler);
 	});
