@@ -113,6 +113,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [動漫伊甸園](http://dmeden.net/) | dmeden.js | 日本漫畫較多。 採用與汗汗酷漫相同系統。 |
 | [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
+| [Toomics 玩漫](https://toomics.com/tc/) | toomics_tc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |
 
 ### Simplified Chinese webcomics 中国内地漫画 中国簡体字のウェブコミック
 [comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, images → zip
@@ -129,7 +130,11 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [布卡漫画](http://www.buka.cn/) | buka.js | 有少數遺失圖片。請注意：搜索某些名稱，如包含"纪元"一詞之作品時，會造成連線重設。對於這類作品必須輸入id而非標題。 **本工具無法下載VIP付費內容** |
 | [SF漫画](https://manhua.sfacg.com/) | sfacg.js | |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。拿來下載日本漫畫的人好像比較多。  **本工具無法下載付费章节** |
-| [土豪漫画](https://www.tohomh123.com/) | tohomh.js | 系統似 dm5。 |
+| [漫画人](http://www.1kkk.com/) | 1kkk.js | 系統與 dm5.js 幾乎相同。和 dm5 一樣，很多作品要收費。  **本工具無法下載付费章节** |
+| [土豪漫画](https://www.tohomh123.com/) | tohomh.js | 系統似 dm5.js。 |
+| [爱看漫画网](http://ikmhw.com/) | ikmhw.js | 韓國漫畫比較多。系統似 tohomh.js。圖片API反應速度比土豪漫画慢許多。內容是自動採集生成的？有少許缺圖與亂序。 |
+| [韩漫窝](http://www.hanmanwo.com/) | hanmanwo.js | 有些韓國漫畫。系統似 dm5.js。 |
+| [无双漫画](https://r2hm.com/) | r2hm.js | 有些韓國漫畫。系統與內容極似 hanmanwo.js。內容是自動採集生成的？有少許缺圖。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | **本工具無法下載VIP付費內容** |
 | [微博动漫](http://manhua.weibo.com/) | weibo.js | **本工具無法下載VIP付費內容**<br />竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
 | [大古漫画网](https://www.dagumanhua.com/) | dagu.js | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。 |
@@ -141,6 +146,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
 | [看漫画](https://www.manhuagui.com/) | manhuagui.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
+| [欢乐漫画网/多多漫画](https://www.hlgoo.cn/) | duoduomh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [漫画牛](https://www.manhuaniu.com/) | manhuaniu.js | 速度稍微慢。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [漫画看](https://www.mhkan.com/) | mhkan.js | 水管太小？總是卡住，下載圖片時常出現 status 522，很難用。<br />採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
@@ -158,6 +164,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
+| [Toomics 玩漫](https://toomics.com/sc/) | toomics_sc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |
 | [57漫画网](http://www.wuqimh.com/) | 57mh.js | 缺話眾多。系統同 2manhua.js。可能是2013年版本的 圣樱漫画管理系统？ MHD模板？ |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
@@ -189,6 +196,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [Manga New](http://manganew.net/) | manganew.js | Using Microsoft IIS? |
 | [Rocaca](http://www.rocaca.com/) | rocaca.js | 受到 Cloudflare 保護 |
 | [WEBTOON](https://www.webtoons.com/en/) | webtoon.js | NAVER LINE WEBTOON |
+| [Toomics](https://toomics.com/en/) | toomics_en.js | Toomics - Free comics **本工具無法下載VIP付費內容** |
 
 ## Installation 安裝
 

@@ -38,7 +38,7 @@ download_sites_set = {
 
 		webtoon : 'WEBTOON',
 
-		//toomics_tc : 'Toomics 玩漫'
+		toomics_tc : 'Toomics 玩漫'
 	},
 	'comic.cmn-Hans-CN' : {
 		qq : '腾讯漫画',
@@ -72,17 +72,17 @@ download_sites_set = {
 
 		dmzj : '动漫之家',
 		dm5 : '动漫屋',
-		//'1kkk' : '漫画人',
+		'1kkk' : '漫画人',
 		tohomh : '土豪漫画',
-		//ikmhw : '爱看漫画网',
-		//r2hm : '无双漫画',
-		//hanmanwo : '韩漫窝',
+		ikmhw : '爱看漫画网',
+		r2hm : '无双漫画',
+		hanmanwo : '韩漫窝',
 
 		// manhuatai : '漫画台',
 
 		manhuagui : '看漫画/漫画柜',
 		gufengmh : '古风漫画网',
-		//duoduomh : '多多漫画',
+		duoduomh : '多多漫画',
 		'36mh' : '36漫画网',
 		manhuaniu : '漫画牛',
 		mhkan : '漫画看',
@@ -97,7 +97,7 @@ download_sites_set = {
 
 		dongman : '咚漫',
 
-		//toomics_sc : 'Toomics 玩漫'
+		toomics_sc : 'Toomics 玩漫'
 	},
 	'comic.ja-JP' : {
 		ComicWalker : 'ComicWalker',
@@ -120,7 +120,7 @@ download_sites_set = {
 	'comic.en-US' : {
 		webtoon_en : 'WEBTOON en',
 
-		//toomics_en : 'Toomics',
+		toomics_en : 'Toomics',
 
 		mangamew : 'Manga Mew (不再維護)',
 		manganew : 'Manga New (不再維護)',
@@ -892,12 +892,13 @@ function change_data_directory(data_directory) {
 	}
 
 	if (data_directory) {
+		// data_directory 必須以 path separator 作結。
 		data_directory = CeL.append_path_separator(data_directory);
+		var old_data_directory = default_configuration.data_directory;
 		for_all_crawler_loaded(function(site_id) {
-			if (this.main_directory
-					.startsWith(default_configuration.data_directory)) {
+			if (this.main_directory.startsWith(old_data_directory)) {
 				var new_main_directory = this.main_directory.replace(
-						default_configuration.data_directory, data_directory);
+						old_data_directory, data_directory);
 				CeL.info({
 					T : [ '同時更改已手動設定下載目錄的網站 %1：%2 → %3', site_id,
 							this.main_directory, new_main_directory ]
@@ -905,12 +906,14 @@ function change_data_directory(data_directory) {
 				this.main_directory = new_main_directory;
 			}
 		});
-		CeL.warn({
-			T : [ '舊下載目錄 "%1" 為空目錄，將之移除。',
-			//
-			default_configuration.data_directory ]
-		});
-		CeL.remove_directory(default_configuration.data_directory);
+
+		if (CeL.directory_is_empty(old_data_directory)) {
+			CeL.warn({
+				T : [ '舊下載目錄 "%1" 為空目錄，將之移除。', old_data_directory ]
+			});
+			CeL.remove_directory(old_data_directory);
+		}
+
 		default_configuration.data_directory = data_directory;
 		// prepare main download directory: create data_directory if needed.
 		// 因為不只是下載時，在編輯最愛列表時也必須寫入到資料目錄中，因此操作完畢就先造出來。
