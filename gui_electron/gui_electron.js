@@ -13,7 +13,7 @@ if (process.env.USERPROFILE
 }
 
 // const
-var app = require('electron').app, BrowserWindow = require('electron').BrowserWindow;
+var electron = require('electron'), app = electron.app, BrowserWindow = electron.BrowserWindow;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -35,7 +35,7 @@ function create_window() {
 		}
 	},
 	// https://github.com/electron/electron/blob/master/docs/api/screen.md
-	require('electron').screen.getPrimaryDisplay().workAreaSize));
+	electron.screen.getPrimaryDisplay().workAreaSize));
 
 	// https://electronjs.org/docs/api/browser-window
 	win.maximize();
@@ -54,22 +54,22 @@ function create_window() {
 		});
 	}
 
-	require('electron').ipcMain.on('set_progress', function(event, progress) {
+	electron.ipcMain.on('set_progress', function(event, progress) {
 		// https://electronjs.org/docs/tutorial/progress-bar
 		// progress indicator:
 		// https://docs.microsoft.com/en-us/dotnet/api/system.windows.shell.taskbariteminfo.progressvalue
 		win.setProgressBar(progress);
 	});
 
-	require('electron').ipcMain.on('open_dialog', function(event, options) {
+	electron.ipcMain.on('open_dialog', function(event, options) {
 		var id = options[0];
 		options = options[1];
-		var result = require('electron').dialog.showOpenDialog(options);
+		var result = electron.dialog.showOpenDialog(options);
 		// console.log(result);
 		event.sender.send('open_dialog', [ id, result ]);
 	});
 
-	require('electron').ipcMain.on('open_DevTools', function(event, open) {
+	electron.ipcMain.on('open_DevTools', function(event, open) {
 		if (open)
 			// Open the DevTools.
 			win.webContents.openDevTools();
@@ -112,7 +112,7 @@ app.on('activate', function() {
 // --------------------------------------------------------------------------------------------------------------------
 
 // 接收訊息
-require('electron').ipcMain.on('send_message', function(event, message) {
+electron.ipcMain.on('send_message', function(event, message) {
 	if (!message) {
 		return;
 	}
@@ -178,10 +178,14 @@ function start_update(event_sender) {
 			JSON.stringify(info && info.version) ]);
 		});
 		autoUpdater.on('error', function(error) {
+			// 安裝包環境無 CLI console
+			// console.error(error);
 			event_sender.send('send_message_warn', [ '安裝包更新出錯：%1',
-					JSON.stringify(error) ]);
+			// JSON.stringify(error)
+			String(error) ]);
 		});
 		autoUpdater.on('download-progress', function(progressObj) {
+			// process.stdout.write(progressObj.percent + '%...\r'));
 			event_sender.send('send_message_debug', [
 					'安裝包已下載%1，下載速度：%2',
 					progressObj.percent + '%' + ' (' + progressObj.transferred
@@ -193,9 +197,7 @@ function start_update(event_sender) {
 			event_sender.send('send_message_log', [ '新版安裝包下載完成：%1',
 					JSON.stringify(event) ]);
 
-			require('electron').ipcMain.on('start-install-now',
-			//
-			function(e, arg) {
+			electron.ipcMain.on('start-install-now', function(e, arg) {
 				console.log(arguments);
 				console.log("重新啟動程式即可更新。");
 				// some code here to handle event
@@ -206,6 +208,7 @@ function start_update(event_sender) {
 	} catch (e) {
 		// e.g., Error: Cannot find module 'electron-updater'
 		// win.webContents.send()
+		// console.error(e);
 		event_sender.send('send_message_warn', [ '安裝包更新失敗：%1', String(e) ]);
 	}
 }
