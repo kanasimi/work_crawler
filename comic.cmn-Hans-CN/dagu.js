@@ -187,7 +187,7 @@ var crawler = new CeL.work_crawler({
 			var image_page_url = url.replace(/(\.[^.]+)$/, '_' + image_NO
 					+ '$1');
 			// console.log('Get #' + index + ': ' + image_page_url);
-			process.stdout.write('Get image data pages of #' + chapter_NO
+			process.stdout.write('Get image data page of §' + chapter_NO
 					+ ': ' + image_NO + '/' + image_count + '...\r');
 			_this.get_URL(image_page_url, function(XMLHttp) {
 				extract_image(XMLHttp);

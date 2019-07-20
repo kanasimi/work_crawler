@@ -12,6 +12,8 @@ CeL.run('application.net.work_crawler.SinMH');
 
 // ----------------------------------------------------------------------------
 
+require('tls').DEFAULT_MIN_VERSION = 'TLSv1';
+
 var crawler = CeL.SinMH({
 	// 循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。 Download images one by one.
 	// 水管太小？總是卡住，下載圖片時常出現 status 522，很難用。
@@ -21,7 +23,9 @@ var crawler = CeL.SinMH({
 	// 模仿實際人工請求。
 	// chapter_time_interval : '1s',
 
-	base_URL : 'https://www.mhkan.com/'
+	// 2019/6/2: https://www.mhkan.com/
+	// 2019/7/8 前: https://www.mh1234.com/
+	base_URL : 'https://www.mh1234.com/'
 });
 
 // ----------------------------------------------------------------------------

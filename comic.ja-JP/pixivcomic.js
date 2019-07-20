@@ -233,5 +233,5 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 // CeL.set_debug(3);
 
 // 缺少這個會從章節頁面跳回作品頁面。
-crawler.get_URL_options.cookie = 'open_work_page=yes';
+crawler.setup_value('cookie', 'open_work_page=yes');
 start_crawler(crawler, typeof module === 'object' && module);

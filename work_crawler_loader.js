@@ -1,5 +1,7 @@
 ﻿/**
  * 載入批量下載線上作品（小說、漫畫）的主要功能。 Download novels / comics.
+ * 
+ * TODO: https://github.com/iridakos/bash-completion-tutorial
  */
 
 'use strict';

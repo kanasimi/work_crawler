@@ -219,5 +219,5 @@ var crawler = new CeL.work_crawler({
 // CeL.set_debug(3);
 
 // for 年齢確認: あなたは18歳以上ですか？
-crawler.get_URL_options.cookie = 'over18=off';
+crawler.setup_value('cookie', 'over18=off');
 start_crawler(crawler, typeof module === 'object' && module);

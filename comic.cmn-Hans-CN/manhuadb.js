@@ -242,7 +242,7 @@ crawler = new CeL.work_crawler({
 			//
 			= _this.full_URL(image_page_list[index - 1].url);
 			// console.log('Get #' + index + ': ' + image_page_url);
-			process.stdout.write('Get image data pages of #' + chapter_NO
+			process.stdout.write('Get image data page of §' + chapter_NO
 					+ ': ' + image_NO + '/' + image_count + '...\r');
 			CeL.get_URL(image_page_url, function(XMLHttp) {
 				extract_image(XMLHttp);
