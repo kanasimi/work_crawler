@@ -108,7 +108,7 @@ download_sites_set = {
 		moae : 'モアイ',
 
 		pixivcomic : 'pixivコミック',
-		OVERLAP : 'OVERLAP',
+		// OVERLAP : 'OVERLAP',
 		MAGCOMI : 'MAGCOMI',
 		cycomi : 'サイコミ',
 
@@ -122,10 +122,16 @@ download_sites_set = {
 
 		toomics_en : 'Toomics',
 
-		mangamew : 'Manga Mew (不再維護)',
-		manganew : 'Manga New (不再維護)',
+		mangamew : [ 'Manga Mew (', {
+			T : '不再維護'
+		}, ')' ],
+		manganew : [ 'Manga New (', {
+			T : '不再維護'
+		}, ')' ],
 
-		Rocaca : 'rocaca (不再維護)'
+		Rocaca : [ 'rocaca (', {
+			T : '不再維護'
+		}, ')' ]
 
 	// mrblue : 'Mr.Blue (不再維護)'
 	},
@@ -2430,6 +2436,7 @@ function check_update_NOT_package() {
 				R : _('建議重新啟動應用程式以使用完整更新後的程式。'),
 				S : 'cursor: pointer;',
 				onclick : function() {
+					// TODO: app.relaunch(); @ gui_electron.js
 					history.go(0);
 				}
 			}, [ update_panel, 'clean' ]);
@@ -2477,6 +2484,7 @@ function check_update() {
 			return;
 		}
 
+		// package_information
 		var package_data = is_installation_package ? process.resourcesPath
 				+ '\\app.asar\\' : CeL.work_crawler.prototype.main_directory;
 		package_data = CeL.read_file(package_data + 'package.json');

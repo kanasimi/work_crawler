@@ -181,11 +181,11 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [アルファポリスの公式Web漫画](https://www.alphapolis.co.jp/manga/official) | AlphaPolis_manga.js | レンタルする話は取得できません |
 | [モアイ](http://www.moae.jp/) | moae.js | 講談社 モーニング・アフタヌーン・イブニング合同Webコミックサイト |
 | [pixivコミック](https://comic.pixiv.net/) | pixivcomic.js | pixivコミック(ぴくしぶこみっく) |
-| [OVERLAP](https://over-lap.co.jp/gardo/) | OVERLAP.js | オーバーラップ コミックガルド: [ActiBook](https://ebook.digitalink.ne.jp/)系統 |
 | [MAGCOMI](https://comic.mag-garden.co.jp/) | MAGCOMI.js | マグコミ: [ActiBook](https://ebook.digitalink.ne.jp/)系統 |
 | [サイコミ](https://cycomi.com/fw/cycomibrowser/title/serialization/0) | cycomi.js | |
 | [コミコ](https://www.comico.jp/)<br />[オトナ限定 コミコ](http://plus.comico.jp/) | comico_jp.js<br />comico_jp_plus.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [XOY](https://xoy.webtoons.com/) | XOY.js | NAVER WEBTOON ja<br />2018.09.13: [XOYの作品が「LINEマンガ」に移行されます。](https://xoy.webtoons.com/ja/notice/detail?noticeNo=849) |
+| ~~[OVERLAP](https://over-lap.co.jp/gardo/)~~ | ~~archive/OVERLAP.js~~ | オーバーラップ コミックガルド: [ActiBook](https://ebook.digitalink.ne.jp/)系統。2019/7/5 改版，域名移至[コミックガルド](https://comic-gardo.com/)，之後轉成與[となりのヤングジャンプ](https://tonarinoyj.jp/)相同系統，圖片經過 canvas 處理以展示。不再支援。 |
 
 ### English webcomics 英語網路漫畫 英語のウェブコミック
 [comic.en-US/](comic.en-US/)*.js, images → zip
