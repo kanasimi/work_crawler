@@ -2432,12 +2432,20 @@ function check_update_NOT_package() {
 
 			CeL.new_node({
 				// 重新啟動應用程式或重新整理網頁(Ctrl-R)
-				T : '重新讀取應用程式之網頁部分',
+				span : [ {
+					T : '重新啟動應用程式。'
+				}, {
+					T : '所有當前作業都會中斷！',
+					S : 'color: red; font-weight: bold;'
+				} ],
 				R : _('建議重新啟動應用程式以使用完整更新後的程式。'),
 				S : 'cursor: pointer;',
 				onclick : function() {
-					// TODO: app.relaunch(); @ gui_electron.js
-					history.go(0);
+					// app.relaunch(); @ gui_electron.js
+					node_electron.ipcRenderer.send('send_message', 'relaunch');
+
+					// 重新讀取應用程式之網頁部分。
+					// history.go(0);
 				}
 			}, [ update_panel, 'clean' ]);
 		}
