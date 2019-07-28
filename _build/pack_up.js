@@ -112,18 +112,16 @@ function build_package(update_script_name) {
 	process.chdir(directory_name);
 	// node_fs.mkdirSync('node_modules');
 
+	var updater = require('./gh-updater');
 	var package_data = JSON.parse(node_fs.readFileSync('package.json'));
 
-	for ( var npm_name in package_data.devDependencies) {
-		if (npm_name in package_data.dependencies) {
+	for ( var package_name in package_data.devDependencies) {
+		if (package_name in package_data.dependencies) {
 			// package_data.dependencies 裡面的應已在建立執行環境時安裝過了。
 			continue;
 		}
-		show_info('安裝打包時需要的套件 ' + npm_name + '...');
 		// npm install electron-builder
-		child_process.execSync('npm install --save-dev ' + npm_name, {
-			stdio : 'inherit'
-		});
+		updater.update_package(package_name, true);
 	}
 
 	remove_directory('node_modules/cejs');

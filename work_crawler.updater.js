@@ -9,14 +9,14 @@
 'use strict';
 
 var repository = 'gh-updater', branch = 'master', update_script_url = 'https://raw.githubusercontent.com/kanasimi/'
-		+ repository + '/' + branch + '/' + 'GitHub.updater.node.js';
+		+ repository + '/' + branch + '/' + 'GitHub.updater.node.js', updater;
 
 // ----------------------------------------------------------------------------
 
 // const
 var node_https = require('https'), node_fs = require('fs');
 
-download_update_tool(update_script_url, update_components);
+download_update_tool(update_script_url, update_CeJS);
 
 function show_info(message) {
 	process.title = message;
@@ -52,35 +52,11 @@ function download_update_tool(update_script_url, callback) {
 	});
 }
 
-function install_npm(package_name, message, for_development) {
-	try {
-		require(package_name);
-	} catch (e) {
-		// e.code: 'MODULE_NOT_FOUND'
-		// console.error(e);
-
-		show_info(message || ('安裝'
-		// for development purpose
-		+ (for_development ? '開發時' : '執行時')
-		//
-		+ '需要用到的組件 [' + package_name + ']...'));
-		if (!node_fs.existsSync('node_modules'))
-			node_fs.mkdirSync('node_modules');
-		require('child_process').execSync('npm install '
-		// https://github.com/kanasimi/work_crawler/issues/104
-		// https://docs.npmjs.com/cli/install
-		// npm install electron --save-dev
-		// sudo npm install -g electron --unsafe-perm=true --allow-root
-		+ (for_development ? '--save-dev ' : '') + package_name + '@latest', {
-			stdio : 'inherit'
-		});
-	}
-}
-
-function update_components(update_script_name) {
+function update_CeJS(update_script_name) {
 	var executing_at_tool_directory = node_fs
-			.existsSync('work_crawler_loader.js'), updater = require('./'
-			+ update_script_name);
+			.existsSync('work_crawler_loader.js');
+	// require('./gh-updater');
+	updater = require('./' + update_script_name);
 
 	show_info('下載並更新 CeJS 線上小說漫畫下載工具...');
 	updater.update('kanasimi/work_crawler', executing_at_tool_directory
@@ -94,18 +70,27 @@ function update_components(update_script_name) {
 		}
 
 		show_info('下載並更新 Colorless echo JavaScript kit 組件...');
-		updater.update(null, null, function() {
-			// @see "dependencies" @ package.json
-			// 下載並更新本工具需要用到的組件 gh-updater...
-			install_npm('gh-updater');
-			// 配置圖形使用者介面。
-			install_npm('electron', '下載並更新圖形介面需要用到的組件 electron...', true);
-			// install_npm('electron-builder');
-			install_npm('electron-updater');
-
-			node_fs.chmodSync('start_gui_electron.sh', '0755');
-
-			show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
-		});
+		updater.update(null, null, update_dependencies);
 	});
+}
+
+function update_dependencies() {
+	var package_data = JSON.parse(node_fs.readFileSync('package.json'));
+
+	// 配置圖形使用者介面。
+	updater.update_package('electron', true, '下載並更新圖形介面需要用到的組件 electron...');
+
+	// update other dependent components listed in package_data.dependencies
+	for ( var package_name in package_data.dependencies) {
+		if (package_name === 'cejs') {
+			// 已在 update_CeJS() 安裝過了。
+			continue;
+		}
+		// npm install electron-builder
+		updater.update_package(package_name);
+	}
+
+	node_fs.chmodSync('start_gui_electron.sh', '0755');
+
+	show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
 }
