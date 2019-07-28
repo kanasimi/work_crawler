@@ -12,6 +12,9 @@
 
 'use strict';
 
+var change_to_version;
+// change_to_version = 'v2.1.0';
+
 var repository = 'work_crawler', branch = 'master', update_script_url = 'https://raw.githubusercontent.com/kanasimi/'
 		+ repository + '/' + branch + '/' + repository + '.updater.js';
 
@@ -109,22 +112,38 @@ function build_package(update_script_name) {
 	process.chdir(directory_name);
 	// node_fs.mkdirSync('node_modules');
 
-	show_info('安裝打包時需要的套件...');
-	// @see "dependencies" @ package.json
-	// npm install electron-builder
-	child_process.execSync('npm install --save-dev electron-builder', {
-		stdio : 'inherit'
-	});
+	var package_data = JSON.parse(node_fs.readFileSync('package.json'));
+
+	for ( var npm_name in package_data.devDependencies) {
+		if (npm_name in package_data.dependencies) {
+			// package_data.dependencies 裡面的應已在建立執行環境時安裝過了。
+			continue;
+		}
+		show_info('安裝打包時需要的套件 ' + npm_name + '...');
+		// npm install electron-builder
+		child_process.execSync('npm install --save-dev ' + npm_name, {
+			stdio : 'inherit'
+		});
+	}
 
 	remove_directory('node_modules/cejs');
 
 	// mv CeJS-master node_modules/cejs
 	node_fs.renameSync('CeJS-master', 'node_modules' + path_separator + 'cejs');
 
-	show_info('開始打包...');
+	if (change_to_version && package_data.version != change_to_version) {
+		show_info('手動指定/改變打包的版本: ' + package_data.version + ' → '
+				+ change_to_version);
+		package_data.version = String(change_to_version);
+		node_fs.writeFileSync('package.json', JSON.stringify(package_data));
+	}
+
+	show_info('開始打包 ' + package_data.version + '...');
 	child_process.execSync('npm run-script dist', {
 		stdio : 'inherit'
 	});
+
+	console.warn('Windows版 2019/7/20 建構時需要改檔名。請確認檔名和 latest.yml 裡面的相符合。');
 
 	// cd build
 	// ls -al
