@@ -287,15 +287,30 @@ global.setup_crawler = setup_crawler;
 function start_crawler(crawler, crawler_module) {
 	setup_crawler(crawler, crawler_module);
 	// console.log(crawler_module);
-	if (is_CLI) {
-		if (work_id === 'l' && default_favorite_list) {
-			work_id = default_favorite_list;
-			if (typeof work_id === 'function')
-				work_id = work_id.call(crawler);
-		}
-
-		crawler.start(work_id, crawler.after_download_list);
+	if (!is_CLI) {
+		// GUI has its process.
+		return;
 	}
+
+	if (work_id === 'l' && default_favorite_list) {
+		work_id = default_favorite_list;
+		if (typeof work_id === 'function')
+			work_id = work_id.call(crawler);
+	}
+
+	// 從其他程式匯入作品資料 可使用API會更有效率
+	// show work information only 純粹只要在命令列介面顯示作品資料即可
+	if (CeL.env.arg_hash.show_information_only) {
+		crawler.data_of(work_id, function got_work_data(work_data) {
+			// console.log(work_data);
+			crawler.show_work_data(work_data);
+		}, {
+			get_data_only : CeL.env.arg_hash.show_information_only
+		});
+		return;
+	}
+
+	crawler.start(work_id, crawler.after_download_list);
 }
 
 global.start_crawler = start_crawler;

@@ -194,7 +194,7 @@ default_configuration_file_name = 'work_crawler.configuration.json',
 //
 theme_list = 'light|dark'.split('|');
 
-'data_directory,recheck,start_chapter,chapter_filter,regenerate,reget_chapter,search_again,archive_images,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,chapter_time_interval,main_directory,user_agent,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
+'data_directory,recheck,start_chapter_NO,start_chapter_title,chapter_filter,regenerate,reget_chapter,search_again,archive_images,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,chapter_time_interval,main_directory,user_agent,proxy,cookie,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
 // @see work_crawler/resource/locale of work_crawler - locale.csv
 .split(',').forEach(function(item) {
 	download_options_set[item] = 'download_options.' + item;
@@ -2579,7 +2579,8 @@ function recerive_dialog_result(event, result) {
 function open_DevTools() {
 	node_electron.ipcRenderer.send('open_DevTools', true);
 	console.warn('-'.repeat(80));
-	console.warn(_('本欄基本上僅供調試使用。若您有下載功能方面的需求，煩請提報議題，謝謝。'));
+	console.warn(_('本欄基本上僅供調試使用。若您有下載功能方面的需求，煩請提報議題，謝謝。') + ' '
+			+ 'https://github.com/kanasimi/work_crawler/issues');
 	return false;
 }
 
