@@ -52,10 +52,9 @@ function download_update_tool(update_script_url, callback) {
 	});
 }
 
-var latest_version_file;
+var latest_version_file, executing_at_tool_directory;
 function update_CeJS(update_script_name) {
-	var executing_at_tool_directory = node_fs
-			.existsSync('work_crawler_loader.js');
+	executing_at_tool_directory = node_fs.existsSync('work_crawler_loader.js');
 	// require('./gh-updater');
 	updater = require('./' + update_script_name);
 
