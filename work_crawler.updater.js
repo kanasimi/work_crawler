@@ -52,6 +52,7 @@ function download_update_tool(update_script_url, callback) {
 	});
 }
 
+var latest_version_file;
 function update_CeJS(update_script_name) {
 	var executing_at_tool_directory = node_fs
 			.existsSync('work_crawler_loader.js');
@@ -61,7 +62,9 @@ function update_CeJS(update_script_name) {
 	show_info('下載並更新 CeJS 線上小說漫畫下載工具...');
 	updater.update('kanasimi/work_crawler', executing_at_tool_directory
 	// 解開到當前目錄下。
-	? '.' : '', function() {
+	? '.' : '', function(version_data) {
+		latest_version_file = version_data.latest_version_file;
+
 		if (executing_at_tool_directory) {
 			// console.log('似乎在 CeJS 線上小說漫畫下載工具的工作目錄下，直接執行升級工具。');
 			// console.log(process.cwd());
@@ -78,7 +81,11 @@ function update_dependencies() {
 	var package_data = JSON.parse(node_fs.readFileSync('package.json'));
 
 	// 配置圖形使用者介面。
-	updater.update_package('electron', true, '下載並更新圖形介面需要用到的組件 electron...');
+	updater.update_package('electron', true, '下載並更新圖形介面需要用到的組件 electron...', {
+		// 當 electron 正執行時，npm install, npm update
+		// 會出現 EBUSY: resource busy or locked 的問題。
+		skip_installed : true
+	});
 
 	// update other dependent components listed in package_data.dependencies
 	for ( var package_name in package_data.dependencies) {
@@ -91,6 +98,8 @@ function update_dependencies() {
 	}
 
 	node_fs.chmodSync('start_gui_electron.sh', '0755');
+	// 避免第一次執行時檢查更新。
+	node_fs.copyFileSync('../' + latest_version_file, latest_version_file);
 
 	show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
 }
