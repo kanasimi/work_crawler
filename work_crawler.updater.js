@@ -98,8 +98,10 @@ function update_dependencies() {
 	}
 
 	node_fs.chmodSync('start_gui_electron.sh', '0755');
-	// 避免第一次執行時檢查更新。
-	node_fs.copyFileSync('../' + latest_version_file, latest_version_file);
+	if (!executing_at_tool_directory) {
+		// 避免第一次執行時檢查更新。
+		node_fs.copyFileSync('../' + latest_version_file, latest_version_file);
+	}
 
 	show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
 }
