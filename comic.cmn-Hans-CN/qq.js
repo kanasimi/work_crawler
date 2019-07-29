@@ -10,7 +10,22 @@ require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
-var crawler = new CeL.work_crawler({
+var
+/**
+ * <code>
+ <a target="_blank" title="剑逆苍穹：一 西域霸主" href="/ComicView/index/id/630316/cid/3">
+ 一 西域霸主 </a>
+ <i class="ui-icon-free"></i> </span>
+
+ <a target="_blank" title="剑逆苍穹：四十四 以快破妖" href="/ComicView/index/id/630316/cid/48">
+ 四十四 以快破妖 </a>
+ <i class="ui-icon-pay"></i> </span>
+ </code>
+ */
+// [ , full chapter title, chapter url, chapter_title, pay icon ]
+PATTERN_chapter = /<a [\s\S]*?title="([^"]*)"[\s\S]*? href="([^"]+?\/cid\/\d{1,4})"[^<>]*>([\s\S]*?)<\/a>[\s\S]*?<i class="([^"]+)">/g,
+//
+crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
 	// recheck : true,
 	// one_by_one : true,
@@ -25,8 +40,9 @@ var crawler = new CeL.work_crawler({
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	// skip_error : true,
 
+	// e.g., 551072 英雄再临（英雄？我早就不当了）\0017 第十七话\551072-17-005.jpg
 	// {Natural}MIN_LENGTH:最小容許圖案檔案大小 (bytes)。
-	MIN_LENGTH : 900,
+	MIN_LENGTH : 250,
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
@@ -154,26 +170,23 @@ var crawler = new CeL.work_crawler({
 
 		return work_data;
 	},
-	get_chapter_list : function(work_data, html) {
+	get_chapter_list : function(work_data, html, get_label) {
 		work_data.chapter_list = [];
-		var matched,
-		// [ , chapter_id ]
-		PATTERN_chapter_id = /\/cid\/(\d{1,4})/g;
+		var matched;
 		html = html.between('<ol class="chapter-page-all works-chapter-list">',
 				'</ol>');
 		// 有些作品如"演平乱志"之類，章節並未按照編號排列。
-		while (matched = PATTERN_chapter_id.exec(html)) {
+		while (matched = PATTERN_chapter.exec(html)) {
+			// [ , full chapter title, chapter url, chapter_title, pay icon ]
 			work_data.chapter_list.push({
-				NO : matched[1]
+				title : get_label(matched[3]),
+				url : matched[2],
+				limited : matched[4].endsWith('pay')
 			});
 		}
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	chapter_URL : function(work_data, chapter_NO) {
-		return 'ComicView/index/id/' + work_data.id + '/cid/'
-				+ work_data.chapter_list[chapter_NO - 1].NO;
-	},
 	parse_chapter_data : function(html, work_data) {
 		// decode chapter data
 		// 2018/11/2-7 之間改版
@@ -251,6 +264,7 @@ var crawler = new CeL.work_crawler({
 		/window\s*(?:\.\s*nonce|\[([nonce"'\s+]+)\])\s*=(.{32,})/g;
 
 		// node qq 热血学霸
+		// console.log(html);
 		while (matched = PATTERN_nonce.exec(html)) {
 			// delete matched.input;
 			// console.log(matched);
