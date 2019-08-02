@@ -346,13 +346,23 @@ function initializer() {
 
 // ------------------------------------
 
+function on_menu_changed() {
+	if (+_('untranslated message count') > 0) {
+		CeL.info({
+			T : [ '現有%1條%2訊息尚未翻譯，歡迎您一同參與翻譯訊息！',
+					_('untranslated message count'),
+					// CeL.gettext.get_alias(CeL.gettext.default_domain)
+					_('using language') ]
+		});
+	}
+}
+
 function setup_language_menu() {
 	_ = CeL.gettext;
 
 	_.create_menu('language_menu', [ 'TW', 'CN', 'ja', 'en', 'ko' ],
 	// 預設介面語言繁體中文+...
-	function() {
-	});
+	on_menu_changed);
 
 	// translate all nodes to show in specified language (or default domain).
 	_.translate_nodes();
@@ -409,14 +419,7 @@ function setup_initial_messages() {
 			force_convert : force_convert
 		} ]
 	});
-	if (+_('untranslated message count') > 0) {
-		CeL.info({
-			T : [ '現有%1條%2訊息尚未翻譯，歡迎您一同參與翻譯訊息！',
-					_('untranslated message count'),
-					// CeL.gettext.get_alias(CeL.gettext.default_domain)
-					_('using language') ]
-		});
-	}
+	on_menu_changed();
 
 	// --------------------------------
 
@@ -618,7 +621,7 @@ function setup_download_options() {
 		var option_object = {
 			label : [ {
 				b : download_option
-			}, ':', input_box, {
+			}, ':', input_box, ' ', {
 				T : download_options_set[download_option],
 				force_convert : _force_convert
 			},
