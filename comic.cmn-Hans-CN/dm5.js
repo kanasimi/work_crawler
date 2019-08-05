@@ -12,6 +12,10 @@ CeL.run('application.net.work_crawler.dm5');
 
 // ----------------------------------------------------------------------------
 
+// https://stackoverflow.com/questions/31673587/error-unable-to-verify-the-first-certificate-in-nodejs
+// fix Error: unable to verify the first certificate
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
 var crawler = CeL.dm5({
 	one_by_one : true,
 	base_URL : 'https://www.dm5.com/'

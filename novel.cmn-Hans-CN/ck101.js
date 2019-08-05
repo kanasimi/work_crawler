@@ -419,8 +419,19 @@ crawler = new CeL.work_crawler({
 			function(all, previous, url) {
 				if (!url.startsWith('//') && !url.includes('://')
 				//
-				&& !url.startsWith('/'))
+				&& !url.startsWith('/')) {
 					url = _this.base_URL + url;
+				} else if (url.includes('bookcover.yuewen')) {
+					// e.g.,
+					// "https://bookcover.yuewen.com/qdbimg/349573/1015476631/180"
+					// @see qidian.js
+					url = url.trim()
+					// 用比較大的圖。
+					// 90 @ https://www.qidian.com/
+					// 180 @ https://book.qidian.com/info/
+					// 300 @ https://m.qidian.com//book/
+					.replace(/\/(?:180|90|300)$/, '/600');
+				}
 				return previous + 'src="' + url + '"';
 			});
 		})

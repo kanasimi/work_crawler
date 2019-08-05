@@ -262,7 +262,7 @@ function setup_crawler(crawler, crawler_module) {
 		crawler.id = crawler_module.filename.match(/([^\\\/]+)\.js$/)[1];
 	}
 
-	// 儲存路徑。圖片檔+紀錄檔下載位置。
+	// 下載檔案儲存目錄路徑。圖片檔與紀錄檔的下載位置。下載線上網站的作品檔案後，將儲存於此目錄下。
 	crawler.setup_value('main_directory', data_directory + crawler.id);
 
 	crawler.setup_value(site_configuration[crawler.id]);
