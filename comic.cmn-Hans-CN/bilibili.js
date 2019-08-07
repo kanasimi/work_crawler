@@ -169,10 +169,13 @@ var crawler = new CeL.work_crawler({
 				// console.log(XMLHttp);
 				// console.log(JSON.parse(XMLHttp.responseText).data);
 				chapter_data.image_list = JSON.parse(XMLHttp.responseText).data
-						.map(function(image_data) {
-							return _this.BFS_URL + image_data.url + '?token='
-									+ image_data.token;
-						});
+				// 2019/7/4–2019/8/7 之間? 哔哩哔哩漫画 改版
+				.map(function(image_data) {
+					var url = image_data.url;
+					if (!url.includes('://'))
+						url = _this.BFS_URL + url;
+					return url + '?token=' + image_data.token;
+				});
 				// console.log(chapter_data);
 				callback();
 
