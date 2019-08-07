@@ -2144,12 +2144,15 @@ function add_new_download_job(crawler, work_id, no_message) {
 		return;
 	}
 
-	var job = new Download_job(crawler, work_id);
-	// embryonic
+	// embryonic work_data
 	crawler.downloading_work_data = {
 		id : work_id,
+		// 紀錄原先輸入名稱。
+		original_download_name : work_id,
 		job_index : Download_job.job_list.length
 	};
+	var job = new Download_job(crawler, work_id);
+	// @see function initialize_work_data(crawler, work_data)
 	Download_job.job_list.push(job);
 	return job;
 }
@@ -2192,7 +2195,9 @@ function destruct_download_job(crawler) {
 			onclick : function() {
 				remove_download_work_layer();
 				// crawler.recheck = true;
-				add_new_download_job(crawler, work_data.title || work_data.id);
+				add_new_download_job(crawler, work_data.original_download_name
+				// ↑ 重新下載鍵功能 以原先輸入名稱去下載
+				|| work_data.title || work_data.id);
 			},
 			S : 'color: blue; font-weight: bold;'
 		}, {
@@ -2271,10 +2276,12 @@ function initialize_work_data(crawler, work_data) {
 
 		// 這裡的 .id 可能是作品標題，因此不應該覆蓋 work_data.id
 		delete crawler.downloading_work_data.id;
+		// copy attributes
 		crawler.downloading_work_data = Object.assign(work_data,
 				crawler.downloading_work_data);
 
 		var job = Download_job.job_list[work_data.job_index];
+		// @see function add_new_download_job(crawler, work_id, no_message)
 		job.work_data = work_data;
 
 		return work_data;
