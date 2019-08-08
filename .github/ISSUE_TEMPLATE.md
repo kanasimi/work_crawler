@@ -10,7 +10,7 @@
 英語或韓語的網站煩請利用 Free Manga Downloader 之類軟體會比較好。這邊幾乎不會上英語或者韓語網站，就算做了出來也很少在做維護，沒有專門看英語韓語網站的工具維護得勤勞。
 I am sorry that for English or Korean sites, using Free Manga Downloader is much suitable. For the deficiency of time, it is hard to maintain the tools instantly.
 新增網站時，請 **一個網站開一個議題，除了在標題說明要新增網站，並加上網站名稱**。
-另外增加網站往往要耗費時間、作許多考量，之後還需維護；請確認網站經常更新、付費作品不多，並附個其他網站未揭載之作品。
+另外增加網站往往要耗費時間、作許多考量，之後還需維護；請確認網站經常更新、付費作品不多，並請附個其他網站未揭載之作品。
 
 請在提交問題的同時，附帶如下信息，方便我們盡快幫您解決問題，謝謝。
 
