@@ -316,10 +316,11 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 		var matched;
 		CeL.debug('[' + fso_name + '] ' + name, 2, 'rename_process');
 		if (PATTERN_full_latin_or_sign.test(name) || !fso_name
-		//
+		// matched: [ all, main file name, extension ]
 		|| !(matched = fso_name.match(PATTERN_latin_fso_name))) {
 			return;
 		}
+		// console.log(matched);
 
 		function rename(fso_name, is_file) {
 			var fso_key = is_file ? target_files[fso_name]
@@ -327,11 +328,17 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 			if (!fso_key || fso_name.includes(name)) {
 				return;
 			}
-			CeL.info(fso_name + '→' + name);
+			var move_to = CeL.to_file_name(name).replace(/\.+$/, '');
+			if (is_file && (move_to + '.' + matched[2]).includes(matched[1])) {
+				move_to += '.' + matched[2];
+			} else {
+				move_to += '.' + fso_name;
+			}
+			// console.log(JSON.stringify(fso_name));
+			// console.log(JSON.stringify(move_to));
+			CeL.info(fso_name + '→' + move_to);
 			var error = CeL.fs_move(target_directory + fso_name,
-			//
-			target_directory + CeL.to_file_name(name).replace(/\.+$/, '') + '.'
-					+ fso_name);
+					target_directory + move_to);
 			if (error) {
 				CeL.error(error);
 			} else if (is_file) {
