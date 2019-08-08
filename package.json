@@ -1,7 +1,7 @@
 {
 	"name" : "work_crawler",
 	"title" : "CeJS online novels and comics downloader",
-	"version" : "v2.2.0",
+	"version" : "v2.3.0",
 	"description" : "A tool using CeJS library to download online novels / comics.",
 	"keywords" : [ "comic-downloader", "novel-downloader", "cejs",
 			"downloader", "download-comic", "epub", "ebook", "comics",
@@ -12,7 +12,7 @@
 		"email" : "vimunci@gmail.com",
 		"url" : "https://github.com/kanasimi/work_crawler"
 	},
-	"contributors" : "vimunci",
+	"contributors" : [ "vimunci" ],
 	"license" : "BSD-3-Clause",
 	"homepage" : "https://github.com/kanasimi/work_crawler",
 	"bugs" : {
@@ -106,7 +106,7 @@
 		}
 	},
 	"engines" : {
-		"node" : ">=0.10"
+		"node" : ">=8.12.0"
 	},
 	"devDependencies" : {
 		"electron" : "latest",
