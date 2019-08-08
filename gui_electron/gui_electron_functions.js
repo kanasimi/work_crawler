@@ -2148,7 +2148,7 @@ function add_new_download_job(crawler, work_id, no_message) {
 	crawler.downloading_work_data = {
 		id : work_id,
 		// 紀錄原先輸入名稱。
-		original_download_name : work_id,
+		original_downloading_name : work_id,
 		job_index : Download_job.job_list.length
 	};
 	var job = new Download_job(crawler, work_id);
@@ -2195,8 +2195,10 @@ function destruct_download_job(crawler) {
 			onclick : function() {
 				remove_download_work_layer();
 				// crawler.recheck = true;
-				add_new_download_job(crawler, work_data.original_download_name
-				// ↑ 重新下載鍵功能 以原先輸入名稱去下載
+				add_new_download_job(crawler,
+				// 重新下載鍵功能 以原先輸入名稱去下載
+				work_data.original_downloading_name
+				//
 				|| work_data.title || work_data.id);
 			},
 			S : 'color: blue; font-weight: bold;'
