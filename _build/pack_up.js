@@ -108,11 +108,14 @@ function build_package(update_script_name) {
 	node_fs.renameSync(directory_name + '.version.json', directory_name
 			+ path_separator + directory_name + '.version.json');
 
+	// 因為更換了目錄，無法採用 chdir() 後 `require('gh-updater')`。
+	var updater = require('./' + directory_name
+			+ '/node_modules/gh-updater/GitHub.updater.node.js');
+
 	// cd work_crawler-master
 	process.chdir(directory_name);
 	// node_fs.mkdirSync('node_modules');
 
-	var updater = require('./gh-updater');
 	var package_data = JSON.parse(node_fs.readFileSync('package.json'));
 
 	for ( var package_name in package_data.devDependencies) {
