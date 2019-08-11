@@ -40,13 +40,32 @@ var crawler = new CeL.work_crawler({
 
 		extract_work_data(work_data, html, null, true);
 
+		if (!work_data.author
+				&& (!work_data.title || work_data.title.includes('サイコミ'))) {
+			var text = html.between('class="not-found', '</div>').between('>');
+			// <div class="row not-found">
+			// <div class="not-found-web">
+			// <img class="no-opacity block" src="/img/404_pc.png"
+			// alt="お探しのページが見つかりませんでした">
+			// <p>このページは閲覧できません。</p>
+			text = text.between('<img ', '>').between('alt="', '"')
+					|| get_label(text);
+			if (text) {
+				work_data.removed = text;
+			} else {
+				// 2, 64: redirected to top page
+			}
+		}
+
 		// console.log(work_data);
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
 		var matched, PATTERN_chapter =
-		//
-		/<a href="([^<>"]+)" class="chapter-item">([\s\S]+?)<\/a>/g;
+		// cycomi 2019/4/19 至5月間改版。
+		// <a class="" href="/fw/cycomibrowser/chapter/pages/6792"
+		// class="chapter-item">
+		/<a [\s\S]*?href="([^<>"]+)" class="chapter-item">([\s\S]+?)<\/a>/g;
 
 		work_data.chapter_list = [];
 		while (matched = PATTERN_chapter.exec(html)) {
