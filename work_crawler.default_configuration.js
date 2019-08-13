@@ -1,5 +1,5 @@
 ﻿/**
- * CeJS 線上小說漫畫下載工具的主要設定。
+ * CeJS 網路小說漫畫下載工具的主要設定。
  * 
  * 請注意：請別直接改變 `work_crawler.default_configuration.js` 的設定。
  * 這個檔案在每次更新時，都會被覆寫成新版本的預設設定。若欲更改設定，請編輯 `work_crawler.configuration.js`

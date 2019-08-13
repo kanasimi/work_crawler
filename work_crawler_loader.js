@@ -1,5 +1,5 @@
 ﻿/**
- * 載入批量下載線上作品（小說、漫畫）的主要功能。 Download novels / comics.
+ * 載入批量下載網路作品（小說、漫畫）的主要功能。 Download novels / comics.
  * 
  * TODO: https://github.com/iridakos/bash-completion-tutorial
  */
@@ -178,7 +178,7 @@ if (is_CLI && !work_id && process.mainModule
 // 檔案整理工具不需要下載作品，因此也不需要作品名稱。
 && (typeof need_work_id === 'undefined' || need_work_id)) {
 	CeL.info({
-		T : 'CeJS 線上小說漫畫下載工具'
+		T : 'CeJS 網路小說漫畫下載工具'
 	});
 	CeL.log({
 		T : [
@@ -262,7 +262,7 @@ function setup_crawler(crawler, crawler_module) {
 		crawler.id = crawler_module.filename.match(/([^\\\/]+)\.js$/)[1];
 	}
 
-	// 下載檔案儲存目錄路徑。圖片檔與紀錄檔的下載位置。下載線上網站的作品檔案後，將儲存於此目錄下。
+	// 下載檔案儲存目錄路徑。圖片檔與紀錄檔的下載位置。下載網路的作品檔案後，將儲存於此目錄下。
 	crawler.setup_value('main_directory', data_directory + crawler.id);
 
 	crawler.setup_value(site_configuration[crawler.id]);

@@ -1,5 +1,5 @@
 ﻿/**
- * @name CeJS 線上小說漫畫下載工具 命令列介面自動產生新安裝包工具。
+ * @name CeJS 網路小說漫畫下載工具 命令列介面自動產生新安裝包工具。
  * 
  * @fileoverview You may using this tool to generate executable packages.
  * 
@@ -109,8 +109,8 @@ function build_package(update_script_name) {
 			+ path_separator + directory_name + '.version.json');
 
 	// 因為更換了目錄，無法採用 chdir() 後 `require('gh-updater')`。
-	var updater = require('./' + directory_name
-			+ '/node_modules/gh-updater/GitHub.updater.node.js');
+	// update_script_url 會下載一份 GitHub.updater.node.js 放在當前目錄中。
+	var updater = require('./GitHub.updater.node.js');
 
 	// cd work_crawler-master
 	process.chdir(directory_name);
@@ -144,7 +144,10 @@ function build_package(update_script_name) {
 		stdio : 'inherit'
 	});
 
-	console.warn('Windows版 2019/7/20 建構時需要改檔名。請確認檔名和 latest.yml 裡面的相符合。');
+	var is_windows = process.platform.startsWith('win');
+	if (is_windows) {
+		console.warn('Windows版 2019/7/20 建構時需要改檔名。請確認檔名和 latest.yml 裡面的相符合。');
+	}
 
 	// cd build
 	// ls -al

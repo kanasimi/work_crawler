@@ -1,5 +1,5 @@
 ﻿/**
- * CeJS 線上小說漫畫下載工具 命令列介面自動更新工具。
+ * CeJS 網路小說漫畫下載工具 命令列介面自動更新工具。
  * 
  * @since 2018/8/27
  * 
@@ -58,14 +58,14 @@ function update_CeJS(update_script_name) {
 	// require('./gh-updater');
 	updater = require('./' + update_script_name);
 
-	show_info('下載並更新 CeJS 線上小說漫畫下載工具...');
+	show_info('下載並更新 CeJS 網路小說漫畫下載工具...');
 	updater.update('kanasimi/work_crawler', executing_at_tool_directory
 	// 解開到當前目錄下。
 	? '.' : '', function(version_data) {
 		latest_version_file = version_data.latest_version_file;
 
 		if (executing_at_tool_directory) {
-			// console.log('似乎在 CeJS 線上小說漫畫下載工具的工作目錄下，直接執行升級工具。');
+			// console.log('似乎在 CeJS 網路小說漫畫下載工具的工作目錄下，直接執行升級工具。');
 			// console.log(process.cwd());
 		} else {
 			process.chdir('work_crawler-master');
@@ -102,5 +102,5 @@ function update_dependencies() {
 		node_fs.copyFileSync('../' + latest_version_file, latest_version_file);
 	}
 
-	show_info('CeJS 線上小說漫畫下載工具 更新完畢.');
+	show_info('CeJS 網路小說漫畫下載工具 更新完畢.');
 }

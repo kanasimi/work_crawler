@@ -12,7 +12,7 @@ require('../work_crawler_loader.js');
 var crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
-	// 日本的線上漫畫網站習慣刪掉舊章節，因此每一次都必須從頭檢查。
+	// 日本的網路漫畫網站習慣刪掉舊章節，因此每一次都必須從頭檢查。
 	recheck : true,
 
 	// one_by_one : true,

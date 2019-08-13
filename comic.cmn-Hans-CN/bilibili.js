@@ -54,7 +54,7 @@ var crawler = new CeL.work_crawler({
 	parse_work_data : function(html, get_label, extract_work_data) {
 		// console.log(html);
 		var work_data = JSON.parse(html).data;
-		// 正規化成 CeJS 線上作品爬蟲程式庫的格式。
+		// 正規化成 CeJS 網路作品爬蟲程式庫的格式。
 		Object.assign(work_data, {
 			author : work_data.author_name.join(' '),
 			description : work_data.evaluate,

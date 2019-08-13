@@ -335,7 +335,7 @@ function initializer() {
 		});
 	}
 
-	process.title = _('CeJS 線上小說漫畫下載工具');
+	process.title = _('CeJS 網路小說漫畫下載工具');
 
 	// --------------------------------
 
@@ -1865,7 +1865,7 @@ function search_work_title() {
 	if (!language_used) {
 		CeL.info({
 			// 點選 語言
-			T : '請先在線上作品區指定要搜尋的作品類別。'
+			T : '請先在網路作品區指定要搜尋的作品類別。'
 		});
 		return;
 	}

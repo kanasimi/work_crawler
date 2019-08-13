@@ -16,7 +16,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 	// e.g., 785 働かないふたり 第45話
 	skip_error : true,
 
-	// 日本的線上漫畫網站習慣刪掉舊章節，因此每一次都必須從頭檢查。
+	// 日本的網路漫畫網站習慣刪掉舊章節，因此每一次都必須從頭檢查。
 	recheck : true,
 
 	// one_by_one : true,
