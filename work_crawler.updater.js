@@ -80,7 +80,9 @@ function update_dependencies() {
 	var package_data = JSON.parse(node_fs.readFileSync('package.json'));
 
 	// 配置圖形使用者介面。
-	updater.update_package('electron', true, '下載並更新圖形介面需要用到的組件 electron...', {
+	updater.update_package('electron', {
+		message : '下載並更新圖形介面需要用到的組件 electron...',
+		development : true,
 		// 當 electron 正執行時，npm install, npm update
 		// 會出現 EBUSY: resource busy or locked 的問題。
 		skip_installed : true
