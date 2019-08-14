@@ -2069,9 +2069,13 @@ function Download_job(crawler, work_id) {
 				// 暫停下載 (略稱)
 				T : '暫停'
 			} ],
-			R : (old_Unicode_support ? '' : '⏯ ') + _('暫停/恢復下載'),
+			R : (old_Unicode_support ? '' : '⏯ ') + _('暫停/恢復下載')
+			//
+			+ '\n' + _('不會馬上反應，會等到當前的章節處理完畢才處理。'),
 			C : 'task_controller',
-			onclick : pause_resume_job
+			onclick : function(event) {
+				return pause_resume_job(this, this_job);
+			}
 		}, {
 			span : [ {
 				b : '✘',
@@ -2080,7 +2084,7 @@ function Download_job(crawler, work_id) {
 				// 取消下載 (略稱)
 				T : '取消'
 			} ],
-			R : _('取消下載'),
+			R : _('取消下載') + '\n' + _('不會馬上反應，會等到當前的章節處理完畢才處理。'),
 			C : 'task_controller',
 			onclick : cancel_task.bind(null, this_job)
 		}, {
@@ -2099,17 +2103,17 @@ function Download_job(crawler, work_id) {
 	});
 }
 
-function pause_resume_job() {
-	if (this.stopped) {
-		this.stopped = false;
+function pause_resume_job(this_node, this_job) {
+	if (this_node.stopped) {
+		this_node.stopped = false;
 		continue_task(this_job);
-		CeL.DOM.set_text(this,
+		CeL.DOM.set_text(this_node,
 		// pause
 		_((old_Unicode_support ? '' : '⏸') + _('暫停')));
 	} else {
-		this.stopped = true
+		this_node.stopped = true;
 		stop_task(this_job);
-		CeL.DOM.set_text(this,
+		CeL.DOM.set_text(this_node,
 		// resume ⏯ "恢復下載 (略稱)"
 		_('▶️' + _('繼續')));
 	}
