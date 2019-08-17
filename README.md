@@ -149,18 +149,18 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [欢乐漫画网/多多漫画](https://www.hlgoo.cn/) | duoduomh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [36漫画网](https://www.36mh.com/) | 36mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [漫画牛](https://www.manhuaniu.com/) | manhuaniu.js | 速度稍微慢。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
-| [漫画看](https://www.mhkan.com/) | mhkan.js | 水管太小？總是卡住，下載圖片時常出現 status 522，很難用。<br />採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [亲亲漫画网](http://www.duzhez.com/) | 930mh.js | 有些韓國漫畫。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
 | [50漫画网](https://www.manhuadui.com/) | 50mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。可能為早期[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板？ |
 | [漫画160](https://www.laimanhua.com/) | mh160.js | 與 733mh.js 相同系統。 |
+| [漫画1234](https://www.mhkan.com/) | mhkan.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) + 改了 733mh.js？ |
 | [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm內容類似...<br />可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板3](http://manhua4.qingtiancms.net/)?? |
 | [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。2018/11/9 之後 (11/16之後?) 改版成 晴天漫画系统 |
 | [卡推漫画](http://www.katui.net/) | katui.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [扑飞漫画](http://www.pufei.net/) | pufei.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [塔多漫画](http://www.taduo.net/) | taduo.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
-| [哦漫画](http://www.omanhua.net/) | omanhua.js | |
+| [哦漫画](http://www.omanhua.net/) | omanhua.js | 2019/7/3 5:4 最後一次成功連接。 |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
@@ -170,6 +170,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |
 | ~~[漫画台](http://www.manhuatai.com/)~~ | ~~archive/manhuatai.2018.js~~ | 2019/5/25-28 間改版，改版幅度過大並開始收費，不再維護。<q>[小明太极旗下](https://www.xiaomingtaiji.com/products/platform.html)拥有看漫画、知音漫客、漫客栈、漫画台、爱飒漫画、神漫画、爱优漫、酷漫漫画8大互联网漫画平台。</q> |
+| ~~[漫画看](https://www.mhkan.com/)~~ | ~~mhkan.js~~ | 水管太小？總是卡住，下載圖片時常出現 status 522，很難用。<br />採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 
 ### Japanese webcomics 日語網路漫畫 日本語のウェブコミック
 [comic.ja-JP/](comic.ja-JP/)*.js, images → zip

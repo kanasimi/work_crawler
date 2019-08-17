@@ -85,7 +85,9 @@ download_sites_set = {
 		duoduomh : '多多漫画',
 		'36mh' : '36漫画网',
 		manhuaniu : '漫画牛',
-		mhkan : '漫画看',
+		// mhkan: deprecated
+		// mhkan : '漫画看',
+		mh1234 : '漫画1234',
 		'930mh' : '亲亲漫画网',
 		'50mh' : '50漫画网',
 
