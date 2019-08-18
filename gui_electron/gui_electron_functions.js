@@ -2451,6 +2451,8 @@ function check_update_NOT_package() {
 			CeL.new_node({
 				// 重新啟動應用程式或重新整理網頁(Ctrl-R)
 				span : [ {
+					T : '更新完畢。'
+				}, {
 					T : '重新啟動應用程式。'
 				}, {
 					T : '所有當前作業都會中斷！',
