@@ -1517,10 +1517,11 @@ function prepare_crawler(crawler, crawler_module) {
 	download_site_nodes.link_of_site[site_id] = crawler.base_URL;
 	// add link to site
 	CeL.new_node([ ' ', {
-		a : [ '🔗 ', {
+		a : [ '🔗', {
 			// 作品平臺連結 (略稱)
 			T : '連結'
 		} ],
+		R : _('連結'),
 		href : crawler.base_URL,
 		onclick : open_external
 	} ], download_site_nodes.node_of_id[site_id].parentNode);
