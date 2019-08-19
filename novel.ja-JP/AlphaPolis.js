@@ -64,10 +64,11 @@ var crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		return 'novel/' + work_id.replace('-', '/');
 	},
-	parse_work_data : function(html, get_label) {
+	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
-			title : html.between('"og:title" content="', '"'),
+			// 2019/8/16 19:0 改版。
+			title : get_label(html.between('<h2 class="title">', '</h2>')),
 
 			// 選擇性屬性：須配合網站平台更改。
 			// e.g., 连载中, 連載中
@@ -75,21 +76,23 @@ var crawler = new CeL.work_crawler({
 			// get the first <div class="author">...</div>
 			author : get_label(html.between('<div class="author">', '</a>')),
 			last_update : get_label(html.between('<th>更新日時</th>', '</td>')),
-			description : get_label(html.between('<div class="abstract">',
-					'</div>')),
+			description : get_label(
+					html.between('<div class="abstract">', '</div>')).replace(
+					/\n{2}/g, '\n'),
+			ranking : get_label(html.between('<div class="ranking">',
+			// also category
+			'</div>')).replace(/\t/g, '').replace(/\n{3}/g, '\0').replace(
+					/\n/g, ' ').split('\0'),
 			// site_name : 'アルファポリス'
-			language : 'ja-JP'
+			language : html.between('data-lang="', '"') || 'ja-JP'
 
-		}, PATTERN = /<meta property="og:([^"]+)" content="([^"]+)"/g, matched;
+		}, PATTERN, matched;
 
 		if (work_data.title === 'Not Found' && !work_data.author) {
 			// 對於已經失效的作品，直接中斷下載。
 			throw work_data.title;
 		}
 
-		while (matched = PATTERN.exec(html)) {
-			work_data[matched[1]] = get_label(matched[2]);
-		}
 		if (work_data.site_name) {
 			// "アルファポリス - 電網浮遊都市 - " → "アルファポリス"
 			work_data.site_name = work_data.site_name.replace(/ +- .+/, '');
@@ -111,12 +114,11 @@ var crawler = new CeL.work_crawler({
 		});
 		work_data.status = work_data.status.unique();
 
-		// 作品の情報
-		PATTERN = /<th>([\s\S]+?)<\/th>[\s\n]*<td[^<>]*>([\s\S]+?)<\/td>/g;
-		while (matched = PATTERN.exec(html.between('<table class="detail">',
-				'</table>'))) {
-			work_data[get_label(matched[1])] = get_label(matched[2]);
-		}
+		// <h2>作品の情報</h2>
+		extract_work_data(work_data, html,
+				/<th>([\s\S]+?)<\/th>[\s\n]*<td[^<>]*>([\s\S]+?)<\/td>/g);
+
+		extract_work_data(work_data, html);
 
 		if (work_data.image
 		// ignore site default image
@@ -124,6 +126,7 @@ var crawler = new CeL.work_crawler({
 			delete work_data.image;
 		}
 
+		// console.log(work_data);
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html) {
