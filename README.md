@@ -141,6 +141,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [360漫画](http://www.xueshine.com/) | 360taofu.js | 有頻率限制。有些漫畫畫質較高，然而本站有太多缺圖、亂序、錯漏話。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | [我要去漫画](http://www.517manhua.com/) | 517.js | 採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | [365漫画网](http://www.iqg365.com/) | iqg365.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
+| [一漫网](http://www.muyict.com/) | emw.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
 | [友绘漫画网](http://m.wuyouhui.net/) | wuyouhui.js | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
 | [188漫画网](http://m.88bag.net/) | 88bag.js | 有些缺圖，圖片似乎多從其他網站採集而來。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
 | [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
@@ -395,3 +396,8 @@ auto-update
 
 https://ctrlq.org/google/photos/
 -->
+
+## Contact 聯絡我們
+Contact us at [GitHub](https://github.com/kanasimi/work_crawler/issues).
+
+[![logo](https://raw.githubusercontent.com/kanasimi/CeJS/master/_test%20suite/misc/logo.jpg)](http://lyrics.meicho.com.tw/)
