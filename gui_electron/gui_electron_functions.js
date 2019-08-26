@@ -1612,6 +1612,7 @@ var search_result_columns = {
 	} ],
 
 	限 : [ '部份章節需要付費/被鎖住/被限制', function(crawler, work_data) {
+		// 💰
 		return work_data.some_limited ? '🔒' : '';
 	} ],
 

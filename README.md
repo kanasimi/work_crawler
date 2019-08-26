@@ -53,8 +53,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 |---|:---:|
 | 繁體中文 | ✔️ |
 | 简体中文 | ✔️ |
+| English | ✔️ |
 | 日本語 | 🚧 |
-| English | 🚧 |
 | 한국어 | 🚧 |
 
 ## Supported sites 已完成之網站工具
@@ -224,6 +224,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
       ``` sh
       node work_crawler.updater.js
       ```
+
+   4. 執行完畢後，除了 `work_crawler-master` 這個目錄，還會出現一些附屬檔案。這些檔案是幫助更新用的，就算刪除也不會影響程式運行或更新。
 </details>
 
 4. 然後就能[開始試用](#execution-執行)囉。若是您希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，請執行 `work_crawler-master` 目錄下面的 `start_gui_electron.bat` 或 `start_gui_electron.sh`。
