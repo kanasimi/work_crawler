@@ -9,9 +9,10 @@ require('../work_crawler_loader.js');
 // ----------------------------------------------------------------------------
 
 // 這PATTERN會直接跳過付費章節。
-// [ all, part_title, additional_data, chapter_title, type, url, chapter NO ]
+// [ all, part_title, part_additional_data, chapter_title, type, url, chapter NO
+// ]
 var PATTERN_chapter = /<span class="manga-episodes_text">([^<>"]+)<\/span>([\s\S]*?)<\/div>|<a [^<>]*?title="([^<>"]+)"[^<>]*?(href|onclick)="([^<>"]+)"[^<>]*>([\s\S]+?)<\/a>/g,
-// [ all <img>, src, additional_data ]
+// [ all <img>, src, image_additional_data ]
 PATTERN_image = /<img[\s\n]+src="([^<>"]+)"([^<>]*)>/g,
 //
 crawler = new CeL.work_crawler({
@@ -21,7 +22,7 @@ crawler = new CeL.work_crawler({
 	// one_by_one : true,
 	base_URL : 'http://www.buka.cn/',
 
-	// 有少數遺失圖片。
+	// 有些遺失圖片。
 	skip_error : true,
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -81,42 +82,99 @@ crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
-		var matched, reverse_starts;
+		var matched, part_starts_index = 0;
+		var chapter_list = work_data.chapter_list = [];
+		// work_data.inverted_order = true;
 
-		function reverse() {
-			var chapter_data, NO_in_part = 1,
-			// reverse work_data.chapter_list[ reverse_starts ~ last ]
-			list = work_data.chapter_list.splice(reverse_starts,
-					work_data.chapter_list.length - reverse_starts);
-			while (chapter_data = list.pop()) {
-				chapter_data.NO_in_part = NO_in_part++;
-				work_data.chapter_list.push(chapter_data);
-			}
-			reverse_starts = undefined;
+		function get_cid(index) {
+			var chapter_data = chapter_list[index];
+			if (!chapter_data || !chapter_data.url)
+				return;
+			// console.log(chapter_data);
+			var cid = chapter_data.url.match(/\/(\d+)\.html$/);
+			// console.log(cid);
+			if (cid)
+				return +cid[1];
 		}
 
-		work_data.inverted_order = true;
-		work_data.chapter_list = [];
+		function check_reverse() {
+			var reversed_count = 0, index = part_starts_index;
+			var latest_cid = get_cid(index);
+			// 檢查每個章節的 cid 來確認到底是正序還是倒序。
+			while (++index < chapter_list.length) {
+				var cid = get_cid(index);
+				if (latest_cid < cid) {
+					reversed_count--;
+				} else if (latest_cid > cid) {
+					reversed_count++;
+				}
+				latest_cid = cid;
+			}
+			// console.log(reversed_count);
+			if (reversed_count <= 0) {
+				return;
+			}
+
+			var chapter_data, NO_in_part = 1,
+			// reverse chapter_list[ part_starts_index ~ last ]
+			list = chapter_list.splice(part_starts_index, chapter_list.length
+					- part_starts_index);
+			while (chapter_data = list.pop()) {
+				// reset NO_in_part
+				chapter_data.NO_in_part = NO_in_part++;
+				chapter_list.push(chapter_data);
+			}
+		}
+
+		matched = html.match(
+		// 20190829 發現有此功能。但沒有附上 part_title，因此僅供參考用。
+		// chapters: { n: [连载(话)], vol: [单行本??], sp: [番外篇] }
+		/<script>[\s\n]*var\s+chapters\s*=([\s\S]+?)<\/script>/);
+		if (matched) {
+			matched = matched[1].replace(/[;\s]+$/, '');
+			// console.log(matched);
+			work_data.chapters = JSON.parse(matched);
+		}
+		// console.log(work_data.chapters);
 
 		html = html.between(
 		//
 		'<div class="manga-episodes_title">', '</section>');
 		// work_data.some_limited = html.includes('onclick="payChapter(');
 
-		// e.g., 我家大师兄脑子有坑 http://www.buka.cn/detail/104014.html
+		/**
+		 * e.g., <code>
+
+		multi parts 我家大师兄脑子有坑 http://www.buka.cn/detail/104014.html
+		http://www.buka.cn/detail/217885.html
+		
+		正序	http://www.buka.cn/detail/222809.html
+		http://www.buka.cn/detail/221313
+
+		倒序 http://www.buka.cn/detail/223255
+		http://www.buka.cn/detail/221802.html
+
+		</code>
+		 */
 		while (matched = PATTERN_chapter.exec(html)) {
-			// [ all, part_title, additional_data,
+			// [ all, part_title, part_additional_data,
 			// chapter_title, type, url, chapter NO ]
 			if (matched[1]) {
-				if (reverse_starts >= 0) {
-					reverse();
-				}
+				// a new part
+				check_reverse();
 				this.set_part(work_data,
 						get_label(matched[1].replace(/:$/, '')));
 
-				if (matched[2] && matched[2].includes('data-sort="desc"')) {
-					// 倒序
-					reverse_starts = work_data.chapter_list.length;
+				part_starts_index = chapter_list.length;
+				if (false && matched[2]
+						&& matched[2].includes('data-sort="desc"')) {
+					// 正序。沒有的也不見得是倒序。
+					// http://www.buka.cn/detail/221313
+					// http://www.buka.cn/detail/222809
+
+					// 倒序。
+					// http://www.buka.cn/detail/221115
+					// http://www.buka.cn/detail/223255
 				}
 
 				continue;
@@ -143,9 +201,7 @@ crawler = new CeL.work_crawler({
 			this.add_chapter(work_data, chapter_data);
 		}
 
-		if (reverse_starts >= 0) {
-			reverse();
-		}
+		check_reverse();
 
 		// console.log(work_data);
 	},
@@ -161,7 +217,7 @@ crawler = new CeL.work_crawler({
 		chapter_data.image_list = [];
 
 		while (matched = PATTERN_image.exec(html)) {
-			// [ all <img>, src, additional_data ]
+			// [ all <img>, src, image_additional_data ]
 			matched[2] = matched[2].match(/[\s\n]data-original="([^<>"]+)"/);
 			chapter_data.image_list.push(matched[2] ? matched[2][1]
 					: matched[1]);
