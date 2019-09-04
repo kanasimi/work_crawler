@@ -20,7 +20,10 @@ var crawler = CeL.qTcms2017({
 
 	base_URL : 'http://www.nokiacn.net/',
 
-	image_base_url : 'http://n.aiwenwo.net:55888',
+	// function f_qTcms_Pic_curUrl_realpic(v){
+	// 2019/3: 'http://n.aiwenwo.net:55888'
+	// 2019/9: 'http://n.aiwenwo.net'
+	image_base_url : 'http://n.aiwenwo.net',
 
 	image_preprocessor : function(contents, image_data) {
 		var index = contents && contents.length - 1;
