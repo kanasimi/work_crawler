@@ -95,12 +95,22 @@ var crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
-		html = html.between('<div class="w980_b1px mt10 clearfix">',
+		var text = html.between('<div class="w980_b1px mt10 clearfix">',
 				'<div class="introduction" id="intro1">').between('<ul>',
 				'</ul>');
+		// console.log(text);
+
 		/**
 		 * e.g., <code>
+
+		// 733mh.js
 		<li><a href="/mh/27576/359123.html" title="179：失踪">179：失踪</a></li>
+
+		// mh1234.js
+		<li>
+		<a  href="/comic/12549/554098.html">第1话：周家圣龙（上）<i></i></a>
+		</li>
+
 		</code>
 		 */
 		work_data.chapter_list = [];
@@ -108,12 +118,13 @@ var crawler = new CeL.work_crawler({
 		var matched, PATTERN_chapter =
 		// [ , chapter_url, chapter_title ]
 		/<a href="(\/mh\/[^<>"]+)" title="([^<>"]+)"/g;
-		while (matched = PATTERN_chapter.exec(html)) {
+		while (matched = PATTERN_chapter.exec(text)) {
 			work_data.chapter_list.push({
 				url : matched[1],
 				title : get_label(matched[2])
 			});
 		}
+		// console.log(work_data);
 	},
 
 	parse_chapter_data : function(html, work_data) {
@@ -127,11 +138,12 @@ var crawler = new CeL.work_crawler({
 			});
 		}
 
-		var chapter_data = html.between('packed="', '"');
+		var chapter_data = html && html.between('packed="', '"');
 		if (chapter_data) {
 			chapter_data = decode(chapter_data);
-		} else if (chapter_data = html.between('photosr[1] ="',
-				'var maxpages=photosr.length-1;')) {
+		} else if (chapter_data = html
+				&& html.between('photosr[1] ="',
+						'var maxpages=photosr.length-1;')) {
 			// e.g., http://www.733mh.net/mh/18102/465176.html
 			var photosr = [];
 			eval('photosr[1] ="' + chapter_data);
