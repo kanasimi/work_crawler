@@ -23,7 +23,7 @@ var crawler = new CeL.work_crawler({
 	// allow .jpg without EOI mark.
 	// allow_EOI_error : true,
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
-	// skip_error : true,
+	skip_error : true,
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title, get_label) {
@@ -78,7 +78,7 @@ var crawler = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	parse_chapter_data : function(html, work_data, get_label) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// console.log(html);
 		var chapter_data = JSON.parse(html.trim()).data, site_ver = 'site_ver='
 				+ chapter_data.site_ver;
@@ -89,6 +89,20 @@ var crawler = new CeL.work_crawler({
 		&& !chapter_data.is_allow_read.is_chapter_read) {
 			chapter_data.limited = true;
 			return;
+		}
+
+		if (Array.isArray(chapter_data.json_content)
+		// 本章为抢先看章节: "json_content":[]
+		&& chapter_data.json_content.length === 0) {
+			var time = chapter_data.chapter.charge_end_time * 1000;
+			if (time > Date.now()) {
+				CeL.info(chapter_NO + '/' + work_data.chapter_count + ' '
+						+ chapter_data.chapter.chapter_name + ' 之後必須等到 '
+						+ (new Date(time)).format('%Y/%m/%d %H:%M')
+						+ ' 才能閱讀。跳過餘下的章節。');
+				work_data.chapter_count = chapter_NO - 1;
+				return;
+			}
 		}
 
 		// chapter_data.image_count = chapter_data.json_content.header.pageNum;
