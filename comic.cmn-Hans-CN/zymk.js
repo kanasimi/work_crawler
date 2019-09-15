@@ -21,6 +21,13 @@ crawler = new CeL.work_crawler({
 	// {Natural}最小容許圖案檔案大小 (bytes)。
 	// MIN_LENGTH : 500,
 
+	// 圖像檔案下載失敗處理方式：忽略/跳過圖像錯誤。當404圖像不存在、檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。default:false
+	skip_error : true,
+
+	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
+	// 模仿實際人工請求。
+	// chapter_time_interval : '1s',
+
 	// one_by_one : true,
 	base_URL : 'https://www.zymk.cn/',
 
@@ -100,14 +107,23 @@ crawler = new CeL.work_crawler({
 		return this.work_URL(work_data.id)
 				+ work_data.chapter_list[chapter_NO - 1].url;
 	},
-	parse_chapter_data : function(html, work_data) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		if (!html) {
+			// 操作過頻繁可能出現
+			// Error: node_zlib.gunzipSync(): Error: unexpected end of file
+			// 但是過幾秒鐘又可以接續下載
+			return this.REGET_PAGE;
+		}
+
 		var chapter_data;
 		html = html.between('__cr.init(', '</script>').between(null, {
 			tail : ')'
 		});
 		eval('chapter_data=' + html);
 		if (!chapter_data) {
-			CeL.log('無法解析資料！');
+			CeL.warn({
+				T : [ '無法解析《%1》§%2 之章節資料！', work_data.title, chapter_NO ]
+			});
 			return;
 		}
 		chapter_data.imgpath = chapter_data.chapter_addr
