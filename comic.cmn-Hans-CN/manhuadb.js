@@ -29,7 +29,8 @@ crawler = new CeL.work_crawler({
 	// allow .jpg without EOI mark.
 	// allow_EOI_error : true,
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
-	// skip_error : true,
+	// e.g., 736 黄昏流星群/单行本 0005 [黄昏流星群][弘兼宪史][尖端][volink]Vol_005/736-5-005.jpg
+	skip_error : true,
 
 	// 單行本圖片較多且大，因此採用一個圖一個圖取得的方式。
 	one_by_one : true,
@@ -179,6 +180,28 @@ crawler = new CeL.work_crawler({
 		if (matched)
 			chapter_data.title = matched[1];
 
+		// --------------------------------------
+
+		matched = html.between('localStorage.setItem("data:"', ');')
+		// 2019/9 漫画DB 網站改版
+		.between("'", {
+			tail : "'"
+		});
+		if (matched) {
+			chapter_data.image_list = JSON.parse(matched)
+			// assert: Array.isArray(chapter_data.image_list);
+			.map(function(image_data) {
+				return {
+					url : image_data.img
+				};
+			});
+			// console.log(chapter_data.image_list);
+			callback();
+			return;
+		}
+
+		// --------------------------------------
+
 		html.between('id="page-selector"', '</select>').each_between(
 		//
 		'<option value="', '</option>', function(token) {
@@ -242,8 +265,8 @@ crawler = new CeL.work_crawler({
 			//
 			= _this.full_URL(image_page_list[index - 1].url);
 			// console.log('Get #' + index + ': ' + image_page_url);
-			process.stdout.write('Get image data page of §' + chapter_NO
-					+ ': ' + image_NO + '/' + image_count + '...\r');
+			process.stdout.write('Get image data page of §' + chapter_NO + ': '
+					+ image_NO + '/' + image_count + '...\r');
 			CeL.get_URL(image_page_url, function(XMLHttp) {
 				extract_image(XMLHttp);
 				run_next();
