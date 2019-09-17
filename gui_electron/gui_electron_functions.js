@@ -32,6 +32,8 @@ download_sites_set = {
 
 		cartoonmad : '動漫狂',
 
+		dogemanga : '漫畫狗',
+
 		dmeden : '動漫伊甸園',
 
 		comico : 'comico',

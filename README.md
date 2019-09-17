@@ -109,6 +109,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [99漫畫網](https://www.999comics.com/) | 999comics.js | 可能是2013年版本的 圣樱漫画管理系统？ MHD模板（漫画岛）？2019/6/18 19:46 測試中陸續發現PC端有頁面404。 |
 | [繁體版漫畫櫃](https://tw.manhuagui.com/) | manhuagui_tw.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [無限動漫](https://www.comicbus.com/comic/) | comicbus.js | 以臺灣翻譯日本的漫畫為主，還有些港漫。僅免費漫畫，無法下載VIP動畫。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
+| [漫畫狗](https://dogemanga.com/) | dogemanga.js | 以臺灣翻譯日本的漫畫為主。有些缺圖。 |
 | [動漫狂](https://www.cartoonmad.com/) | cartoonmad.js | 以臺灣翻譯日本的漫畫為主。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
 | [動漫伊甸園](http://dmeden.net/) | dmeden.js | 日本漫畫較多。 採用與汗汗酷漫相同系統。 |
 | [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
