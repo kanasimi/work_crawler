@@ -12,9 +12,17 @@ require('../work_crawler_loader.js');
 var PATTERN_id_last_part = /\/([a-zA-Z\d\-_]{8})$/;
 // or '_'
 var id_separator = ' ';
+var id_revert_to;
 var PATTERN_converted_id_last_part = new RegExp(PATTERN_id_last_part.source
-		.replace(/^\\./, '\\' + id_separator));
+		.replace(/^\\(.)/, function(all, prefix) {
+			// `prefix` should be '/'
+			id_revert_to = prefix + '$1';
+			return '\\' + id_separator;
+		}));
 // console.log(PATTERN_converted_id_last_part);
+if (!id_revert_to) {
+	throw new Error('dogemanga: ' + '無法判別程式需要用到的關鍵數值：' + 'id_revert_to');
+}
 
 var crawler = new CeL.work_crawler({
 	// recheck:從頭檢測所有作品之所有章節。
@@ -64,10 +72,10 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		// console.log(work_id.replace(PATTERN_converted_id_last_part, '/$1'));
 		return 'm/'
-		// includes "/", so can not use encodeURIComponent()
-		+ encodeURI(work_id.replace(PATTERN_converted_id_last_part, '/$1'));
+				// includes "/", so can not use encodeURIComponent()
+				+ encodeURI(work_id.replace(PATTERN_converted_id_last_part,
+						id_revert_to));
 	},
 	parse_work_data : function(html, get_label, extract_work_data, options) {
 		var work_data = html
