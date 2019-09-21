@@ -15,6 +15,8 @@ CeL.run('application.net.work_crawler.SinMH');
 var crawler = CeL.SinMH({
 	base_URL : 'https://www.hlgoo.cn/',
 
+	skip_error : true,
+
 	search_URL : 'API',
 	id_of_search_result : 'slug'
 });

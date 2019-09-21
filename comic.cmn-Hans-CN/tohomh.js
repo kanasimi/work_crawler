@@ -16,6 +16,8 @@ var crawler = CeL.dm5({
 	// 本網站常有圖片不存在的現象。
 	skip_error : true,
 
+	chapter_time_interval : '4s',
+
 	// 2019/1/21 土豪漫畫網址更動 ← https://www.tohomh.com/
 	base_URL : 'https://www.tohomh123.com/',
 

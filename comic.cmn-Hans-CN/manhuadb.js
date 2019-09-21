@@ -182,9 +182,10 @@ crawler = new CeL.work_crawler({
 
 		// --------------------------------------
 
-		matched = html.between('localStorage.setItem("data:"', ');')
-		// 2019/9 漫画DB 網站改版
-		.between("'", {
+		// 2019/9/17 漫画DB 網站改版
+		matched = html.between(" img_data = '", "';")
+		// 2019/9/17 5:0
+		|| html.between('localStorage.setItem("data:"', ');').between("'", {
 			tail : "'"
 		});
 		if (matched) {

@@ -148,6 +148,13 @@ var crawler = new CeL.work_crawler({
 	get_chapter_list : function(work_data, html, get_label) {
 		// console.log(html);
 		var data = JSON.parse(html);
+		if (!data.data) {
+			// {"code":1006,"msg":"未定义异常"}: 被消失了?
+			var error = new Error(data.msg);
+			error.code = data.code;
+			this.onwarning(error);
+			return;
+		}
 
 		work_data.chapter_list = [];
 		data.data.vs.forEach(function(volume) {

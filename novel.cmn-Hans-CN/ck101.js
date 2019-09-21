@@ -180,7 +180,9 @@ crawler = new CeL.work_crawler({
 		return [ 'search.php?mod=forum', {
 			formhash : 'aa2d7d2d',
 			srchtxt : work_title,
-			searchsubmit : 'yes'
+			searchsubmit : 'yes',
+			// 搜尋小說類型
+			srchtab : 'novel'
 		} ];
 	},
 	parse_search_result_201802 : function(html, get_label, work_title) {

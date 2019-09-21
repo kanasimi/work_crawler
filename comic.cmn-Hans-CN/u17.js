@@ -131,7 +131,7 @@ crawler = new CeL.work_crawler({
 			chapter_data = JSON.parse(html);
 			if (!chapter_data.image_list && chapter_data.message) {
 				CeL.error(work_data.title + ' #' + chapter_NO + ': '
-				// e.g., "没有阅读权限"
+				// e.g., "没有阅读权限"。2019/8 時，無 `chapter_data.chapter`。
 				+ chapter_data.message);
 			} else {
 				chapter_data.image_list.forEach(function(image_data) {
@@ -159,7 +159,7 @@ crawler = new CeL.work_crawler({
 		}
 
 		// type: '0','3': OK, '4': masked
-		if (+chapter_data.chapter.type === 4)
+		if (!chapter_data.chapter || +chapter_data.chapter.type === 4)
 			chapter_data.limited = true;
 		// console.log(chapter_data);
 		return chapter_data;

@@ -21,6 +21,7 @@ Plese fill the template when you reporting a new issue, thank you!
 
 * **Version**: <!-- 您使用的 work_crawler 為哪個版本: 安裝包, 懶人安裝法 -->
 * **Interface**: <!-- 您使用的 work_crawler 為哪個介面: 圖形介面, 命令列介面 -->
+* **Arguments**: <!-- 採用命令列介面時所下的指令，或者使用圖形介面時的網站與作品名稱/作品ID -->
 
 <!-- 請描述出了什麼問題、下載的網站與作品名稱、造成問題的操作步驟、您預期的行為等。您可貼上錯誤訊息與執行時的畫面，謝謝。 -->
 

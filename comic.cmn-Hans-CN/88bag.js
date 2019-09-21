@@ -15,6 +15,9 @@ CeL.run('application.net.work_crawler.qTcms2017');
 // ----------------------------------------------------------------------------
 
 var crawler = CeL.qTcms2017({
+	// 圖像檔案下載失敗處理方式：忽略/跳過圖像錯誤。當404圖像不存在、檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。default:false
+	skip_error : true,
+
 	// {Natural}最小容許圖案檔案大小 (bytes)。
 	// MIN_LENGTH : 500,
 
