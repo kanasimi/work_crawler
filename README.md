@@ -21,15 +21,16 @@
    * [Lazy installation 懶人安裝法](#lazy-installation-懶人安裝法)
 * [Execution 執行](#execution-執行)
 
-## Features 特點
-* 具備最愛清單功能。
-* 能一鍵搜尋各網站與下載作品。
-* 可自動下載小說封面以及章節中的插圖。
-* 小說漫畫自動分部(part)。
-* 本工具會盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
-* 跨平臺支援：支援 Windows, Linux, Mac。
-* 採用 CeJS [網路作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
-* 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料，僅更新有問題的圖檔。（👉請注意：必須先安裝 7-Zip **18.01 以上的版本**）
+## Language support 多語言支援
+Welcome to join [the translating project](https://github.com/kanasimi/work_crawler/issues/185)! [一緒に翻訳しましょう](https://github.com/kanasimi/work_crawler/issues/185)！
+
+| Language 語言 | support 支援狀況 |
+|---|:---:|
+| 繁體中文 | ✔️ |
+| 简体中文 | ✔️ |
+| English | ✔️ |
+| 日本語 | 🚧 |
+| 한국어 | 🚧 |
 
 ## OS support 作業系統支援
 | Platform 作業系統平臺 | support 支援狀況 |
@@ -46,16 +47,15 @@
 | [CLI](https://en.wikipedia.org/wiki/Command-line_interface) 命令列/命令行 コマンドライン | ✔️ |
 | API 應用程式介面 | ✔️ |
 
-## Language support 多語言支援
-Welcome to join [the translating project](https://github.com/kanasimi/work_crawler/issues/185)! [一緒に翻訳しましょう](https://github.com/kanasimi/work_crawler/issues/185)！
-
-| Language 語言 | support 支援狀況 |
-|---|:---:|
-| 繁體中文 | ✔️ |
-| 简体中文 | ✔️ |
-| English | ✔️ |
-| 日本語 | 🚧 |
-| 한국어 | 🚧 |
+## Features 特點
+* 具備最愛清單功能。
+* 能一鍵搜尋各網站與下載作品。
+* 可自動下載小說封面以及章節中的插圖。
+* 小說漫畫自動分部(part)。
+* 本工具會盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
+* 跨平臺支援：支援 Windows, Linux, Mac。
+* 採用 CeJS [網路作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
+* 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料，僅更新有問題的圖檔。（👉請注意：必須先安裝 7-Zip **18.01 以上的版本**）
 
 ## Supported sites 已完成之網站工具
 * For novels, please install [7-Zip](https://en.wikipedia.org/wiki/7-Zip) command-line version first. 👉請注意：必須先安裝 7-Zip **18.01 以上的版本**，這樣才能製作 .epub 小說電子書、壓縮漫畫章節。
@@ -306,11 +306,11 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
    e.g.,
    ``` sh
    cd comic.cmn-Hans-CN && node qq.js "狐妖小红娘" skip_error=true
-   cd novel.cmn-Hans-CN && node qidian free && echo 下载 起点中文网限免作品
+   cd novel.cmn-Hans-CN && node qidian free && echo "下载 起点中文网限免作品"
    cd novel.cmn-Hans-CN && node 23us "斗罗大陆Ⅲ龙王传说" proxy=localhost:8080
    cd comic.cmn-Hans-CN && node 2manhua "大主宰" recheck=true
    cd comic.cmn-Hans-CN && node ikanman "l=ikanman.txt" recheck=true
-   cd novel.cmn-Hans-CN && echo "via id" && node 630book "267"
+   cd novel.cmn-Hans-CN && node 630book "267" && echo "via id"
    cd novel.ja-JP       && node yomou "転生したらスライムだった件"
    ```
 

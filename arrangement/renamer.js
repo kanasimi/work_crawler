@@ -316,7 +316,7 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 		var matched;
 		CeL.debug('[' + fso_name + '] ' + name, 2, 'rename_process');
 		if (PATTERN_full_latin_or_sign.test(name) || !fso_name
-		// matched: [ all, main file name, extension ]
+		// matched: [ all, main file name, '.' + extension ]
 		|| !(matched = fso_name.match(PATTERN_latin_fso_name))) {
 			return;
 		}
@@ -328,9 +328,15 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 			if (!fso_key || fso_name.includes(name)) {
 				return;
 			}
-			var move_to = CeL.to_file_name(name).replace(/\.+$/, '');
-			if (is_file && (move_to + '.' + matched[2]).includes(matched[1])) {
-				move_to += '.' + matched[2];
+			var move_to = CeL.to_file_name(name).replace(/\.+$/, ''),
+			//
+			from_page = (move_to + matched[2])/* .replace(/_/g, ' ') */,
+			//
+			file_name = matched[1]/* .replace(/_/g, ' ') */;
+			if (is_file && (from_page.includes(file_name)
+			// from_page 有較多資訊。
+			|| from_page.toLowerCase().includes(file_name))) {
+				move_to += matched[2];
 			} else {
 				move_to += '.' + fso_name;
 			}
