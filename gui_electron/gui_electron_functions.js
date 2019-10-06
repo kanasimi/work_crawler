@@ -747,7 +747,9 @@ function change_download_option() {
 }
 
 function select_download_options_fso() {
-	var _this = this, fso_type = this.getAttribute('fso_type'), properties = {
+	var _this = this, fso_type = this.getAttribute('fso_type'),
+	// https://electronjs.org/docs/api/dialog
+	properties = {
 		file : [ 'openFile' ],
 		files : [ 'openFile', 'multiSelections' ],
 		directory : [ 'openDirectory' ],
@@ -759,7 +761,8 @@ function select_download_options_fso() {
 	open_dialog({
 		properties : properties
 	}, function(fso_path_list) {
-		if (!fso_path_list) {
+		if (!fso_path_list || fso_path_list.canceled
+				|| !Array.isArray(fso_path_list = fso_path_list.filePaths)) {
 			// assert: fso_path_list === null
 			CeL.log({
 				T : '未選擇檔案或目錄。'
@@ -2586,7 +2589,6 @@ function open_dialog(options, callback) {
 	if (callback)
 		open_dialog.queue[id] = callback;
 	node_electron.ipcRenderer.send('open_dialog', [ id, options ]);
-
 }
 open_dialog.queue = Object.create(null);
 
@@ -2595,8 +2597,11 @@ function recerive_dialog_result(event, result) {
 	result = result[1];
 	var callback = open_dialog.queue[id];
 	delete open_dialog.queue[id];
-	if (!callback)
+	if (!callback
+	// || result && result.canceled
+	) {
 		return;
+	}
 	// 注意: 選擇目錄時，不會自動加上最後的目錄分隔符號！
 	callback(result);
 }

@@ -61,18 +61,11 @@ function create_window() {
 		win.setProgressBar(progress);
 	});
 
-	electron.ipcMain.on('open_dialog', function(event, options) {
-		var id = options[0];
-		options = options[1];
-		var result = electron.dialog.showOpenDialog(options);
-		// console.log(result);
-		event.sender.send('open_dialog', [ id, result ]);
-	});
-
 	electron.ipcMain.on('open_DevTools', function(event, open) {
-		if (open)
+		if (open) {
 			// Open the DevTools.
 			win.webContents.openDevTools();
+		}
 	});
 
 	// Emitted when the window is closed.
@@ -142,6 +135,18 @@ app.on('activate', function() {
 // code. You can also put them in separate files and require them here.
 
 // --------------------------------------------------------------------------------------------------------------------
+
+// open FSO dialog
+electron.ipcMain.on('open_dialog', function(event, options) {
+	var id = options[0];
+	options = options[1];
+	electron.dialog.showOpenDialog(options)
+	// https://electronjs.org/docs/api/dialog
+	.then(function(result, error) {
+		// console.log(result);
+		event.sender.send('open_dialog', [ id, error || result ]);
+	});
+});
 
 // 接收訊息
 electron.ipcMain.on('send_message', function(event, message) {
