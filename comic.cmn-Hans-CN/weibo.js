@@ -96,13 +96,28 @@ var crawler = new CeL.work_crawler({
 		&& chapter_data.json_content.length === 0) {
 			var time = chapter_data.chapter.charge_end_time * 1000;
 			if (time > Date.now()) {
-				CeL.info(chapter_NO + '/' + work_data.chapter_count + ' '
-						+ chapter_data.chapter.chapter_name + ' 之後必須等到 '
-						+ (new Date(time)).format('%Y/%m/%d %H:%M')
-						+ ' 才能閱讀。跳過餘下的章節。');
+				CeL.info([
+						this.id + ':',
+						{
+							T : [ '%1《%2》之後必須等到 %3  才能閱讀。跳過餘下的章節。',
+									chapter_NO + '/' + work_data.chapter_count,
+									chapter_data.chapter.chapter_name,
+									(new Date(time)).format('%Y/%m/%d %H:%M') ]
+						} ]);
 				work_data.chapter_count = chapter_NO - 1;
 				return;
 			}
+		}
+
+		if (chapter_data.json_content.page.length === 1
+		//
+		&& !chapter_data.json_content.page[0].newImgUrl
+		//
+		&& chapter_data.json_content.page[0].mobileImgUrl) {
+			CeL.warn([ this.id + ':', {
+				T : [ '《%1》為會員專屬作品，必須充值後才能閱讀！', work_data.title ]
+			} ]);
+			return;
 		}
 
 		// chapter_data.image_count = chapter_data.json_content.header.pageNum;
