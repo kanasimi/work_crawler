@@ -19,8 +19,8 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 var crawler = CeL.dm5({
 	one_by_one : true,
 	// 2019/9: https://www.dm5.com/
-	// 2019/10: http://cnc.dm5.com/
-	base_URL : 'http://cnc.dm5.com/'
+	// 2019/10: 可以使用 http://cnc.dm5.com/
+	base_URL : 'https://www.dm5.com/'
 });
 
 // ----------------------------------------------------------------------------
