@@ -8,7 +8,7 @@ require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
-CeL.run('application.net.work_crawler.hhcool');
+CeL.run('application.net.work_crawler.sites.hhcool');
 
 // ----------------------------------------------------------------------------
 
@@ -19,6 +19,7 @@ CeL.hhcool({
 	// 2019/4 NG: http://www.hheehh.com/
 	// 2019/4 NG: http://www.huhumh.com/
 	// 2019/4 內容圖源相同: http://www.huhudm.com/ http://www.hhmmoo.com/
+	// 2019/9 圖源相同: http://www.1manhua.net/
 	base_URL : 'http://www.hhimm.com/'
 
 }, function(crawler) {

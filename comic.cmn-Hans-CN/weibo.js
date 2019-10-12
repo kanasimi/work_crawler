@@ -96,14 +96,15 @@ var crawler = new CeL.work_crawler({
 		&& chapter_data.json_content.length === 0) {
 			var time = chapter_data.chapter.charge_end_time * 1000;
 			if (time > Date.now()) {
-				CeL.info([
-						this.id + ':',
-						{
-							T : [ '%1《%2》之後必須等到 %3  才能閱讀。跳過餘下的章節。',
-									chapter_NO + '/' + work_data.chapter_count,
-									chapter_data.chapter.chapter_name,
-									(new Date(time)).format('%Y/%m/%d %H:%M') ]
-						} ]);
+				CeL.info([ this.id + ':', {
+					T : [ '§%1《%2》之後必須等到 %3  才能閱讀。跳過餘下的章節。',
+					//
+					chapter_NO + '/' + work_data.chapter_count,
+					//
+					chapter_data.chapter.chapter_name,
+					//
+					(new Date(time)).format('%Y/%m/%d %H:%M') ]
+				} ]);
 				work_data.chapter_count = chapter_NO - 1;
 				return;
 			}

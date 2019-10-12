@@ -1246,8 +1246,9 @@ function reset_favorites(crawler) {
 							//
 							+ work_data.last_download.date : '')
 						});
+						if (work_data.last_download
 						// add finished 並且檢測上次下載與上次作品更新
-						if ((!Date.parse(work_data.last_download.date)
+						&& (!Date.parse(work_data.last_download.date)
 						//
 						|| CeL.to_millisecond('200D') < Date.now()
 						//

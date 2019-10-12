@@ -8,7 +8,7 @@ require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
-CeL.run('application.net.work_crawler.sequential');
+CeL.run('application.net.work_crawler.sites.sequential');
 
 // ----------------------------------------------------------------------------
 

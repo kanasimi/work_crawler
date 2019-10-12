@@ -16,7 +16,7 @@
 - [CN] 批量下载小说 (→ epub)、漫画网站作品的网络爬虫。
 - [ja] ウェブ小説 (→ epub)、ウェブ漫画作品を一括ダウンロードツール。
 
-## TOC 快速瀏覽
+## Quick view 快速瀏覽
 * [Installation 安裝](#installation-安裝)
    * [Lazy installation 懶人安裝法](#lazy-installation-懶人安裝法)
 * [Execution 執行](#execution-執行)

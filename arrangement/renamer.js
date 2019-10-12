@@ -370,7 +370,7 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 		rename_process(folder_list[0]);
 	} else if (file_list.length === 1) {
 		rename_process(file_list[0]);
-	} else if (0) {
+	} else if (false) {
 		CeL.warn(name + ': ' + JSON.stringify(folder_list));
 		CeL.warn('file_list: [' + file_list.length + ']'
 				+ JSON.stringify(file_list.slice(0, 20)));

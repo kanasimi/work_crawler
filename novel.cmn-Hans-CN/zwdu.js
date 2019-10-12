@@ -10,7 +10,7 @@ require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
-CeL.run('application.net.work_crawler.PTCMS');
+CeL.run('application.net.work_crawler.sites.PTCMS');
 
 // ----------------------------------------------------------------------------
 
