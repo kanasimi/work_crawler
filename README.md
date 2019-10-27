@@ -54,7 +54,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 * 小說漫畫自動分部(part)。
 * 本工具會盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
 * 跨平臺支援：支援 Windows, Linux, Mac。
-* 採用 CeJS [網路作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js)來製作 crawler，可自行配置與設定。
+* 採用 CeJS [網路作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler)來製作 crawler，可自行配置與設定。
 * 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料，僅更新有問題的圖檔。（👉請注意：必須先安裝 7-Zip **18.01 以上的版本**）
 
 ## Supported sites 已完成之網站工具
@@ -133,7 +133,6 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。拿來下載日本漫畫的人好像比較多。  **本工具無法下載付费章节** |
 | [漫画人](http://www.1kkk.com/) | 1kkk.js | 系統與 dm5.js 幾乎相同。和 dm5 一樣，很多作品要收費。  **本工具無法下載付费章节** |
 | [土豪漫画](https://www.tohomh123.com/) | tohomh.js | 系統似 dm5.js。 |
-| [爱看漫画网](http://ikmhw.com/) | ikmhw.js | 韓國漫畫比較多。系統似 tohomh.js。圖片API反應速度比土豪漫画慢許多。內容是自動採集生成的？有少許缺圖與亂序。 |
 | [韩漫窝](http://www.hanmanwo.com/) | hanmanwo.js | 有些韓國漫畫。系統似 dm5.js。 |
 | [无双漫画](https://r2hm.com/) | r2hm.js | 有些韓國漫畫。系統與內容極似 hanmanwo.js。內容是自動採集生成的？有少許缺圖。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | **本工具無法下載VIP付費內容** |
@@ -143,6 +142,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [我要去漫画](http://www.517manhua.com/) | 517.js | 採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | [365漫画网](http://www.iqg365.com/) | iqg365.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
 | [一漫网](http://www.muyict.com/) | emw.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
+| [爱看漫画](http://www.aikanmh.cn/) | aikanmh.js | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
 | [友绘漫画网](http://m.wuyouhui.net/) | wuyouhui.js | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
 | [188漫画网](http://m.88bag.net/) | 88bag.js | 有些缺圖，圖片似乎多從其他網站採集而來。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
 | [乙女漫画](http://www.nokiacn.net/) | nokiacn.js | 日本漫畫較多。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
@@ -173,6 +173,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | ~~[爱漫画](http://www.2manhua.com/)~~ | ~~archive/2manhua.js~~ | 許多作品似乎從2017/9/3起就沒有更新。2017/5/16 4:43 最後一次成功連接，至 2018/6/11 未復原。 |
 | ~~[漫画台](http://www.manhuatai.com/)~~ | ~~archive/manhuatai.2018.js~~ | 2019/5/25-28 間改版，改版幅度過大並開始收費，不再維護。<q>[小明太极旗下](https://www.xiaomingtaiji.com/products/platform.html)拥有看漫画、知音漫客、漫客栈、漫画台、爱飒漫画、神漫画、爱优漫、酷漫漫画8大互联网漫画平台。</q> |
 | ~~[漫画看](https://www.mhkan.com/)~~ | ~~mhkan.js~~ | 水管太小？總是卡住，下載圖片時常出現 status 522，很難用。<br />採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
+| ~~[爱看漫画网](http://ikmhw.com/)~~ | ~~ikmhw.js~~ | 韓國漫畫比較多。系統似 tohomh.js。圖片API反應速度比土豪漫画慢許多。內容是自動採集生成的？有少許缺圖與亂序。 2019/8/18 最後一次成功連接，2019/8/21 起無法連接。 |
 
 ### Japanese webcomics 日語網路漫畫 日本語のウェブコミック
 [comic.ja-JP/](comic.ja-JP/)*.js, images → zip
@@ -383,7 +384,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 * 若可能，[您應該檢核並參與維護您需要的軟體](https://gist.github.com/dominictarr/9fd9c1024c94592bc7268d36b8d83b3a)。現在您可以參與本工具開發了！本工具歡迎熱心友人參與開發，以改進這個工具。
 
 ## Purpose 公開目的
-* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [網路作品爬蟲程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler.js) 批量下載各網路小說漫畫網站。
+* 示範如何使用 [CeJS](https://github.com/kanasimi/CeJS) 之 [網路作品爬蟲程式庫 (module)](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler) 批量下載各網路小說漫畫網站。
 * 展示程式撰寫當時，各網路小說漫畫網站之網站結構。
 * 提供離線瀏覽小說漫畫功能，以利個人化閱覽方式。增進閱覽體驗、掌控閱覽環境。
 * 增加對閱讀權的掌控能力，預防暫時無法連接網頁，或者[數十年後找不到記憶中閱覽過的作品](https://www.bbc.com/ukchina/simp/vert-fut-48609293)。

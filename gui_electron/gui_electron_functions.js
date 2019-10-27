@@ -63,6 +63,7 @@ download_sites_set = {
 		nokiacn : '乙女漫画',
 		iqg365 : '365漫画网',
 		emw : '一漫网',
+		aikanmh : '爱看漫画',
 		wuyouhui : '友绘漫画网',
 		'88bag' : '188漫画网',
 		'360taofu' : '360漫画',
@@ -77,7 +78,7 @@ download_sites_set = {
 		dm5 : '动漫屋',
 		'1kkk' : '漫画人',
 		tohomh : '土豪漫画',
-		ikmhw : '爱看漫画网',
+		// ikmhw : '爱看漫画网',
 		r2hm : '无双漫画',
 		hanmanwo : '韩漫窝',
 
@@ -1103,7 +1104,7 @@ function get_favorites(crawler, get_parsed, remove_list) {
 	if (work_list_text && (work_list_text = work_list_text.toString()).trim()) {
 		// 有東西。
 		work_list = CeL.work_crawler.parse_favorite_list(work_list_text, {
-			get_parsed : get_parsed || remove_list,
+			get_parsed : get_parsed || !!remove_list,
 			remove : remove_list
 		});
 		return get_parsed ? work_list.parsed : work_list;
@@ -1136,11 +1137,7 @@ function save_favorites(crawler, work_list_text) {
 		return;
 	}
 
-	CeL.create_directory(favorite_list_file_path.replace(/[^\\\/]+$/g, ''));
-	// backup old favorite list file 備份最後一次修改前的書籤，預防一不小心操作錯誤時還可以補救。
-	CeL.move_file(favorite_list_file_path, favorite_list_file_path + '.'
-			+ crawler.backup_file_extension);
-	CeL.write_file(favorite_list_file_path, work_list_text);
+	crawler.write_favorite_list(work_list_text, favorite_list_file_path);
 }
 
 function remove_favorite(crawler, work_title) {
