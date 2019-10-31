@@ -19,6 +19,7 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 var crawler = CeL.SinMH({
 	// one_by_one : true,
+	skip_error : true,
 
 	// 201/3/30: https://www.50mh.com/
 	// 201/5/29 前更改域名與名稱→ 漫画堆 https://www.manhuadui.com/
