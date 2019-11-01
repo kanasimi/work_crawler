@@ -888,12 +888,22 @@ function paste_text() {
 	}
 }
 
+function show_fso(fso_path) {
+	node_electron.shell.showItemInFolder(fso_path)
+	// https://electronjs.org/docs/api/shell
+	['catch'](function(error) {
+		CeL.error(String(error) + ': ' + fso_path);
+	});
+
+	return false;
+}
+
 function open_external(URL) {
 	if (typeof URL !== 'string')
 		URL = this.href;
 
 	node_electron.shell.openExternal(URL)
-	//
+	// https://electronjs.org/docs/api/shell
 	['catch'](function(error) {
 		CeL.error(String(error) + ': ' + URL);
 	});
@@ -1219,7 +1229,7 @@ function reset_favorites(crawler) {
 						span : '📂',
 						R : (old_Unicode_support ? '' : '🗁 ') + _('開啓作品下載目錄'),
 						onclick : function() {
-							open_external(work_directory);
+							show_fso(work_directory);
 						},
 						S : 'cursor: pointer;'
 					});
@@ -1608,7 +1618,7 @@ var search_result_columns = {
 				// var work_data =
 				// work_data_search_queue[this.parentNode.title];
 
-				open_external(work_data.directory);
+				show_fso(work_data.directory);
 			},
 			S : 'cursor: pointer;'
 		} ] : '';
@@ -2424,9 +2434,9 @@ function open_download_directory(crawler) {
 	if (is_Download_job(crawler)) {
 		// console.log( crawler.work_data);
 		if (crawler.work_data && crawler.work_data.directory)
-			open_external(crawler.work_data.directory);
+			show_fso(crawler.work_data.directory);
 	} else if (crawler = to_crawler(crawler))
-		open_external(crawler.main_directory);
+		show_fso(crawler.main_directory);
 	return false;
 }
 
