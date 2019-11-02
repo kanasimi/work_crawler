@@ -419,7 +419,7 @@ function setup_initial_messages() {
 				force_convert : force_convert
 			},
 			href : 'https://github.com/kanasimi/work_crawler/issues/185',
-			onclick : open_external
+			onclick : open_URL
 		}, {
 			T : '歡迎與我們一同翻譯介面文字！#3',
 			force_convert : force_convert
@@ -437,7 +437,7 @@ function setup_initial_messages() {
 			href : 'https://en.wikipedia.org/wiki/'
 			//
 			+ 'Cut,_copy,_and_paste#Common_keyboard_shortcuts',
-			onclick : open_external
+			onclick : open_URL
 		}, ' - ', {
 			T : '複製選取的項目：'
 		}, {
@@ -919,8 +919,10 @@ function paste_text() {
 
 function show_fso(fso_path) {
 	try {
+		// 跳轉至目標資料夾的目錄下，而不只標示出資料夾位置。
+		node_electron.shell.openItem(fso_path)
 		// https://electronjs.org/docs/api/shell
-		node_electron.shell.showItemInFolder(fso_path);
+		|| node_electron.shell.showItemInFolder(fso_path);
 	} catch (e) {
 		CeL.error(String(e) + ': ' + fso_path);
 	}
@@ -928,7 +930,7 @@ function show_fso(fso_path) {
 	return false;
 }
 
-function open_external(URL) {
+function open_URL(URL) {
 	if (typeof URL !== 'string')
 		URL = this.href;
 
@@ -1567,7 +1569,7 @@ function prepare_crawler(crawler, crawler_module) {
 		} ],
 		R : _('連結'),
 		href : crawler.base_URL,
-		onclick : open_external
+		onclick : open_URL
 	} ], download_site_nodes.node_of_id[site_id].parentNode);
 }
 
@@ -1682,7 +1684,7 @@ var search_result_columns = {
 			a : status,
 			R : work_data.id,
 			href : crawler.full_URL(href),
-			onclick : open_external
+			onclick : open_URL
 		};
 	} ],
 
@@ -1703,7 +1705,7 @@ var search_result_columns = {
 		&& !Array.isArray(work_data.latest_chapter_url) ? [ {
 			a : node,
 			href : crawler.full_URL(work_data.latest_chapter_url),
-			onclick : open_external
+			onclick : open_URL
 		}, node === work_data.last_update ? '' : {
 			sub : work_data.last_update,
 		} ] : {
@@ -2356,7 +2358,7 @@ function after_download_chapter(work_data, chapter_NO) {
 		job.layer.replaceChild(CeL.new_node({
 			a : title_tag.childNodes,
 			href : job.crawler.full_URL(job.crawler.work_URL, work_data.id),
-			onclick : open_external,
+			onclick : open_URL,
 			C : title_tag.className
 		}), title_tag);
 	}
@@ -2578,7 +2580,7 @@ function check_update() {
 				T : [ '有新版本：%1', version_data.latest_version ]
 			},
 			href : 'https://github.com/' + GitHub_repository_path,
-			onclick : open_external
+			onclick : open_URL
 		}, has_version ? [ {
 			br : null
 		}, '← ' + has_version ] : '' ], [ update_panel, 'clean' ]);
