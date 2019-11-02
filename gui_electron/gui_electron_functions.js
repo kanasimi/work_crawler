@@ -476,9 +476,38 @@ function setup_ipcRenderer() {
 
 // ------------------------------------
 
+// Select CSS theme
+function select_theme(theme, no_save) {
+	if (typeof theme !== 'string') {
+		theme = CeL.DOM_data(this);
+		theme = theme && theme.theme_label;
+	}
+	if (!theme_list.includes(theme)) {
+		CeL.warn([ 'select_theme: ', {
+			T : [ 'Invalid theme name: %1', theme ]
+		} ]);
+		return;
+	}
+
+	theme_list.forEach(function(theme_name) {
+		CeL.set_class(document.body, theme_name, {
+			remove : theme_name !== theme
+		});
+	});
+
+	if (!no_save) {
+		default_configuration.CSS_theme = theme;
+		save_default_configuration();
+	}
+}
+
 function setup_theme_selecter() {
-	if (default_configuration.CSS_theme)
+	if (default_configuration.CSS_theme) {
 		select_theme(default_configuration.CSS_theme);
+	} else if (CeL.DOM.navigator_theme) {
+		// auto-detect navigator theme
+		select_theme(CeL.DOM.navigator_theme, true);
+	}
 
 	var theme_nodes = [ {
 		T : '布景主題：'
@@ -889,11 +918,12 @@ function paste_text() {
 }
 
 function show_fso(fso_path) {
-	node_electron.shell.showItemInFolder(fso_path)
-	// https://electronjs.org/docs/api/shell
-	['catch'](function(error) {
-		CeL.error(String(error) + ': ' + fso_path);
-	});
+	try {
+		// https://electronjs.org/docs/api/shell
+		node_electron.shell.showItemInFolder(fso_path);
+	} catch (e) {
+		CeL.error(String(e) + ': ' + fso_path);
+	}
 
 	return false;
 }
@@ -2620,29 +2650,4 @@ function open_DevTools() {
 	console.warn(_('本欄基本上僅供調試使用。若您有下載功能方面的需求，煩請提報議題，謝謝。') + ' '
 			+ 'https://github.com/kanasimi/work_crawler/issues');
 	return false;
-}
-
-// ----------------------------------------------
-
-// Select CSS theme
-function select_theme(theme) {
-	if (typeof theme !== 'string') {
-		theme = CeL.DOM_data(this);
-		theme = theme && theme.theme_label;
-	}
-	if (!theme_list.includes(theme)) {
-		CeL.warn([ 'select_theme: ', {
-			T : [ 'Invalid theme name: %1', theme ]
-		} ]);
-		return;
-	}
-
-	theme_list.forEach(function(theme_name) {
-		CeL.set_class(document.body, theme_name, {
-			remove : theme_name !== theme
-		});
-	});
-
-	default_configuration.CSS_theme = theme;
-	save_default_configuration();
 }
