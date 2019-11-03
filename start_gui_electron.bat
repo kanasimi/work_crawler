@@ -1,4 +1,5 @@
 @ECHO OFF
+CHCP 65001
 
 echo Loading work_crawler GUI...
 
