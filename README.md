@@ -138,7 +138,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | **本工具無法下載VIP付費內容** |
 | [微博动漫](http://manhua.weibo.com/) | weibo.js | **本工具無法下載VIP付費內容**<br />竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
 | [大古漫画网](https://www.dagumanhua.com/) | dagu.js | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。 |
-| [360漫画](http://www.xueshine.com/) | 360taofu.js | 有頻率限制。有些漫畫畫質較高，然而本站有太多缺圖、亂序、錯漏話。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
+| [76漫画](http://www.srweh.com/) | 76.js | 採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | [我要去漫画](http://www.517manhua.com/) | 517.js | 採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | [365漫画网](http://www.iqg365.com/) | iqg365.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
 | [一漫网](http://www.muyict.com/) | emw.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
@@ -174,6 +174,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | ~~[漫画台](http://www.manhuatai.com/)~~ | ~~archive/manhuatai.2018.js~~ | 2019/5/25-28 間改版，改版幅度過大並開始收費，不再維護。<q>[小明太极旗下](https://www.xiaomingtaiji.com/products/platform.html)拥有看漫画、知音漫客、漫客栈、漫画台、爱飒漫画、神漫画、爱优漫、酷漫漫画8大互联网漫画平台。</q> |
 | ~~[漫画看](https://www.mhkan.com/)~~ | ~~mhkan.js~~ | 水管太小？總是卡住，下載圖片時常出現 status 522，很難用。<br />採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | ~~[爱看漫画网](http://ikmhw.com/)~~ | ~~ikmhw.js~~ | 韓國漫畫比較多。系統似 tohomh.js。圖片API反應速度比土豪漫画慢許多。內容是自動採集生成的？有少許缺圖與亂序。 2019/8/18 最後一次成功連接，2019/8/21 起無法連接。 |
+| ~~[360漫画](http://www.xueshine.com/)~~ | ~~360taofu.js~~ | 2019/11後續章節全部轉到 76.js。有頻率限制。有些漫畫畫質較高，然而本站有太多缺圖、亂序、錯漏話。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 
 ### Japanese webcomics 日語網路漫畫 日本語のウェブコミック
 [comic.ja-JP/](comic.ja-JP/)*.js, images → zip

@@ -66,7 +66,7 @@ download_sites_set = {
 		aikanmh : '爱看漫画',
 		wuyouhui : '友绘漫画网',
 		'88bag' : '188漫画网',
-		'360taofu' : '360漫画',
+		'76' : '76漫画',
 		'517' : '我要去漫画',
 		dagu : '大古漫画网',
 		manhuadb : '漫画DB',

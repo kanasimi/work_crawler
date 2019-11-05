@@ -1,9 +1,5 @@
 ﻿/**
- * 批量下載 360漫画 的工具。 Download 360taofu, http://www.xatxwh.com/ comics.
- * 
- * 晴天漫画程序 skin1 2011.06.24更新; 腾讯动漫模板?
- * 
- * @see qTcms 晴天漫画程序 晴天漫画系统 http://manhua2.qingtiancms.net/
+ * 批量下載 76漫画 的工具。 Download http://www.srweh.com/ comics.
  */
 
 'use strict';
@@ -22,9 +18,7 @@ var crawler = CeL.qTcms2017({
 
 	// one_by_one : true,
 
-	// old: http://www.360taofu.com/ 360桃符??
-	// 2019/4/24-25? 360漫畫網址更動: http://www.xatxwh.com/ → http://www.xueshine.com/
-	base_URL : 'http://www.xueshine.com/'
+	base_URL : 'http://www.srweh.com/'
 });
 
 // ----------------------------------------------------------------------------
