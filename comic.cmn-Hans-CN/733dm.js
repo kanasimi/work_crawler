@@ -27,7 +27,7 @@ var crawler = CeL.qTcms2017({
 	skip_error : true,
 
 	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
-	chapter_time_interval : '2s',
+	// chapter_time_interval : '2s',
 
 	// 2018/3: https://www.733dm.net/
 	base_URL : 'https://www.733.so/',
@@ -39,7 +39,7 @@ var crawler = CeL.qTcms2017({
 	common_catalog : 'mh',
 
 	// 取得作品的章節資料。 get_work_data()
-	parse_chapter_data : function(html, work_data) {
+	parse_chapter_data_201811 : function(html, work_data) {
 		var chapter_data = html.between('qTcms_S_m_murl_e="', '"');
 		if (chapter_data) {
 			// 對於非utf-8編碼之中文，不能使用 atob()???
