@@ -375,7 +375,8 @@ function check_fso(fso_name) {
 	// 降序序列排序: 大→小
 	// non_zero_size_array.sort(CeL.descending);
 
-	if ((exe_count > 0 || iso_count > 1 && sub_sub_files_count < 20 || iso_count === sub_sub_files_count)
+	if ((exe_count > 0 && sub_sub_files_count - archive_count > 3
+			|| iso_count > 1 && sub_sub_files_count < 20 || iso_count === sub_sub_files_count)
 			&& test_size_OK(1e10, 'game folder', CeL.gettext(
 					'含有 %1/%2 個可執行檔或函式庫', exe_count, sub_sub_files_count))) {
 		return;
