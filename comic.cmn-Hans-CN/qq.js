@@ -173,6 +173,7 @@ crawler = new CeL.work_crawler({
 	get_chapter_list : function(work_data, html, get_label) {
 		work_data.chapter_list = [];
 		var matched;
+		// console.log(html);
 		html = html.between('<ol class="chapter-page-all works-chapter-list">',
 				'</ol>');
 		// 有些作品如"演平乱志"之類，章節並未按照編號排列。
