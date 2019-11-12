@@ -200,6 +200,9 @@ default_configuration_file_name = 'work_crawler.configuration.json',
 //
 theme_list = 'light|dark'.split('|');
 
+var DEFAULT_THEME_TEXT = 'default', default_theme_name;
+theme_list.push(DEFAULT_THEME_TEXT);
+
 'data_directory,recheck,start_chapter_NO,start_chapter_title,chapter_filter,regenerate,reget_chapter,search_again,cache_title_to_id,archive_images,images_archive_extension,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,chapter_time_interval,main_directory,user_agent,proxy,cookie,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
 // @see work_crawler/resource/locale of work_crawler - locale.csv
 .split(',').forEach(function(item) {
@@ -489,9 +492,10 @@ function select_theme(theme, no_save) {
 		return;
 	}
 
+	var theme_used = theme === DEFAULT_THEME_TEXT ? default_theme_name : theme;
 	theme_list.forEach(function(theme_name) {
 		CeL.set_class(document.body, theme_name, {
-			remove : theme_name !== theme
+			remove : theme_name !== theme_used
 		});
 	});
 
@@ -502,11 +506,14 @@ function select_theme(theme, no_save) {
 }
 
 function setup_theme_selecter() {
-	if (default_configuration.CSS_theme) {
+	if (CeL.DOM.navigator_theme) {
+		default_theme_name = CeL.DOM.navigator_theme;
+	}
+	if (default_configuration.CSS_theme && default_configuration.CSS_theme !== DEFAULT_THEME_TEXT) {
 		select_theme(default_configuration.CSS_theme);
-	} else if (CeL.DOM.navigator_theme) {
+	} else if (default_theme_name) {
 		// auto-detect navigator theme
-		select_theme(CeL.DOM.navigator_theme, true);
+		select_theme(default_theme_name, true);
 	}
 
 	var theme_nodes = [ {
@@ -516,7 +523,7 @@ function setup_theme_selecter() {
 		theme_nodes.push({
 			T : theme_name + ' theme',
 			force_convert : force_convert,
-			C : theme_name,
+			C : theme_name === DEFAULT_THEME_TEXT ? default_theme_name : theme_name,
 			D : {
 				theme_label : theme_name
 			},
