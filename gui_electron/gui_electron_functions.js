@@ -499,6 +499,13 @@ function select_theme(theme, no_save) {
 		});
 	});
 
+	var node_list = document.querySelectorAll('#select_theme_panel .button');
+	node_list.forEach(function(node) {
+		CeL.set_class(node, 'selected', {
+			remove : theme !== CeL.DOM_data(node).theme_label
+		});
+	});
+
 	if (!no_save) {
 		default_configuration.CSS_theme = theme;
 		save_default_configuration();
@@ -509,12 +516,6 @@ function setup_theme_selecter() {
 	if (CeL.DOM.navigator_theme) {
 		default_theme_name = CeL.DOM.navigator_theme;
 	}
-	if (default_configuration.CSS_theme && default_configuration.CSS_theme !== DEFAULT_THEME_TEXT) {
-		select_theme(default_configuration.CSS_theme);
-	} else if (default_theme_name) {
-		// auto-detect navigator theme
-		select_theme(default_theme_name, true);
-	}
 
 	var theme_nodes = [ {
 		T : '布景主題：'
@@ -523,7 +524,9 @@ function setup_theme_selecter() {
 		theme_nodes.push({
 			T : theme_name + ' theme',
 			force_convert : force_convert,
-			C : theme_name === DEFAULT_THEME_TEXT ? default_theme_name : theme_name,
+			C : [
+					theme_name === DEFAULT_THEME_TEXT ? default_theme_name
+							: theme_name, 'button' ],
 			D : {
 				theme_label : theme_name
 			},
@@ -533,6 +536,9 @@ function setup_theme_selecter() {
 	CeL.new_node(theme_nodes, 'select_theme_panel');
 	// free
 	theme_nodes = null;
+
+	// auto-detect navigator theme
+	select_theme(default_configuration.CSS_theme || DEFAULT_THEME_TEXT);
 }
 
 // ------------------------------------
