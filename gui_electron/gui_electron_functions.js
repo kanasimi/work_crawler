@@ -142,7 +142,7 @@ download_sites_set = {
 	// mrblue : 'Mr.Blue (不再維護)'
 	},
 	'novel.cmn-Hans-CN' : {
-		ck101 : '卡提諾論壇 小說頻道',
+		// ck101 : '卡提諾論壇 小說頻道',
 
 		qidian : '起点中文网',
 

@@ -81,7 +81,6 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
-| [卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180) | ck101.js | Discuz! X3 |
 | [起点中文网](https://www.qidian.com/) | qidian.js | **本工具無法下載 VIP章节內容** |
 | [笔趣阁](https://www.xs.la/)<br />[笔趣阁.cc](http://www.xbiquge.cc/)<br />[新笔趣阁](https://www.xbiquge6.com/) | biquge.js<br />xbiquge.cc.js<br />xbiquge.js | PTCMS |
 | ~~[八一中文网](http://www.81xsw.com/)~~ | ~~archive/81xsw.js~~ | 最後一次成功下載此網站作品日期: 2019/1/12。[PTCMS](https://www.ptcms.com/)系统 |
@@ -98,6 +97,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [落霞小说网](http://www.luoxia.com/) | luoxia.js | WordPress，數量少、速度較慢但品質較高，較少錯字和自我審查。 |
 | [努努书坊](https://www.kanunu8.com/) | kanunu.js | 有些非流行網路小說的書。 |
 | [稻草人书屋](http://www.daocaorenshuwu.com/) | daocaoren.js | 有些非流行網路小說的書 |
+| ~~[卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180)~~ | ~~ck101.js~~ | Discuz! X3 可能因版權問題，自2019-10-01關小說版。 |
 
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
