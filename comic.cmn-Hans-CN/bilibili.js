@@ -14,6 +14,9 @@ var crawler = new CeL.work_crawler({
 	// 檔案數量多時會拖比較久，必須加長 timeout 時間。
 	timeout : '40s',
 
+	// e.g., 26945 恶女会改变\0025 023\26945-25-024.png
+	acceptable_types : 'png',
+
 	// one_by_one : true,
 	base_URL : 'https://manga.bilibili.com/',
 	API_BASE : 'twirp/comic.v1.Comic/',
