@@ -500,12 +500,26 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
+	if (/[(\[](?:同人ゲーム)[)\]]/.test(fso_name)) {
+		move_to('doujin');
+		return;
+	}
+
 	if (/^\((?:C\d{2,3}|CC福岡\d{2,3}|CC大阪\d{2,3}|Futaket ?\d{2}|コミティア\d{3}|Cレヴォ\d{2})|COMIC1(?:[☆_]\d{2})?\)/
 			.test(fso_name)
 			|| fso_name.includes('同人誌')
 			// "(サンクリ2015 Winter) "
-			|| /^\((?:同人|COMIC1☆|こみトレ|例大祭|紅楼夢|ふたけっと|サンクリ)/.test(fso_name)) {
+			|| /^\((?:同人誌|COMIC1☆|こみトレ|例大祭|紅楼夢|ふたけっと|サンクリ)/.test(fso_name)) {
 		move_to('doujinshi');
+		return;
+	}
+
+	if (/[(\[](?:同人CG集)[)\]]/.test(fso_name)) {
+		// TODO: (BanG Dream!) [DL版].zip
+		matched = fso_name.match(/ \(([^()]+)\)\.[a-z]+$/);
+		move_to(matched
+		// 頁順修正 更新版
+		&& !/頁順|更新/.test(matched[1]) ? 'doujinshi' : 'doujin');
 		return;
 	}
 
