@@ -1,8 +1,8 @@
 @ECHO OFF
 REM parallelly
-REM chcp 65001
-REM chcp 932
-REM cd/d D:\USB\cgi-bin\program\comic
+CHCP 65001
+REM CHCP 932
+REM CD /D D:\USB\cgi-bin\program\comic
 
 REM CD "%~n0"
 REM It's often too slow, so trying to execute parallelly.
