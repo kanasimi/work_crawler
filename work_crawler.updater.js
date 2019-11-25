@@ -16,16 +16,17 @@ var repository = 'gh-updater', branch = 'master', update_script_url = 'https://r
 // const
 var node_https = require('https'), node_fs = require('fs');
 
-download_update_tool(update_script_url, update_CeJS);
+download_update_tool(update_script_url, function(update_script_name) {
+	update_CeJS(update_script_name, download_opencc);
+});
 
 function show_info(message) {
 	process.title = message;
 	console.info('\x1b[35;46m' + message + '\x1b[0m');
 }
 
-function download_update_tool(update_script_url, callback) {
-	show_info('下載 ' + repository + ' 更新工具...');
-	node_https.get(update_script_url, function(response) {
+function fetch_url(url, callback) {
+	node_https.get(url, function(response) {
 		var buffer_array = [], sum_size = 0;
 
 		response.on('data', function(data) {
@@ -36,24 +37,46 @@ function download_update_tool(update_script_url, callback) {
 		response.on('end', function(e) {
 			var contents = Buffer.concat(buffer_array, sum_size).toString(),
 			//
-			update_script_name = update_script_url.match(/[^\\\/]+$/)[0];
-			console.info(update_script_name + ': ' + sum_size + ' bytes.');
-			node_fs.writeFileSync(update_script_name, contents);
+			file_name = url.match(/[^\\\/]+$/)[0];
+			console.info(file_name + ': ' + sum_size + ' bytes.');
+			try {
+				node_fs.writeFileSync(file_name, contents);
+			} catch (e) {
+				// e.g., read-only. testing now?
+				console.error(e);
+			}
 
 			if (typeof callback === 'function')
-				callback(update_script_name);
+				callback(file_name);
 		});
 	})
 	//
 	.on('error', function(e) {
 		// network error?
 		// console.error(e);
-		throw e;
+		// throw e;
+		callback(null, e);
 	});
 }
 
+function fetch_url_promise(url) {
+	return new Promise(function(resolve, reject) {
+		fetch_url(url, function(file_name, error) {
+			if (error)
+				reject(error);
+			else
+				resolve(file_name);
+		});
+	});
+}
+
+function download_update_tool(update_script_url, callback) {
+	show_info('下載 ' + repository + ' 更新工具...');
+	fetch_url(update_script_url, callback);
+}
+
 var latest_version_file, executing_at_tool_directory;
-function update_CeJS(update_script_name) {
+function update_CeJS(update_script_name, callback) {
 	executing_at_tool_directory = node_fs.existsSync('work_crawler_loader.js');
 	// require('./gh-updater');
 	updater = require('./' + update_script_name);
@@ -71,8 +94,13 @@ function update_CeJS(update_script_name) {
 			process.chdir('work_crawler-master');
 		}
 
-		show_info('下載並更新 Colorless echo JavaScript kit 組件...');
-		updater.update(null, null, update_dependencies);
+		show_info('下載並更新 Colorless echo JavaScript kit (CeJS) 組件...');
+		updater.update(null, null, function() {
+			update_dependencies();
+			callback();
+		}, {
+			fetch_opencc : true
+		});
 	});
 }
 
@@ -103,6 +131,34 @@ function update_dependencies() {
 		// 避免第一次執行時檢查更新。
 		node_fs.copyFileSync('../' + latest_version_file, latest_version_file);
 	}
+}
 
+var opencc_base_url = 'https://raw.githubusercontent.com/BYVoid/OpenCC/master/data/dictionary/',
+// copy from CeL.extension.zh_conversion
+opencc_files = (
+//
+'STPhrases,STCharacters,TWPhrasesName,TWPhrasesIT'
+// 因此得要一個個 replace。
++ ',TWPhrasesOther,TWVariants,TWVariantsRevPhrases').split(',');
+
+// 2019/11/25: `npm install opencc` failed
+function download_opencc() {
+	show_info('更新 OpenCC 中文繁簡體轉換工具...');
+	process.chdir('./CeJS-master' + '/extension/zh_conversion/OpenCC/');
+	var file_lsit = node_fs.readdirSync('.');
+	// console.log(node_fs.readdirSync('.'));
+	return Promise.all(opencc_files.map(function(file) {
+		file += '.txt';
+		if (file_lsit.includes(file))
+			return;
+		return fetch_url_promise(opencc_base_url + file);
+	})).then(function() {
+		// recovery
+		process.chdir('../../../../');
+		update_finished();
+	});
+}
+
+function update_finished() {
 	show_info('CeJS 網路小說漫畫下載工具 更新完畢.');
 }
