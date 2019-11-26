@@ -12,18 +12,18 @@ var repository = 'gh-updater', branch = 'master', update_script_url = 'https://r
 		+ repository + '/' + branch + '/' + 'GitHub.updater.node.js', updater;
 
 // ----------------------------------------------------------------------------
-
-// const
-var node_https = require('https'), node_fs = require('fs');
-
-download_update_tool(update_script_url, function(update_script_name) {
-	update_CeJS(update_script_name, download_opencc);
-});
+// Using in GitHub.updater.node.js work_crawler.updater.js pack_up.js
 
 function show_info(message) {
 	process.title = message;
 	console.info('\x1b[35;46m' + message + '\x1b[0m');
 }
+
+// ----------------------------------------------------------------------------
+// Using in work_crawler.updater.js pack_up.js
+
+// const
+var node_https = require('https'), node_fs = require('fs');
 
 function fetch_url(url, callback) {
 	node_https.get(url, function(response) {
@@ -70,10 +70,21 @@ function fetch_url_promise(url) {
 	});
 }
 
+/**
+ * <code>
+ curl -O https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js
+ * </code>
+ */
 function download_update_tool(update_script_url, callback) {
 	show_info('下載 ' + repository + ' 更新工具...');
 	fetch_url(update_script_url, callback);
 }
+
+// ----------------------------------------------------------------------------
+
+download_update_tool(update_script_url, function(update_script_name) {
+	update_CeJS(update_script_name, update_finished);
+});
 
 var latest_version_file, executing_at_tool_directory;
 function update_CeJS(update_script_name, callback) {
@@ -131,32 +142,6 @@ function update_dependencies() {
 		// 避免第一次執行時檢查更新。
 		node_fs.copyFileSync('../' + latest_version_file, latest_version_file);
 	}
-}
-
-var opencc_base_url = 'https://raw.githubusercontent.com/BYVoid/OpenCC/master/data/dictionary/',
-// copy from CeL.extension.zh_conversion
-opencc_files = (
-//
-'STPhrases,STCharacters,TWPhrasesName,TWPhrasesIT'
-// 因此得要一個個 replace。
-+ ',TWPhrasesOther,TWVariants,TWVariantsRevPhrases').split(',');
-
-// 2019/11/25: `npm install opencc` failed
-function download_opencc() {
-	show_info('更新 OpenCC 中文繁簡體轉換工具...');
-	process.chdir('./CeJS-master' + '/extension/zh_conversion/OpenCC/');
-	var file_lsit = node_fs.readdirSync('.');
-	// console.log(node_fs.readdirSync('.'));
-	return Promise.all(opencc_files.map(function(file) {
-		file += '.txt';
-		if (file_lsit.includes(file))
-			return;
-		return fetch_url_promise(opencc_base_url + file);
-	})).then(function() {
-		// recovery
-		process.chdir('../../../../');
-		update_finished();
-	});
 }
 
 function update_finished() {
