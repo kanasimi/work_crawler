@@ -185,13 +185,16 @@ download_sites_set = {
 global_options = {
 	preserve_download_work_layer : 'boolean',
 	play_finished_sound : 'boolean',
+	archive_program_path : 'string:fso_file',
 	CSS_theme : 'string',
 	// fso:directory
 	data_directory : 'string:fso_directory'
 },
+/** 改變下載選項後額外需要做的處理 */
+options_post_processor = Object.create(null),
 // const 下載選項。有順序。常用的排前面。
 // @see CeL.application.net.work_crawler
-download_options_set = {},
+download_options_set = Object.create(null),
 // const `global.original_data_directory`/`default_configuration_file_name`
 // 本設定檔案會放在 `global.original_data_directory` 這個目錄下。假如另外更動了
 // `global.data_directory`，那麼所有的作品資料以及圖片都會放在 `global.data_directory`
@@ -203,7 +206,7 @@ theme_list = 'light|dark'.split('|');
 var DEFAULT_THEME_TEXT = 'default', default_theme_name;
 theme_list.push(DEFAULT_THEME_TEXT);
 
-'data_directory,recheck,start_chapter_NO,start_chapter_title,chapter_filter,regenerate,reget_chapter,search_again,cache_title_to_id,archive_images,images_archive_extension,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,chapter_time_interval,main_directory,convert_to_TW,vertical_writing,user_agent,proxy,cookie,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound'
+'data_directory,recheck,start_chapter_NO,start_chapter_title,chapter_filter,regenerate,reget_chapter,search_again,cache_title_to_id,archive_images,images_archive_extension,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,chapter_time_interval,main_directory,vertical_writing,convert_to_TW,user_agent,proxy,cookie,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound,archive_program_path'
 // @see work_crawler/resource/locale of work_crawler - locale.csv
 .split(',').forEach(function(item) {
 	download_options_set[item] = 'download_options.' + item;
@@ -288,6 +291,18 @@ function initializer() {
 	default_configuration = CeL.get_JSON(original_data_directory
 			+ default_configuration_file_name)
 			|| Object.create(null);
+
+	if (!default_configuration.archive_program_type)
+		default_configuration.archive_program_type = '7z';
+	if (default_configuration.archive_program_path && CeL.storage.file_exists(
+	// .slice(1, -1): e.g., '"C:\\Program Files\\7-Zip\\7z.exe"'
+	// → 'C:\\Program Files\\7-Zip\\7z.exe'
+	default_configuration.archive_program_path.slice(1, -1))) {
+		// export to CeL.archive
+		CeL.archive.executable_file_path[default_configuration.archive_program_type] = default_configuration.archive_program_path;
+	} else {
+		default_configuration.archive_program_path = CeL.archive.executable_file_path[default_configuration.archive_program_type];
+	}
 
 	change_data_directory(default_configuration.data_directory
 			|| data_directory);
@@ -729,6 +744,41 @@ function setup_download_options() {
 	}, 'download_options_panel'));
 }
 
+change_download_option.exit = Symbol('exit');
+
+options_post_processor.data_directory = function(value) {
+	if (data_directory) {
+		change_data_directory(value);
+	} else {
+		// recovery
+		this.value = data_directory;
+	}
+	return change_download_option.exit;
+};
+
+options_post_processor.archive_program_path = function(value) {
+	var path = value;
+	if (!CeL.storage.file_exists(path)) {
+		if (path.startsWith('"') && path.endsWith('"')) {
+			path = path.slice(1, -1);
+			if (!CeL.storage.file_exists(path)) {
+				path = null;
+			}
+		} else
+			path = null;
+
+		if (!path) {
+			// recovery
+			CeL.error('未發現檔案 ' + value + '，回復原值。');
+			this.value = default_configuration.archive_program_path;
+			return change_download_option.exit;
+		}
+	}
+
+	value = '"' + path + '"';
+	return this.value = value;
+};
+
 function change_download_option() {
 	var key = this.parentNode.title, value = this.value,
 	//
@@ -737,14 +787,10 @@ function change_download_option() {
 		return _class ? _class[1] : '';
 	});
 
-	if (key === 'data_directory') {
-		if (data_directory) {
-			change_data_directory(value);
-		} else {
-			// recovery
-			this.value = data_directory;
-		}
-		return;
+	if (key in options_post_processor) {
+		value = options_post_processor[key].call(this, value);
+		if (value === change_download_option.exit)
+			return;
 	}
 
 	var crawler = get_crawler();
