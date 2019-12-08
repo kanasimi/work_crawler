@@ -292,8 +292,10 @@ function initializer() {
 			+ default_configuration_file_name)
 			|| Object.create(null);
 
-	if (!default_configuration.archive_program_type)
-		default_configuration.archive_program_type = '7z';
+	if (!default_configuration.archive_program_type) {
+		// '7z'
+		default_configuration.archive_program_type = CeL.archive.default_program_type;
+	}
 	if (default_configuration.archive_program_path && CeL.storage.file_exists(
 	// .slice(1, -1): e.g., '"C:\\Program Files\\7-Zip\\7z.exe"'
 	// → 'C:\\Program Files\\7-Zip\\7z.exe'
@@ -753,6 +755,7 @@ options_post_processor.data_directory = function(value) {
 		// recovery
 		this.value = data_directory;
 	}
+	// do not save
 	return change_download_option.exit;
 };
 
@@ -764,8 +767,9 @@ options_post_processor.archive_program_path = function(value) {
 			if (!CeL.storage.file_exists(path)) {
 				path = null;
 			}
-		} else
+		} else {
 			path = null;
+		}
 
 		if (!path) {
 			// recovery
@@ -776,6 +780,7 @@ options_post_processor.archive_program_path = function(value) {
 	}
 
 	value = '"' + path + '"';
+	CeL.archive.executable_file_path[default_configuration.archive_program_type] = value;
 	return this.value = value;
 };
 
@@ -793,14 +798,14 @@ function change_download_option() {
 			return;
 	}
 
-	var crawler = get_crawler();
-	if (!crawler) {
-		return;
-	}
-
 	if (key in global_options) {
 		default_configuration[key] = value;
 		save_default_configuration();
+		return;
+	}
+
+	var crawler = get_crawler();
+	if (!crawler) {
 		return;
 	}
 
