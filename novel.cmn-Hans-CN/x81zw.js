@@ -59,6 +59,16 @@ crawler = CeL.PTCMS({
 	// 取得包含章節列表的文字範圍。
 	get_chapter_list_contents : function(html) {
 		return html.between('<div id="list">', '</div>');
+	},
+	pre_add_ebook_chapter : function(data) {
+		// console.log(data.text);
+		data.text = data.text.replace(/([\s\S]+?)<首发[\s\S]+?(?:<br>|$)/g, function(all, front) {
+			var index = front.lastIndexOf('<br>');
+			if (index >= 0)
+				front = front.slice(0, index);
+			return front;
+		});
+		// console.log(data.text);
 	}
 });
 

@@ -54,7 +54,9 @@ crawler = new CeL.work_crawler({
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : '?s=',
-	parse_search_result : CeL.work_crawler.extract_work_id_from_search_result_link.bind(null,
+	parse_search_result :
+	//
+	CeL.work_crawler.extract_work_id_from_search_result_link.bind(null,
 			/<li class="cat-search-item">([\s\S]+?)<\/li>/g),
 
 	// 取得作品的章節資料。 get_work_data()

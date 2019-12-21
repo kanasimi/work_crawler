@@ -28,7 +28,9 @@ crawler = new CeL.work_crawler({
 	// recheck : 'changed',
 
 	site_name : '飘天文学',
-	base_URL : 'http://www.piaotian.com/',
+	// 2018: http://www.piaotian.com/
+	// 2019/11/23 前改為: https://www.ptwxz.com/
+	base_URL : 'https://www.ptwxz.com/',
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -39,6 +41,7 @@ crawler = new CeL.work_crawler({
 		} ];
 	},
 	parse_search_result : function(html, get_label) {
+		// console.log(html);
 		if (html.includes('<span class="hottext">最新章节：</span>')) {
 			// 只有一個作品完全符合，引導到了作品資訊頁面。
 			var matched = html.match(/ href="[^<>"]+?\/\d{1,2}\/(\d{1,5})\/"/);
@@ -157,6 +160,7 @@ crawler = new CeL.work_crawler({
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		// console.log(html);
 		// 在取得小說章節內容的時候，若發現有章節被目錄漏掉，則將之補上。
 		this.check_next_chapter(work_data, chapter_NO, html);
 
@@ -172,14 +176,16 @@ crawler = new CeL.work_crawler({
 		|| text.between('<div class="ad_content">', '<div class="bottomlink">')
 		//
 		.between('</div>', '</div>');
+		text = text.replace(/<script[^<>]*>[^<>]*<\/script>/g, '')
+		// 去除掉廣告。
+		.replace(PATTERN_AD, '');
+		// console.log(text);
 
 		this.add_ebook_chapter(work_data, chapter_NO, {
 			title : chapter_data.part_title,
 			sub_title : chapter_data.title
 					|| get_label(html.between('<H1>', '</H1>')),
-			text : text.replace(/<script[^<>]*>[^<>]*<\/script>/g, '')
-			// 去除掉廣告。
-			.replace(PATTERN_AD, '')
+			text : text
 		});
 	}
 });
