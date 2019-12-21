@@ -81,6 +81,8 @@ download_sites_set = {
 		// ikmhw : '爱看漫画网',
 		r2hm : '无双漫画',
 		hanmanwo : '韩漫窝',
+		youma : '有码漫画',
+		mymhh : '梦游漫画',
 
 		// manhuatai : '漫画台',
 
@@ -760,26 +762,19 @@ options_post_processor.data_directory = function(value) {
 };
 
 options_post_processor.archive_program_path = function(value) {
-	var path = value;
-	if (!CeL.storage.file_exists(path)) {
-		if (path.startsWith('"') && path.endsWith('"')) {
-			path = path.slice(1, -1);
-			if (!CeL.storage.file_exists(path)) {
-				path = null;
-			}
-		} else {
-			path = null;
-		}
-
-		if (!path) {
-			// recovery
-			CeL.error('未發現檔案 ' + value + '，回復原值。');
-			this.value = default_configuration.archive_program_path;
-			return change_download_option.exit;
-		}
+	var path = CeL.archive.remove_fso_path_quote(value);
+	if (path && !CeL.storage.file_exists(path)) {
+		path = null;
 	}
 
-	value = '"' + path + '"';
+	if (!path) {
+		// recovery
+		CeL.error('未發現檔案 ' + value + '，回復原值。');
+		this.value = default_configuration.archive_program_path;
+		return change_download_option.exit;
+	}
+
+	value = CeL.archive.add_fso_path_quote(path);
 	CeL.archive.executable_file_path[default_configuration.archive_program_type] = value;
 	return this.value = value;
 };

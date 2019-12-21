@@ -48,11 +48,12 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | API 應用程式介面 | ✔️ |
 
 ## Features 特點
-* 具備最愛清單功能。
-* 能一鍵搜尋各網站與下載作品。
-* 可自動下載小說封面以及章節中的插圖。
+* 最愛清單功能。
+* 一鍵搜尋各網站與下載作品。
+* 將簡體小說轉換為繁體小說之選項。
+* 自動下載小說封面以及章節中的插圖。
 * 小說漫畫自動分部(part)。
-* 本工具會盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
+* 盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。
 * 跨平臺支援：支援 Windows, Linux, Mac。
 * 採用 CeJS [網路作品爬蟲程式庫](https://github.com/kanasimi/CeJS/blob/master/application/net/work_crawler)來製作 crawler，可自行配置與設定。
 * 對於漫畫，下載完畢後可以章節為單位自動產生壓縮檔，並自動刪除下載目錄原始圖檔/清除暫存檔。每次下載前將自動讀取壓縮檔資料，僅更新有問題的圖檔。（👉請注意：必須先安裝 7-Zip **18.01 以上的版本**）
@@ -134,6 +135,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [漫画人](http://www.1kkk.com/) | 1kkk.js | 系統與 dm5.js 幾乎相同。和 dm5 一樣，很多作品要收費。  **本工具無法下載付费章节** |
 | [土豪漫画](https://www.tohomh123.com/) | tohomh.js | 系統似 dm5.js。 |
 | [韩漫窝](http://www.hanmanwo.com/) | hanmanwo.js | 有些韓國漫畫。系統似 dm5.js。 |
+| [有码漫画](https://www.youma.org/) | youma.js | 大多為韓國漫畫。系統似 hanmanwo.js。 |
+| [梦游漫画](https://mymhh.com/) | mymhh.js | 有許多韓國漫畫。系統似 hanmanwo.js。 |
 | [无双漫画](https://r2hm.com/) | r2hm.js | 有些韓國漫畫。系統與內容極似 hanmanwo.js。內容是自動採集生成的？有少許缺圖。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | **本工具無法下載VIP付費內容** |
 | [微博动漫](http://manhua.weibo.com/) | weibo.js | **本工具無法下載VIP付費內容**<br />竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
