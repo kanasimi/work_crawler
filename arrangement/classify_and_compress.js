@@ -485,12 +485,14 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
-	if (/[\[(（【](?:ゲームCG|Game CG)/i.test(fso_name)) {
+	if (/[\[(（【](?:ゲームCG|Game CG|HCG)/i.test(fso_name)) {
 		move_to('game_CG');
 		return;
 	}
 
-	if (/[\[(（【](?:(?:一般)?画集)/.test(fso_name)) {
+	if (/[\[(（【](?:(?:一般)?画集|artbook)/i.test(fso_name)
+			|| /(?:原画集|設定資料集|Visual (?:fan)?book)|Official Book/i
+					.test(fso_name)) {
 		move_to('artbook');
 		return;
 	}

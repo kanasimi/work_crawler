@@ -13,8 +13,9 @@ CeL.run('application.net.work_crawler.sites.dm5');
 // ----------------------------------------------------------------------------
 
 var crawler = CeL.dm5({
-	// MIN_LENGTH : 400,
+	// 本網站偶爾有圖片不存在的現象。
 	skip_error : true,
+	// MIN_LENGTH : 400,
 
 	base_URL : 'http://www.hanmanwo.com/',
 

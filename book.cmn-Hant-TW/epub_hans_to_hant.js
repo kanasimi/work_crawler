@@ -3,6 +3,9 @@
  * 
  * @since 2018/8/7<br />
  *        2018/8/20 18:10:52 use (new CeL.EPUB(epub_directory)).archive()
+ * 
+ * @see CeL.application.net.work_crawler.ebook
+ *      https://github.com/ThanatosDi/EpubConv_Python
  */
 
 require('../_CeL.loader.nodejs.js');
@@ -55,8 +58,8 @@ function initialization() {
 		});
 		// console.log(archive_file.ebook_file_list);
 
-		var converted_epub_file = epub_file_path.replace(/(\.[^.]+)$/,
-				' (cmn-Hant-TW)$1');
+		var converted_epub_file = epub_file_path.replace(/(\.[^.]+)$/, ' ('
+				+ CeL.gettext.to_standard('cmn-Hant-TW') + ')$1');
 		CeL.remove_file(converted_epub_file);
 
 		process.stdout.write('Packing epub file: ' + converted_epub_file

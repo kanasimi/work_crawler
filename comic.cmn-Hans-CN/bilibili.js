@@ -73,9 +73,9 @@ var crawler = new CeL.work_crawler({
 			chapter_list : work_data.ep_list.map(function(chapter_data) {
 				return {
 					id : chapter_data.id,
-					title :
-					// e.g., https://manga.bilibili.com/detail/mc26818
-					chapter_data.short_title + ' ' + chapter_data.title,
+					title : chapter_data.short_title
+					// e.g., https://manga.bilibili.com/detail/mc26723
+					+ (chapter_data.title ? ' ' + chapter_data.title : ''),
 					limited : chapter_data.is_locked,
 					url : [ this.API_BASE + 'Index?device=h5&platform=h5',
 					//

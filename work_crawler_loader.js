@@ -81,8 +81,6 @@ if (is_CLI) {
 	// e.g., resource/cmn-Hant-TW.js, resource/ja-JP.js
 	CeL.env.domain_location = module.filename.replace(/[^\\\/]*$/, 'resource'
 			+ CeL.env.path_separator);
-
-	// CeL.gettext.use_domain('GUESS', true);
 }
 
 // ----------------------------------------------------------------------------
@@ -106,6 +104,15 @@ CeL.run('application.platform.nodejs', [
 // ----------------------------------------------------------------------------
 
 // console.log(process.argv);
+
+// e.g., # node task.js debug=2
+if (CeL.env.arg_hash && (CeL.env.arg_hash.set_debug || CeL.env.arg_hash.debug)) {
+	CeL.set_debug(CeL.env.arg_hash.set_debug || CeL.env.arg_hash.debug);
+}
+
+if (is_CLI) {
+	// CeL.gettext.use_domain('GUESS', true);
+}
 
 global.work_id = is_CLI
 		&& (CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id) || process.argv[2])
