@@ -19,31 +19,21 @@ var repository = 'work_crawler', branch = 'master', update_script_url = 'https:/
 		+ repository + '/' + branch + '/' + repository + '.updater.js';
 
 // ----------------------------------------------------------------------------
-
-// const
-var node_https = require('https'), node_fs = require('fs'), child_process = require('child_process'),
-// path segment separator
-path_separator = require('path').sep;
-
-// You may need to change the working directory first.
-
-show_info('Build package in current directory [' + process.cwd() + ']...');
-
-download_update_tool(update_script_url, build_package);
+// Using in GitHub.updater.node.js work_crawler.updater.js pack_up.js
 
 function show_info(message) {
 	process.title = message;
 	console.info('\x1b[35;46m' + message + '\x1b[0m');
 }
 
-/**
- * <code>
- curl -O https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js
- * </code>
- */
-function download_update_tool(update_script_url, callback) {
-	show_info('下載 ' + repository + ' 更新工具...');
-	node_https.get(update_script_url, function(response) {
+// ----------------------------------------------------------------------------
+// Using in work_crawler.updater.js pack_up.js
+
+// const
+var node_https = require('https'), node_fs = require('fs');
+
+function fetch_url(url, callback) {
+	node_https.get(url, function(response) {
 		var buffer_array = [], sum_size = 0;
 
 		response.on('data', function(data) {
@@ -54,23 +44,63 @@ function download_update_tool(update_script_url, callback) {
 		response.on('end', function(e) {
 			var contents = Buffer.concat(buffer_array, sum_size).toString(),
 			//
-			update_script_name = update_script_url.match(/[^\\\/]+$/)[0];
-			console.info(update_script_name + ': ' + sum_size + ' bytes.');
-			node_fs.writeFileSync(update_script_name, contents);
+			file_name = url.match(/[^\\\/]+$/)[0];
+			console.info(file_name + ': ' + sum_size + ' bytes.');
+			try {
+				node_fs.writeFileSync(file_name, contents);
+			} catch (e) {
+				// e.g., read-only. testing now?
+				console.error(e);
+			}
 
 			if (typeof callback === 'function')
-				callback(update_script_name);
+				callback(file_name);
 		});
 	})
 	//
 	.on('error', function(e) {
 		// network error?
 		// console.error(e);
-		throw e;
+		// throw e;
+		callback(null, e);
 	});
 }
 
-// 刪除目錄與底下所有檔案。
+function fetch_url_promise(url) {
+	return new Promise(function(resolve, reject) {
+		fetch_url(url, function(file_name, error) {
+			if (error)
+				reject(error);
+			else
+				resolve(file_name);
+		});
+	});
+}
+
+/**
+ * <code>
+ curl -O https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js
+ * </code>
+ */
+function download_update_tool(update_script_url, callback) {
+	show_info('下載 ' + repository + ' 更新工具...');
+	fetch_url(update_script_url, callback);
+}
+
+// ----------------------------------------------------------------------------
+
+// const
+var child_process = require('child_process'),
+// path segment separator
+path_separator = require('path').sep;
+
+// You may need to change the working directory first.
+
+show_info('Build package in current directory [' + process.cwd() + ']...');
+
+download_update_tool(update_script_url, build_package);
+
+// 遞歸刪除目錄與底下所有檔案。
 function remove_directory(directory_path) {
 	var is_windows = process.platform.startsWith('win');
 	if (is_windows)
