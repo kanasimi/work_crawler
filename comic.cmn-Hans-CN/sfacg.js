@@ -128,49 +128,78 @@ crawler = new CeL.work_crawler({
 
 		html.between('<script language="javascript">', '</script>');
 
-		chapter_data.page_variables = Object.create(null);
-
 		var matched, PATTERN_assignment =
 		// [ expression, variable name, value, quote ]
 		/\svar\s+([a-zA-Z\d_]+)\s*=\s*(\d+|true|false|(["'])(?:\\.|[^\\"']+)*\3)/g
 		// @see dm5.js
 		;
+		var page_variables = chapter_data.page_variables = Object.create(null);
 		while (matched = PATTERN_assignment.exec(html)) {
 			// console.log(matched);
-			chapter_data.page_variables[matched[1]] = JSON
+			page_variables[matched[1]] = JSON
 					.parse(matched[3] === "'" ? matched[2].replace(
 							/^'([\s\S]*?)'$/g, function(all, inner) {
 								return '"' + inner.replace(/"/g, '\\"') + '"';
 							}) : matched[2]);
 		}
 
-		matched = html.match(
-		// e.g., "//comic.sfacg.com/Utility/1951/ZP/001.js"
-		/<script .*?src="(\/\/comic\.sfacg\.com\/Utility\/[^"]+\.js)"><\/script>/
-		// "//comic.sfacg.com/Utility/" + .c + "/" + .fn + "/" + .nv + ".js"
-		)[1];
-		matched = 'https:' + matched;
+		// console.log(html);
+		// console.log(page_variables);
 
-		this.get_URL(matched, function(XMLHttp) {
+		var image_list_url;
+
+		if (true) {
+			// 2020/1/19 版本
+			image_list_url = '/ajax/Common.ashx?op=getPics&cid='
+			// var apiUrl = "/ajax/Common.ashx?op="; @
+			// https://manhua.sfacg.com/js/v1/request-1.0.8.js
+			+ page_variables.c + '&chapId=' + page_variables.chapId
+					+ '&serial=' + page_variables.fn + '&path='
+					+ page_variables.nv
+					// per jQuery
+					+ '_=' + Date.now();
+		} else {
+			// @deprecated: 2020/1/7 版本
+			matched = html.match(
+			// e.g., "//comic.sfacg.com/Utility/1951/ZP/001.js"
+			/<script .*?src="(\/\/comic\.sfacg\.com\/Utility\/[^"]+\.js)"><\/script>/
+			// "//comic.sfacg.com/Utility/" + .c + "/" + .fn + "/" + .nv + ".js"
+			)[1];
+			image_list_url = 'https:' + matched;
+		}
+
+		this.get_URL(image_list_url, function(XMLHttp) {
 			try {
-				html = XMLHttp.responseText.replace(/var picAy/,
-						'chapter_data.image_list').replace(/picAy(\[\d+\])/g,
-						'chapter_data.image_list$1').replace(/var\s/g,
-						'chapter_data.');
-				eval(html);
+				html = XMLHttp.responseText;
+				// console.log(html);
+
+				if (true) {
+					// 2020/1/19 版本
+					html = JSON.parse(html);
+					// console.log(html);
+					chapter_data.image_list = html.data;
+
+				} else {
+					// @deprecated: 2020/1/7 版本
+					html = html.replace(/var picAy/,
+					//
+					'chapter_data.image_list').replace(/picAy(\[\d+\])/g,
+							'chapter_data.image_list$1').replace(/var\s/g,
+							'chapter_data.');
+					eval(html);
+					chapter_data.image_list = chapter_data.image_list
+					//
+					.map(function(url) {
+						return encodeURI(chapter_data.hosts[0] + url);
+					});
+				}
 			} catch (e) {
 				// for 山海无极 #23
 				if (this.skip_error)
 					CeL.error(html);
 				else
 					this.onerror(e, work_data);
-				callback();
-				return;
 			}
-			chapter_data.image_list = chapter_data.image_list
-					.map(function(url) {
-						return encodeURI(chapter_data.hosts[0] + url);
-					});
 			callback();
 		});
 	},
