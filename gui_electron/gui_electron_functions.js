@@ -44,7 +44,7 @@ download_sites_set = {
 	},
 	'comic.cmn-Hans-CN' : {
 		qq : '腾讯漫画',
-		'163' : '网易漫画',
+		//'163' : '网易漫画',
 		u17 : '有妖气',
 		zymk : '知音漫客',
 		dajiaochong : '大角虫漫画',
@@ -120,7 +120,7 @@ download_sites_set = {
 		MAGCOMI : 'MAGCOMI',
 		cycomi : 'サイコミ',
 
-		XOY : 'WEBTOON ja',
+		//XOY : 'WEBTOON ja',
 
 		comico_jp : 'コミコ',
 		comico_jp_plus : 'オトナ限定 コミコ'
@@ -150,6 +150,7 @@ download_sites_set = {
 
 		// PTCMS
 		'23us' : '顶点小说',
+		//booktxt : '顶点小说 booktxt',
 		zwdu : '八一中文网',
 		x81zw : '新八一中文网',
 		'88dus' : '八八读书网',
@@ -761,6 +762,7 @@ options_post_processor.data_directory = function(value) {
 	return change_download_option.exit;
 };
 
+// 可手動指定7z壓縮工具執行檔的路徑。
 options_post_processor.archive_program_path = function(value) {
 	var path = CeL.archive.remove_fso_path_quote(value);
 	if (path && !CeL.storage.file_exists(path)) {

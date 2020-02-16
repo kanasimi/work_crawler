@@ -89,6 +89,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [八一中文网](https://www.zwdu.com/) | zwdu.js | [PTCMS](https://www.ptcms.com/)系统 |
 | [八八读书网](http://www.88dus.com/) | 88dus.js | 88读书网(88dushu)，PTCMS? |
 | [顶点小说](https://www.x23us.com/) | 23us.js<br />~~archive/23us.com.js~~ | PTCMS? 有許多無內容/空章節 |
+| [顶点小说](https://www.booktxt.net/) | booktxt.js | PTCMS |
 | [顶点小说](https://www.23us.cc/) | ~~archive/23us.2018.js~~ | [WMCMS](http://www.weimengcms.com/index.html) (未梦开源小说程序) [仿电脑顶点小说模板](http://www.weimengcms.com/html/temple/article/141.html) or PTCMS? 自 2018/12/9 23:56 最後一次連接 |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | PTCMS |
 | [看书神站](https://www.kanshushenzhan.com/) | kanshushenzhan.js | 部分章節被腰斬。[杰奇小说连载系统](https://www.jieqi.com/files/page/html/product/article.html) |
@@ -98,7 +99,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [落霞小说网](http://www.luoxia.com/) | luoxia.js | WordPress，數量少、速度較慢但品質較高，較少錯字和自我審查。 |
 | [努努书坊](https://www.kanunu8.com/) | kanunu.js | 有些非流行網路小說的書。 |
 | [稻草人书屋](http://www.daocaorenshuwu.com/) | daocaoren.js | 有些非流行網路小說的書 |
-| ~~[卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180)~~ | ~~ck101.js~~ | Discuz! X3 可能因版權問題，自2019-10-01關小說版。 |
+| ~~[卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180)~~ | ~~ck101.js~~ | Discuz! X3 可能因[版權問題](https://ck101.com/thread-5106627-1-1.html)，自2019-10-01關小說版。 |
 
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
@@ -124,19 +125,18 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** 2017/8/15 起取消了今日限免 |
-| [网易漫画](https://manhua.163.com/) | 163.js | 2017/7/13 開始 **本工具無法下載VIP付費內容** |
 | [有妖气](http://www.u17.com/) | u17.js | **本工具無法下載VIP付費內容** |
 | [知音漫客](https://www.zymk.cn/) | zymk.js | |
 | [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
 | [哔哩哔哩漫画](https://manga.bilibili.com/m) | bilibili.js | 收費作品太多，PC端只給看10話，感覺很難用。並且系統太複雜，每次改版得花許多時間來修正，恐不再維護。 **本工具無法下載 APP only & 付費內容** |
 | [布卡漫画](http://www.buka.cn/) | buka.js | 有少數遺失圖片。請注意：搜索某些名稱，如包含"纪元"一詞之作品時，會造成連線重設。對於這類作品必須輸入id而非標題。 **本工具無法下載VIP付費內容** |
-| [SF漫画](https://manhua.sfacg.com/) | sfacg.js | |
+| [SF漫画](https://manhua.sfacg.com/) | sfacg.js | **本工具無法下載VIP付費內容** |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。拿來下載日本漫畫的人好像比較多。  **本工具無法下載付费章节** |
 | [漫画人](http://www.1kkk.com/) | 1kkk.js | 系統與 dm5.js 幾乎相同。和 dm5 一樣，很多作品要收費。  **本工具無法下載付费章节** |
 | [土豪漫画](https://www.tohomh123.com/) | tohomh.js | 系統似 dm5.js。 |
 | [韩漫窝](http://www.hanmanwo.com/) | hanmanwo.js | 有些韓國漫畫。系統似 dm5.js。 |
 | [有码漫画](https://www.youma.org/) | youma.js | 大多為韓國漫畫。系統似 hanmanwo.js。 |
-| [梦游漫画](https://mymhh.com/) | mymhh.js | 有許多韓國漫畫。系統似 hanmanwo.js。 |
+| [梦游漫画](https://mymhh.com/) | mymhh.js | 有許多韓國漫畫。系統似 hanmanwo.js。僅能以手機觀看。 |
 | [无双漫画](https://r2hm.com/) | r2hm.js | 有些韓國漫畫。系統與內容極似 hanmanwo.js。內容是自動採集生成的？有少許缺圖。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | **本工具無法下載VIP付費內容** |
 | [微博动漫](http://manhua.weibo.com/) | weibo.js | **本工具無法下載VIP付費內容**<br />竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
@@ -160,7 +160,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [漫画160](https://www.laimanhua.com/) | mh160.js | 與 733mh.js 相同系統。 |
 | [漫画1234](https://www.mhkan.com/) | mhkan.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) + 改了 733mh.js？ |
 | [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm內容類似...<br />可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板3](http://manhua4.qingtiancms.net/)?? |
-| [733动漫网](https://www.733dm.net/) | 733dm.js | 僅處理漫畫。2018/11/9 之後 (11/16之後?) 改版成 晴天漫画系统 |
+| [733动漫网](https://www.733.so/) | 733dm.js | 僅處理漫畫。2018/11/9 之後 (11/16之後?) 改版成 晴天漫画系统 |
 | [卡推漫画](http://www.katui.net/) | katui.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [扑飞漫画](http://www.pufei.net/) | pufei.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [塔多漫画](http://www.taduo.net/) | taduo.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
@@ -178,6 +178,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | ~~[漫画看](https://www.mhkan.com/)~~ | ~~mhkan.js~~ | 水管太小？總是卡住，下載圖片時常出現 status 522，很難用。<br />採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | ~~[爱看漫画网](http://ikmhw.com/)~~ | ~~ikmhw.js~~ | 韓國漫畫比較多。系統似 tohomh.js。圖片API反應速度比土豪漫画慢許多。內容是自動採集生成的？有少許缺圖與亂序。 2019/8/18 最後一次成功連接，2019/8/21 起無法連接。 |
 | ~~[360漫画](http://www.xueshine.com/)~~ | ~~360taofu.js~~ | 2019/11後續章節全部轉到 76.js。有頻率限制。有些漫畫畫質較高，然而本站有太多缺圖、亂序、錯漏話。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
+| ~~[网易漫画](https://manhua.163.com/)~~ | ~~archive/163.js~~ | 2017/7/13 開始 **本工具無法下載VIP付費內容** 2019年12月31日12點後永久停止服務。[大部分已經轉移至嗶哩嗶哩漫畫](https://finance.sina.com.cn/stock/usstock/c/2019-11-27/doc-iihnzhfz2061319.shtml)。 |
 
 ### Japanese webcomics 日語網路漫畫 日本語のウェブコミック
 [comic.ja-JP/](comic.ja-JP/)*.js, images → zip
@@ -192,7 +193,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [MAGCOMI](https://comic.mag-garden.co.jp/) | MAGCOMI.js | マグコミ: [ActiBook](https://ebook.digitalink.ne.jp/)系統 |
 | [サイコミ](https://cycomi.com/fw/cycomibrowser/title/serialization/0) | cycomi.js | |
 | [コミコ](https://www.comico.jp/)<br />[オトナ限定 コミコ](http://plus.comico.jp/) | comico_jp.js<br />comico_jp_plus.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
-| [XOY](https://xoy.webtoons.com/) | XOY.js | NAVER WEBTOON ja<br />2018.09.13: [XOYの作品が「LINEマンガ」に移行されます。](https://xoy.webtoons.com/ja/notice/detail?noticeNo=849) |
+| ~~[XOY](https://xoy.webtoons.com/)~~ | ~~archive/XOY.js~~ | NAVER WEBTOON ja<br />2018.09.13: [XOYの作品が「LINEマンガ」に移行されます。](https://xoy.webtoons.com/ja/notice/detail?noticeNo=849) |
 | ~~[OVERLAP](https://over-lap.co.jp/gardo/)~~ | ~~archive/OVERLAP.js~~ | オーバーラップ コミックガルド: [ActiBook](https://ebook.digitalink.ne.jp/)系統。2019/7/5 改版，域名移至[コミックガルド](https://comic-gardo.com/)，之後轉成與[となりのヤングジャンプ](https://tonarinoyj.jp/)相同系統，圖片經過 canvas 處理以展示。不再支援。 |
 
 ### English webcomics 英語網路漫畫 英語のウェブコミック
