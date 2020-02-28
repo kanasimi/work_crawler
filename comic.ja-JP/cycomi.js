@@ -85,7 +85,8 @@ var crawler = new CeL.work_crawler({
 			work_data.chapter_list.push(chapter_data);
 		}
 
-		work_data.chapter_list.reverse();
+		// 2020/1/28-2/22間轉正序
+		// work_data.chapter_list.reverse();
 
 		// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
 		// 這個網站以日本網站來說比較特別，所有章節皆列在列表上。
