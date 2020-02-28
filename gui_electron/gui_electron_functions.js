@@ -44,7 +44,7 @@ download_sites_set = {
 	},
 	'comic.cmn-Hans-CN' : {
 		qq : '腾讯漫画',
-		//'163' : '网易漫画',
+		// '163' : '网易漫画',
 		u17 : '有妖气',
 		zymk : '知音漫客',
 		dajiaochong : '大角虫漫画',
@@ -120,7 +120,7 @@ download_sites_set = {
 		MAGCOMI : 'MAGCOMI',
 		cycomi : 'サイコミ',
 
-		//XOY : 'WEBTOON ja',
+		// XOY : 'WEBTOON ja',
 
 		comico_jp : 'コミコ',
 		comico_jp_plus : 'オトナ限定 コミコ'
@@ -1084,9 +1084,36 @@ function save_preference(crawler) {
 			crawler.preference);
 }
 
+function check_favorites_line_separator(favorites) {
+	// console.log(favorites);
+	return !('line_separator' in favorites)
+	//
+	|| favorites.line_separator === CeL.env.line_separator ? '' : [ ' ', {
+		// 分行
+		T : [ '檔案換行為 %1，和系統換行 %2 不符。',
+		//
+		JSON.stringify(favorites.line_separator),
+		//
+		JSON.stringify(CeL.env.line_separator) ]
+	}, {
+		T : '開啟檔案時可能會有亂碼。'
+	}, {
+		b : {
+			T : '一鍵修正檔案換行'
+		},
+		onclick : function() {
+			favorites.line_separator = CeL.env.line_separator;
+			// save_favorites(crawler, favorites.toString());
+		},
+		C : 'favorites_button'
+	} ];
+}
+
 function edit_favorites(crawler) {
 	function click_save_favorites() {
-		save_favorites(crawler, favorites_node.value);
+		save_favorites(crawler, favorites_node.value.replace(/\r?\n/g,
+		// assert: !!favorites.line_separator === true
+		favorites.line_separator || CeL.env.line_separator));
 		reset_favorites(crawler);
 	}
 
@@ -1144,7 +1171,7 @@ function edit_favorites(crawler) {
 				reset_favorites(crawler);
 			},
 			C : 'favorites_button cancel'
-		} ]
+		}, check_favorites_line_separator(favorites) ]
 	} ], [ 'favorite_list', 'clean' ]);
 	favorites_node.focus();
 }
@@ -1492,7 +1519,9 @@ function reset_favorites(crawler) {
 				reset_favorites(crawler);
 			},
 			C : 'favorites_button'
-		} : '' ]
+		} : '',
+		// check_favorites_line_separator(favorites)
+		]
 	}, favorites.length < read_work_data_limit
 	//
 	|| crawler.read_work_data ? '' : [ {
