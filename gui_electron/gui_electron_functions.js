@@ -1104,6 +1104,7 @@ function check_favorites_line_separator(favorites) {
 		onclick : function() {
 			favorites.line_separator = CeL.env.line_separator;
 			// save_favorites(crawler, favorites.toString());
+			this.innerHTML = _('已修改檔案換行。您必須儲存最愛作品清單才能生效。');
 		},
 		C : 'favorites_button'
 	} ];
