@@ -150,7 +150,7 @@ download_sites_set = {
 
 		// PTCMS
 		'23us' : '顶点小说',
-		//booktxt : '顶点小说 booktxt',
+		booktxt : '顶点小说 booktxt',
 		zwdu : '八一中文网',
 		x81zw : '新八一中文网',
 		'88dus' : '八八读书网',
