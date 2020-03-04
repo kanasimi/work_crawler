@@ -502,7 +502,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
-	if (/[(\[](?:同人ゲーム)[)\]]/.test(fso_name)) {
+	if (/[(\[](?:同人ゲーム|同人RPG)[)\]]/.test(fso_name)) {
 		move_to('doujin');
 		return;
 	}
@@ -512,7 +512,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 			|| fso_name.includes('同人誌')
 			// "(サンクリ2015 Winter) "
 			|| /^\((?:同人誌|COMIC1☆|こみトレ|例大祭|紅楼夢|ふたけっと|サンクリ)/.test(fso_name)) {
-		move_to('doujinshi');
+		move_to(/\(オリジナル\)/.test(fso_name) ? 'doujin' : 'doujinshi');
 		return;
 	}
 
