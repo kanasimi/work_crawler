@@ -79,6 +79,16 @@ var crawler = CeL.qTcms2017({
 		// console.log(JSON.stringify(chapter_data));
 
 		return chapter_data;
+	},
+
+	// function f_qTcms_Pic_curUrl_realpic(v) @
+	// https://www.733.so/template/skin2/css/d7s/js/show.20190608.js?20190902222912
+	for_each_image : function(url, parameters, base64_encode) {
+		var File_Server = "https://api.733.so/newfile.php?data=";
+		return File_Server
+				+ base64_encode(url + "|" + Date.now() + "|"
+						+ parameters.qTcms_S_m_id + "|"
+						+ parameters.qTcms_S_p_id + "|pc");
 	}
 });
 

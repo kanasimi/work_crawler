@@ -22,17 +22,6 @@ global.auto_update = true;
 global.use_cejs_mudule = true;
 
 // ------------------------------------
-// 各個網站獨特的設定/特別的個人化設定。
-global.site_configuration = {};
-
-// comico 搭配閱讀卷示範
-site_configuration.comico = site_configuration.comico_jp = site_configuration.comico_jp_plus = {
-	// 讓本工具自動使用閱讀卷。警告:閱讀券使用完就沒了。不可回復。
-	// auto_use_ticket : true,
-	// 警告:帳號資訊是用明碼存放在檔案中。
-	loginid : '',
-	password : ''
-};
 
 // 代理伺服器 "hostname:port"
 global.proxy_server = '';
@@ -56,3 +45,16 @@ global.completed_directory = [ '', '' ];
 
 // 檔案分類完後要放置的標的目錄。
 global.catalog_directory = '';
+
+// ------------------------------------
+// 各個網站獨特的設定/特別的個人化設定。
+global.site_configuration = {};
+
+// comico 搭配閱讀卷示範
+site_configuration.comico = site_configuration.comico_jp = site_configuration.comico_jp_plus = {
+	// 讓本工具自動使用閱讀卷。警告:閱讀券使用完就沒了。不可回復。
+	// auto_use_ticket : true,
+	// 警告:帳號資訊是用明碼存放在檔案中。
+	loginid : '',
+	password : ''
+};

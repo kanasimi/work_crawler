@@ -193,8 +193,6 @@ var crawler = new CeL.work_crawler({
 
 // ----------------------------------------------------------------------------
 
-// CeL.set_debug(3);
-
 // return t.prototype._generateHashKey = function() @
 // https://s1.hdslb.com/bfs/static/manga/mobile/static/js/read.b8ba074e2011370f741a.js
 function generateHashKey(t, e) {
@@ -218,4 +216,7 @@ function unhashContent(episodeId, seasonId, indexData) {
 		indexData[t] ^= hashKey[t % 8];
 }
 
+// ----------------------------------------------------------------------------
+
+// CeL.set_debug(3);
 start_crawler(crawler, typeof module === 'object' && module);

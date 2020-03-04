@@ -1,7 +1,8 @@
 ﻿/**
  * 批量下載 大古漫画网 的工具。 Download dagu comics.
  * 
- * 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。
+ * 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。<br />
+ * 2019/11/28–12/5 間，大古漫画网 改版，採用晴天漫画程序。
  */
 
 'use strict';
@@ -10,108 +11,31 @@ require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
-// https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature
-// for Error: unable to verify the first certificate
-// code: 'UNABLE_TO_VERIFY_LEAF_SIGNATURE'
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+CeL.run('application.net.work_crawler.sites.qTcms2017');
 
-var crawler = new CeL.work_crawler({
-	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
+// ----------------------------------------------------------------------------
 
+var crawler = CeL.qTcms2017({
 	// 圖像檔案下載失敗處理方式：忽略/跳過圖像錯誤。當404圖像不存在、檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。default:false
 	skip_error : true,
 
-	// one_by_one : true,
+	// charset : '',
+
+	// {Natural}最小容許圖案檔案大小 (bytes)。
+	MIN_LENGTH : 500,
+
 	base_URL : 'https://www.dagumanhua.com/',
-	// fs.readdirSync('.').forEach(function(d){if(/^\d+\s/.test(d))fs.renameSync(d,'manhua-'+d);})
-	// fs.readdirSync('.').forEach(function(d){if(/^manhua-/.test(d))fs.renameSync(d,d.replace(/^manhua-/,''));})
-	// 所有作品都使用這種作品類別前綴。
-	common_catalog : 'manhua',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
-		return [ this.base_URL + 'e/search/index.php', {
+		return [ 'e/search/index.php', {
 			show : 'title,writer',
 			tempid : 1,
 			tbname : 'sinfo',
 			keyboard : work_title
 		} ];
 	},
-	parse_search_result : function(html, get_label) {
-		// console.log(html);
-		html = html.between('<div class="cy_list">', '</div>');
-		var id_list = [], id_data = [];
-		html.each_between('<li class="title">', '</li>', function(token) {
-			// console.log(token);
-			var matched = token.match(
-			//
-			/<a href="\/([a-z]+\/[a-z_\-\d]+)\/"[^<>]*?>([^<>]+)/);
-			// console.log(matched);
-			if (this.common_catalog
-			// 去掉所有不包含作品類別前綴者。
-			&& !matched[1].startsWith(this.common_catalog + '/'))
-				return;
-			id_list.push(this.common_catalog
-			//
-			? matched[1].slice((this.common_catalog + '/').length) : matched[1]
-					.replace('/', '-'));
-			id_data.push(get_label(matched[2]));
-		}, this);
-		// console.log([ id_list, id_data ]);
-		return [ id_list, id_data ];
-	},
-
-	// 取得作品的章節資料。 get_work_data()
-	work_URL : function(work_id) {
-		return (this.common_catalog ? this.common_catalog + '/' + work_id
-				: work_id.replace('-', '/'))
-				+ '/';
-	},
-	parse_work_data : function(html, get_label, extract_work_data) {
-		// console.log(html);
-		var work_data = {
-			// 必要屬性：須配合網站平台更改。
-			title : get_label(html.between('<h1>', '</h1>')),
-
-			// 選擇性屬性：須配合網站平台更改。
-			description : get_label(html.between(' id="comic-description">',
-					'</')),
-			latest_chapter : get_label(html.between('<p>最新话：', '</p>')),
-			latest_chapter_url : html.between('<p>最新话：<a href="', '"')
-		};
-
-		extract_work_data(work_data, html);
-		extract_work_data(work_data, html.between('<h1>',
-				' id="comic-description">'),
-				/<span>([^<>：]+)：([\s\S]*?)<\/span>/g);
-
-		Object.assign(work_data, {
-			author : work_data.作者,
-			status : work_data.状态,
-			last_update : work_data.更新时间
-		});
-
-		// console.log(work_data);
-		return work_data;
-	},
-	get_chapter_list : function(work_data, html, get_label) {
-		html = html.between('<div class="cy_plist', '</div>');
-
-		var matched, PATTERN_chapter =
-		//
-		/<li><a href="([^<>"]+)"[^<>]*>([\s\S]+?)<\/li>/g;
-
-		work_data.chapter_list = [];
-		while (matched = PATTERN_chapter.exec(html)) {
-			var chapter_data = {
-				url : matched[1],
-				title : get_label(matched[2])
-			};
-			work_data.chapter_list.push(chapter_data);
-		}
-		work_data.chapter_list.reverse();
-		// console.log(work_data.chapter_list);
-	},
+	using_web_search : true,
 
 	pre_parse_chapter_data
 	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。
@@ -176,7 +100,17 @@ var crawler = new CeL.work_crawler({
 				//
 				+ '/' + image_count + ': ' + url, 1, 'extract_image');
 				// 僅保留網址資訊，節省記憶體用量。
-				chapter_data.image_list.push(url);
+				chapter_data.image_list.push({
+					get_URL_options : {
+						headers : {
+							// img.baidu.com.manhuapi.com 不可設定 Referer。
+							Referer : ''
+						}
+					},
+					// e.g.,
+					// http://img.baidu.com.manhuapi.com/c/20180926/urgglxb2nz3.jpg
+					url : url
+				});
 			});
 		}
 
@@ -186,9 +120,12 @@ var crawler = new CeL.work_crawler({
 		CeL.run_serial(function(run_next, image_NO, index) {
 			var image_page_url = url.replace(/(\.[^.]+)$/, '_' + image_NO
 					+ '$1');
-			// console.log('Get #' + index + ': ' + image_page_url);
-			process.stdout.write('Get image data page of §' + chapter_NO
-					+ ': ' + image_NO + '/' + image_count + '...\r');
+			if (false) {
+				console.log('Get #' + index + '/' + image_count + ': '
+						+ image_page_url);
+			}
+			process.stdout.write('Get image data page of §' + chapter_NO + ': '
+					+ image_NO + '/' + image_count + '...\r');
 			_this.get_URL(image_page_url, function(XMLHttp) {
 				extract_image(XMLHttp);
 				run_next();
