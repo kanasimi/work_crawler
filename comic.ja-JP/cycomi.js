@@ -51,6 +51,7 @@ var crawler = new CeL.work_crawler({
 			text = text.between('<img ', '>').between('alt="', '"')
 					|| get_label(text);
 			if (text) {
+				delete work_data.title;
 				work_data.removed = text;
 			} else {
 				// 2, 64: redirected to top page
@@ -97,21 +98,39 @@ var crawler = new CeL.work_crawler({
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
 		Object.assign(chapter_data, {
 			// 設定必要的屬性。
-			image_count : html
-			// <span id="viewer-max-page">19</span>
-			.between('<span id="viewer-max-page">', '</span>')
-			// 會算入一張 placeholder，無論在前頭或最後，無論存不存在。
-			// e.g., https://cycomi.com/fw/cycomibrowser/chapter/pages/5135
-			// 但也有例外: https://cycomi.com/fw/cycomibrowser/chapter/pages/3705
-			- 1,
 			image_list : []
 		});
 
-		html = html.between('<div class="swiper-slide">');
-		html = html.between(null, 'viewer-last-page')
-				|| html.between(null, '<div class="author');
+		// <div id="vertical-viewer" class="vertical-viewer is-visibility-hidden
+		// only-vertical">
+		var matched = html.between('<div id="vertical-viewer"',
+				'<div class="last-page">');
+		if (matched) {
+			// 縦書き
+			// https://cycomi.com/fw/cycomibrowser/chapter/title/145
+			html = matched;
+			this.MIN_LENGTH = 150;
 
-		var matched, PATTERN_image = /<img\s[^<>]*?src="([^<>"]+)"/g;
+		} else {
+			// 有例外
+			if (false) {
+				chapter_data.image_count = html
+				// <span id="viewer-max-page">19</span>
+				.between('<span id="viewer-max-page">', '</span>')
+				// 會算入一張 placeholder，無論在前頭或最後，無論存不存在。
+				// e.g., https://cycomi.com/fw/cycomibrowser/chapter/pages/5135
+				// 但也有例外: https://cycomi.com/fw/cycomibrowser/chapter/pages/3705
+				- 1;
+			}
+
+			html = html.between('<div class="swiper-slide">');
+			html = html.between(null, 'viewer-last-page')
+					|| html.between(null, '<div class="author');
+
+			delete this.MIN_LENGTH;
+		}
+
+		var PATTERN_image = /<img\s[^<>]*?src="([^<>"]+)"/g;
 		while (matched = PATTERN_image.exec(html)) {
 			// delete matched.input;
 			// console.log(matched);
@@ -130,9 +149,7 @@ var crawler = new CeL.work_crawler({
 			chapter_data.image_list.push(url);
 		}
 
-		// 有例外
-		delete chapter_data.image_count;
-
+		// console.log(chapter_data);
 		return chapter_data;
 	}
 });
