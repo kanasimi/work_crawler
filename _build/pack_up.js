@@ -170,6 +170,9 @@ function build_package(update_script_name) {
 	}
 
 	show_info('開始打包 ' + package_data.version + '...');
+	// electron打包太慢解決方法
+	// https://electronjs.org/docs/tutorial/installation#快取
+	// https://github.com/electron/electron/releases
 	child_process.execSync('npm run-script dist', {
 		stdio : 'inherit'
 	});
