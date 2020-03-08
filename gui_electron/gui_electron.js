@@ -218,7 +218,7 @@ function start_update(event_sender) {
 			}));
 		});
 
-		var latest_time = Date.now(), latest_progress = 10;
+		var start_time = Date.now(), latest_time = Date.now(), latest_progress = 10;
 		autoUpdater.on('update-available', function(info) {
 			event_sender.send('send_message_info', [ '有新版安裝包：%1',
 					JSON.stringify(info) ]);
@@ -269,13 +269,12 @@ function start_update(event_sender) {
 			// 整個下載過程可能需要十幾分鐘。增加安裝包下載進程訊息。
 			var time_diff = Date.now() - latest_time;
 			if (time_diff > 1 * 60 * 1000 || time_diff > 10 * 1000
-					&& progressObj.percent > latest_progress) {
+					&& progressObj.percent >= latest_progress) {
 				event_sender.send('send_message_log', [
-						'安裝包已下載 %1，預估還需 %1 分鐘下載完畢。',
-						progressObj.percent.toFixed(2),
-						(time_diff / progressObj.transferred
-								* (progressObj.total - progressObj.transferred)
-								/ 60 / 1000).toFixed(1) ]);
+						'安裝包已下載 %1，預估還需 %2 分鐘下載完畢。',
+						progressObj.percent.toFixed(2) + '%',
+						((Date.now() - start_time) * (progressObj.total - progressObj.transferred) / progressObj.transferred / (60 * 1000)).toFixed(1) ]);
+				// 每 10% 顯示一次訊息。
 				latest_progress = Math.ceil(progressObj.percent / 10) * 10;
 				latest_time = Date.now();
 			}
