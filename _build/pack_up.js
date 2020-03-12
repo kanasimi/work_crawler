@@ -5,7 +5,13 @@
  * 
  * TODO: 部署至 GitHub
  * 
- * @since 2018/9/9 20:54:21
+ * @since 2018/9/9 20:54:21 <code>
+
+2020/3/8 8:26:20 @ macOS v10.13.2 "High Sierra"
+electron-builder@22.3.2	可執行安裝程序
+electron-builder@22.3.6, 2.4.0	SIGILL
+
+</code>
  * 
  * @see work_crawler.updater.js
  */
