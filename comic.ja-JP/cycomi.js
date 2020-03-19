@@ -109,7 +109,8 @@ var crawler = new CeL.work_crawler({
 			// 縦書き
 			// https://cycomi.com/fw/cycomibrowser/chapter/title/145
 			html = matched;
-			this.MIN_LENGTH = 150;
+			// this.MIN_LENGTH = 150;
+			this.setup_value('MIN_LENGTH', 150);
 
 		} else {
 			// 有例外
@@ -127,7 +128,7 @@ var crawler = new CeL.work_crawler({
 			html = html.between(null, 'viewer-last-page')
 					|| html.between(null, '<div class="author');
 
-			delete this.MIN_LENGTH;
+			this.setup_value('MIN_LENGTH', 'default');
 		}
 
 		var PATTERN_image = /<img\s[^<>]*?src="([^<>"]+)"/g;
