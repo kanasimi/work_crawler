@@ -89,6 +89,7 @@ var crawler = new CeL.work_crawler({
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'contents/search/?q=',
 	parse_search_result : function(html, get_label) {
+		// console.log(html);
 		html = html.between('<ul class="tileList', '</ul>');
 
 		var id_list = [], id_data = [];
@@ -159,7 +160,8 @@ var crawler = new CeL.work_crawler({
 		work_data.chapter_list = [];
 		html.each_between('<li', '</li>', function(text) {
 			// 不可用 /title="([^<>"]+)"/：《クロウ・レコード <Infinite Dendrogram Another>》
-			var matched = text.match(/<a title="([^"]+)" href="([^<>"]+)"/);
+			// "(.+?)" e.g., `"かわいい"はキミのもの`
+			var matched = text.match(/<a title="(.+?)" href="([^<>"]+)"/);
 			work_data.chapter_list.push({
 				// matched[1].replace(work_data.title, '')
 				title : get_label(text.between(
