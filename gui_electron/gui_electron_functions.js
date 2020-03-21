@@ -426,7 +426,8 @@ function setup_initial_messages() {
 	// --------------------------------
 
 	CeL.info({
-		T : [ 'Default download location: %1', data_directory ]
+		// Default download location
+		T : [ 'Default download directory: %1', data_directory ]
 	});
 
 	// --------------------------------
