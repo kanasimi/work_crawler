@@ -155,7 +155,7 @@ var crawler = new CeL.work_crawler({
 	get_chapter_list : function(work_data, html, get_label) {
 		// バックナンバー
 		// <ul class="acBacknumber-list first-preview clearfix" id="reversible">
-		html = html.between('<ul class="acBacknumber-list', '<section>');
+		html = html.between('<ul class="acBacknumber-list', '</section>');
 		// console.log(html);
 		work_data.chapter_list = [];
 		html.each_between('<li', '</li>', function(text) {
