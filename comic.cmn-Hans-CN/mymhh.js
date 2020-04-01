@@ -20,12 +20,11 @@ var crawler = CeL.dm5({
 	// 2020/1: https://mymhh.com/
 	// 2020/2: https://www.mumumh.com/
 	// 2020/3/26: Also https://www.mymhh.com/
-	base_URL : 'https://www.mumumh.com/',
+	base_URL : 'https://www.mymhh.com/',
 	// 2020/1: 僅能以手機觀看。
-	// 2020/3/26: 取消。
-	_user_agent : 'Mozilla/5.0 (Linux; Android 10; Pixel 4)'
-			+ ' AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.'
-			+ (Math.random() * 1e4).toFixed(1) + ' Mobile Safari/537.36',
+	user_agent : 'Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X)'
+			+ ' AppleWebKit/604.1.34 (KHTML, like Gecko)'
+			+ ' Version/11.0 Mobile/15A5341f Safari/604.1',
 
 	// 解析 作品名稱 → 作品id get_work()
 	// <a id="btnSearch">搜索</a>
