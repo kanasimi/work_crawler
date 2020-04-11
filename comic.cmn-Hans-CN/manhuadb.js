@@ -40,9 +40,6 @@ crawler = new CeL.work_crawler({
 	// 2020/4/11: https://www.manhuadb.com/
 	base_URL : 'https://www.manhuadb.com/',
 
-	// Server where images are stored
-	server_URL : [ 'http://i1.manhuadb.com/ccbaike/' ],
-
 	// reget_image_page : true,
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -197,23 +194,11 @@ crawler = new CeL.work_crawler({
 			// console.log(atob(matched));
 			// console.log(chapter_data);
 
-			// Chapter URL format: /manhua/<work_id>/<cc_id>_<chapter_id>.html
-			// Image URL format: <server_url>/<cc_id>/<chapter_id>/<file_name>
-			// So split chapter URL into segments, pick <cc_id> and <chapter_id>
-			// and join with "/" to construct the image base URL, then the image
-			// base URL is joined with image_data.img below.
-			//
-			// For example:
-			// Chapter URL: /manhua/838/866_67276.html
-			// Image base URL: 866/67276/
-			// Image URL (before joining with base URL): 010_dcwcviys.jpg
-			// Image URL (after joining with base URL):
-			// 866/67276/010_dcwcviys.jpg
-			// Image URL (after joining with server_URL):
-			// http://i1.manhuadb.com/ccbaike/866/67276/010_dcwcviys.jpg
-			var image_base_url = chapter_data.url.split(/[\/\._]/).slice(3, 5)
-					.join('/')
-					+ '/';
+			// 2020/4 漫画DB 網站改版
+			// @see https://www.manhuadb.com/assets/js/vg-read.js
+			var image_prefix = html.between(' data-host="', '"')
+					+ html.between(' data-img_pre="', '"');
+			// console.log(image_prefix);
 
 			// img_data is base64 encoded, need to do base64 decode before json
 			// decode
@@ -221,7 +206,7 @@ crawler = new CeL.work_crawler({
 			// assert: Array.isArray(chapter_data.image_list);
 			.map(function(image_data) {
 				return {
-					url : image_base_url + image_data.img
+					url : image_prefix + image_data.img
 				};
 			});
 			// console.log(chapter_data.image_list);
