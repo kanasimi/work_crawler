@@ -389,7 +389,7 @@ function on_menu_changed() {
 function setup_language_menu() {
 	_ = CeL.gettext;
 
-	_.create_menu('language_menu', [ 'TW', 'CN', 'ja', 'en', 'ko' ],
+	_.create_menu('language_menu', [ 'TW', 'CN', 'ja', 'en', 'pt', 'ko' ],
 	// 預設介面語言繁體中文+...
 	on_menu_changed);
 
