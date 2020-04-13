@@ -29,6 +29,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | 繁體中文 | ✔️ |
 | 简体中文 | ✔️ |
 | English | ✔️ |
+| Português brasileiro | 🚧 |
 | 日本語 | 🚧 |
 | 한국어 | 🚧 |
 
