@@ -2004,22 +2004,30 @@ function show_search_result(work_data_search_queue) {
 var language_used;
 // 自動搜尋不同的網站並選擇下載作品。
 function search_work_title() {
+	// 點選 語言
+	var attention_message = '請先在網路作品區指定要搜尋的作品類別。';
 	if (!language_used) {
-		CeL.info({
-			// 點選 語言
-			T : '請先在網路作品區指定要搜尋的作品類別。'
-		});
+		show_attention({
+			b : {
+				T : attention_message
+			}
+		}, attention_message);
 		return;
 	}
+	hide_attention_panel(attention_message);
 
 	var work_title = CeL.node_value('#input_work_id').trim();
+	attention_message = '請先輸入作品名稱或🆔。';
 	if (!work_title) {
-		CeL.info({
-			T : '請先輸入作品名稱或🆔。'
-		});
+		show_attention({
+			b : {
+				T : attention_message
+			}
+		}, attention_message);
 		CeL.get_element('input_work_id').focus();
 		return;
 	}
+	hide_attention_panel(attention_message);
 
 	var sites = CeL.get_element('search_results');
 	if (sites.running) {
@@ -2141,14 +2149,18 @@ function for_all_crawler_loaded(operator) {
 
 function get_crawler(site_id, just_test) {
 	site_id = site_id || site_used;
+	var attention_message = '請先指定要下載的網站。';
 	if (!site_id) {
 		if (!just_test) {
-			CeL.info({
-				T : '請先指定要下載的網站。'
-			});
+			show_attention({
+				b : {
+					T : attention_message
+				}
+			}, attention_message);
 		}
 		return;
 	}
+	hide_attention_panel(attention_message);
 
 	var crawler = base_directory + site_id + '.js';
 	CeL.debug({
@@ -2513,12 +2525,16 @@ function start_gui_crawler() {
 
 	// or work_title
 	var work_id = CeL.node_value('#input_work_id');
+	var attention_message = '請先輸入作品名稱或🆔。';
 	if (work_id) {
+		hide_attention_panel(attention_message);
 		add_new_download_job(crawler, work_id);
 	} else {
-		CeL.info({
-			T : '請先輸入作品名稱或🆔。'
-		});
+		show_attention({
+			b : {
+				T : attention_message
+			}
+		}, attention_message);
 		CeL.get_element('input_work_id').focus();
 	}
 }
@@ -2582,6 +2598,11 @@ function check_update_NOT_package() {
 		if (error) {
 			CeL.error({
 				T : [ '非安裝包版本更新失敗：%1', error ]
+			});
+			show_attention({
+				b : {
+					T : [ '非安裝包版本更新失敗：%1', error ]
+				}
 			});
 		} else {
 			CeL.log({
@@ -2676,6 +2697,13 @@ function check_update() {
 		}, has_version ? [ {
 			br : null
 		}, '← ' + has_version ] : '' ], [ update_panel, 'clean' ]);
+		show_attention({
+			a : {
+				T : [ '有新版本：%1', version_data.latest_version ]
+			},
+			href : 'https://github.com/' + GitHub_repository_path,
+			onclick : open_URL
+		});
 
 		check_update_NOT_package();
 	}
@@ -2744,4 +2772,24 @@ function open_DevTools() {
 	console.warn(_('本欄基本上僅供調試使用。若您有下載功能方面的需求，煩請提報議題，謝謝。') + ' '
 			+ 'https://github.com/kanasimi/work_crawler/issues');
 	return false;
+}
+
+// ----------------------------------------------
+
+var attention_data = Object.create(null);
+
+function show_attention(message, options) {
+	if (options && options.type)
+		attention_data.type = options.type;
+	CeL.new_node(message, [ 'attention_inner', 'clean' ]);
+	CeL.toggle_display('attention_panel', true);
+}
+
+function hide_attention_panel(options) {
+	if (options && options.type) {
+		// only remove this type
+		if (attention_data.type !== options.type)
+			return;
+	}
+	CeL.toggle_display('attention_panel', false);
 }

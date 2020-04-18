@@ -11,21 +11,22 @@
 
 	<!-- <h2>CeJS 網路小說漫畫下載工具 online novels / comics downloader</h2> -->
 	<div class="panel">
-		<label>📘<span data-gettext="作品名稱或🆔"></span> <input
-			id="input_work_id" value="" title="快速鍵: Ctrl + V 貼上作品名稱或 id" /></label> <b
-			class="button" onclick="paste_text();" title="貼上作品名稱或 id">📋<span
-			data-gettext="貼上"></span></b> <b class="button"
-			onclick="start_gui_crawler();">▶<span data-gettext="開始下載"></span></b>
+		<label> 📘<span data-gettext="作品名稱或🆔"></span> <input
+			id="input_work_id" value="" title="快速鍵: Ctrl + V 貼上作品名稱或 id" />
+		</label> <b class="button" onclick="paste_text();" title="貼上作品名稱或 id"> 📋<span
+			data-gettext="貼上"></span>
+		</b> <b class="button" onclick="start_gui_crawler();">▶<span
+			data-gettext="開始下載"></span></b>
 		<!--  <b class="button"
 			onclick="stop_task();">暫停下載</b> <b class="button"
 			onclick="continue_task();">繼續下載</b> <b class="button"
 			onclick="cancel_task();">取消下載</b> -->
-		<b class="button" onclick="search_work_title();" title="搜尋各網站並下載作品。">👀<span
-			data-gettext="搜尋"></span></b> <b class="button"
-			onclick="open_download_directory();">📂<span
-			data-gettext="開啓下載目錄"></span></b>
+		<b class="button" onclick="search_work_title();" title="搜尋各網站並下載作品。">
+			👀<span data-gettext="搜尋"></span>
+		</b> <b class="button" onclick="open_download_directory();"> 📂<span
+			data-gettext="開啓下載目錄"></span>
+		</b>
 	</div>
-
 
 	<div id="operation_panel">
 		<div>
@@ -38,6 +39,12 @@
 		</div>
 
 		<div id="right_panel">
+			<div id="attention_panel" class="panel">
+				<div id="close_attention_panel_button" title="close"
+					onclick="return hide_attention_panel();">×</div>
+				<div id="attention_inner"></div>
+			</div>
+
 			<div id="favorites_panel">
 				<h3 id="favorites_trigger">
 					😘<span data-gettext="最愛作品清單"></span>
@@ -70,20 +77,23 @@
 	</div>
 
 	<hr />
-	<b class="button" onclick="CeL.Log.clear();">⎚<!-- ✨ --> <span
+	<b class="button" onclick="CeL.Log.clear();"> ⎚<!-- ✨ --> <span
 		data-gettext="清除訊息"></span>
 	</b>
 	<b class="button"
-		onclick="this.firstChild.innerHTML = CeL.Log.toggle() ? '📖' : '📕';"><span>📖</span><span
-		data-gettext="顯示/隱藏訊息"></span></b>
-	<label for="max_logs"><span></span><span class="disabled"
+		onclick="this.firstChild.innerHTML = CeL.Log.toggle() ? '📖' : '📕';">
+		<span>📖</span><span data-gettext="顯示/隱藏訊息"></span>
+	</b>
+	<label for="max_logs"> <span></span><span class="disabled"
 		style="cursor: pointer;" data-gettext="不限制訊息行數"
-		onclick="check_max_logs.call(this);"></span> </label>
+		onclick="check_max_logs.call(this);"></span>
+	</label>
 	<input style="display: none;" id="max_logs" type="number" pattern="\d*"
 		max="99999" min="0" value="500"></input>
 
-	<b class="button" onclick="open_DevTools();">🐞<!-- 🧪 --> <span
-		data-gettext="開啟偵錯工具"></span></b>
+	<b class="button" onclick="open_DevTools();"> 🐞<!-- 🧪 --> <span
+		data-gettext="開啟偵錯工具"></span>
+	</b>
 
 	<span id="small_tips"></span>
 
@@ -91,7 +101,7 @@
 
 	<div id="log_panel"></div>
 
-	<audio id="finished_sound" controls="false" style="display: none;">
+	<audio id="finished_sound">
 		<source
 			src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Artu_speech_03.ogg"
 			type="audio/ogg" autoplay="false" />
