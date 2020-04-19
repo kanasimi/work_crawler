@@ -2282,6 +2282,9 @@ function is_Download_job(value) {
 }
 
 function add_new_download_job(crawler, work_id, no_message) {
+	var attention_message = '請先輸入作品名稱或🆔。';
+	hide_attention_panel(attention_message);
+
 	if (crawler.downloading_work_data) {
 		work_id = work_id.trim();
 		if (work_id && crawler.downloading_work_data.id !== work_id
