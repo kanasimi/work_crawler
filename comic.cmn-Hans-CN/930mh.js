@@ -15,12 +15,17 @@ CeL.run('application.net.work_crawler.sites.SinMH');
 var crawler = CeL.SinMH({
 	// one_by_one : true,
 
+	// 2020/4/24
+	// 單一作品 1s: NG, 1200ms: OK
+	chapter_time_interval : 6000,
+
 	// 圖像檔案下載失敗處理方式：忽略/跳過圖像錯誤。當404圖像不存在、檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。default:false
 	skip_error : true,
 
 	// old: http://www.duzhez.com/
 	// 2019/8 改網址: http://www.93gmh.com/
-	base_URL : 'http://www.93gmh.com/',
+	// 2019/10/17 改網址: http://www.rubobo.com/
+	base_URL : 'http://www.rubobo.com/',
 
 	extract_work_id : function(work_information) {
 		return CeL.is_digits(work_information) && work_information;
@@ -46,6 +51,13 @@ var crawler = CeL.SinMH({
 	crypto : {
 		key : "u1S2Bvvwp1XZ37B9",
 		iv : "2VNNjmjywpbnsYmW"
+	},
+	/**
+	 * 2019/10/17 改網址: function jmzz20191018() @ http://www.rubobo.com/js/jmzz20191018.js
+	 */
+	crypto : {
+		iv : "opb4x7z21vg1f3gI",
+		key : "cxNB23W8xzKJV26O",
 	}
 });
 
