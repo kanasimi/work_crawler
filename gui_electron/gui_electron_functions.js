@@ -267,7 +267,8 @@ function check_max_logs() {
 		remove : show
 	});
 	this.innerHTML = _(CeL.DOM_data(this).gettext = show ? '限制訊息行數' : '不限制訊息行數');
-	CeL.node_value(this.parentNode.firstChild, show ? '✂️' : '');
+	// .children[0] (<span>) === .firstElementChild !== .firstChild (#text)
+	CeL.node_value(this.parentNode.children[0], show ? '✂️' : '');
 }
 
 // initialization
@@ -2348,7 +2349,7 @@ function destruct_download_job(crawler) {
 	if (work_data.error_list
 			|| default_configuration.preserve_download_work_layer) {
 		// remove "暫停"
-		// job.layer.removeChild(job.layer.firstChild);
+		// job.layer.removeChild(job.layer.children[0]);
 		CeL.new_node([ {
 			T : '↻',
 			R : _('重新下載'),
