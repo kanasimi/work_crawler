@@ -188,7 +188,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | --- | --- | --- |
 | [ニコニコ静画](https://seiga.nicovideo.jp/) | nico_seiga.js | アカウントが必要です。 ドワンゴ DWANGO Co., Ltd. |
 | [ComicWalker](https://comic-walker.com/) | ComicWalker.js | KADOKAWAの無料漫画（マンガ） コミックウォーカー 後端採用ニコニコ静画技術 |
-| [ヤングエースUP](https://web-ace.jp/youngaceup/) | youngaceup.js | KADOKAWA webエース |
+| [ヤングエースUP](https://web-ace.jp/youngaceup/) | youngaceup.js | KADOKAWA webエース 所属 |
+| [TYPE-MOONコミックエース](https://web-ace.jp/tmca/) | tmca.js | KADOKAWA webエース 所属 |
 | [アルファポリスの公式Web漫画](https://www.alphapolis.co.jp/manga/official) | AlphaPolis_manga.js | レンタルする話は取得できません |
 | [モアイ](http://www.moae.jp/) | moae.js | 講談社 モーニング・アフタヌーン・イブニング合同Webコミックサイト |
 | [pixivコミック](https://comic.pixiv.net/) | pixivcomic.js | pixivコミック(ぴくしぶこみっく) |

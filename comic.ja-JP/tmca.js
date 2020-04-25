@@ -1,6 +1,6 @@
 ﻿/**
- * 批量下載 KADOKAWA CORPORATION webエース ヤングエースUP（アップ） Webコミック 的工具。 Download YOUNG
- * ACE UP comics.
+ * 批量下載 KADOKAWA CORPORATION webエース TYPE-MOONコミックエース 的工具。 Download TYPE-MOON
+ * comics.
  */
 
 'use strict';
@@ -15,7 +15,7 @@ CeL.run('application.net.work_crawler.sites.ace');
 
 var crawler = CeL.ace({
 	// CeL.get_script_name()
-	site : 'youngaceup'
+	site : 'tmca'
 });
 
 // ----------------------------------------------------------------------------

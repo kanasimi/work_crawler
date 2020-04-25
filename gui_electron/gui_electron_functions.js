@@ -110,7 +110,10 @@ download_sites_set = {
 	'comic.ja-JP' : {
 		nico_seiga : 'ニコニコ静画',
 		ComicWalker : 'ComicWalker',
+
 		youngaceup : 'ヤングエースUP',
+		// TYPE-MOONコミックエース
+		tmca : 'TYPE-MOONエース',
 
 		AlphaPolis_manga : 'アルファポリス',
 
