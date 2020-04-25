@@ -267,7 +267,8 @@ function check_max_logs() {
 		remove : show
 	});
 	this.innerHTML = _(CeL.DOM_data(this).gettext = show ? '限制訊息行數' : '不限制訊息行數');
-	// .children[0] (<span>) === .firstElementChild !== .firstChild (#text)
+	// .children[0] (<span>) === .firstElementChild
+	// !== .firstChild (maybe #text)
 	CeL.node_value(this.parentNode.children[0], show ? '✂️' : '');
 }
 
@@ -957,10 +958,28 @@ function setup_DOM_events() {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+function set_panel_height(panel) {
+	panel = CeL.get_element(panel);
+
+	var style = panel.style;
+	// 設定控制面板可改變大小。
+	style.resize = 'vertical';
+	style.overflow = 'auto';
+
+	var max_height = Math.max(200, window.innerHeight - 90);
+	style.height = '';
+	if (panel.offsetHeight > max_height) {
+		style.height = max_height + 'px';
+	}
+}
+
 function set_click_trigger(trigger, panel, callback) {
 	CeL.set_class(trigger, 'trigger');
 	CeL.add_listener('click', function() {
-		CeL.toggle_display(panel);
+		if (CeL.toggle_display(panel) === 'block') {
+			set_panel_height(panel);
+		}
+		CeL.get_element(panel).parentElement.style.height = '';
 		if (typeof callback === 'function') {
 			callback.call(trigger, panel);
 		}
@@ -2186,6 +2205,7 @@ function get_crawler(site_id, just_test) {
 	} else {
 		CeL.toggle_display('favorites_panel', true);
 		CeL.toggle_display('download_options_panel', true);
+		set_panel_height('favorites_panel');
 		process.title = _('選擇下載工具：%1', crawler.site_id);
 	}
 
@@ -2211,10 +2231,16 @@ function Download_job(crawler, work_id) {
 	// console.log(crawler);
 	this.layer = CeL.new_node({
 		div : [ {
-			b : [ crawler.site_name ? {
-				span : crawler.site_name,
-				R : crawler.site_id
-			} : crawler.site_id, ' ', work_id ],
+			b : [ {
+				span : crawler.site_name ? {
+					span : crawler.site_name,
+					R : crawler.site_id
+				} : crawler.site_id,
+				C : 'site_label'
+			}, {
+				span : work_id,
+				R : work_id
+			} ],
 			C : 'task_label'
 		}, {
 			div : this.progress_layer,
@@ -2349,7 +2375,7 @@ function destruct_download_job(crawler) {
 	if (work_data.error_list
 			|| default_configuration.preserve_download_work_layer) {
 		// remove "暫停"
-		// job.layer.removeChild(job.layer.children[0]);
+		// job.layer.removeChild(job.layer.firstChild);
 		CeL.new_node([ {
 			T : '↻',
 			R : _('重新下載'),

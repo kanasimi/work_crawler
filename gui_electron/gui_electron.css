@@ -531,6 +531,14 @@ tr:nth-child(even) {
 	white-space: nowrap;
 }
 
+.task_label .site_label {
+	max-width: 5em;
+	/* 網站標籤占比太大會看不到作品名稱 */
+	font-size: .8em;
+	color: #5af;
+	margin-right: .2em;
+}
+
 /* ------------------------------------------- */
 #small_tips {
 	color: #f88;
