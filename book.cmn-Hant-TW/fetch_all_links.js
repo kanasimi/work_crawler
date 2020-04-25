@@ -32,8 +32,8 @@ target_directory = process.argv[3],
 PATTERN_ebook_link = /\.(epub|mobi|azw\d?|fb2|txt|pdf|DjVu|docx?|xps|chm|htmlz|cbz|cbr)(?:$|[?#])/i;
 
 if (!base_URL || !target_directory) {
-	var main_script = process.mainModule
-			&& process.mainModule.filename.match(/[^\\\/]+$/)[0];
+	var main_script = require.main
+			&& require.main.filename.match(/[^\\\/]+$/)[0];
 	CeL.log('Download links in web page. 下載網頁中所有連結檔案，例如下載網頁中電子書的工具。\n\n'
 			+ 'Usage:\n	node ' + main_script + ' "URL" "target directory"');
 	process.exit();

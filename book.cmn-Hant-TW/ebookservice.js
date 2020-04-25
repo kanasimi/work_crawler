@@ -110,7 +110,7 @@ CeL.run([ 'application.storage.archive',
 var target_html_file = process.argv[2];
 
 if (!target_html_file) {
-	var main_script = process.mainModule && process.mainModule.filename.match(/[^\\\/]+$/)[0];
+	var main_script = require.main && require.main.filename.match(/[^\\\/]+$/)[0];
 	CeL.log('批量下載遠流出版公司台灣雲端書庫的工具。\n\n' + 'Usage:\n	node ' + main_script
 			+ ' "saved webpage.html"');
 	process.exit();

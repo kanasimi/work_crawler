@@ -44,6 +44,7 @@ try {
 try {
 	require('./_CeL.loader.nodejs.js');
 } catch (e) {
+	// console.error(e);
 }
 
 // @see _CeL.loader.nodejs.js
@@ -181,7 +182,7 @@ function option_type_token(arg_type_data, colors) {
 	return option_types;
 }
 
-if (is_CLI && !work_id && process.mainModule
+if (is_CLI && !work_id && require.main
 // 檔案整理工具不需要下載作品，因此也不需要作品名稱。
 && (typeof need_work_id === 'undefined' || need_work_id)) {
 	CeL.info({
@@ -197,8 +198,8 @@ if (is_CLI && !work_id && process.mainModule
 	CeL.log('');
 	// --------------------------------
 
-	var main_script = process.mainModule
-			&& process.mainModule.filename.match(/[^\\\/]+$/)[0],
+	var main_script = require.main
+			&& require.main.filename.match(/[^\\\/]+$/)[0],
 	//
 	options_arguments = ' [' + CeL.gettext('option=true') + '] ["'
 			+ CeL.gettext('option=value') + '"]';
