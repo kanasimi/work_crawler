@@ -130,18 +130,15 @@ download_sites_set = {
 
 		toomics_en : 'Toomics',
 
-		mangamew : [ 'Manga Mew (', {
-			T : '不再維護'
-		}, ')' ],
-		manganew : [ 'Manga New (', {
-			T : '不再維護'
-		}, ')' ],
+	// 不再維護
+	// mangamew : 'Manga Mew',
+	// manganew : 'Manga New',
 
-		Rocaca : [ 'rocaca (', {
-			T : '不再維護'
-		}, ')' ]
+	// Rocaca : [ 'rocaca (', {
+	// T : '不再維護'
+	// }, ')' ]
 
-	// mrblue : 'Mr.Blue (不再維護)'
+	// mrblue : 'Mr.Blue'
 	},
 	'novel.cmn-Hans-CN' : {
 		// ck101 : '卡提諾論壇 小說頻道',
@@ -236,7 +233,7 @@ require(base_directory + 'work_crawler_loader.js');
 
 // declaration for gettext(). @see setup_language_menu()
 var _;
-// language force convert. @see setup_language_menu()
+// 設定國際性語言 language force convert. @see setup_language_menu()
 var force_convert = [ 'en' ];
 
 // @see setup_language_menu()

@@ -202,11 +202,11 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 | Site | Tool file | Note |
 | --- | --- | --- |
-| [Manga Mew](https://www1.mangamew.com/) | mangamew.js | 一些圖片在檔案最後會多加個字元 0A，因此被判別為非正規圖片檔。 |
-| [Manga New](http://manganew.net/) | manganew.js | Using Microsoft IIS? |
-| [Rocaca](http://www.rocaca.com/) | rocaca.js | 受到 Cloudflare 保護 |
 | [WEBTOON](https://www.webtoons.com/en/) | webtoon.js | NAVER LINE WEBTOON |
 | [Toomics](https://toomics.com/en/) | toomics_en.js | Toomics - Free comics **本工具無法下載VIP付費內容** |
+| ~~[Manga Mew](https://www1.mangamew.com/)~~ | ~~mangamew.js~~ | 一些圖片在檔案最後會多加個字元 0A，因此被判別為非正規圖片檔。 |
+| ~~[Manga New](http://manganew.net/)~~ | ~~manganew.js~~ | Using Microsoft IIS? |
+| ~~[Rocaca](http://www.rocaca.com/)~~ | ~~rocaca.js~~ | 受到 Cloudflare 保護 |
 
 ## Installation 安裝
 
