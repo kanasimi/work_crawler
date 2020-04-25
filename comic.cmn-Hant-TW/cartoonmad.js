@@ -14,8 +14,8 @@ var crawler = new CeL.work_crawler({
 	// 當有多個分部的時候才重新檢查。
 	recheck : 'multi_parts_changed',
 
-	// 圖像檔案下載失敗處理方式：忽略/跳過圖像錯誤。當404圖像不存在、檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。default:false
-	// skip_error : true,
+	// e.g., 保安官艾凡思的謊言 第080話 (13頁)] 共 13 張圖片。
+	skip_error : true,
 
 	// e.g., 精靈來日
 	acceptable_types : 'png',
@@ -70,18 +70,26 @@ var crawler = new CeL.work_crawler({
 		// <legend>&nbsp;火影忍者漫畫線上觀看&nbsp;</legend>
 		'線上觀看');
 
-		// <b><font color="#FFFFFF">會員 <a href=/profile/MTFOX.html
-		// target=_blank>MTFOX</a>
-		// 發表，最後更新日期 7/2/2015 2:52:15 PM </font></b></td>
-		// />([^<>]+)<\/a>[\s\n]*發表，最後更新日期([^<>]+)</
-		var matched = html.match(/最後更新日期([^<>]+)</);
+		/**
+		 * <code>
+		2020/4/9:
+		<b><font color="#FFFFFF">會員 <a href=/profile/MTFOX.html target=_blank>MTFOX</a>
+		發表，最後更新日期 7/2/2015 2:52:15 PM </font></b></td>
+		/>([^<>]+)<\/a>[\s\n]*發表，最後更新日期([^<>]+)</
+				
+		2020/4/25:
+		<b><font color="#FFFFFF">會員 <a href=/profile/Hoser.html target=_blank>Hoser</a>
+		發表，日期 3/11/2020 5:24:05 PM </font></b>
+		</code>
+		 */
+		var matched = html.match(/發表，.*?日期([^<>]+)</);
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between(
 					'<input type="hidden" name="name" value="', '">')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			last_update : matched[1]
+			last_update : matched[1].trim()
 		};
 
 		extract_work_data(work_data, html.between('瀏覽記錄', '我要推薦').replace(
