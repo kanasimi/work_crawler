@@ -58,3 +58,10 @@ site_configuration.comico = site_configuration.comico_jp = site_configuration.co
 	loginid : '',
 	password : ''
 };
+
+// ニコニコ静画を利用する為にはniconicoのアカウントが必要です。
+site_configuration.nico_seiga = {
+	mail_tel : '',
+	// 警告:帳號資訊是用明碼存放在檔案中。
+	password : ''
+};

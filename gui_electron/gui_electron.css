@@ -535,7 +535,7 @@ tr:nth-child(even) {
 	max-width: 5em;
 	/* 網站標籤占比太大會看不到作品名稱 */
 	font-size: .8em;
-	color: #5af;
+	color: #56f;
 	margin-right: .2em;
 }
 

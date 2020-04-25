@@ -108,6 +108,7 @@ download_sites_set = {
 		toomics_sc : 'Toomics 玩漫'
 	},
 	'comic.ja-JP' : {
+		nico_seiga : 'ニコニコ静画',
 		ComicWalker : 'ComicWalker',
 		youngaceup : 'ヤングエースUP',
 
@@ -1598,7 +1599,11 @@ function reset_site_options() {
 		var value = download_option in global_options ? default_configuration[download_option]
 				: crawler[download_option] || crawler[download_option] === 0 ? crawler[download_option]
 						: '';
-		CeL.DOM.set_text(download_option + '_input', value);
+		CeL.DOM.set_text(download_option + '_input', value, {
+			// 自動調整輸入框大小。
+			resize : true,
+			max_width : 800
+		});
 	}
 }
 
