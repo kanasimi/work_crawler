@@ -256,6 +256,8 @@ dt {
 }
 
 /* ------------------------------------------- */
+
+/* notice */
 #attention_panel {
 	display: none;
 	color: #f02;
@@ -264,6 +266,10 @@ dt {
 	border-radius: 1em;
 	padding: .5em;
 	font-size: 1.5em;
+}
+
+#attention_panel a {
+	color: #22f;
 }
 
 #close_attention_panel_button {
