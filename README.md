@@ -49,9 +49,9 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | API 應用程式介面 | ✔️ |
 
 ## Features 特點
-* 最愛清單功能。
+* 最愛作品清單功能。
 * 一鍵搜尋各網站與下載作品。
-* 將簡體小說轉換為繁體小說之選項。
+* 可將簡體小說轉換為繁體小說。
 * 自動下載小說封面以及章節中的插圖。
 * 小說漫畫自動分部(part)。
 * 盡量取得原有的圖片檔案中最高品質的，並自動檢核下載的圖片是否是否完整。若有破損將重新下載。

@@ -35,7 +35,7 @@ var torrent_directory// = 'torrent' + CeL.env.path_separator
 target_directory = process.argv[3]
 		|| CeL.first_exist_fso(global.completed_directory) || '.',
 //
-default_menu_page_length = 200,
+default_menu_page_length = 100,
 // start from menu NO. 1
 default_menu_page_starts = 1,
 // reget === true: reget till no more new menu files.

@@ -294,8 +294,7 @@ function check_fso(fso_name) {
 				biggest_file_size = sub_fso_status.size;
 			non_zero_size_count++;
 		}
-		// TODO: .bmp
-		if (/\.(?:jpg|jpeg|webp|png|gif|ico|icon)$/i.test(sub_fso_name)) {
+		if (/\.(?:jpg|jpeg|webp|png|gif|bmp|ico|icon)$/i.test(sub_fso_name)) {
 			image_count++;
 		} else if (PATTERN_executable_file.test(sub_fso_name)) {
 			exe_count++;
@@ -510,8 +509,9 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 	if (/^\((?:C\d{2,3}|CC福岡\d{2,3}|CC大阪\d{2,3}|Futaket ?\d{2}|コミティア\d{3}|Cレヴォ\d{2})|COMIC1(?:[☆_]\d{2})?\)/
 			.test(fso_name)
 			|| fso_name.includes('同人誌')
-			// "(サンクリ2015 Winter) "
-			|| /^\((?:同人誌|COMIC1☆|こみトレ|例大祭|紅楼夢|ふたけっと|サンクリ)/.test(fso_name)) {
+			// "(サンクリ2015 Winter) ", "秋季例大祭6"
+			|| /^\((?:同人誌|COMIC1☆|こみトレ|[^()]*例大祭[^()]*|紅楼夢|ふたけっと|サンクリ)/
+					.test(fso_name)) {
 		move_to(/\(オリジナル\)/.test(fso_name) ? 'doujin' : 'doujinshi');
 		return;
 	}

@@ -15,8 +15,7 @@ CeL.run('application.net.work_crawler.sites.SinMH');
 var crawler = CeL.SinMH({
 	// one_by_one : true,
 
-	// 2020/4/24
-	// 單一作品 1s: NG, 1200ms: OK
+	// 2020/4/24 單一作品 1s: NG, 1200ms: OK
 	chapter_time_interval : 6000,
 
 	// 圖像檔案下載失敗處理方式：忽略/跳過圖像錯誤。當404圖像不存在、檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。default:false

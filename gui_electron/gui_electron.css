@@ -269,6 +269,7 @@ dt {
 }
 
 #attention_panel a {
+	/* for .dark a {} */
 	color: #22f;
 }
 
