@@ -1605,6 +1605,7 @@ function reset_site_options() {
 		CeL.DOM.set_text(download_option + '_input', value, {
 			// 自動調整輸入框大小。
 			resize : true,
+			min_width : 80,
 			max_width : 800
 		});
 	}
