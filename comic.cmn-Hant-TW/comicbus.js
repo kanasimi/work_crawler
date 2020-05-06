@@ -52,6 +52,7 @@ require('../work_crawler_loader.js');
 require('tls').DEFAULT_MIN_VERSION = 'TLSv1';
 
 function extract_image_urls(XMLHttp, work_data) {
+	// console.log(XMLHttp);
 	var html = XMLHttp.responseText;
 	// console.log(html);
 
@@ -103,7 +104,10 @@ var crawler = new CeL.work_crawler({
 	skip_error : true,
 
 	// one_by_one : true,
-	base_URL : 'https://www.comicbus.com/',
+
+	// 2019/6/28-2020/4/30: https://www.comicbus.com/
+	// 2020/4/30 無限動漫 改變網址: https://comicbus.live/
+	base_URL : 'https://comicbus.live/',
 	charset : 'big5',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -270,6 +274,9 @@ function(contents, error) {
 	// `getcookie=()=>3` 會擷取 "c-" 系列，但此系列網頁更新似乎較慢，有時會在獲取最新章節時會得不到圖片網址資料。
 	contents = 'var getcookie=()=>0,getCookie=()=>0;' + contents
 			+ ';decoder.cview=cview;';
+	contents = contents.replace(/document\.location/g, '(' + JSON.stringify({
+		href : crawler.base_URL
+	}) + ')');
 	eval(contents);
 
 	CeL.get_URL_cache(crawler.base_URL + 'js/' + decode_filename,
