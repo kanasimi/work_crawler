@@ -97,9 +97,12 @@ download_sites_set = {
 		'930mh' : '亲亲漫画网',
 		'50mh' : '50漫画网',
 
-		omanhua : '哦漫画',
+		// omanhua : '哦漫画',
 
 		hhcool : '汗汗酷漫',
+
+		// fed 系統
+		ohmanhua : 'Oh漫画',
 
 		migudm : '咪咕圈圈',
 
