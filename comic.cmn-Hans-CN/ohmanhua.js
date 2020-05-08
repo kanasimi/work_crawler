@@ -2,58 +2,6 @@
  * 批量下載 Oh漫画 的工具。 Download ohmanhua comics.
  * 
  * @see http://www.z1i.cn/ https://www.007ts.co/
- * 
- * <code>
-
-__cr.PrefixInteger = function(num, length) {
-	return (Array(length).join('0') + num).slice(-length);
-}
-
-function __cr_getpice(index_now) {
-	var _0x5bdfx72 = "";
-	if (!image_info["img_type"]) {
-		var server = chapter_data.domain;
-		var _index_now = parseInt(mh_info.startimg) + index_now - 1, file_name = __cr
-				.PrefixInteger(_index_now, 4)
-				+ ".jpg";
-		var img_url;
-		var server_root_domain = server.replace("img.", "");
-		var _0x5bdfx1b = Math[__Ox7f6a6[0x57]](Math[__Ox7f6a6[0x56]]() * 100);
-		if (__cad.cookie("CN_LINE_CONTROL") == __Ox7f6a6[0x58]) {
-			img_url = __Ox7f6a6[0x19c] + __Ox7f6a6[0x1c8] + "/comic/"
-					+ encodeURI(mh_info.imgpath) + file_name;
-			_0x5bdfx72 = img_url
-		} else {
-			if (__cad.cookie("CN_LINE_CONTROL") == __Ox7f6a6[0x1cb]) {
-				img_url = __Ox7f6a6[0x1cc] + server_root_domain + "/comic/"
-						+ encodeURI(mh_info.imgpath) + file_name;
-				_0x5bdfx72 = __cr[__Ox7f6a6[0x1ce]]
-						(img_url, mh_info.manga_size)
-			} else {
-				img_url = chapter_data.domain + "/comic/"
-						+ encodeURI(chapter_data.imgpath)
-						+ (chapter_data.startimg - 1 + index_now).pad(4)
-						+ ".jpg";
-				if (mh_info.manga_size) {
-					// __cr.switchWebp()
-					img_url += '.webp';
-				}
-			}
-		}
-	} else {
-		var _0x5bdfx7d = __images_yy[index_now - 1];
-		if (image_info[__Ox7f6a6[0x54]] == __Ox7f6a6[0x5d]) {
-			_0x5bdfx72 = __cr[__Ox7f6a6[0x1ce]](_0x5bdfx7d, mh_info.manga_size)
-		} else {
-			_0x5bdfx72 = _0x5bdfx7d
-		}
-	}
-	;
-	return _0x5bdfx72
-}
-
- </code>
- * 
  */
 
 'use strict';
@@ -80,6 +28,9 @@ var crawler = new CeL.work_crawler({
 	MIN_LENGTH : 350,
 
 	// one_by_one : true,
+
+	// 2019/9/27-2020/4/27: ONE漫画 https://www.onemanhua.com/
+	// 2020/5/2: Oh漫画 https://www.ohmanhua.com/
 	base_URL : 'https://www.ohmanhua.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -176,15 +127,14 @@ var crawler = new CeL.work_crawler({
 		// console.log(work_data.chapter_list);
 	},
 
+	using_webp : false,
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		// 2019/9/27: "JRUIFMVJDIWE569j"
+		var __READKEY = "JRUIFMVJDIWE569j";
 		function decode(C_DATA) {
-			// @see https://www.ohmanhua.com/js/custom.js
-			var __READKEY = "JRUIFMVJDIWE569j";
 			C_DATA = crawler.__cdecrypt(__READKEY,
-			//
-			CryptoJS["enc"]["Base64"]["parse"](C_DATA)
-			//
-			.toString(CryptoJS["enc"].Utf8));
+			// @see https://www.ohmanhua.com/js/custom.js
+			CryptoJS.enc.Base64.parse(C_DATA).toString(CryptoJS.enc.Utf8));
 
 			var mh_info, image_info;
 			eval(C_DATA);
@@ -200,31 +150,26 @@ var crawler = new CeL.work_crawler({
 		}
 		// console.log(chapter_data);
 
+		// chapter_data.startimg often "1"
+		var image_NO = parseInt(chapter_data.startimg) || 1;
 		// 設定必要的屬性。
 		chapter_data.title = chapter_data.pagename;
-		chapter_data.image_count = chapter_data.totalimg;
+		// chapter_data.image_count = chapter_data.totalimg + image_NO - 1;
+
 		// @see function __cr_getpice() @
 		// https://www.ohmanhua.com/js/manga.read.js
+		var chapter_image_base_path = this.base_URL.replace(/:\/\/.+/, '://')
+		// "img.mljzmm.com"
+		+ chapter_data.domain + "/comic/" + encodeURI(chapter_data.imgpath);
 		chapter_data.image_list = [];
-		for (var index = parseInt(chapter_data.startimg) || 1;
-		//
-		index <= chapter_data.totalimg; index++) {
-			var image_url = this.base_URL.replace(/:\/\/.+/, '://')
-			//
-			+ chapter_data.domain + "/comic/"
-			//
-			+ encodeURI(chapter_data.imgpath)
-			// 
-			+ (chapter_data.startimg - 1 + index)
+		for (; image_NO <= chapter_data.totalimg; image_NO++) {
 			// @see __cr.PrefixInteger()
-			.pad(4) + ".jpg";
+			var image_url = chapter_image_base_path + image_NO.pad(4) + ".jpg";
 			if (this.using_webp) {
 				// @see __cr.switchWebp()
 				image_url += '.webp';
 			}
-			chapter_data.image_list.push({
-				url : image_url
-			});
+			chapter_data.image_list.push(image_url);
 		}
 
 		// console.log(chapter_data);
