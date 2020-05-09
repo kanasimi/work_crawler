@@ -225,7 +225,7 @@ function start_update(event_sender) {
 			// 已經下載完畢則不會再下載，會直接跳到 'update-downloaded'。
 			if (autoUpdater.autoDownload) {
 				event_sender.send('send_message_info',
-						'開始下載安裝包。若還沒下載完就離開程式，下次會從頭下載。您可升高訊息欄的偵錯等級，以得知下載進度。');
+						'開始下載安裝包。若還沒下載完就離開程式、出錯，下次會從頭下載。您可升高訊息欄的偵錯等級，以得知下載進度。');
 				latest_time = Date.now();
 			}
 			return;
