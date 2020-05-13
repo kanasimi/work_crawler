@@ -12,6 +12,11 @@ CeL.run('application.net.work_crawler.sites.SinMH');
 
 // ----------------------------------------------------------------------------
 
+// https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature
+// for Error: unable to verify the first certificate
+// code: 'UNABLE_TO_VERIFY_LEAF_SIGNATURE'
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 var crawler = CeL.SinMH({
 	// 循序逐個、一個個下載圖像。僅對漫畫有用，對小說無用。小說章節皆為逐個下載。 Download images one by one.
 	// one_by_one : true,
