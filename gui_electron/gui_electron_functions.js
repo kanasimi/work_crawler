@@ -597,7 +597,7 @@ function setup_download_sites() {
 				title : site_type + '/' + site_id,
 				onclick : function() {
 					site_used = this.title;
-					language_used = site_used.replace(/\/.+/, '');
+					type_and_language_used = site_used.replace(/\/.+/, '');
 					reset_favorites();
 					reset_site_options();
 				}
@@ -616,7 +616,7 @@ function setup_download_sites() {
 		});
 		site_nodes.push(label_node, label_sites);
 		set_click_trigger(label_node, label_sites, function() {
-			language_used = this.title;
+			type_and_language_used = this.title;
 		});
 	}
 	CeL.new_node(site_nodes, 'download_sites_list');
@@ -2030,42 +2030,35 @@ function show_search_result(work_data_search_queue) {
 	delete CeL.get_element('search_results').running;
 }
 
-var language_used;
+var type_and_language_used;
 // 自動搜尋不同的網站並選擇下載作品。
 function search_work_title() {
 	// 點選 語言
-	var attention_message = '請先在網路作品區指定要搜尋的作品類別。';
-	if (!language_used) {
-		show_attention({
-			b : {
-				T : attention_message
-			}
-		}, attention_message);
+	if (test_and_attention('請先在網路作品區指定要搜尋的作品類別。', !type_and_language_used)) {
 		return;
 	}
-	hide_attention_panel(attention_message);
 
+	// 僅能搜尋作品名稱，無法搜尋作品ID。
 	var work_title = CeL.node_value('#input_work_id').trim();
-	attention_message = '請先輸入作品名稱或🆔。';
-	if (!work_title) {
-		show_attention({
-			b : {
-				T : attention_message
-			}
-		}, attention_message);
+	if (test_and_attention('請先輸入作品名稱。', !work_title)) {
 		CeL.get_element('input_work_id').focus();
 		return;
 	}
-	hide_attention_panel(attention_message);
 
 	var sites = CeL.get_element('search_results');
-	if (sites.running) {
-		CeL.error({
-			T : [ '正在搜尋[%1]中，必須先取消當前的搜尋程序才能重新搜尋。', work_title ]
-		});
+	if (test_and_attention([ '正在搜尋[%1]中，必須先取消當前的搜尋程序才能重新搜尋。', work_title ],
+			sites.running)) {
 		return;
 	}
 	sites.running = work_title;
+
+	var guessed_language = CeL.guess_text_language(work_title);
+	if (!type_and_language_used.endsWith(guessed_language)) {
+		CeL.warn({
+			T : [ '作品名稱之語言似乎為%1，但指定了%2。', guessed_language,
+					type_and_language_used ]
+		});
+	}
 
 	CeL.remove_all_child('search_results');
 	CeL.new_node([ {
@@ -2101,7 +2094,7 @@ function search_work_title() {
 		C : 'button'
 	} ], 'search_results');
 
-	sites = download_sites_set[language_used];
+	sites = download_sites_set[type_and_language_used];
 	sites = Object.keys(sites);
 	var work_data_search_queue = Object.create(null), site_count = sites.length, done = 0, found = 0;
 	sites.forEach(function(site_id) {
@@ -2126,7 +2119,7 @@ function search_work_title() {
 			}
 		}
 
-		site_id = language_used + '/' + site_id;
+		site_id = type_and_language_used + '/' + site_id;
 		var crawler = get_crawler(site_id), chapter_time_interval = crawler
 				.get_chapter_time_interval('search');
 		CeL.debug(crawler.site_id + ' chapter_time_interval: '
@@ -2150,7 +2143,7 @@ function search_work_title() {
 
 			if (site_count - done < 12) {
 				var still_searching = sites.filter(function(site_id) {
-					return !((language_used + '/' + site_id)
+					return !((type_and_language_used + '/' + site_id)
 					//
 					in work_data_search_queue);
 				});
@@ -2564,17 +2557,11 @@ function start_gui_crawler() {
 
 	// or work_title
 	var work_id = CeL.node_value('#input_work_id');
-	var attention_message = '請先輸入作品名稱或🆔。';
-	if (work_id) {
+	if (test_and_attention('請先輸入作品名稱或🆔。', !work_id)) {
+		CeL.get_element('input_work_id').focus();
+	} else {
 		hide_attention_panel(attention_message);
 		add_new_download_job(crawler, work_id);
-	} else {
-		show_attention({
-			b : {
-				T : attention_message
-			}
-		}, attention_message);
-		CeL.get_element('input_work_id').focus();
 	}
 }
 
@@ -2814,6 +2801,18 @@ function open_DevTools() {
 }
 
 // ----------------------------------------------
+
+function test_and_attention(message, condition_to_show) {
+	if (condition_to_show) {
+		show_attention({
+			b : {
+				T : message
+			}
+		}, message);
+		return condition_to_show;
+	}
+	hide_attention_panel(message);
+}
 
 var attention_data = Object.create(null);
 
