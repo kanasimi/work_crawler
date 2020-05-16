@@ -137,8 +137,8 @@ var crawler = new CeL.work_crawler({
 // CeL.set_debug(3);
 
 // for 年齢確認 eternityConfirm()
-crawler.setup_value('cookie', 'confirm=' + Math.floor(Date.now() / 1000)
+crawler.setup_value('cookie', [ 'confirm=' + Math.floor(Date.now() / 1000)
 // location.hostname
-+ ';domain=' + crawler.base_URL.match(/\/\/([^\/]+)/)[1] + ';path=/;');
++ ';domain=' + crawler.base_URL.match(/\/\/([^\/]+)/)[1] + ';path=/;' ]);
 
 start_crawler(crawler, typeof module === 'object' && module);
