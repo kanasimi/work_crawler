@@ -1006,9 +1006,17 @@ function paste_text() {
 function show_fso(fso_path) {
 	try {
 		// 跳轉至目標資料夾的目錄下，而不只標示出資料夾位置。
-		node_electron.shell.openItem(fso_path)
 		// https://electronjs.org/docs/api/shell
-		|| node_electron.shell.showItemInFolder(fso_path);
+		if (node_electron.shell.openPath) {
+			// electron 9.0.0
+			node_electron.shell.openPath(fso_path);
+		} else if (node_electron.shell.openItem) {
+			// electron@7.3.0
+			node_electron.shell.openItem(fso_path);
+		} else {
+			// + select the file.
+			node_electron.shell.showItemInFolder(fso_path);
+		}
 	} catch (e) {
 		CeL.error(String(e) + ': ' + fso_path);
 	}
@@ -2038,7 +2046,8 @@ function search_work_title() {
 		return;
 	}
 
-	// 僅能搜尋作品名稱，無法搜尋作品ID。
+	// 搜尋名稱用於跨網站。僅能搜尋作品名稱，無法搜尋作品id。
+	// 另外假如您已知作品id，可以直接在最愛作品清單輸入id，用不著搜尋。
 	var work_title = CeL.node_value('#input_work_id').trim();
 	if (test_and_attention('請先輸入作品名稱。', !work_title)) {
 		CeL.get_element('input_work_id').focus();
