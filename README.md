@@ -302,7 +302,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
    ![暗色系主題](https://lh3.googleusercontent.com/qS2i8iJTQ21bY8_IbHkBDG0__svP_zJIaYXKREbXW3lNmYA4XyJVLfJ0eyvJ6mb_k0jmGXNLRmKsngfdob-lkrLrHq9HLkcP3vVgXxx4ZQLbA85o7bRAurPiN_-Py3t7AZoop5S78g=w2400)
 
    能一鍵搜尋各網站與下載作品：
-   **搜尋名稱用於跨網站。僅能搜尋作品名稱，無法搜尋作品ID。假如您已知作品id，可以直接在最愛作品清單輸入id，用不著搜尋。**
+   **搜尋名稱用於跨網站。僅能搜尋作品名稱，無法搜尋作品id。假如您已知作品id，可以直接在最愛作品清單輸入id，用不著搜尋。**
    ![一鍵搜尋各網站與下載作品](https://lh3.googleusercontent.com/pz0zKuF5-kxFle8EgoUMfNAF7V8Kq6M_Dw9HVBvbXrF3hIW94voHHstMSsoZXmmmuVCxCk-Tfev6g0OJ2Ee7aZViYGiCB9hi5lJRlJ0r0eY9KjYkgW-BV2OOq8fPwp0Hi8RylR-YQQ=w2400)
 
 ## Execution 執行

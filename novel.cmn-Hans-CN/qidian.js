@@ -142,7 +142,7 @@ var crawler = new CeL.work_crawler({
 	// 對於章節列表與作品資訊分列不同頁面(URL)的情況，應該另外指定.chapter_list_URL。
 	chapter_list_URL : function(work_id) {
 		this._csrfToken = this.get_URL_options.agent.cookie_hash._csrfToken;
-		return 'https://book.qidian.com/ajax/book/category?_csrfToken='
+		return this.book_base_URL + 'ajax/book/category?_csrfToken='
 				+ this._csrfToken + '&bookId=' + work_id;
 	},
 	get_chapter_list : function(work_data, html, get_label) {

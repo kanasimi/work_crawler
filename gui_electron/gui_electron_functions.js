@@ -1008,7 +1008,7 @@ function show_fso(fso_path) {
 		// 跳轉至目標資料夾的目錄下，而不只標示出資料夾位置。
 		// https://electronjs.org/docs/api/shell
 		if (node_electron.shell.openPath) {
-			// electron 9.0.0
+			// electron 9.0.0 棄用 shell.openItem，並用異步的 shell.openPath 代替。
 			node_electron.shell.openPath(fso_path);
 		} else if (node_electron.shell.openItem) {
 			// electron@7.3.0

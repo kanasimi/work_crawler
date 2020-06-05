@@ -105,7 +105,8 @@ var crawler = new CeL.work_crawler({
 		// 在取得小說章節內容的時候，若發現有章節被目錄漏掉，則將之補上。
 		var has_continue = this.check_next_chapter(work_data, chapter_NO, html,
 		// PATTERN_next_chapter: [ all, next chapter url ]
-		/<a [^<>]*?href="([^"]+.html)"[^<>]*><button[^<>]*>下一[章页][：: →]*/);
+		/<a [^<>]*?href="([^<>"]+.html)"[^<>]*><button[^<>]*>下一[章页][：: →]*/);
+		// console.log([ chapter_NO, has_continue ]);
 
 		// var chapter_data = work_data.chapter_list[chapter_NO - 1];
 
@@ -133,7 +134,7 @@ var crawler = new CeL.work_crawler({
 
 		if (has_continue) {
 			CeL.debug('Move url of #' + (chapter_NO + 1) + ' to #' + chapter_NO
-					+ '/' + work_data.chapter_list.length, 2);
+					+ '/' + work_data.chapter_list.length, 1);
 			work_data.chapter_list[chapter_NO - 1].url
 			// hack for this.check_next_chapter()
 			= work_data.chapter_list[chapter_NO].url;

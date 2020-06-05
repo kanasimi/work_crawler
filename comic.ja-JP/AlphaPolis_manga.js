@@ -10,6 +10,10 @@ require('../work_crawler_loader.js');
 
 var crawler = new CeL.work_crawler({
 
+	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
+	// 模仿實際人工請求。
+	// chapter_time_interval : '5s',
+
 	base_URL : 'https://www.alphapolis.co.jp/',
 
 	// 解析 作品名稱 → 作品id get_work()
