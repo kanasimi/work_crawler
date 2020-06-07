@@ -1113,8 +1113,15 @@ function save_preference(crawler) {
 
 	// prepare work directory.
 	CeL.create_directory(crawler.main_directory);
-	CeL.write_file(crawler.main_directory + 'preference.json',
-			crawler.preference);
+
+	var preference = crawler.preference;
+	if (get_favorite_list_file_path(crawler)) {
+		// 不將最愛作品清單保存到 preference.json
+		preference = Object.clone(preference);
+		delete preference.favorites;
+	}
+
+	CeL.write_file(crawler.main_directory + 'preference.json', preference);
 }
 
 function check_favorites_line_separator(favorites) {
