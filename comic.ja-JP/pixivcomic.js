@@ -19,6 +19,8 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 	// 日本的網路漫畫網站習慣刪掉舊章節，因此每一次都必須從頭檢查。
 	recheck : true,
 
+	acceptable_types : 'webp|jpg',
+
 	// one_by_one : true,
 	base_URL : base_URL,
 
@@ -189,6 +191,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 			if (html.error)
 				throw html.error;
 		} catch (e) {
+			console.debug(html);
 			if (typeof html === 'string' && html.includes('期限')) {
 				// e.g., html==="エピソードの公開期限が過ぎました"
 				chapter_data.limited = html;
