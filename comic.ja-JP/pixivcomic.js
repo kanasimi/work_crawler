@@ -144,23 +144,24 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
 
-		var url = html.between(
+		url = html.between(
 				'<script id="__NEXT_DATA__" type="application/json">',
 				'</script>');
 		if (url) {
 			// 2020/6 via Google Chrome
 			Object.assign(chapter_data, JSON.parse(url));
 
-			var time = (new Date).format('%Y-%2m-%2dT%2H:%2M:%2S%z').replace(
-					/(\d{2})$/, ':$1');
-			if (false) {
-				var hash = crawler.CryptoJS.MD5(
-						time + chapter_data.runtimeConfig.salt).toString(
-						crawler.CryptoJS.enc.Hex);
+			var hash, time = (new Date).format('%Y-%2m-%2dT%2H:%2M:%2S%z')
+					.replace(/(\d{2})$/, ':$1');
+			if (this.forge) {
+				hash = this.forge.md.md5.create();
+				hash.update(time + chapter_data.runtimeConfig.salt);
+				hash = hash.digest().toHex();
+			} else {
+				hash = this.CryptoJS
+						.MD5(time + chapter_data.runtimeConfig.salt).toString(
+								this.CryptoJS.enc.Hex);
 			}
-			var hash = crawler.forge.md.md5.create();
-			hash.update(time + chapter_data.runtimeConfig.salt);
-			hash = hash.digest().toHex();
 
 			// key: "getApiAppEpisodesIdReadRaw",
 			// https://comic.pixiv.net/_next/static/chunks/eb04f3552258e45f2446579a418399595863319c.e75f48a4015b43818882.js
@@ -174,8 +175,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 				// Authorization : 'Bearer ' +
 				// this.configuration.accessToken("Bearer", []),
 
-				// "pixivcomic"
-				'X-Requested-With' : this.id,
+				'X-Requested-With' : this.id/* "pixivcomic" */,
 				'X-Client-Time' : time,
 				'X-Client-Hash' : hash
 			});
@@ -288,35 +288,36 @@ crawler.setup_value('cookie', 'open_work_page=yes');
 
 setup_crawler(crawler, typeof module === 'object' && module);
 
-if (false) {
-	CeL.get_URL_cache(
-	// https://cdnjs.com/libraries/crypto-js
-	'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js',
-			// https://cryptojs.gitbook.io/docs/
-			// https://github.com/brix/crypto-js
-			function(contents) {
-				crawler.CryptoJS = require(crawler.main_directory
-						+ 'crypto-js.min.js');
-				// console.log(crawler.CryptoJS.MD5('text').toString(crawler.CryptoJS.enc.Hex));
-				// start_crawler(crawler, typeof module === 'object' && module);
-			}, {
-				directory : crawler.main_directory
-			});
-}
-
 CeL.get_URL_cache(
-//
-'https://cdn.jsdelivr.net/npm/node-forge@0.7.0/dist/forge.min.js',
-// https://github.com/digitalbazaar/forge
+// https://cdnjs.com/libraries/crypto-js
+'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js',
+// https://cryptojs.gitbook.io/docs/
+// https://github.com/brix/crypto-js
 function(contents) {
-	crawler.forge = require(crawler.main_directory + 'forge.min.js');
-	if (false) {
-		var hash = crawler.forge.md.md5.create();
-		hash.update('text');
-		hash = hash.digest().toHex();
-		console.log(hash);
-	}
+	crawler.CryptoJS = require(crawler.main_directory
+	//
+	+ 'crypto-js.min.js');
+	// console.log(crawler.CryptoJS.MD5('text').toString(crawler.CryptoJS.enc.Hex));
 	start_crawler(crawler, typeof module === 'object' && module);
 }, {
 	directory : crawler.main_directory
 });
+
+if (false) {
+	CeL.get_URL_cache(
+	//
+	'https://cdn.jsdelivr.net/npm/node-forge@0.7.0/dist/forge.min.js',
+	// https://github.com/digitalbazaar/forge
+	function(contents) {
+		crawler.forge = require(crawler.main_directory + 'forge.min.js');
+		if (false) {
+			var hash = crawler.forge.md.md5.create();
+			hash.update('text');
+			hash = hash.digest().toHex();
+			console.log(hash);
+		}
+		start_crawler(crawler, typeof module === 'object' && module);
+	}, {
+		directory : crawler.main_directory
+	});
+}
