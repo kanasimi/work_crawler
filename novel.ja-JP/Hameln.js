@@ -45,7 +45,7 @@ var crawler = new CeL.work_crawler({
 	convert_id : {
 		r18 : function(callback) {
 			CeL.info('これ以降はR-18小説と見なされる。');
-			this.search_URL = '?mode=search_r18cs&word=';
+			this.search_URL = '?mode=search_r18&word=';
 			callback();
 		}
 	},
