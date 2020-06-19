@@ -14,6 +14,10 @@ CeL.run([ 'application.storage.EPUB'
 
 // ----------------------------------------------------------------------------
 
+// for Error: unable to verify the first certificate
+// code: 'UNABLE_TO_VERIFY_LEAF_SIGNATURE'
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 // 章節以及篇章連結的模式。
 var PATTERN_chapter = /<div class="list">(.+)<\/div>|<a href="(\d+\.html)">(.+)<\/a>/g,
 // 打廣告就算了；每個章節都要檢查這個資源檔，有些煩人了。
