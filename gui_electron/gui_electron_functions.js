@@ -169,6 +169,7 @@ download_sites_set = {
 		zhuishubang : '追书帮',
 
 		daocaoren : '稻草人书屋',
+		'51shucheng' : '无忧书城',
 		luoxia : '落霞小说网',
 		kanunu : '努努书坊',
 		piaotian : '飘天文学'
