@@ -40,9 +40,9 @@ crawler = new CeL.work_crawler({
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
 	// skip_error : true,
 
-	// e.g., 551072 英雄再临（英雄？我早就不当了）\0017 第十七话\551072-17-005.jpg
+	// e.g., 638085 我的充电女友\0091 我会一直陪着你\638085-91-007.jpg
 	// {Natural}MIN_LENGTH:最小容許圖案檔案大小 (bytes)。
-	MIN_LENGTH : 250,
+	MIN_LENGTH : 200,
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
