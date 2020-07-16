@@ -135,7 +135,6 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [SF漫画](https://manhua.sfacg.com/) | sfacg.js | **本工具無法下載VIP付費內容** |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。拿來下載日本漫畫的人好像比較多。  **本工具無法下載付费章节** |
 | [漫画人](http://www.1kkk.com/) | 1kkk.js | 系統與 dm5.js 幾乎相同。和 dm5 一樣，很多作品要收費。  **本工具無法下載付费章节** |
-| [土豪漫画](https://www.tohomh123.com/) | tohomh.js | 系統似 dm5.js。 |
 | [韩漫窝](http://www.hanmanwo.com/) | hanmanwo.js | 有些韓國漫畫。系統似 dm5.js。 |
 | [有码漫画](https://www.youma.org/) | youma.js | 大多為韓國漫畫。系統似 hanmanwo.js。 |
 | [梦游漫画](https://mymhh.com/) | mymhh.js | 有許多韓國漫畫。系統似 hanmanwo.js。僅能以手機觀看。 |
@@ -143,7 +142,6 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | **本工具無法下載VIP付費內容** |
 | [微博动漫](http://manhua.weibo.com/) | weibo.js | **本工具無法下載VIP付費內容**<br />竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
 | [大古漫画网](https://www.dagumanhua.com/) | dagu.js | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。 |
-| [76漫画](http://www.srweh.com/) | 76.js | 採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | [我要去漫画](http://www.517manhua.com/) | 517.js | 採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | [365漫画网](http://www.iqg365.com/) | iqg365.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
 | [一漫网](http://www.muyict.com/) | emw.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
@@ -182,6 +180,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | ~~[爱看漫画网](http://ikmhw.com/)~~ | ~~ikmhw.js~~ | 韓國漫畫比較多。系統似 tohomh.js。圖片API反應速度比土豪漫画慢許多。內容是自動採集生成的？有少許缺圖與亂序。 2019/8/18 最後一次成功連接，2019/8/21 起無法連接。 |
 | ~~[360漫画](http://www.xueshine.com/)~~ | ~~360taofu.js~~ | 2019/11後續章節全部轉到 76.js。有頻率限制。有些漫畫畫質較高，然而本站有太多缺圖、亂序、錯漏話。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | ~~[网易漫画](https://manhua.163.com/)~~ | ~~archive/163.js~~ | 2017/7/13 開始 **本工具無法下載VIP付費內容** 2019年12月31日12點後永久停止服務。[大部分已經轉移至嗶哩嗶哩漫畫](https://finance.sina.com.cn/stock/usstock/c/2019-11-27/doc-iihnzhfz2061319.shtml)。 |
+| ~~[76漫画](http://www.srweh.com/)~~ | ~~archive/76.js~~ | 2019/11/16 5:20 最後一次成功連接。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
+| ~~[土豪漫画](https://www.tohomh123.com/)~~ | ~~archive/tohomh.js~~ | 2020/6/21 無法連接。系統似 dm5.js。 |
 
 ### Japanese webcomics 日語網路漫畫 日本語のウェブコミック
 [comic.ja-JP/](comic.ja-JP/)*.js, images → zip
