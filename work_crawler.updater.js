@@ -54,7 +54,7 @@ function fetch_url(url, callback) {
 	.on('error', function(e) {
 		// network error?
 		// console.error(e);
-		// throw e;
+		throw e;
 		callback(null, e);
 	});
 }
