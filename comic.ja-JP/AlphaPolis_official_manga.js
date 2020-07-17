@@ -8,41 +8,18 @@ require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
-var crawler = new CeL.work_crawler({
+CeL.run('application.net.work_crawler.sites.AlphaPolis');
 
+// ----------------------------------------------------------------------------
+
+var crawler = CeL.AlphaPolis({
 	// 當網站不允許太過頻繁的訪問/access時，可以設定下載之前的等待時間(ms)。
 	// 模仿實際人工請求。
 	// chapter_time_interval : '5s',
 
-	base_URL : 'https://www.alphapolis.co.jp/',
-	is_official : true,
-
-	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'search?category=official_manga&query=',
-	parse_search_result : function(html, get_label) {
-		// console.log(html);
-		var _this = this, id_data = [],
-		// {Array}id_list = [id,id,...]
-		id_list = [];
-		html.each_between(' class="title">', '</a>', function(text) {
-			// console.log(text);
-			var id = text.between(' href="/manga/official/', '"');
-			if (id) {
-				if (_this.is_official && id.startsWith('official/'))
-					id = id.between('official/');
-				id_list.push(id.replace(/\//, '-'));
-				id_data.push(get_label(text.between('>')));
-			}
-		});
-		// console.log([ id_list, id_data ]);
-		return [ id_list, id_data ];
-	},
+	work_type : 'manga/official',
 
 	// 取得作品的章節資料。 get_work_data()
-	work_URL : function(work_id) {
-		return 'manga/' + (this.is_official ? 'official/' : '')
-				+ work_id.replace('-', '/');
-	},
 	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
@@ -120,33 +97,12 @@ var crawler = new CeL.work_crawler({
 		});
 		work_data.chapter_list.reverse();
 		// console.log(work_data.chapter_list);
-	},
-
-	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
-		// console.log(html);
-		var chapter_data = work_data.chapter_list[chapter_NO - 1];
-		Object.assign(chapter_data, {
-			// 設定必要的屬性。
-			title : get_label(html.between('<h2>', '</h2>')),
-			image_list : []
-		});
-
-		html.each_between('_pages.push("', '"', function(url) {
-			if (url.includes('://'))
-				chapter_data.image_list.push(url);
-		});
-
-		return chapter_data;
 	}
+
 });
 
 // ----------------------------------------------------------------------------
 
 // CeL.set_debug(3);
-
-// for 年齢確認 eternityConfirm()
-crawler.setup_value('cookie', [ 'confirm=' + Math.floor(Date.now() / 1000)
-// location.hostname
-+ ';domain=' + crawler.base_URL.match(/\/\/([^\/]+)/)[1] + ';path=/;' ]);
 
 start_crawler(crawler, typeof module === 'object' && module);
