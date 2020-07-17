@@ -118,7 +118,8 @@ download_sites_set = {
 		// TYPE-MOONコミックエース
 		tmca : 'TYPE-MOONエース',
 
-		AlphaPolis_official_manga : 'アルファポリス',
+		AlphaPolis_official_manga : 'アルファポリス 公式',
+		AlphaPolis_user_manga : 'アルファポリス 投稿',
 
 		moae : 'モアイ',
 

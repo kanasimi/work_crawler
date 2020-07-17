@@ -193,6 +193,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [ヤングエースUP](https://web-ace.jp/youngaceup/) | youngaceup.js | KADOKAWA webエース 所属 |
 | [TYPE-MOONコミックエース](https://web-ace.jp/tmca/) | tmca.js | KADOKAWA webエース 所属 |
 | [アルファポリスの公式Web漫画](https://www.alphapolis.co.jp/manga/official) | AlphaPolis_official_manga.js | レンタルする話は取得できません |
+| [アルファポリスの無料の漫画投稿](https://www.alphapolis.co.jp/manga/user) | AlphaPolis_user_manga.js | |
 | [モアイ](http://www.moae.jp/) | moae.js | 講談社 モーニング・アフタヌーン・イブニング合同Webコミックサイト |
 | [pixivコミック](https://comic.pixiv.net/) | pixivcomic.js | pixivコミック(ぴくしぶこみっく) |
 | [サイコミ](https://cycomi.com/fw/cycomibrowser/title/serialization/0) | cycomi.js | |

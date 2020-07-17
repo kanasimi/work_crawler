@@ -1,5 +1,5 @@
 ﻿/**
- * 批量下載アルファポリス - 電網浮遊都市 - 公式漫画的工具。 Download AlphaPolis official mangas.
+ * 批量下載アルファポリス - 電網浮遊都市 - 公式漫画的工具。 Download AlphaPolis official manga.
  */
 
 'use strict';
@@ -15,19 +15,22 @@ var crawler = new CeL.work_crawler({
 	// chapter_time_interval : '5s',
 
 	base_URL : 'https://www.alphapolis.co.jp/',
+	is_official : true,
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search?category=official_manga&query=',
 	parse_search_result : function(html, get_label) {
 		// console.log(html);
-		var id_data = [],
+		var _this = this, id_data = [],
 		// {Array}id_list = [id,id,...]
 		id_list = [];
 		html.each_between(' class="title">', '</a>', function(text) {
 			// console.log(text);
 			var id = text.between(' href="/manga/official/', '"');
 			if (id) {
-				id_list.push(id);
+				if (_this.is_official && id.startsWith('official/'))
+					id = id.between('official/');
+				id_list.push(id.replace(/\//, '-'));
 				id_data.push(get_label(text.between('>')));
 			}
 		});
@@ -37,7 +40,8 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return 'manga/official/' + work_id.replace('-', '/');
+		return 'manga/' + (this.is_official ? 'official/' : '')
+				+ work_id.replace('-', '/');
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = {
