@@ -17,7 +17,12 @@ var crawler = CeL.AlphaPolis({
 	// 模仿實際人工請求。
 	// chapter_time_interval : '5s',
 
-	work_type : 'manga'
+	work_type : 'manga',
+
+	// 提取出引數（如 URL）中的作品ID 以回傳。
+	extract_work_id : function(work_information) {
+		return /^\d+-\d+$/.test(work_information) && work_information;
+	}
 
 });
 
