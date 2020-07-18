@@ -55,7 +55,8 @@ function fetch_url(url, callback) {
 		// network error?
 		// console.error(e);
 		throw e;
-		callback(null, e);
+		if (typeof callback === 'function')
+			callback(null, e);
 	});
 }
 
@@ -82,7 +83,7 @@ function download_update_tool(update_script_url, callback) {
 
 // ----------------------------------------------------------------------------
 
-download_update_tool(update_script_url, function(update_script_name) {
+download_update_tool(update_script_url, function(update_script_name, error) {
 	update_CeJS(update_script_name, update_finished);
 });
 

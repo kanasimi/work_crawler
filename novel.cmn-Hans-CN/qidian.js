@@ -41,7 +41,7 @@ var crawler = new CeL.work_crawler({
 		while ((text = get_next_between()) !== undefined) {
 			// 從URL網址中解析出作品id。
 			var matched = text.match(
-			//		
+			//
 			/<a [^<>]*?href="[^<>"]+?\/(\d+)"[^<>]*>(.+?)<\/a>/);
 			id_list.push(matched[1]);
 			id_data.push(get_label(matched[2]));
