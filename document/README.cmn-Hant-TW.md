@@ -52,7 +52,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 已撰寫完的各大小說漫畫網站工具包括：
 
 ### Japanese web fictions / Japanese light novels ライトノベル 日本輕小說 日本語のオンライン小説
-[novel.ja-JP/](novel.ja-JP/)*.js, web pages → epub
+[../novel.ja-JP/](novel.ja-JP/)*.js, web pages → epub
 
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
@@ -65,7 +65,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [ムーンライトノベルズ](https://mnlt.syosetu.com/top/top/) | mnlt.js | [小説家になろう](http://syosetu.com/)の[女性読者向けのR18作品を探すことができるサイト](http://noc.syosetu.com/site/faq/) |
 
 ### Simplified Chinese web fictions / novels 中国内地小说 中国簡体字のオンライン小説
-[novel.cmn-Hans-CN/](novel.cmn-Hans-CN/)*.js, web pages → epub
+[../novel.cmn-Hans-CN/](novel.cmn-Hans-CN/)*.js, web pages → epub
 
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
@@ -92,7 +92,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
 ### Traditional Chinese webcomics 繁體字漫畫 中国繁体字のウェブコミック
-[comic.cmn-Hant-TW/](comic.cmn-Hant-TW/)*.js, images → zip
+[../comic.cmn-Hant-TW/](comic.cmn-Hant-TW/)*.js, images → zip
 
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
@@ -107,7 +107,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | [Toomics 玩漫](https://toomics.com/tc/) | toomics_tc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |
 
 ### Simplified Chinese webcomics 中国内地漫画 中国簡体字のウェブコミック
-[comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, images → zip
+[../comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, images → zip
 * 本工具無法下載需VIP付費、已屏蔽或刪除的內容。
 
 | Site 平臺名稱 | Tool file | Note 說明 |
@@ -170,7 +170,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | ~~[土豪漫画](https://www.tohomh123.com/)~~ | ~~archive/tohomh.js~~ | 2020/6/21 無法連接。系統似 dm5.js。 |
 
 ### Japanese webcomics 日語網路漫畫 日本語のウェブコミック
-[comic.ja-JP/](comic.ja-JP/)*.js, images → zip
+[../comic.ja-JP/](comic.ja-JP/)*.js, images → zip
 
 | Site | Tool file | Note |
 | --- | --- | --- |
@@ -189,7 +189,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | ~~[OVERLAP](https://over-lap.co.jp/gardo/)~~ | ~~archive/OVERLAP.js~~ | オーバーラップ コミックガルド: [ActiBook](https://ebook.digitalink.ne.jp/)系統。2019/7/5 改版，域名移至[コミックガルド](https://comic-gardo.com/)，之後轉成與[となりのヤングジャンプ](https://tonarinoyj.jp/)相同系統，圖片經過 canvas 處理以展示。不再支援。 |
 
 ### English webcomics 英語網路漫畫 英語のウェブコミック
-[comic.en-US/](comic.en-US/)*.js, images → zip
+[../comic.en-US/](comic.en-US/)*.js, images → zip
 
 | Site | Tool file | Note |
 | --- | --- | --- |

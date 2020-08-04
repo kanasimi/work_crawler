@@ -41,14 +41,14 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 
 ## Installation
 1. Install [7-Zip](https://www.7-zip.org/) 18.01+
-2. Install the released package from [![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)
+2. Install the released package from [release page ![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/)
 
 ### Speedy installation
 Speedy installation supports stable editions.
 1. Please install [node.js](https://nodejs.org/) and [7-Zip](https://www.7-zip.org/) 18.01+.
 2. Save the install-script <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>.
 3. Using [node.js](https://nodejs.org/) to executing <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>.
-4. And then you may [try it](#execution) now!
+4. And then you can [try it](#execution) now!
 
 * 🚧 Not yet full translated, please refer to [Chinese document](README.cmn-Hant-TW.md).
 

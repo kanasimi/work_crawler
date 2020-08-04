@@ -1,10 +1,15 @@
 ﻿# CeJS オンライン小説/コミックダウンローダー
 - [ja] ウェブ小説 (→ epub)、ウェブ漫画作品を一括ダウンロードツール。
 
+## Quick view
+* [インストール](#インストール)
+   * [迅速なインストール](#迅速なインストール)
+* [実行](#実行)
+
 ## 言語サポート
 [一緒に翻訳しましょう](https://github.com/kanasimi/work_crawler/issues/185)！
 
-| Language | サポート |
+| 言語 | サポート |
 |---|:---:|
 | 繁體中文 | ✔️ |
 | 简体中文 | ✔️ |
@@ -36,7 +41,7 @@
 * 🚧 Not yet translated, please refer to [Chinese document](README.cmn-Hant-TW.md).
 
 ### ライトノベル 日本語のオンライン小説
-[novel.ja-JP/](novel.ja-JP/)*.js, web pages → epub
+[../novel.ja-JP/](novel.ja-JP/)*.js, web pages → epub
 
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
@@ -49,7 +54,7 @@
 | [ムーンライトノベルズ](https://mnlt.syosetu.com/top/top/) | mnlt.js | [小説家になろう](http://syosetu.com/)の[女性読者向けのR18作品を探すことができるサイト](http://noc.syosetu.com/site/faq/) |
 
 ### 日本語のウェブコミック
-[comic.ja-JP/](comic.ja-JP/)*.js, images → zip
+[../comic.ja-JP/](comic.ja-JP/)*.js, images → zip
 
 | Site | Tool file | Note |
 | --- | --- | --- |
@@ -69,13 +74,14 @@
 
 ## インストール
 1. [7-Zip](https://www.7-zip.org/) 18.01+ をインストールします。
-2. [![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)リリース パッケージ](https://github.com/kanasimi/work_crawler/releases/latest/) をインストールします。
+2. [リリース パッケージ![GitHub release](https://img.shields.io/github/release/kanasimi/work_crawler.svg)](https://github.com/kanasimi/work_crawler/releases/latest/) をインストールします。
 
 ### 迅速なインストール
+安定チャンネルを使用したい場合は、
 1. [node.js](https://nodejs.org/) と [7-Zip](https://www.7-zip.org/) 18.01+ をインストールします。
 2. インストール脚本 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code> をダウンロードします。
 3. [node.js](https://nodejs.org/) で、<code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code> を実行します。
-4. これで[実行](#実行)できます。
+4. これで本ツールを[実行](#実行)できます。
 
 * 🚧 Not yet full translated, please refer to [Chinese document](README.cmn-Hant-TW.md).
 

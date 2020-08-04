@@ -12,23 +12,23 @@
 
 # CeJS online novels / comics downloader
 - [en] Tools to download novels (→ epub) and comics.<br />
-	[English document](document/README.en-US.md)
+	→ **[English document](document/README.en-US.md)**
 - [TW] 批量下載小說 (→ epub)、漫畫網站作品的工具。
-- [CN] 批量下载小说 (→ epub)、漫画网站作品的网络爬虫。
-	[中文說明](document/README.cmn-Hant-TW.md)
-- [ja] ウェブ小説 (→ epub)、ウェブ漫画作品を一括ダウンロードツール。
-	[日本語の説明](document/README.ja-JP.md)
+- [CN] 批量下载小说 (→ epub)、漫画网站作品的网络爬虫。<br />
+	→ **[中文說明](document/README.cmn-Hant-TW.md)**
+- [ja] ウェブ小説 (→ epub)、ウェブ漫画作品を一括ダウンロードツール。<br />
+	→ **[日本語の説明](document/README.ja-JP.md)**
 
 ## Language support 多語言支援
 Welcome to join [the translating project](https://github.com/kanasimi/work_crawler/issues/185)! [一緒に翻訳しましょう](https://github.com/kanasimi/work_crawler/issues/185)！
 
-| Language 語言 | Support 支援狀況 |
-|---|:---:|
-| 繁體中文 | ✔️ |
+| Language 語言 | Support 支援狀況 | README.md |
+|---|:---:|---|
+| 繁體中文 | ✔️ | [中文說明](document/README.cmn-Hant-TW.md) |
 | 简体中文 | ✔️ |
-| English | ✔️ |
+| English | ✔️ | [English document](document/README.en-US.md) |
 | Português brasileiro | 🚧 |
-| 日本語 | 🚧 |
+| 日本語 | 🚧 | [日本語の説明](document/README.ja-JP.md) |
 | 한국어 | 🚧 |
 
 ## OS support 作業系統支援
@@ -47,15 +47,14 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | API 應用程式介面 | ✔️ |
 
 ## Features 特點
-視窗型態介面支援不同語系：
+GUI supports different languages: 視窗型態介面支援不同語系：
 ![支援不同語系](https://lh3.googleusercontent.com/-EOQgYAap6YPw7iKQRlvlA4-fr37-4SddypCw44H2uhgpgmQ6FtpjjJ-qg_gJHbwfNRn8GNvvoYqE46yIQwg3xOVzR-5mzfqX8tPhOM06iYdF2gXOuIddcN5rNlCMhmmIxYye7SX8g=w2400)
 
-有許多可調整的下載選項：
+Many download options: 有許多可調整的下載選項：
 ![有許多可調整的下載選項](https://lh3.googleusercontent.com/uEUr-iYs1JKoZukar44sOqxSL908uPTSjSG4eDco-O8bFjjIFkxSRsPy2UMkcnI3Z7Hfn-zZ2wdE9OjRr1CQZs_DfoGjvJLBCoRg9g4GH-JxG9ZpwT8fX8srn958jBzJzNbWcMvdIg=w2400)
 
-可選用暗色系主題：
+Optional dark theme: 可選用暗色系主題：
 ![暗色系主題](https://lh3.googleusercontent.com/qS2i8iJTQ21bY8_IbHkBDG0__svP_zJIaYXKREbXW3lNmYA4XyJVLfJ0eyvJ6mb_k0jmGXNLRmKsngfdob-lkrLrHq9HLkcP3vVgXxx4ZQLbA85o7bRAurPiN_-Py3t7AZoop5S78g=w2400)
 
-能一鍵搜尋各網站與下載作品：
-**搜尋名稱用於跨網站。僅能搜尋作品名稱，無法搜尋作品id。假如您已知作品id，可以直接在最愛作品清單輸入id，用不著搜尋。**
+Search websites and download works with one click: 能一鍵搜尋各網站與下載作品：
 ![一鍵搜尋各網站與下載作品](https://lh3.googleusercontent.com/pz0zKuF5-kxFle8EgoUMfNAF7V8Kq6M_Dw9HVBvbXrF3hIW94voHHstMSsoZXmmmuVCxCk-Tfev6g0OJ2Ee7aZViYGiCB9hi5lJRlJ0r0eY9KjYkgW-BV2OOq8fPwp0Hi8RylR-YQQ=w2400)
