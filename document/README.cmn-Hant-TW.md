@@ -206,7 +206,15 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 為了想趕快嘗鮮的您～<!-- （已經做過的步驟可以跳過） -->
 1. 先安裝 [node.js](https://nodejs.org/) 與 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下載小說須先安裝 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以製作 .epub 電子書。 --> **請將程式安裝於預設路徑下，否則可能出現錯誤！** 已經安裝過的可以跳過。Node.js 用以執行本工具。7-Zip 在更新本工具，或者打包漫畫章節，以及製作電子書時使用。
 2. 下載並儲存本工具安裝檔 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>（按右鍵另存新檔）。本工具安裝檔 **預設會將所有組件放在 `work_crawler-master` 目錄下**。
-3. <details><summary>在命令列介面下以 Node.js 執行安裝檔 `work_crawler.updater.js`。（本安裝檔不能直接點擊兩下執行。點擊本行可獲得更詳細的說明。）</summary>
+3. 若在中國大陸使用本工具，您可能需要更改預設 npm registry 以加快下載速度：
+   ```bash
+   npm config set registry https://registry.npm.taobao.org
+   ```
+   附注：恢復預設設定請執行
+   ```bash
+   npm config set registry https://registry.npmjs.org
+   ```
+4. <details><summary>在命令列介面下以 Node.js 執行安裝檔 `work_crawler.updater.js`。（本安裝檔不能直接點擊兩下執行。點擊本行可獲得更詳細的說明。）</summary>
 
    1. **進入[命令列介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下**：
       * Windows 10 下，請按下<kbd>[⊞ Windows鍵](https://zh.wikipedia.org/wiki/Windows%E9%94%AE)</kbd> + <kbd>X</kbd> → 選擇 **命令提示字元**。（如下圖的示範）
@@ -226,7 +234,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
    4. 執行完畢後，除了 `work_crawler-master` 這個目錄，還會出現一些附屬檔案。這些檔案是幫助更新用的，就算刪除也不會影響程式運行或更新。
 </details>
 
-4. 然後就能[開始試用](#execution-執行)囉。
+5. 然後就能[開始試用](#execution-執行)囉。
    <details><summary>下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子：</summary>
 
    ![下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
@@ -240,8 +248,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
    ```
 </details>
 
-5. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
-6. 您可設定 `work_crawler.configuration.js` 以指定 **所有網站採用之預設主要下載目錄**，所下載的作品檔案預設會放置到此主要目錄之工具檔名稱底下。簡便的方法是：
+6. 若是您將 CeJS 放置在其他目錄底下，您可以從 <code>[_repository_path_list.txt](https://github.com/kanasimi/CeJS/blob/master/_for%20include/_repository_path_list.sample.txt)</code> 這個檔案來設定放置的路徑。
+7. 您可設定 `work_crawler.configuration.js` 以指定 **所有網站採用之預設主要下載目錄**，所下載的作品檔案預設會放置到此主要目錄之工具檔名稱底下。簡便的方法是：
    1. 將 `work_crawler.default_configuration.js` 改名成 `work_crawler.configuration.js`。只要在 `work_crawler.configuration.js` 檔案裡面，已將所有選項設定好；那麼是否有 `work_crawler.default_configuration.js` 並不影響程式運作，請不用擔心。
    2. 直接用文字編輯器打開 `work_crawler.configuration.js`，找到 `global.data_directory = '';` 這一段，把引號中改成您要的 **所有網站採用之預設主要下載目錄**；例如：
       ```javascript
@@ -249,7 +257,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
       ```
       **請記得在引號中，目錄分隔號必須輸入兩次！** 這不會影響到您之前曾手動改變過的標的目錄。
 
-7. 每次要更新到最新版本時，只要進到工具安裝檔所在目錄，重新執行一次本工具安裝檔即可。
+8. 每次要更新到最新版本時，只要進到工具安裝檔所在目錄，重新執行一次本工具安裝檔即可。
    ```bash
    node work_crawler.updater.js
    ```
