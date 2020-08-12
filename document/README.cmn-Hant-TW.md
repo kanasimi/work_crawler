@@ -1,6 +1,5 @@
 ﻿# CeJS 網路小說漫畫下載工具
 - [TW] 批量下載小說 (→ epub)、漫畫網站作品的工具。
-- [CN] 批量下载小说 (→ epub)、漫画网站作品的网络爬虫。
 
 ## 快速瀏覽
 * [安裝](#安裝)
@@ -30,8 +29,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 ## Interface 支援介面
 | 介面/界面 | 支援狀況 |
 |---|:---:|
-| [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) 視窗/图形 | ✔️ |
-| [CLI](https://en.wikipedia.org/wiki/Command-line_interface) 命令列/命令行 | ✔️ |
+| [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) 視窗 | ✔️ |
+| [CLI](https://en.wikipedia.org/wiki/Command-line_interface) 命令列 | ✔️ |
 | API 應用程式介面 | ✔️ |
 
 ## Features 特點
