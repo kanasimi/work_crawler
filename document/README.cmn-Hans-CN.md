@@ -47,7 +47,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 为了想赶快尝鲜的您～<!-- （已经做过的步骤可以跳过） -->
 1. 先安装 [node.js](https://nodejs.org/) 与 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下载小说须先安装 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以制作 .epub 电子书。 --> **请将程式安装于预设路径下，否则可能出现错误！** 已经安装过的可以跳过。Node.js 用以执行本工具。7-Zip 在更新本工具，或者打包漫画章节，以及制作电子书时使用。
 2. 下载并储存本工具安装档 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>（按右键另存新档）。本工具安装档 **预设会将所有组件放在 `work_crawler-master` 目录下**。
-3. 若在中国大陆使用本工具，您可能需要更改预设 npm registry 以加快下载速度：
+3. 若在中国大陆使用本工具，您可能需要更改预设 npm registry 至[淘宝 npm 镜像](https://developer.aliyun.com/mirror/NPM)，以加快下载速度：<details><summary>（点击本文字可获得更详细的说明）</summary>
    ```bash
    npm config set registry https://registry.npm.taobao.org
    ```
@@ -55,6 +55,8 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
    ```bash
    npm config set registry https://registry.npmjs.org
    ```
+</details>
+
 4. <details><summary>在命令行界面下以 Node.js 执行安装档 `work_crawler.updater.js`。（本安装档不能直接点击两下执行。点击本行可获得更详细的说明。）</summary>
 
    1. **进入[命令行界面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下**：
