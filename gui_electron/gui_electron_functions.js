@@ -991,18 +991,89 @@ function set_panel_height(panel) {
 	}
 }
 
-function set_click_trigger(trigger, panel, callback) {
+function set_click_trigger(trigger, target_panel, callback) {
+	trigger = CeL.get_element(trigger);
 	CeL.set_class(trigger, 'trigger');
-	CeL.add_listener('click', function() {
-		if (CeL.toggle_display(panel) === 'block') {
-			set_panel_height(panel);
+	CeL.add_listener('click', function on_click_trigger() {
+		var display = CeL.toggle_display(target_panel);
+		if (display === 'block') {
+			set_panel_height(target_panel);
 		}
-		CeL.get_element(panel).parentElement.style.height = '';
+		CeL.get_element(target_panel).parentElement.style.height = '';
+		set_trigger_icon.call(this, {
+			display : display
+		});
 		if (typeof callback === 'function') {
-			callback.call(trigger, panel);
+			callback.call(this, target_panel);
 		}
 		return false;
 	}, trigger);
+
+	setTimeout(set_trigger_icon.bind(trigger, {
+		initialization : true,
+		display : 'block'
+	}));
+}
+
+function icon_of_trigger(trigger) {
+	var icon_node = trigger.firstElementChild;
+	if (icon_node) {
+		var _class = CeL.DOM.set_class(icon_node);
+		if (!_class || !('trigger_icon' in _class))
+			icon_node = null;
+	}
+	return icon_node;
+}
+
+function set_trigger_icon(options) {
+	var trigger = CeL.get_element(this);
+
+	// trigger.children.length
+	var children_count = trigger.childElementCount;
+
+	var icon_node = icon_of_trigger(trigger);
+
+	var need_icon;
+
+	var width = CeL.DOM.get_node_offset(trigger).width;
+	// console.log(trigger);
+	// console.log(width);
+
+	if (options.initialization && width === 0) {
+		// forced show icon for hidden button
+		need_icon = true;
+
+	} else if (children_count === 1) {
+		need_icon = width
+				- (CeL.DOM.get_node_offset(trigger.firstElementChild).width || 0) > 60;
+
+	} else {
+		// assert: children_count === 0
+		// || children_count > 1
+		need_icon = width > (children_count === 0 ? 40 : 200);
+	}
+
+	if (!need_icon) {
+		if (icon_node) {
+			trigger.removeChild(icon_node);
+		}
+		return;
+
+	}
+
+	var icon_text = options.display === 'block' ? '📖' : '📕';
+	var icon_title = _(options.display === 'block' ? '收合' : '展開');
+	if (icon_node) {
+		icon_node.title = icon_title;
+		CeL.DOM.set_text(icon_node, icon_text);
+
+	} else {
+		CeL.new_node({
+			div : icon_text,
+			R : icon_title,
+			C : 'trigger_icon'
+		}, [ trigger, 'first' ]);
+	}
 }
 
 // ----------------------------------------------
@@ -1511,7 +1582,7 @@ function reset_favorites(crawler) {
 		} : {
 			T : '🈳 尚未設定最愛作品。'
 		}, {
-			// 我的最愛
+			// 📝 我的最愛
 			b : [ '✍️', {
 				T : '編輯最愛作品清單'
 			} ],

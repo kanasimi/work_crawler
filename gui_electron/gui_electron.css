@@ -111,6 +111,10 @@ dt {
 	padding-right: .5em;
 }
 
+.trigger_icon {
+	float: right;
+}
+
 .panel {
 	color: #11a;
 	display: inline-block;
