@@ -62,12 +62,18 @@ crawler = CeL.PTCMS({
 	},
 	pre_add_ebook_chapter : function(data) {
 		// console.log(data.text);
-		data.text = data.text.replace(/([\s\S]+?)<首发[\s\S]+?(?:<br>|$)/g, function(all, front) {
+		data.text = data.text.replace(/([\s\S]+?)<首发[\s\S]+?(?:<br>|$)/g,
+		//
+		function(all, front) {
 			var index = front.lastIndexOf('<br>');
 			if (index >= 0)
 				front = front.slice(0, index);
 			return front;
-		});
+		})
+		// e.g., https://www.x81zw.com/book/63/63675/43268085.html
+		// "<aonclick>防采集自动加载失败，点击手动加载，不支持阅读模式，请安装最新版浏览器！</aonclick></divid>"
+		.replace(/<aonclick>[\s\S]+?<\/aonclick>/g, '').replace(/<\/?divid>/g,
+				'');
 		// console.log(data.text);
 	}
 });
