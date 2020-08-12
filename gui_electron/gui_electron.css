@@ -89,6 +89,7 @@ dt {
 	background-color: #ffd;
 	border: 1px solid #eec;
 	margin: 1px;
+	text-align: left !important;
 }
 
 #right_panel {

@@ -210,7 +210,12 @@ download_options_set = Object.create(null),
 // 下面，此時本檔案和作品資料就會放在不同的目錄下。
 default_configuration_file_name = 'work_crawler.configuration.json',
 //
-theme_list = 'light|dark'.split('|');
+theme_hash = {
+	// 🔆
+	light : '☀️',
+	// 🌙
+	dark : '🌃'
+}, theme_list = Object.keys(theme_hash);
 
 var DEFAULT_THEME_TEXT = 'default', default_theme_name;
 theme_list.push(DEFAULT_THEME_TEXT);
@@ -550,12 +555,15 @@ function setup_theme_selecter() {
 		T : '布景主題：'
 	} ];
 	theme_list.forEach(function(theme_name) {
+		var _theme_name = theme_name === DEFAULT_THEME_TEXT
+		//
+		? default_theme_name : theme_name;
 		theme_nodes.push({
-			T : theme_name + ' theme',
-			force_convert : force_convert,
-			C : [
-					theme_name === DEFAULT_THEME_TEXT ? default_theme_name
-							: theme_name, 'button' ],
+			span : [ theme_hash[_theme_name] || '', {
+				T : theme_name + ' theme',
+				force_convert : force_convert
+			} ],
+			C : [ _theme_name, 'button' ],
 			D : {
 				theme_label : theme_name
 			},
@@ -579,12 +587,16 @@ function setup_download_sites() {
 		node_of_id : Object.create(null)
 	});
 
-	var site_nodes = [];
+	var site_nodes = [], type_icon = {
+		//
+		novel : '📄',
+		comic : '🖼️'
+	};
 	for ( var site_type in download_sites_set) {
 		var label_node = CeL.new_node({
-			div : {
+			div : [ type_icon[site_type.replace(/\..+$/, '')] || '', {
 				T : site_type_description[site_type] || site_type
-			},
+			} ],
 			title : site_type,
 			C : 'site_type_label'
 		}), label_sites = [];
@@ -2573,9 +2585,11 @@ function start_gui_crawler() {
 
 	// initialization && initialization();
 
+	var attention_message = '請先輸入作品名稱或🆔。';
+
 	// or work_title
 	var work_id = CeL.node_value('#input_work_id');
-	if (test_and_attention('請先輸入作品名稱或🆔。', !work_id)) {
+	if (test_and_attention(attention_message, !work_id)) {
 		CeL.get_element('input_work_id').focus();
 	} else {
 		hide_attention_panel(attention_message);
