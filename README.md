@@ -16,7 +16,7 @@
 - [TW] 批量下載小說 (→ epub)、漫畫網站作品的工具。<br />
 	→ **[繁體中文說明](document/README.cmn-Hant-TW.md)**
 - [CN] 批量下载小说 (→ epub)、漫画网站作品的网络爬虫。<br />
-	→ **[简体中文說明](document/README.cmn-Hans-CN.md)**
+	→ **[简体中文说明](document/README.cmn-Hans-CN.md)**
 - [ja] ウェブ小説 (→ epub)、ウェブ漫画作品を一括ダウンロードツール。<br />
 	→ **[日本語の説明](document/README.ja-JP.md)**
 
@@ -26,7 +26,7 @@ Welcome to join [the translating project](https://github.com/kanasimi/work_crawl
 | Language 語言 | Support 支援狀況 | README.md |
 |---|:---:|---|
 | 繁體中文 | ✔️ | [繁體中文說明](document/README.cmn-Hant-TW.md) |
-| 简体中文 | ✔️ | [简体中文說明](document/README.cmn-Hans-CN.md) |
+| 简体中文 | ✔️ | [简体中文说明](document/README.cmn-Hans-CN.md) |
 | English | ✔️ | [English document](document/README.en-US.md) |
 | Português brasileiro | 🚧 |
 | 日本語 | 🚧 | [日本語の説明](document/README.ja-JP.md) |
