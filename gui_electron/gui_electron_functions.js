@@ -996,7 +996,7 @@ function set_click_trigger(trigger, target_panel, callback) {
 	CeL.set_class(trigger, 'trigger');
 	CeL.add_listener('click', function on_click_trigger() {
 		var display = CeL.toggle_display(target_panel);
-		if (display === 'block') {
+		if (display !== 'none') {
 			set_panel_height(target_panel);
 		}
 		CeL.get_element(target_panel).parentElement.style.height = '';
@@ -1010,8 +1010,7 @@ function set_click_trigger(trigger, target_panel, callback) {
 	}, trigger);
 
 	setTimeout(set_trigger_icon.bind(trigger, {
-		initialization : true,
-		display : 'block'
+		initialization : true
 	}));
 }
 
@@ -1061,8 +1060,10 @@ function set_trigger_icon(options) {
 
 	}
 
-	var icon_text = options.display === 'block' ? '📖' : '📕';
-	var icon_title = _(options.display === 'block' ? '收合' : '展開');
+	var expand_now = options.display !== 'none';
+	var icon_text = expand_now ? '📖' : '📕';
+	// click to expand
+	var icon_title = _(expand_now ? 'collapse' : 'expand');
 	if (icon_node) {
 		icon_node.title = icon_title;
 		CeL.DOM.set_text(icon_node, icon_text);
