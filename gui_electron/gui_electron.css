@@ -111,6 +111,10 @@ dt {
 	padding-right: .5em;
 }
 
+.trigger:hover {
+	background-color: #888;
+}
+
 .trigger_icon {
 	float: right;
 }
