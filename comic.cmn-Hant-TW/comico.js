@@ -16,7 +16,7 @@ CeL.run('application.net.work_crawler.sites.comico');
 
 // crawler(configuration, callback, initializer)
 CeL.comico({
-	base_URL : 'http://www.comico.com.tw/',
+	base_URL : 'https://www.comico.com.tw/',
 
 	// search_head_token : '<li class="list-article02__item">',
 	// PATTERN_search : /<a href="[^<>"]*?titleNo=(\d+)"[\s\S]*? alt="([^"]+)"/,
