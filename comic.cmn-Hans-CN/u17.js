@@ -19,8 +19,9 @@ crawler = new CeL.work_crawler({
 	base_URL : 'http://www.u17.com/',
 
 	// https://github.com/kanasimi/work_crawler/issues/250
-	// e.g., 97661 破例婚约（全彩）
-	acceptable_types : 'png',
+	// png: 97661 破例婚约（全彩）
+	// gif:
+	acceptable_types : 'png|gif',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'www/ajax.php?mod=comic&act=comic_suggest&q=',
@@ -155,7 +156,7 @@ crawler = new CeL.work_crawler({
 			});
 
 		} else {
-			throw '網站結構改變，無法取得資料！請回報此項錯誤。';
+			throw new Error('網站結構改變，無法取得資料！請回報此項錯誤。');
 		}
 
 		// type: '0','3': OK, '4': masked
