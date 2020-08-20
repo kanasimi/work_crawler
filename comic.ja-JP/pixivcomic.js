@@ -111,7 +111,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 		// 因為中間的章節可能已經被下架，因此依章節標題來定章節編號。
 		this.set_chapter_NO_via_title(work_data);
 
-		// console.log(work_data.chapter_list);
+		// console.trace(work_data.chapter_list);
 		// console.log(work_data.official_work.stories);
 	},
 
@@ -131,6 +131,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 				'X-Requested-With' : 'XMLHttpRequest'
 			}
 		};
+		// console.trace(work_data.token_options);
 
 		var url = html.between(
 		// <meta name="viewer-api-url"
@@ -151,16 +152,25 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 			// 2020/6 via Google Chrome
 			Object.assign(chapter_data, JSON.parse(url));
 
+			var salt = chapter_data.runtimeConfig
+			//
+			&& chapter_data.runtimeConfig.salt
+			// 2020/8/20: No chapter_data.runtimeConfig supported
+			// salt is defined directly @
+			// https://comic.pixiv.net/_next/static/chunks/b60f68a1e08e7dab72e67792ea4c65a79a5af442.445088b0d1a2f05514d5.js
+			// t.update("".concat(e).concat("mAtW1X8SzGS880fsjEXlM73QpS1i4kUMBhyhdaYySk8nWz533nrEunaSplg63fzT"))
+			|| ('mAtW1X8SzGS880fsjEXlM73QpS1i4k'
+			//
+			+ 'UMBhyhdaYySk8nWz533nrEunaSplg63fzT');
 			var hash, time = (new Date).format('%Y-%2m-%2dT%2H:%2M:%2S%z')
 					.replace(/(\d{2})$/, ':$1');
 			if (this.forge) {
 				hash = this.forge.md.md5.create();
-				hash.update(time + chapter_data.runtimeConfig.salt);
+				hash.update(time + salt);
 				hash = hash.digest().toHex();
 			} else {
-				hash = this.CryptoJS
-						.MD5(time + chapter_data.runtimeConfig.salt).toString(
-								this.CryptoJS.enc.Hex);
+				hash = this.CryptoJS.MD5(time + salt).toString(
+						this.CryptoJS.enc.Hex);
 			}
 
 			// key: "getApiAppEpisodesIdReadRaw",
