@@ -18,8 +18,8 @@ CeL.run('application.net.work_crawler.sites.comico');
 CeL.comico({
 	base_URL : 'https://www.comico.com.tw/',
 
-	// 2020/8/18起? 需要coin閱讀的會給一張圖，卻又403。
-	skip_error : true,
+	// 2020/8/18-21? 需要coin閱讀的會給一張圖，卻又403。
+	// skip_error : true,
 
 	// search_head_token : '<li class="list-article02__item">',
 	// PATTERN_search : /<a href="[^<>"]*?titleNo=(\d+)"[\s\S]*? alt="([^"]+)"/,
