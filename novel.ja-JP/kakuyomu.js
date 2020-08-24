@@ -109,12 +109,14 @@ var crawler = new CeL.work_crawler({
 			}
 			work_data.chapter_list.push({
 				url : text.between('<a href="', '"'),
-				date : new Date(text.between(
-				//
-				'datePublished" datetime="', '"')),
+				// text.between('datePublished" datetime="', '"')
+				date : new Date(text.between(' datetime="', '"')),
 				title : text.between(
+				// <span class="widget-toc-episode-titleLabel
+				// js-vertical-composition-item">第1話 どうやら死んだらしい</span>
+				'<span class="widget-toc-episode-titleLabel', '</span>')
 				//
-				'<span class="widget-toc-episode-titleLabel">', '</span>')
+				.between('>')
 			});
 		});
 	},
