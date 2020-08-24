@@ -124,11 +124,19 @@ var crawler = new CeL.work_crawler({
 	using_webp : false,
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 2019/9/27: "JRUIFMVJDIWE569j"
-		var __READKEY = "JRUIFMVJDIWE569j";
+		// 2020/8/21 14:39:33: "fw12558899ertyui"
+		var __READKEY = 'fw12558899ertyui';
 		function decode(C_DATA) {
-			C_DATA = crawler.__cdecrypt(__READKEY,
 			// @see https://www.ohmanhua.com/js/custom.js
-			CryptoJS.enc.Base64.parse(C_DATA).toString(CryptoJS.enc.Utf8));
+			C_DATA = CryptoJS.enc.Base64.parse(C_DATA).toString(
+					CryptoJS.enc.Utf8);
+			// @search `if (typeof C_DATA !=` ...) { eval( @
+			// https://www.ohmanhua.com/js/custom.js
+			try {
+				C_DATA = crawler.__cdecrypt(__READKEY, C_DATA);
+			} catch (e) {
+				C_DATA = crawler.__cdecrypt("JRUIFMVJDIWE569j", C_DATA);
+			}
 
 			var mh_info, image_info;
 			eval(C_DATA);
