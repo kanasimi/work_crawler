@@ -100,13 +100,19 @@ var crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
-		html = html.between('<ul class="list_con_li autoHeight">', '</ul>')
-				// is_manhua
-				|| html.between('<div class="middleright_mr">',
-						'<!--middleright_mr-->');
+		var is_manhua;
+		// is_manhua = work_data.id.startsWith('manhua_');
+		var text = html.between('<ul class="list_con_li autoHeight">',
+		//
+		'</ul>');
+		if (!text) {
+			is_manhua = true;
+			text = html.between('<div class="middleright_mr">',
+					'<!--middleright_mr-->');
+		}
 
-		work_data.chapter_list = [];
-		var is_manhua = work_data.id.startsWith('manhua_'), matched,
+		var chapter_list = work_data.chapter_list = [];
+		var matched,
 		/**
 		 * e.g., <code>
 		<li><a title="双星之阴阳师-第01话" href="/sxzyys/25213.shtml" >第01话</a>
@@ -114,20 +120,29 @@ var crawler = new CeL.work_crawler({
 		</code>
 		 */
 		PATTERN_chapter = is_manhua ?
-		// [all,title,href,inner]
-		/<li><a title="([^"<>]+)" href="([^"<>]+)"[^<>]*>(.+?)<\/a>/g :
+		// [all,part,title,href,inner]
+		/<h2>(.+?)<\/h2>|<li><a title="([^"<>]+)" href="([^"<>]+)"[^<>]*>(.+?)<\/a>/g
+		//
+		:
 		// [all,href,title,inner]
 		/<li><a href="([^"<>]+)" target="_blank" title="([^"<>]+)"[^<>]*>(.+?)<\/a>/g
 		//
 		;
-		while (matched = PATTERN_chapter.exec(html)) {
+		while (matched = PATTERN_chapter.exec(text)) {
 			if (is_manhua) {
-				work_data.chapter_list.push({
-					title : get_label(matched[3]),
-					url : this.base_URL_manhua + encodeURI(matched[2])
-				});
+				if (matched[1]) {
+					// https://manhua.dmzj.com/wojiadenvpuxiaojie
+					this.set_part(work_data, matched[1].replace(
+							work_data.title, '').trim());
+					continue;
+				}
+				var chapter_data = {
+					title : get_label(matched[4]),
+					url : this.base_URL_manhua + encodeURI(matched[3])
+				};
+				this.add_chapter(work_data, chapter_data);
 			} else {
-				work_data.chapter_list.unshift({
+				chapter_list.unshift({
 					title : get_label(matched[3]),
 					url : matched[1]
 				});
@@ -137,7 +152,7 @@ var crawler = new CeL.work_crawler({
 		return;
 	},
 
-	parse_chapter_data : function(html, work_data, get_label) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// decode chapter data
 		function decode(code) {
 			// console.log(code);
@@ -193,6 +208,8 @@ var crawler = new CeL.work_crawler({
 				}
 			})
 		};
+		chapter_data = Object.assign(work_data.chapter_list[chapter_NO - 1],
+				chapter_data);
 
 		// console.log(chapter_data.image_list);
 		return chapter_data;
