@@ -115,9 +115,9 @@ if (is_CLI) {
 	// CeL.gettext.use_domain('GUESS', true);
 }
 
-global.work_id = is_CLI
+globalThis.work_id = is_CLI
 		&& (CeL.env.arg_hash && (CeL.env.arg_hash.title || CeL.env.arg_hash.id) || process.argv[2])
-		|| global.work_id;
+		|| globalThis.work_id;
 
 if (data_directory
 // && !CeL.directory_exists(data_directory)
@@ -255,7 +255,7 @@ if (is_CLI && !work_id && require.main
 	process.exit();
 }
 
-global.option_type_token = option_type_token;
+globalThis.option_type_token = option_type_token;
 
 // ----------------------------------------------------------------------------
 
@@ -290,7 +290,7 @@ function setup_crawler(crawler, crawler_module) {
 	CeL.debug(crawler.id + ', ' + crawler.main_directory, 1, 'setup_crawler');
 }
 
-global.setup_crawler = setup_crawler;
+globalThis.setup_crawler = setup_crawler;
 
 function start_crawler(crawler, crawler_module) {
 	setup_crawler(crawler, crawler_module);
@@ -321,7 +321,7 @@ function start_crawler(crawler, crawler_module) {
 	crawler.start(work_id, crawler.after_download_list);
 }
 
-global.start_crawler = start_crawler;
+globalThis.start_crawler = start_crawler;
 
 // CeL.set_debug(3);
 

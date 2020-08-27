@@ -14,42 +14,42 @@
 // 請記得在引號中，目錄分隔號必須輸入兩次！
 // '': the same directory as the .js running,
 // or default download location of user.
-global.data_directory = '';
+globalThis.data_directory = '';
 
 // 設定是否開啟自動更新功能。
-global.auto_update = true;
+globalThis.auto_update = true;
 
 // npm: 若有 CeJS module 則用之。
-global.use_cejs_mudule = true;
+globalThis.use_cejs_mudule = true;
 
 // ------------------------------------
 
 // 代理伺服器 "hostname:port"
-global.proxy_server = '';
+globalThis.proxy_server = '';
 
 /** {String|Function}儲存最愛作品清單的目錄。可以把最愛作品清單放在獨立的檔案，便於編輯。 */
-global.favorite_list_directory = '';
+globalThis.favorite_list_directory = '';
 // 儲存最愛作品清單的目錄 @ .main_directory。
 favorite_list_directory = function() {
 	return this.main_directory + 'favorite.txt';
 };
 
 /** {String|Function}當只輸入 "l" 時的轉換。 */
-global.default_favorite_list = '';
+globalThis.default_favorite_list = '';
 
 // ------------------------------------
 // configuration for arrangement/*.js
 
 // default directory to place completed files
 // 將會被指定為第一個存在的目錄。
-global.completed_directory = [ '', '' ];
+globalThis.completed_directory = [ '', '' ];
 
 // 檔案分類完後要放置的標的目錄。
-global.catalog_directory = '';
+globalThis.catalog_directory = '';
 
 // ------------------------------------
 // 各個網站獨特的設定/特別的個人化設定。
-global.site_configuration = {};
+globalThis.site_configuration = {};
 
 // comico 搭配閱讀卷示範
 site_configuration.comico = site_configuration.comico_jp = site_configuration.comico_jp_plus = {
