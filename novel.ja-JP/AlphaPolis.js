@@ -29,8 +29,9 @@ var crawler = CeL.AlphaPolis({
 
 	// 2018/10/16-19 間開始: 頁面讀得太頻繁，例如連續讀取20個頁面，之後會只提供無內容頁面。
 	// 開新的 instance 可以多重下載作品。
-	// 2019/1/29: 13s 還不行, 15s OK (每20個章節需要超過5分鐘)
-	chapter_time_interval : '15s',
+	// 2019/1/29-2020/6: 13s 還不行, 15s OK (每20個章節需要超過5分鐘)
+	// 2020/8/9 20s 不行, 20s OK
+	chapter_time_interval : '20s',
 
 	work_type : 'novel',
 
