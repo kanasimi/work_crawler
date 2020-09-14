@@ -125,22 +125,44 @@ var crawler = new CeL.work_crawler({
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 2019/9/27: "JRUIFMVJDIWE569j"
 		// 2020/8/21 14:39:33: "fw12558899ertyui"
-		var __READKEY = 'fw12558899ertyui';
-		function decode(C_DATA) {
+		var __READKEY = "fw12558899ertyui";
+		function decode_data(C_DATA, key, default_key) {
+			// console.log(C_DATA);
 			// @see https://www.ohmanhua.com/js/custom.js
 			C_DATA = CryptoJS.enc.Base64.parse(C_DATA).toString(
 					CryptoJS.enc.Utf8);
+
 			// @search `if (typeof C_DATA !=` ...) { eval( @
 			// https://www.ohmanhua.com/js/custom.js
 			try {
-				C_DATA = crawler.__cdecrypt(__READKEY, C_DATA);
+				C_DATA = crawler.__cdecrypt(key || __READKEY, C_DATA);
 			} catch (e) {
-				C_DATA = crawler.__cdecrypt("JRUIFMVJDIWE569j", C_DATA);
+				C_DATA = crawler.__cdecrypt(
+						typeof default_key === 'string' ? default_key
+								: "JRUIFMVJDIWE569j", C_DATA);
 			}
+			return C_DATA;
+		}
+
+		function decode(C_DATA) {
+			C_DATA = decode_data(C_DATA);
+			// console.log(C_DATA);
 
 			var mh_info, image_info;
 			eval(C_DATA);
 			mh_info.image_info = image_info;
+			// @see `totalImageCount =
+			// parseInt(eval(base64[__Ox97c0e[0x4]](__Ox97c0e[0x3])))` @
+			// https://www.ohmanhua.com/js/manga.read.js
+			if (mh_info.enc_code1) {
+				mh_info.totalimg = eval(decode_data(mh_info.enc_code1));
+			}
+			if (mh_info.enc_code2) {
+				mh_info.imgpath = decode_data(mh_info.enc_code2,
+				// 2020/9/3 改版
+				// @see function __cr_getpice(_0xfb06x4a)
+				"fw125gjdi9ertyui", "");
+			}
 			return mh_info;
 		}
 
