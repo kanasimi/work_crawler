@@ -45,7 +45,7 @@
 
 ### 懒人安装法
 为了想赶快尝鲜的您～<!-- （已经做过的步骤可以跳过） -->
-1. 先安装 [node.js](https://nodejs.org/) 与 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下载小说须先安装 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以制作 .epub 电子书。 --> **请将程式安装于预设路径下，否则可能出现错误！** 已经安装过的可以跳过。Node.js 用以执行本工具。7-Zip 在更新本工具，或者打包漫画章节，以及制作电子书时使用。
+1. 先安装 [node.js](https://nodejs.org/) 与 [7-Zip](https://www.7-zip.org/) 18.01 以上的版本。<!-- 下载小说须先安装 [7-Zip](https://en.wikipedia.org/wiki/7-Zip) 以制作 .epub 电子书。 -->**请将程式安装于预设路径下，否则可能出现错误！**（例如 Windows 系统下，安装 7-Zip 于 `C:\Program Files`）已经安装过的可以跳过。Node.js 用以执行本工具。7-Zip 在更新本工具，或者打包漫画章节，以及制作电子书时使用。
 2. 下载并储存本工具安装档 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>（按右键另存新档）。本工具安装档 **预设会将所有组件放在 `work_crawler-master` 目录下**。
 3. 若在中国大陆使用本工具，您可能需要更改预设 npm registry 至[淘宝 npm 镜像](https://developer.aliyun.com/mirror/NPM)，以加快下载速度：<details><summary>（单击本处可获得更详细的说明）</summary>
    * 请在命令列界面下执行下列指令，将会修改 [.npmrc](https://docs.npmjs.com/misc/config) 设定档：可参考 [npm 淘宝镜像配置](https://gist.github.com/52cik/c1de8926e20971f415dd)
