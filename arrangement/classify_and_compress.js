@@ -566,7 +566,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 				.test(matched[1])) {
 			// [Pixiv] 60枚 (3322006).zip
 		} else if (matched[1] !== '仮') {
-			move_to('_maybe_doujinshi');
+			move_to(/\(オリジナル\)/.test(fso_name) ? 'doujin' : '_maybe_doujinshi');
 			return;
 		}
 	}
