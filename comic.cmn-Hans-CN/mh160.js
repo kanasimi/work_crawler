@@ -53,9 +53,9 @@ var crawler = new CeL.work_crawler({
 		// console.log(html);
 		var id_list = [], id_data = [], matched, PATTERN =
 		//
-		/<a href="\/kanmanhua\/(\d+)\/?" title="([^"<>]+)">/g;
+		/\/kanmanhua\/([\w\d]+)\/?" title="([^"<>]+)">/g;
 		while (matched = PATTERN.exec(html)) {
-			id_list.push(+matched[1]);
+			id_list.push(matched[1]);
 			id_data.push(matched[2]);
 		}
 		return [ id_list, id_data ];
@@ -178,24 +178,19 @@ var crawler = new CeL.work_crawler({
 // CeL.set_debug(3);
 
 // http://www.mh160.com/template/skin4_20110501/js/mh160style/base64.js
+// 2020-06-21T13:08:54Z:
+// https://www.laimanhua.com/template/skin4_20110501/js/laimanhuastyle/base64.js
 function getpicdamin(cid, currentChapterid) {
 	var yuming;
 
 	// copy-paste start ---------------
 
-	if (parseInt(cid) > 10000) {
-
-		yuming = "https://mhpic6.kingwar.cn";
-	} else {
-
-		yuming = "https://mhpic7.kingwar.cn";
-	}
-
+	yuming = "https://mhpic6.kingwar.cn";
 	if (parseInt(currentChapterid) > 542724) {
-
 		yuming = "https://mhpic5.kingwar.cn";
-
 	}
+	if (parseInt(currentChapterid) > 885032)
+		yuming = "https://mhpic88.kingwar.cn";
 	return yuming;
 
 	// copy-paste end -----------------
