@@ -71,29 +71,31 @@ var crawler = CeL.AlphaPolis({
 		// <div class="scroll scroll-up" id="ScrollUp"><img
 		// src="/img/official_manga/under_arrow.svg?1543454323"
 		// alt="最上部へ"/></div>
-		.between('>').split(' href="/manga/official/').slice(1)
-		// <a href="/manga/official/462000159/1705" data-order="16"
-		// class="episode RentalContent" target="_blank"
-		// data-href="/manga/official/462000159/1705"><div class="thumbnail
-		// lazyloading"><img src="/?1553506644" alt=""
-		// data-src="https://cdn-image.alphapolis.co.jp/official_manga/rental_episode/462000159/1705/5af0f21a-8f08-4111-adcf-109dac113c05/thumbnail.png"
-		// class="lazyload"/></div>
-		.forEach(function(text) {
+		.between('>');
+
+		// <div data-order="0000" class="episode-unit">...</div>
+		html.each_between(' class="episode-unit">', null, function(text) {
 			// console.log(JSON.stringify(text));
-			work_data.chapter_list.push({
+			var chapter_data = {
+				// <div class="title">第1回</div>
+				title : text.between(' class="title">', '</'),
 				url : '/manga/official/'
-				//
-				+ text.between(null, '"'),
+						+ text.between(' href="/manga/official/', '"'),
 				date : text.between('<div class="up-time">', '</div>')
 				//
 				.replace('更新', ''),
-				// <div class="title">第1回</div>
-				title : text.between(' class="title">', '</'),
+				// <span class="likes-count">1,690</span>
+				likes : text.between(' class="likes-count">', '</'),
+				// <span class="comments-count">4</span>
+				comments : text.between(' class="comments-count">', '</'),
 				// <div class="rental-coin">70AC</div>
 				limited : text.between(' class="rental-coin">', '</'),
 				// <div class="volume"> 1巻収録 </div>
+				// <div class="volume">13巻収録</div>
 				収録 : text.between(' class="volume">', '</')
-			});
+			};
+			// console.log(chapter_data);
+			work_data.chapter_list.push(chapter_data);
 		});
 		work_data.chapter_list.reverse();
 		// console.log(work_data.chapter_list);
