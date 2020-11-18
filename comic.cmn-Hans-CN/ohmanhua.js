@@ -159,7 +159,7 @@ var crawler = new CeL.work_crawler({
 			}
 			if (mh_info.enc_code2) {
 				mh_info.imgpath = decode_data(mh_info.enc_code2,
-				// 2020/9/3 改版
+				// 2020/9/3 前改版
 				// @see function __cr_getpice(_0xfb06x4a)
 				"fw125gjdi9ertyui", "");
 			}

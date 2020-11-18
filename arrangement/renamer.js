@@ -305,11 +305,11 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 		throw new Error('Nothing get on ' + name);
 	}
 
-	// CeL.debug(name, 2, 'parse_file_list');
-	if (false && /創世のタイガ/.test(name)) {
-		console.log(folder_list);
-	}
 	if (false) {
+		// CeL.debug(name, 2, 'parse_file_list');
+		if (/Dobutsu no Mori/.test(name)) {
+			console.log(folder_list);
+		}
 		CeL.fs_write(base_directory + id + '.data.json', {
 			name : name,
 			files : file_list
@@ -318,7 +318,7 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 
 	function rename_process(fso_name) {
 		var matched;
-		CeL.debug('[' + fso_name + '] ' + name, 2, 'rename_process');
+		// CeL.debug('[' + fso_name + '] ' + name, 0, 'rename_process');
 		if (PATTERN_full_latin_or_sign.test(name) || !fso_name
 		// matched: [ all, main file name, '.' + extension ]
 		|| !(matched = fso_name.match(PATTERN_latin_fso_name))) {
