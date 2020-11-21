@@ -10,6 +10,7 @@ require('../work_crawler_loader.js');
 
 var crawler = new CeL.work_crawler({
 	// one_by_one : true,
+	// https://18comic.org/
 	base_URL : 'https://18comic.vip/',
 
 	// one_by_one : true,
@@ -22,7 +23,8 @@ var crawler = new CeL.work_crawler({
 	// allow .jpg without EOI mark.
 	// allow_EOI_error : true,
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
-	// skip_error : true,
+	// e.g., 与学姐的那些事
+	skip_error : true,
 
 	// acceptable_types : 'png',
 
@@ -37,7 +39,9 @@ var crawler = new CeL.work_crawler({
 		id_data = [];
 
 		html.each_between('<div class="well well-sm">', null, function(token) {
-			var id = token.between('<a href="/album/', '"').replace('/', '-');
+			var id = token.between('<a href="/album/', '/');
+			// work_id 包含擷取作品名稱的情況:
+			// id = token.between('<a href="/album/', '"').replace('/', '-');
 			if (!id)
 				return;
 			id_list.push(id);
@@ -49,7 +53,9 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return '/album/' + encodeURIComponent(work_id).replace('-', '/');
+		return '/album/' + work_id;
+		// work_id 包含擷取作品名稱的情況:
+		// return '/album/' + encodeURIComponent(work_id).replace('-', '/');
 	},
 	parse_work_data : function(html, get_label, extract_work_data, options) {
 		var work_data = {
@@ -85,11 +91,14 @@ var crawler = new CeL.work_crawler({
 			description : work_data.敘述
 		});
 
-		// 允許自訂作品目錄名/命名資料夾。
-		// console.log([ options.id, work_data.title ]);
-		// 由於 work id 已經包含作品名稱，因此不再重複作品名稱部分。
-		work_data.directory_name = options.id.match(/^[^-]+/)[0] + ' '
-				+ work_data.title;
+		// work_id 包含擷取作品名稱的情況:
+		if (false) {
+			// 允許自訂作品目錄名/命名資料夾。
+			// console.log([ options.id, work_data.title ]);
+			// 由於 work id 已經包含作品名稱，因此不再重複作品名稱部分。
+			work_data.directory_name = options.id.match(/^[^-]+/)[0] + ' '
+					+ work_data.title;
+		}
 
 		// console.log(work_data);
 		return work_data;
@@ -133,9 +142,17 @@ var crawler = new CeL.work_crawler({
 		html = html.between('<div class="panel-body">',
 				'<ul class="nav nav-tabs">');
 		html.each_between('<img ', '>', function(token) {
+			var url = token.between(' data-original="', '"')
+					|| token.between(' src="', '"');
+			if (url.startsWith('/static')) {
+				// 廣告
+				// e.g., <img alt=""
+				// src="/static/resources/images/MAFIA-956-264.png"
+				// style="width: 956px; height: 264px;" />
+				return;
+			}
 			chapter_data.image_list.push({
-				url : token.between(' data-original="', '"')
-						|| token.between(' src="', '"')
+				url : url
 			});
 		});
 
