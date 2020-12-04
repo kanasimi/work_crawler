@@ -19,7 +19,7 @@ var
 
  <a target="_blank" title="剑逆苍穹：四十四 以快破妖" href="/ComicView/index/id/630316/cid/48">
  四十四 以快破妖 </a>
- <i class="ui-icon-pay"></i> </span>
+ <i class="ui-icon-pay"></i>  <i class="ui-icon-wnew"></i> </span>
  </code>
  */
 // [ , full chapter title, chapter url, chapter_title, pay icon ]
@@ -188,7 +188,7 @@ crawler = new CeL.work_crawler({
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	parse_chapter_data : function(html, work_data) {
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// decode chapter data
 		// 2018/11/2-7 之間改版
 		// modify from
@@ -305,9 +305,24 @@ crawler = new CeL.work_crawler({
 		// 設定必要的屬性。
 		chapter_data.title = chapter_data.chapter.cTitle;
 		// chapter_data.image_count = chapter_data.picture.length;
-		chapter_data.image_list = chapter_data.picture;
 
-		chapter_data.limited = !chapter_data.chapter.canRead;
+		if (chapter_data.picture[0].url.includes(
+		// 有些漫畫的最新話會設定只在APP觀看 會取得
+		// https://manhua.qpic.cn/manhua_detail/0/14_11_10_a1827afc3b8d37cfd3f7242cc713f5751_109708576.png/0
+		'/14_11_10_a1827afc3b8d37cfd3f7242cc713f5751_109708576.png')) {
+			// assert: chapter_data.picture[0].pid === 16111
+			if (!work_data.last_download.start_chapter_next_time) {
+				CeL.info(CeL.gettext('下次從《%1》起下載。', chapter_data.title));
+				work_data.last_download.start_chapter_next_time = chapter_NO;
+			}
+			// work_data.chapter_list.truncate(chapter_NO);
+			chapter_data.limited = true;
+		} else {
+			// 正常情況。
+			chapter_data.image_list = chapter_data.picture;
+
+			chapter_data.limited = !chapter_data.chapter.canRead;
+		}
 
 		return chapter_data;
 	}

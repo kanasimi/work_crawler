@@ -131,19 +131,23 @@ var crawler = new CeL.work_crawler({
 		// console.log(work_data);
 	},
 
-	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
-		// console.log(html);
-		var chapter_data = Object.assign(
+	pre_parse_chapter_data
+	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。
+	// 必須自行保證執行 callback()，不丟出異常、中斷。
+	: function(XMLHttp, work_data, callback, chapter_NO) {
+		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
-		work_data.chapter_list[chapter_NO - 1], {
-			image_list : []
-		});
-		html = html.between('<div class="panel-body">',
-				'<ul class="nav nav-tabs">');
-		html.each_between('<img ', '>', function(token) {
+		html = XMLHttp.responseText, _this = this;
+
+		if (!chapter_data.image_list)
+			chapter_data.image_list = [];
+
+		html.between('<div class="panel-body">', '<ul class="nav nav-tabs">')
+		//
+		.each_between('<img ', '>', function(token) {
 			var url = token.between(' data-original="', '"')
-					|| token.between(' src="', '"');
+			//
+			|| token.between(' src="', '"');
 			if (url.startsWith('/static')) {
 				// 廣告
 				// e.g., <img alt=""
@@ -156,6 +160,41 @@ var crawler = new CeL.work_crawler({
 			});
 		});
 
+		// ----------------------------
+		// 每頁最多只包含500個圖片，之後就會分頁，必須遍歷每個分頁才能獲取所有圖片。
+
+		// <li class="ph-active switch" id="phpage">
+		var image_count = +html.between(' id="phpage"', '</a>').between('>')
+				.between('<span>', '</span>').between('/');
+		// console.trace(image_count);
+		if (image_count > 500) {
+		}
+
+		var next_image_page_url = html
+		/**
+		 * <code>
+		<ul class="pagination pagination-lg"><li><a href="https://18comic.vip/photo/140470/?page=1">&laquo;</a></li><li class=""><a href="https://18comic.vip/photo/140470/?page=1">1</a></li><li class="active"><span>2</span></li></ul>
+		</code>
+		 */
+		.between('<ul class="pagination', '</ul>').between(' class="active"')
+				.between('<li', '</li>').between(' href="', '"');
+		if (!next_image_page_url) {
+			callback();
+			return;
+		}
+
+		// console.log(next_image_page_url);
+		this.get_URL(next_image_page_url, function(XMLHttp) {
+			_this.pre_parse_chapter_data(XMLHttp, work_data, callback,
+					chapter_NO);
+		}, null, true);
+	},
+	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
+	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		var chapter_data = work_data.chapter_list[chapter_NO - 1];
+		// console.log(chapter_data);
+
+		// 已在 pre_parse_chapter_data() 設定完 {Array}chapter_data.image_list
 		return chapter_data;
 	},
 
