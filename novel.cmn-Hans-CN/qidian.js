@@ -94,6 +94,7 @@ var crawler = new CeL.work_crawler({
 					.replace(/\/(?:180|90|300)$/, '/600'),
 			author : get_label(text.between(' class="writer"', '</a>').between(
 					'>')),
+			authorId : html.between(' data-authorid="', '"'),
 			tags : text.between('<p class="tag">', '</p>').split(
 					/<\/(?:span|a)>/).append(
 					// 作者自定义标签
@@ -142,7 +143,9 @@ var crawler = new CeL.work_crawler({
 	// 對於章節列表與作品資訊分列不同頁面(URL)的情況，應該另外指定.chapter_list_URL。
 	chapter_list_URL : function(work_id) {
 		// console.trace(this.get_URL_options.agent);
-		this._csrfToken = this.get_URL_options.agent.last_cookie.cookie_hash._csrfToken;
+		this._csrfToken = this.get_URL_options
+		//
+		.agent.last_cookie.cookie_hash._csrfToken;
 		return this.book_base_URL + 'ajax/book/category?_csrfToken='
 				+ this._csrfToken + '&bookId=' + work_id;
 	},
@@ -167,13 +170,24 @@ var crawler = new CeL.work_crawler({
 			}
 			// chapter section?
 			volume.cs.forEach(function(chapter_data) {
+				var url;
+				if (volume.vS) {
+					// 2020/10
+					url = 'https://vipreader.qidian.com/chapter/'
+							+ work_data.id + '/' + chapter_data.id;
+					url = 'https://vipreader.qidian.com'
+					// 2020/11/11-
+					+ '/ajax/chapter/chapterInfo?_csrfToken='
+							+ crawler._csrfToken + '&bookId=' + work_data.id
+							+ '&chapterId=' + chapter_data.id + '&authorId='
+							+ work_data.authorId;
+				} else {
+					url = 'https://read.qidian.com/chapter/' + chapter_data.cU;
+				}
 				Object.assign(chapter_data, {
 					part_title : volume.vN,
 					title : chapter_data.cN,
-					url : volume.vS ? 'https://vipreader.qidian.com/chapter/'
-							+ work_data.id + '/' + chapter_data.id
-							: 'https://read.qidian.com/chapter/'
-									+ chapter_data.cU,
+					url : url,
 					limited : !chapter_data.sS
 				});
 			});
@@ -184,9 +198,25 @@ var crawler = new CeL.work_crawler({
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 在取得小說章節內容的時候，若發現有章節被目錄漏掉，則將之補上。
-		this.check_next_chapter(work_data, chapter_NO, html);
+		// this.check_next_chapter(work_data, chapter_NO, html);
 
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
+
+		if (/^\s*{/.test(html)) {
+			// console.log(html);
+			// 2020/11/11- 因為採用了 font 編碼，內文必須先經過 mapping。
+			html = JSON.parse(html).data.chapterInfo;
+			this.add_ebook_chapter(work_data, chapter_NO, {
+				title : html.extra.volumeName || chapter_data.part_title,
+				sub_title : html.chapterName || chapter_data.title,
+				date : chapter_data.uT || html.updateTime,
+				// word count
+				wc : chapter_data.cnt || html.wordsCount,
+				text : fix_HTML_error(html.content)
+						+ fix_HTML_error(html.authorWords.content)
+			});
+			return;
+		}
 
 		this.add_ebook_chapter(work_data, chapter_NO, {
 			title : chapter_data.part_title,
@@ -200,19 +230,53 @@ var crawler = new CeL.work_crawler({
 			wc : chapter_data.cnt
 					|| +get_label(html.between(
 							'<span class="j_chapterWordCut">', '</span>')),
-			text : html
-			//
-			.between(' class="read-content', '</div>').between('>').trim()
-			// 修正本網站的 HTML 語法錯誤。
-			.replace(/<p>$/, '').replace(/(?!^)<p>(?!$)/g, '</p>\n<p>')
-			// 修正圖形沒有解析的錯誤。 e.g.,
-			// https://read.qidian.com/chapter/T050C_JEojo1/7S-LnenB5z8ex0RJOkJclQ2
-			.replace(/\[\[\[CP.*?\|U:([^\|\[\]]+).*?\]\]\]/g,
-					'<img src="$1" />')
-					+ '</p>'
+			text : fix_HTML_error(html
+			// <div class="read-content j_readContent" id="">
+			.between(' class="read-content', '</div>').between('>').trim())
 		});
 	}
 });
+
+// --------------------------
+
+// 修正本網站的 HTML 語法錯誤。
+function fix_HTML_error(html) {
+	if (!html)
+		return '';
+	return html.replace(/<p>$/, '').replace(/(?!^)<p>(?!$)/g, '</p>\n<p>')
+	// 修正圖形沒有解析的錯誤。 e.g.,
+	// https://read.qidian.com/chapter/T050C_JEojo1/7S-LnenB5z8ex0RJOkJclQ2
+	.replace(/\[\[\[CP.*?\|U:([^\|\[\]]+).*?\]\]\]/g, '<img src="$1" />')
+	// 經 font viewer online: https://fontdrop.info/
+	// https://www.glyphrstudio.com/online/
+	// https://devstudioonline.com/ttf-font-viewer
+	// 分析 /ajax/chapter/chapterInfo 中所指示的
+	// http://yuewen-skythunder-1252317822.cos.ap-shanghai.myqcloud.com/font/shs-ms-a47a8681.ttf
+	// 起点中文网 此字型佔用 \uE290-\uE3DE 各-己, contains 335 glyphs
+	.replace(/&#(58\d{3});/g, function(entity, code) {
+		return char_mapper[code] || entity;
+	})
+	//
+	+ '</p>';
+}
+
+var char_mapper = Object.create(null);
+
+function initialize_char_mapper() {
+	var char_mapper_data = {
+		E290 : '各'
+	};
+
+	for ( var start_code in char_mapper_data) {
+		var char_list = char_mapper_data[start_code].chars();
+		var index = 0, char_code = parseInt(start_code, 16);
+		while (index < char_list.length) {
+			char_mapper[char_code++] = char_list[index++];
+		}
+	}
+}
+
+initialize_char_mapper();
 
 // ----------------------------------------------------------------------------
 
