@@ -243,28 +243,37 @@ var crawler = new CeL.work_crawler({
 function fix_HTML_error(html) {
 	if (!html)
 		return '';
-	return html.replace(/<p>$/, '').replace(/(?!^)<p>(?!$)/g, '</p>\n<p>')
+	html = html.replace(/<p>$/, '').replace(/(?!^)<p>(?!$)/g, '</p>\n<p>')
 	// 修正圖形沒有解析的錯誤。 e.g.,
 	// https://read.qidian.com/chapter/T050C_JEojo1/7S-LnenB5z8ex0RJOkJclQ2
-	.replace(/\[\[\[CP.*?\|U:([^\|\[\]]+).*?\]\]\]/g, '<img src="$1" />')
-	// 經 font viewer online: https://fontdrop.info/
-	// https://www.glyphrstudio.com/online/
-	// https://devstudioonline.com/ttf-font-viewer
-	// 分析 /ajax/chapter/chapterInfo 中所指示的
-	// http://yuewen-skythunder-1252317822.cos.ap-shanghai.myqcloud.com/font/shs-ms-a47a8681.ttf
-	// 起点中文网 此字型佔用 \uE290-\uE3DE 各-己, contains 335 glyphs
-	.replace(/&#(58\d{3});/g, function(entity, code) {
-		return char_mapper[code] || entity;
-	})
-	//
-	+ '</p>';
+	.replace(/\[\[\[CP.*?\|U:([^\|\[\]]+).*?\]\]\]/g, '<img src="$1" />');
+
+	if (false) {
+		// 經 font viewer online: https://fontdrop.info/
+		// https://www.glyphrstudio.com/online/
+		// https://devstudioonline.com/ttf-font-viewer
+		// 分析 /ajax/chapter/chapterInfo 中所指示的
+		// http://yuewen-skythunder-1252317822.cos.ap-shanghai.myqcloud.com/font/shs-ms-a47a8681.ttf
+		// 起点中文网 此字型佔用 \uE290-\uE3DE 各-己, contains 335 glyphs
+		//
+		// 然而每次展示頁面會加載不同字型，因此解析特定字型檔無效，
+		// 恐怕需要解析字型數據本身，從 glyphs 數據判斷對應哪個字，再作 mapping。
+		html = html.replace(/&#(58\d{3});/g, function(entity, code) {
+			if (+code in char_mapper)
+				return char_mapper[+code];
+			return entity;
+		});
+	}
+
+	return html + '</p>';
 }
 
-var char_mapper = Object.create(null);
+var char_mapper = [];
 
 function initialize_char_mapper() {
 	var char_mapper_data = {
-		E290 : '各'
+		// Only works for shs-ms-a47a8681.ttf
+		E290 : '各手须光同上每置共中省色土或除支再大取只高住京例到最般前家任革次得法又百划教子影代放改几身受机叫水提江多表何持及种于族究治路起看老一志采五流消引收品日石且准院西第式特的信率照活始部之知越律加列去市年用地人器至北等能基确被海技拉反美后利方所象比六思价保事油度公往因原易由素生是真通那些管然千气花二商强片速适很小音干型你查其什程十酸常局者接历七和具精力制类口意府候在他据建八青示界半团安性角而主行才包整天么造位正林育外我向她入成眼明世即自出形米空打系不新面体走想相本存厂好低命太根理以解南别四金指物平都题完证先有化目需格使研分效月便派作道近周科更重直快就元深火斯白按步清山回定工量合算个了感非也毛把件政但情要发果委民斗做并史它下克交此王名段容立料布期值今文社三心九复集求展己'
 	};
 
 	for ( var start_code in char_mapper_data) {
@@ -276,7 +285,7 @@ function initialize_char_mapper() {
 	}
 }
 
-initialize_char_mapper();
+// initialize_char_mapper();
 
 // ----------------------------------------------------------------------------
 
