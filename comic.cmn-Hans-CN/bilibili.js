@@ -171,8 +171,20 @@ var crawler = new CeL.work_crawler({
 			//
 			function(XMLHttp) {
 				// console.log(XMLHttp);
-				// console.log(JSON.parse(XMLHttp.responseText).data);
-				chapter_data.image_list = JSON.parse(XMLHttp.responseText).data
+				var response = XMLHttp.responseText;
+				try {
+					response = JSON.parse(response);
+				} catch (e) {
+					// TODO: handle exception
+				}
+				if (!response || !response.data) {
+					CeL.error('下載出錯！假如反覆出現此錯誤，並且確認圖片沒問題，煩請回報。取得資料：'
+							+ XMLHttp.responseText);
+					callback();
+					return;
+				}
+				// console.log(response.data);
+				chapter_data.image_list = response.data
 				// 2019/7/4–2019/8/7 之間? 哔哩哔哩漫画 改版
 				.map(function(image_data) {
 					var url = image_data.url;
