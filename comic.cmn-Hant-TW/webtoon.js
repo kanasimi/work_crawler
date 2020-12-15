@@ -25,7 +25,7 @@ var crawler = CeL.webtoon({
 	},
 
 	// 2018/10: 投稿新星專區 用預設方法(callback var API)搜尋不到，得要用網頁的方法。
-	search_URL : 'search?keyword=',
+	search_URL : 'zh-hant/search?keyword=',
 	parse_search_result : function(html, get_label) {
 		// console.log(html);
 		// <h3 class="search_result">投稿新星專區作品 (1個結果)</h3>
