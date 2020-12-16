@@ -1113,8 +1113,11 @@ function show_fso(fso_path) {
 }
 
 function open_URL(URL) {
-	if (typeof URL !== 'string')
+	if (typeof URL !== 'string') {
 		URL = this.href;
+		if (!URL)
+			return false;
+	}
 
 	node_electron.shell.openExternal(URL)
 	// https://electronjs.org/docs/api/shell
@@ -2595,12 +2598,16 @@ function after_download_chapter(work_data, chapter_NO) {
 	// add link to work
 	var title_tag = job.layer.childNodes[0];
 	if (!title_tag.href) {
-		job.layer.replaceChild(CeL.new_node({
+		var work_URL = job.crawler.full_URL(job.crawler.work_URL, work_data.id), a_node = {
 			a : title_tag.childNodes,
-			href : job.crawler.full_URL(job.crawler.work_URL, work_data.id),
 			onclick : open_URL,
 			C : title_tag.className
-		}), title_tag);
+		};
+		if (typeof work_URL === 'string') {
+			// 對於一些需要 POST 取得 JSON 作品資料的作品，work_URL 可能是 {Array}。
+			a_node.href = work_URL;
+		}
+		job.layer.replaceChild(CeL.new_node(a_node), title_tag);
 	}
 
 	job.progress_layer.style.width = percent;
