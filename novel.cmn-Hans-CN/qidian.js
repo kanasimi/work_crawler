@@ -258,6 +258,12 @@ function fix_HTML_error(html) {
 		//
 		// 然而每次展示頁面會加載不同字型，因此解析特定字型檔無效，
 		// 恐怕需要解析字型數據本身，從 glyphs 數據判斷對應哪個字，再作 mapping。
+		// 或可參考 https://github.com/foliojs/fontkit
+		// https://github.com/trevordixon/ttfinfo
+		// https://github.com/fontello/svg2ttf
+		// https://github.com/aui/font-spider
+		// https://github.com/kekee000/fonteditor-core/tree/master/src/ttf
+		// https://github.com/fontello/ttf2woff/blob/master/index.js
 		html = html.replace(/&#(58\d{3});/g, function(entity, code) {
 			if (+code in char_mapper)
 				return char_mapper[+code];

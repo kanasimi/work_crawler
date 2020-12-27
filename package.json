@@ -1,7 +1,7 @@
 {
 	"name" : "work_crawler",
 	"title" : "CeJS online novels and comics downloader",
-	"version" : "v2.9.0",
+	"version" : "v2.10.0",
 	"description" : "A tool using CeJS library to download online novels / comics.",
 	"keywords" : [ "comic-downloader", "novel-downloader", "cejs",
 			"downloader", "download-comic", "epub", "ebook", "comics",
@@ -42,7 +42,7 @@
 			"owner" : "kanasimi",
 			"repo" : "work_crawler"
 		} ],
-		"files" : [ "package.json", "node_modules/*", "resource/*",
+		"files" : [ "package.json", "node_modules/*", "resources/*",
 				"_CeL.loader.nodejs.js", "gui_electron/**/*",
 				"work_crawler_loader.js",
 				"work_crawler.default_configuration.js", "comic.*/**/*",

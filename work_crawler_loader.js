@@ -77,10 +77,10 @@ if (!CeL.random_id)
 var is_CLI = CeL.platform.is_CLI;
 
 if (is_CLI) {
-	// for i18n: define gettext() user domain resource location.
+	// for i18n: define gettext() user domain resources location.
 	// gettext() will auto load (CeL.env.domain_location + language + '.js').
-	// e.g., resource/cmn-Hant-TW.js, resource/ja-JP.js
-	CeL.env.domain_location = module.filename.replace(/[^\\\/]*$/, 'resource'
+	// e.g., resources/cmn-Hant-TW.js, resources/ja-JP.js
+	CeL.env.domain_location = module.filename.replace(/[^\\\/]*$/, 'resources'
 			+ CeL.env.path_separator);
 }
 

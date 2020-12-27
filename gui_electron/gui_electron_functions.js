@@ -255,15 +255,15 @@ var force_convert = [ 'en' ];
 // @see setup_language_menu()
 // for i18n: define gettext() user domain resource location.
 // gettext() will auto load (CeL.env.domain_location + language + '.js').
-// e.g., resource/cmn-Hant-TW.js, resource/ja-JP.js
+// e.g., resources/cmn-Hant-TW.js, resources/ja-JP.js
 CeL.env.domain_location = function() {
 	is_installation_package = CeL.is_installation_package();
 
 	return CeL.env.domain_location
 	// CeL.env.script_base_path: 形如 ...'/work_crawler/gui_electron/'
 	= CeL.env.script_base_path.replace(/gui_electron[\\\/]$/, '')
-	// resource/
-	+ CeL.env.resource_directory_name + '/';
+	// resources/
+	+ CeL.env.resources_directory_name + '/';
 	// 在安裝包中， `process.cwd()` 可能為
 	// C:\Users\user\AppData\Local\Programs\work_crawler
 // 因此 CeL.env.domain_location 必須提供完整路徑。

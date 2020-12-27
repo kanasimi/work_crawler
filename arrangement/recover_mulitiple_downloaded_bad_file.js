@@ -108,7 +108,7 @@ do {
 
 	node_fs.writeSync(target_fd, from_buffer_list[0], 0, max_buffer_index);
 	process_to += max_buffer_index;
-	process.stdout.write(`${process_to / max_size * 100 | 0}% ${CeL.show_KiB(process_to)} / ${CeL.show_KiB(max_size)} ...\r`);
+	process.stdout.write(`${process_to / max_size * 100 | 0}% ${CeL.to_KiB(process_to)} / ${CeL.to_KiB(max_size)} ...\r`);
 } while (not_ended);
 
 node_fs.closeSync(target_fd);
