@@ -24,8 +24,9 @@ var crawler = new CeL.work_crawler({
 	// one_by_one : true,
 
 	// 2019/9/27-2020/4/27: ONE漫画 https://www.onemanhua.com/
-	// 2020/5/2: Oh漫画 https://www.ohmanhua.com/
-	base_URL : 'https://www.ohmanhua.com/',
+	// 2020/5/2-2020/12/13: Oh漫画 https://www.ohmanhua.com/
+	// 2021/1/5: COCOMANHUA COCO漫画 https://www.cocomanhua.com/
+	base_URL : 'https://www.cocomanhua.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search?searchString=',
@@ -125,22 +126,33 @@ var crawler = new CeL.work_crawler({
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// 2019/9/27: "JRUIFMVJDIWE569j"
 		// 2020/8/21 14:39:33: "fw12558899ertyui"
-		var __READKEY = "fw12558899ertyui";
+		// 2021/1/8: var __READKEY = 'fw122587mkertyui';
+		var default_READKEY_list = [ 'fw122587mkertyui', 'fw12558899ertyui',
+				'JRUIFMVJDIWE569j' ];
 		function decode_data(C_DATA, key, default_key) {
 			// console.log(C_DATA);
 			// @see https://www.ohmanhua.com/js/custom.js
 			C_DATA = CryptoJS.enc.Base64.parse(C_DATA).toString(
 					CryptoJS.enc.Utf8);
 
-			// @search `if (typeof C_DATA !=` ...) { eval( @
-			// https://www.ohmanhua.com/js/custom.js
-			try {
-				C_DATA = crawler.__cdecrypt(key || __READKEY, C_DATA);
-			} catch (e) {
-				C_DATA = crawler.__cdecrypt(
-						typeof default_key === 'string' ? default_key
-								: "JRUIFMVJDIWE569j", C_DATA);
+			var KEY_list = default_READKEY_list.clone();
+			if (typeof default_key === 'string' && default_key)
+				KEY_list.unshift(default_key);
+			if (key)
+				KEY_list.unshift(key);
+
+			for (var index = 0; index < KEY_list.length; index++) {
+				// @search `if (typeof C_DATA !=` ...) { eval( @
+				// https://www.ohmanhua.com/js/custom.js
+				try {
+					var DECRIPT_DATA = crawler.__cdecrypt(KEY_list[index],
+							C_DATA);
+					if (DECRIPT_DATA)
+						return DECRIPT_DATA;
+				} catch (e) {
+				}
 			}
+
 			return C_DATA;
 		}
 
