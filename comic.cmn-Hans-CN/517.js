@@ -28,7 +28,11 @@ var crawler = CeL.qTcms2017({
 	// {Natural}MIN_LENGTH:最小容許圖案檔案大小 (bytes)。
 	MIN_LENGTH : 200,
 
-	base_URL : 'http://www.517manhua.com/'
+	base_URL : 'http://www.517manhua.com/',
+
+	// 2020-09-09T08:08:55.000Z 改版
+	// http://www.517manhua.com/template/skin1_3687/css/d7s/js/show.20170501.js?20201205201326
+	qTcms_m_indexurl : "http://images.yiguahai.com/"
 
 });
 
