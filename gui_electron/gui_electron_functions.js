@@ -253,7 +253,7 @@ var _;
 var force_convert = [ 'en' ];
 
 // @see setup_language_menu()
-// for i18n: define gettext() user domain resource location.
+// for i18n: define gettext() user domain resources location.
 // gettext() will auto load (CeL.env.domain_location + language + '.js').
 // e.g., resources/cmn-Hant-TW.js, resources/ja-JP.js
 CeL.env.domain_location = function() {

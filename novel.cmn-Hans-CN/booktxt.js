@@ -17,7 +17,7 @@ var crawler = CeL.PTCMS({
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'https://search1.booktxt.net/modules/article/search.php?searchkey=',
+	search_URL : 'https://so.biqusoso.com/s1.php?ie=gbk&siteid=booktxt.net&s=2758772450457967865&q=',
 	parse_search_result : 'biquge',
 
 	// 取得作品的章節資料。 get_work_data()

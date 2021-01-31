@@ -182,7 +182,9 @@ crawler = new CeL.work_crawler({
 		.between('</div>', '</div>');
 		text = text.replace(/<script[^<>]*>[^<>]*<\/script>/g, '')
 		// 去除掉廣告。
-		.replace(PATTERN_AD, '');
+		.replace(PATTERN_AD, '')
+		// https://www.ptwxz.com/html/10/10231/7979150.html
+		.replace(/水印广告测试(?:&nbsp;)*/g, '');
 		// console.log(text);
 
 		this.add_ebook_chapter(work_data, chapter_NO, {
