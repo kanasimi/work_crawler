@@ -256,7 +256,8 @@ function fix_HTML_error(html) {
 		// http://yuewen-skythunder-1252317822.cos.ap-shanghai.myqcloud.com/font/shs-ms-a47a8681.ttf
 		// 起点中文网 此字型佔用 \uE290-\uE3DE 各-己, contains 335 glyphs
 		//
-		// 然而每次展示頁面會加載不同字型，因此解析特定字型檔無效，
+		// 起点中文网 VIP章節現在採用亂數選擇字型的方式來顯示文字，
+		// 每次展示頁面會加載不同字型，因此解析特定字型檔無效，
 		// 恐怕需要解析字型數據本身，從 glyphs 數據判斷對應哪個字，再作 mapping。
 		// 或可參考 https://github.com/foliojs/fontkit
 		// https://github.com/trevordixon/ttfinfo
