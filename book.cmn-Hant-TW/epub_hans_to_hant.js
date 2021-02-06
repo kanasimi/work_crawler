@@ -49,6 +49,19 @@ function handle_files() {
 	CeL.debug('Extract epub files: ' + epub_file_path);
 	archive_file.ebook_file_list = [];
 
+	var work_title = epub_directory.match(/[^\\\/]+$/)[0].replace(/\.[^.]+$/,
+			'');
+	if (false) {
+		// author - work title
+		var matched = work_title.match(/^([^\-\s]+) - (.+)$/);
+		if (matched)
+			work_title = work_title[2];
+	}
+
+	// --------------------------------
+
+	var file_count = 0;
+
 	var convert_options = {
 		// only for debug CeCC 繁簡轉換。
 		cache_directory : CeL.append_path_separator(
@@ -57,10 +70,35 @@ function handle_files() {
 		// 超過此長度才 cache。
 		min_cache_length : 20
 	};
-	process.stdout.write('Extracting ebook ' + epub_file_path + ' ...\r');
-	archive_file.extract({
-		output : epub_directory
-	}, convert_files);
+
+	return new Promise(function(resolve, reject) {
+		process.stdout.write('Extracting ebook ' + epub_file_path + ' ...\r');
+		archive_file.extract({
+			output : epub_directory
+		}, function(output) {
+
+			var cecc = CeL.CN_to_TW && CeL.CN_to_TW.cecc;
+			// console.trace(cecc);
+			// console.trace(cecc.load_text_to_check);
+			// console.trace(epub_directory);
+			if (cecc && cecc.load_text_to_check) {
+				// console.trace(work_title);
+				var promise_load_text_to_check = cecc.load_text_to_check({
+					work_title : work_title,
+					convert_to_language : 'TW'
+				}, {
+					reset : true
+				});
+				if (CeL.is_thenable(promise_load_text_to_check)) {
+					// console.trace(promise_load_text_to_check);
+					return promise_load_text_to_check.then(convert_files.bind(
+							null, output));
+				}
+			}
+
+			convert_files(output).then(resolve);
+		});
+	});
 
 	function convert_files(output) {
 		// console.log(String(output));
@@ -104,8 +142,8 @@ function handle_files() {
 		if (!/\.(?:[sx]?html?|xml|te?xt|ncx|opf)$/i.test(path))
 			return;
 
-		process.stdout.write('Convert to hant ' + options.file_count + ': '
-				+ path + ' ...\r');
+		process.stdout.write('Convert to hant ' + ++file_count + '/'
+				+ options.all_file_count + ' ' + path + ' ...\r');
 		// CeL.info('for_text_file: Convert to hant: ' + path);
 		var contents = CeL.get_file(path);
 		return Promise.resolve().then(
