@@ -1,5 +1,5 @@
 ﻿/**
- * @fileoverview 當多次下載一個大檔案，卻各有不同錯誤時，可利用本工具回覆原先完整的檔案。將以多數檔案的內容為準。
+ * @fileoverview 當多次下載一個大檔案，卻各有不同錯誤時，可利用本工具回復原先完整的檔案。將以多數檔案的內容為準。最好下載三次以上，方便比對。
  * 
  * @examples<code>
 
@@ -30,12 +30,14 @@ const node_fs = require('fs');
 // 1 MiB
 const BUFFER_SIZE = 1 * 1024 * 1024;
 
+const BUFFER_INDEX_TO_WRITE = 0;
+
 let different_byte_count = 0, doubtful_byte_count = 0;
 
 const target_file_path = process.argv[2];
 const target_fd = node_fs.openSync(target_file_path, 'w');
 
-const from_fso_list = [];
+const from_fso_list = [], bad_block_list = [];
 for (let index = 3; index < process.argv.length; index++) {
 	//console.log([process.argv[index], CeL.extract_wildcard(process.argv[index])]);
 	from_fso_list.append(CeL.extract_wildcard(process.argv[index]));
@@ -55,6 +57,55 @@ from_fso_list.forEach(fso_name => {
 });
 //console.trace(from_buffer_list);
 
+// ------------------------------------------------------------------------------------------------
+
+// 以多數檔案的內容為準。
+// TOO SLOW!!!
+function most_frequently_byte(selector_configuration) {
+	const { from_buffer_list, buffer_index, bytesRead_array, start_index, base_byte, block_index } = selector_configuration;
+
+	const count_hash = { [base_byte]: 1 };
+	for (let index = start_index + 1; index < from_buffer_list.length; index++) {
+		if (buffer_index >= bytesRead_array[index])
+			continue;
+		const byte = from_buffer_list[index][buffer_index];
+		count_hash[byte] = (count_hash[byte] || 0) + 1;
+	}
+	//console.log(count_hash);
+
+	let max_count = 0, selected_byte, muttiple_max_byte;
+	for (const byte in count_hash) {
+		if (max_count < count_hash[byte]) {
+			max_count = count_hash[byte];
+			selected_byte = byte;
+			muttiple_max_byte = false;
+		} else {
+			muttiple_max_byte = max_count === count_hash[byte];
+		}
+	}
+	// assert: max_count > 0
+	if (muttiple_max_byte)
+		doubtful_byte_count++;
+
+	return selected_byte;
+}
+
+
+let latest_block_index;
+function select_by_process_to(selector_configuration) {
+	const { from_buffer_list, buffer_index, bytesRead_array, start_index, base_byte, block_index } = selector_configuration;
+
+	let list_index = block_index < 3900 ? 1 : 0;
+	if (list_index === 0 && latest_block_index !== block_index) {
+		latest_block_index = block_index;
+		console.log(block_index);
+	}
+
+	return from_buffer_list[list_index][buffer_index];
+}
+
+// ------------------------------------------------------------------------------------------------
+
 let not_ended = true, process_to = 0;
 do {
 	let bytesRead_array = [];
@@ -66,16 +117,15 @@ do {
 		bytesRead_array[index] = bytesRead;
 	}
 
-	let max_buffer_index = BUFFER_SIZE;
+	let max_buffer_index = BUFFER_SIZE, is_bad_block, block_index = process_to / BUFFER_SIZE;
 	for (let buffer_index = 0, start_index = 0; buffer_index < BUFFER_SIZE; buffer_index++) {
 		while (start_index < bytesRead_array.length && bytesRead_array[start_index] <= buffer_index) {
 			// 本 from_buffer_list[start_index] 已經讀取完畢的話，就跳到下一個。
 			start_index++;
 		}
 		if (start_index === bytesRead_array.length) {
-			// 所有的 buffer 都沒有尚未處理的資料了。
 			// assert: 所有檔案串流都讀取完畢。
-			// assert: 所有 from_buffer_list 皆處理完畢。
+			// assert: 所有 from_buffer_list 都沒有尚未處理的資料了。皆處理完畢。
 			// Should using bytesRead_array[start_index]
 			max_buffer_index = buffer_index;
 			not_ended = false;
@@ -95,59 +145,33 @@ do {
 			continue;
 		}
 
+		is_bad_block = true;
 		different_byte_count++;
 
 		// assert: 有些 from_buffer_list 尚未處理。
 
-		// TOO SLOW!!!
-		const count_hash = { [base_byte]: 1 };
-		for (let index = start_index + 1; index < from_buffer_list.length; index++) {
-			if (buffer_index >= bytesRead_array[index])
-				continue;
-			const byte = from_buffer_list[index][buffer_index];
-			count_hash[byte] = (count_hash[byte] || 0) + 1;
-		}
-		//console.log(count_hash);
+		const selector_configuration = { from_buffer_list, buffer_index, bytesRead_array, start_index, base_byte, block_index };
 
-		if (false) {
-			const sorted_bytes_list = Object.entries(count_hash).sort((pair_1, pair_2) => pair_2[1] - pair_1[1]);
-			// assert: sorted_bytes_list.length >= 1, 次數自大至小排列
-			if (sorted_bytes_list[0][1] === sorted_bytes_list[1][1])
-				doubtful_byte_count++;
-		}
+		const selected_byte = most_frequently_byte(selector_configuration);
+		//const selected_byte = select_by_process_to(selector_configuration);
 
-		let max_count = 0, max_byte, muttiple_max_byte;
-		for (const byte in count_hash) {
-			if (max_count < count_hash[byte]) {
-				max_count = count_hash[byte];
-				max_byte = byte;
-				muttiple_max_byte = false;
-			} else {
-				muttiple_max_byte = max_count === count_hash[byte];
-			}
-		}
-		// assert: max_count > 0
-		if (false && max_count === 0) {
-			// assert: 所有 from_buffer_list 皆處理完畢。
-			max_buffer_index = buffer_index - 1;
-			not_ended = false;
-			break;
-		}
-		if (muttiple_max_byte)
-			doubtful_byte_count++;
-		else {
-			console.trace(process_to + buffer_index);
-			console.log([max_count, max_byte, start_index, from_buffer_list, muttiple_max_byte, count_hash]);
-		}
-		from_buffer_list[0][buffer_index] = max_byte;
+		from_buffer_list[BUFFER_INDEX_TO_WRITE][buffer_index] = selected_byte;
 	}
 
-	node_fs.writeSync(target_fd, from_buffer_list[0], 0, max_buffer_index);
+	if (is_bad_block)
+		bad_block_list.push(block_index);
+	node_fs.writeSync(target_fd, from_buffer_list[BUFFER_INDEX_TO_WRITE], 0, max_buffer_index);
 	process_to += max_buffer_index;
-	process.stdout.write(`${process_to / max_size * 100 | 0}% ${CeL.to_KiB(process_to)} / ${CeL.to_KiB(max_size)} ...\r`);
+	process.stdout.write(`${process_to / max_size * 100 | 0}% ${CeL.to_KiB(process_to)} / ${CeL.to_KiB(max_size)
+		}${different_byte_count ? `, ${CeL.to_KiB(different_byte_count)} different` : ''} ...\r`);
+
 } while (not_ended);
 
 node_fs.closeSync(target_fd);
 from_fd_list.forEach(from_fd => node_fs.closeSync(from_fd));
 
-CeL.info(`All ${different_byte_count} byte(s) different. ${doubtful_byte_count} byte(s) hard to decide.`);
+CeL.info(`All ${CeL.to_KiB(different_byte_count)} different.${doubtful_byte_count
+	? ` ${CeL.to_KiB(doubtful_byte_count)} (${(doubtful_byte_count / different_byte_count * 100).to_fixed(1)}%) hard to decide.`
+	: ''}`);
+if (doubtful_byte_count > 0)
+	CeL.log(`${bad_block_list.length} bad blocks: ${bad_block_list}`);
