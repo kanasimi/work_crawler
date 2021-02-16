@@ -39,6 +39,8 @@ function handle_files() {
 		return;
 	}
 
+	var convert_to_language = 'TW';
+
 	archive_file = new CeL.storage.archive(epub_file_path);
 
 	// CeL.set_debug();
@@ -52,10 +54,10 @@ function handle_files() {
 	var work_title = epub_directory.match(/[^\\\/]+$/)[0].replace(/\.[^.]+$/,
 			'');
 	if (false) {
-		// author - work title
-		var matched = work_title.match(/^([^\-\s]+) - (.+)$/);
+		// Calibre2 轉存時，會存成 "work title - author.epub"
+		var matched = work_title.match(/^(.+?) - (.+)$/);
 		if (matched)
-			work_title = work_title[2];
+			work_title = work_title[1];
 	}
 
 	// --------------------------------
@@ -65,7 +67,7 @@ function handle_files() {
 	var convert_options = {
 		// only for debug CeCC 繁簡轉換。
 		cache_directory : CeL.append_path_separator(
-		//
+		// "main file name - 繁簡轉換 cache/"
 		epub_directory.replace(/[\/]*$/, ' - 繁簡轉換 cache')),
 		// 超過此長度才 cache。
 		min_cache_length : 20
@@ -85,7 +87,7 @@ function handle_files() {
 				// console.trace(work_title);
 				var promise_load_text_to_check = cecc.load_text_to_check({
 					work_title : work_title,
-					convert_to_language : 'TW'
+					convert_to_language : convert_to_language
 				}, {
 					reset : true
 				});
@@ -132,6 +134,13 @@ function handle_files() {
 		CeL.debug('Remove directory: ' + epub_directory);
 		CeL.remove_directory(epub_directory, true);
 		CeL.info('Convert epub: 繁簡轉換完畢: ' + converted_epub_file);
+
+		var cecc = CeL.CN_to_TW && CeL.CN_to_TW.cecc;
+		if (cecc && cecc.report_text_to_check) {
+			cecc.report_text_to_check({
+				convert_to_language : convert_to_language
+			});
+		}
 	}
 
 	function for_text_file(path, fso_status, is_directory, options) {
@@ -143,7 +152,7 @@ function handle_files() {
 			return;
 
 		process.stdout.write('Convert to hant ' + ++file_count + '/'
-				+ options.all_file_count + ' ' + path + ' ...\r');
+				+ options.all_file_count + '+ ' + path + ' ...\r');
 		// CeL.info('for_text_file: Convert to hant: ' + path);
 		var contents = CeL.get_file(path);
 		return Promise.resolve().then(
