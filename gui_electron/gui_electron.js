@@ -31,7 +31,9 @@ function create_window() {
 			// https://github.com/electron/electron/issues/5113
 			// preload : "preload.js",
 			// https://electronjs.org/docs/faq
-			nodeIntegration : true
+			nodeIntegration : true,
+			// https://github.com/electron/electron/issues/27957
+			contextIsolation : false
 		}
 	},
 	// https://github.com/electron/electron/blob/master/docs/api/screen.md
