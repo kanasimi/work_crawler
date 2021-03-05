@@ -337,6 +337,11 @@
 3. 本工具會循序下載每個章節，對於漫畫基本上每個章節的圖片會並行下載。不可並行下載同一個網站的同一個作品，否則會出現衝突。若是想要並行下載不同網站或是不同的作品，那麼您就需要再開一個命令列介面來執行工具檔。
 4. 若是下載出錯，**重新執行即可接續下載**。
 
+## Get cookies from browser 從瀏覽器獲取 cookies
+* 若您已有帳號，想作備份預防萬一，可利用 cookie 功能模擬您的帳號瀏覽。請先以瀏覽器登入，打開瀏覽器的偵錯頁面，可在 Network 一欄複製 cookie 到本工具使用。
+
+   ![Get cookies from browser](https://lh3.googleusercontent.com/pw/ACtC-3fXlNcSvm0zY4Xcx4W7pFTZ-QBEa_ruuJOF11hHtz-dFumc5xD-xg7HUd1SzY3aK5mWMOxYDZbcTAFYsBDfHTFqbro3baoCteUctj2KKD2UOvlKLf1PGTHuE2Td2SR4bex20eNXp0Q_9aCVLrAwtjPr=w936-h606-no)
+
 ## Workflow 工作流程
 * 本工具將把所指定的漫畫下載至特定目錄中（預設為工具檔名，如 `qq`），每套漫畫一個目錄。
 
