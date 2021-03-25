@@ -134,6 +134,7 @@
 | [爱看漫画](http://www.aikanmh.cn/) | aikanmh.js | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
 | [友绘漫画网](http://m.wuyouhui.net/) | wuyouhui.js | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
 | [188漫画网](http://m.88bag.net/) | 88bag.js | 有些缺圖，圖片似乎多從其他網站採集而來。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
+| [乙女漫画](https://www.yinvmh.com/) | yinvmh.js | 日本漫畫較多，幾乎都是 BL。自 2020/12/18 起無更新？用[晴天新漫画系统](http://www.qingtiancms.com/manhua/) |
 | [看漫画](https://www.manhuagui.com/) | manhuagui.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [欢乐漫画网/多多漫画](https://www.hlgoo.cn/) | duoduomh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |

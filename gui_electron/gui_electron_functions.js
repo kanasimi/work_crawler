@@ -63,6 +63,7 @@ download_sites_set = {
 		'733mh' : '733漫画网',
 		mh160 : '漫画160',
 		// nokiacn : '乙女漫画',
+		yinvmh : '乙女漫画',
 		iqg365 : '365漫画网',
 		emw : '一漫网',
 		aikanmh : '爱看漫画',
