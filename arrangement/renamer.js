@@ -19,9 +19,11 @@ require('../work_crawler_loader.js');
 // ----------------------------------------------------------------------------
 // Load module.
 
-CeL.run(
+CeL.run([
 // for HTML_to_Unicode()
-'interact.DOM');
+'interact.DOM',
+// archive()
+'application.storage.archive' ]);
 
 // ----------------------------------------------------------------------------
 
@@ -82,9 +84,31 @@ if (target_directory) {
 		// CeL.log('Test: ' + path);
 		if (is_directory) {
 			target_directories[fso_status.name] = path;
-		} else {
-			target_files[fso_status.name] = path;
+			return;
 		}
+
+		var fso_name = fso_status.name;
+		// e.g., "RJ287557.zip"
+		if (/^RJ\d{6,}(-v[\d.]+| *\([\d.]+\))?\.(?:zip|rar|7z)+$/
+				.test(fso_name)) {
+			var archive_file = new CeL.application.storage.archive(
+					target_directory + fso_name, {
+						program_type : '7z'
+					});
+			// console.log(archive_file);
+			archive_file.info(function(file_info_hash) {
+				try {
+					rename_dlsite_works(fso_name, target_directory,
+					//
+					file_info_hash);
+				} catch (e) {
+					// TODO: handle exception
+					console.error(e);
+				}
+			});
+		}
+
+		target_files[fso_name] = path;
 	}, PATTERN_full_latin_or_sign, 1);
 
 	if (CeL.is_empty_object(target_files)
@@ -253,8 +277,9 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 		}
 	}
 
-	var name = get_label(html.between('<h3 class="panel-title">', '</h3>'));
-	if (!name && html.includes('DDOS Protection')) {
+	var full_title = get_label(html
+			.between('<h3 class="panel-title">', '</h3>'));
+	if (!full_title && html.includes('DDOS Protection')) {
 		CeL.fs_remove(base_directory + this.id + '.html');
 		throw new Error('DDOS Protection');
 	}
@@ -277,7 +302,7 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 	}
 	// 就算利用的是 cache，依然檢查檔案而不直接跳出。
 
-	CeL.debug(name, 2, 'parse_file_list');
+	CeL.debug(full_title, 2, 'parse_file_list');
 	// console.log(file_list_html);
 
 	var folder_list = [];
@@ -302,24 +327,24 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 
 	if (file_list.length === 0 && folder_list.length === 0) {
 		// shame changed?
-		throw new Error('Nothing get on ' + name);
+		throw new Error('Nothing get on ' + full_title);
 	}
 
 	if (false) {
 		// CeL.debug(name, 2, 'parse_file_list');
-		if (/Dobutsu no Mori/.test(name)) {
+		if (/Dobutsu no Mori/.test(full_title)) {
 			console.log(folder_list);
 		}
 		CeL.fs_write(base_directory + id + '.data.json', {
-			name : name,
+			full_title : full_title,
 			files : file_list
 		});
 	}
 
 	function rename_process(fso_name) {
 		var matched;
-		// CeL.debug('[' + fso_name + '] ' + name, 0, 'rename_process');
-		if (PATTERN_full_latin_or_sign.test(name) || !fso_name
+		// CeL.debug('[' + fso_name + '] ' + full_title, 0, 'rename_process');
+		if (PATTERN_full_latin_or_sign.test(full_title) || !fso_name
 		// matched: [ all, main file name, '.' + extension ]
 		|| !(matched = fso_name.match(PATTERN_latin_fso_name))) {
 			// CeL.log('NG: ' + fso_name);
@@ -334,14 +359,26 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 		function rename(fso_name, is_file) {
 			var fso_key = is_file ? target_files[fso_name]
 					: target_directories[fso_name];
-			if (false && /Gundam/.test(fso_name)) {
-				console.log([ target_files, target_directories ])
-				console.log([ fso_key, fso_name, name ]);
+			if (!fso_key) {
+				for ( var file_name in target_files) {
+					var _matched = file_name.match(/^(.+)(\.[^.]+)$/);
+					// console.log([ _matched[1], fso_name ]);
+					if (_matched && _matched[1] === fso_name) {
+						CeL.warn('在目錄改名之前就已先壓縮成了檔案？ ' + file_name);
+						fso_key = target_files[fso_name = file_name];
+						break;
+					}
+				}
 			}
-			if (!fso_key || fso_name.includes(name)) {
+
+			if (false && /Demi/.test(fso_name)) {
+				console.log([ is_file, target_files, target_directories ])
+				console.log([ fso_key, fso_name, full_title ]);
+			}
+			if (!fso_key || fso_name.includes(full_title)) {
 				return;
 			}
-			var move_to = CeL.to_file_name(name).replace(/\.+$/, ''),
+			var move_to = CeL.to_file_name(full_title).replace(/\.+$/, ''),
 			//
 			from_page = (move_to + matched[2])/* .replace(/_/g, ' ') */,
 			//
@@ -362,17 +399,19 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 				CeL.error(error);
 			} else if (is_file) {
 				delete target_files[fso_name];
+				fso_name = move_to;
 			} else {
 				delete target_directories[fso_name];
+				fso_name = move_to;
 			}
 		}
 
-		CeL.debug(matched[0] + ': ' + name, 3, 'rename_process');
+		CeL.debug(matched[0] + ': ' + full_title, 3, 'rename_process');
 		rename(matched[0], true);
 		rename(matched[0].replace(/ /g, '_'), true);
 		rename(matched[0].replace(/_/g, ' '), true);
 
-		CeL.debug(matched[1] + ': ' + name, 3, 'rename_process');
+		CeL.debug(matched[1] + ': ' + full_title, 3, 'rename_process');
 		rename(matched[1]);
 		rename(matched[1].replace(/ /g, '_'));
 		rename(matched[1].replace(/_/g, ' '));
@@ -391,10 +430,53 @@ function parse_file_list(html, error, XMLHttp, got_torrent) {
 	} else if (file_list.length === 1) {
 		rename_process(file_list[0]);
 	} else if (false) {
-		CeL.warn(name + ': ' + JSON.stringify(folder_list));
+		CeL.warn(full_title + ': ' + JSON.stringify(folder_list));
 		CeL.warn('file_list: [' + file_list.length + ']'
 				+ JSON.stringify(file_list.slice(0, 20)));
 	}
 
 	typeof this.callback === 'function' && this.callback();
+}
+
+// Read folders inside archive and rename to the folder name.
+function rename_dlsite_works(fso_name, target_directory, file_info_hash) {
+	// console.trace(file_info_hash);
+	if (!file_info_hash)
+		return;
+	var file_list = Object.keys(file_info_hash);
+	var directory_list = file_list.filter(function(file_path) {
+		var file_info = file_info_hash[file_path];
+		if (file_info.Folder === '+') {
+			return !!file_path;
+		}
+	});
+	// console.trace(directory_list);
+
+	var matched, root_directory = '', root_directory_2 = root_directory;
+	while ((matched = CeL.longest_common_starting_length(
+	//
+	directory_list = directory_list.filter(function(directory) {
+		return directory !== root_directory && (root_directory_2 = directory);
+	}))) > root_directory.length) {
+		root_directory = root_directory_2.slice(0, matched);
+	}
+
+	var matched = root_directory
+			.match(/^(RJ\d{6,}(?:-v[\d.]+| *\([\d.]+\))?)[\\\/]([^\\\/]+)/)
+			|| root_directory.match(/^()([^\\\/]+)/);
+	// console.log([ root_directory, matched ]);
+	var fso_id = fso_name.replace(/\.[^.]+$/, '');
+	if (!matched || matched[2] === fso_id) {
+		return;
+	}
+
+	if (matched[1] && matched[1] !== fso_id) {
+		CeL.error(fso_name + ': ' + matched[1] + ' inside!');
+	} else {
+		var move_to = '(同人) [dlsite] ' + matched[2] + '.' + fso_name
+		CeL.info('rename_dlsite_works: ' + fso_name + '→'
+		//
+		+ move_to);
+		CeL.fs_move(target_directory + fso_name, target_directory + move_to);
+	}
 }
