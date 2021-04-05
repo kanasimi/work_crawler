@@ -26,6 +26,18 @@ function show_info(message) {
 var node_https = require('https'), node_fs = require('fs');
 
 function fetch_url(url, callback) {
+	if (process.env.socks_proxy) {
+		try {
+			var SocksProxyAgent = require('socks-proxy-agent');
+			url = url.parse(url);
+			url.agent = new SocksProxyAgent(process.env.socks_proxy);
+		} catch (e) {
+			console.error('Please install socks-proxy-agent to using proxy: '
+					+ '`npm install socks-proxy-agent`');
+			throw e;
+		}
+	}
+
 	node_https.get(url, function(response) {
 		var buffer_array = [], sum_size = 0;
 
