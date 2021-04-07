@@ -164,6 +164,13 @@ crawler = new CeL.work_crawler({
 			chapter_data.limited = true;
 		// console.log(chapter_data);
 		return chapter_data;
+	},
+
+	/**
+	 * 處理特殊圖片: u17免費章節會下載到模糊圖片。
+	 */
+	is_limited_image_url : function(image_data) {
+		return image_data.url && image_data.url.endsWith('_seal.jpg');
 	}
 });
 

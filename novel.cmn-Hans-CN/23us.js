@@ -99,7 +99,7 @@ var crawler = new CeL.work_crawler({
 		work_data.site_name = work_data.site_name.between(null, ' ');
 
 		if (work_data.image
-		// ignore site default image
+		// 處理特殊圖片: ignore site default image
 		// http://www.23us.com/modules/article/images/nocover.jpg
 		&& work_data.image.includes('nocover.jpg')) {
 			delete work_data.image;

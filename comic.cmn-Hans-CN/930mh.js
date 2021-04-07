@@ -58,6 +58,13 @@ var crawler = CeL.SinMH({
 	crypto : {
 		iv : "opb4x7z21vg1f3gI",
 		key : "cxNB23W8xzKJV26O",
+	},
+
+	/**
+	 * 處理特殊圖片: 有些會下載成盜鏈圖片 http://mhimg.acg.gd:44236/images/logo/dl.jpg
+	 */
+	is_limited_image_url : function(image_data) {
+		return image_data.url && image_data.url.endsWith('logo/dl.jpg');
 	}
 });
 

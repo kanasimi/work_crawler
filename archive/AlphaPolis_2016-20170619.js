@@ -81,7 +81,7 @@ var AlphaPolis = new CeL.work_crawler({
 		}
 
 		if (work_data.image
-		// ignore site default image
+		// 處理特殊圖片: ignore site default image
 		&& work_data.image.endsWith('\/ogp.png')) {
 			delete work_data.image;
 		}

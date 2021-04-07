@@ -91,7 +91,7 @@ var crawler = new CeL.work_crawler({
 		work_data.site_name = work_data.site_name.between(null, ' ');
 
 		if (work_data.image
-		// ignore site default image
+		// 處理特殊圖片: ignore site default image
 		&& work_data.image.includes('common\/ogimage.png')) {
 			delete work_data.image;
 		}

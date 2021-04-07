@@ -199,14 +199,12 @@ var crawler = new CeL.work_crawler({
 	// 在取得作品資料時，就能分析出整個作品的圖片網址，因此不需要再取得每個章節。
 	skip_get_chapter_page : true,
 
-	image_preprocessor : function(contents, image_data) {
-		// 檢查是否下載到 padding 用的 404 檔案。
+	// 處理特殊圖片: 檢查是否下載到 padding 用的 404 檔案。
+	is_limited_image_url : function(image_url) {
 		// 2019/6/27: ct.png 14963 bytes
-		if (image_data.responseURL
+		return image_data.url
 		// https://www.cartoonmad.com/image/ct.png
-		&& image_data.responseURL.endsWith('/image/ct.png')) {
-			return false;
-		}
+		&& image_data.url.endsWith('/image/ct.png');
 	}
 });
 

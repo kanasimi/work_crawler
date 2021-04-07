@@ -10,10 +10,14 @@ require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
+// [ all, chapter url, title, part title tag name, part title ]
 var PATTERN_chapter
 // <a class="fixed-a-es" target="_blank" href="/manhua/000/....html"
 // title="第01回">第01回</a>
-= /<li[\s\S]+?<a [^<>]*?href="([^<>"]+)"[^<>]*? title="([^<>"]+)"|<h3[^<>]*>(.+?)<\/h3>/g,
+//
+// <div class="align-self-center pr-2"><h3 class="h4 mb-0 font-weight-normal
+// comic_version_title">[辉夜姬想让人告白~天才们的恋爱头脑战~ 连载]</h3></div>
+= /<li[\s\S]+?<a [^<>]*?href="([^<>"]+)"[^<>]*? title="([^<>"]+)"|<(h[23])[^<>]*>(.+?)<\/\3>/g,
 //
 crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
@@ -69,10 +73,12 @@ crawler = new CeL.work_crawler({
 			// 必要屬性：須配合網站平台更改。
 
 			// 選擇性屬性：須配合網站平台更改。
+			// 漫画出版信息
 			publish : get_label(html.between(
 					'<div class="comic-pub-data-section', '</div>')
 					.between('>')),
-			synopsis : get_label(html.between(
+			// 概要 synopsis
+			description : get_label(html.between(
 					'<div class="comic_detail_content">', '</div>'))
 		};
 
@@ -93,7 +99,7 @@ crawler = new CeL.work_crawler({
 		// e.g., 一拳超人
 		var part_title_list = html.between('<div class="comic-toc-section',
 				'</ul>').all_between('<li', '</li>').map(function(token) {
-			return get_label(token.between('>'));
+			return get_label(token.between('>')).replace(/列表$/, '');
 		});
 		// console.log(part_title_list);
 
@@ -110,7 +116,7 @@ crawler = new CeL.work_crawler({
 		while (matched = PATTERN_chapter.exec(html)) {
 			// delete matched.input;
 			// console.log(matched);
-			if (matched[3]) {
+			if (matched[4]) {
 				part_title = get_label(matched[3]).replace(PATTERN_title, '')
 						.replace(/\[\]/g, '');
 				part_title = part_title_list[part_NO++];
@@ -186,6 +192,8 @@ crawler = new CeL.work_crawler({
 
 		// 2019/9/17 漫画DB 網站改版
 		matched = html.between(" img_data = '", "';")
+		// manhuacat.js
+		|| html.between(' img_data = "', '"')
 		// 2019/9/17 5:0
 		|| html.between('localStorage.setItem("data:"', ');').between("'", {
 			tail : "'"
@@ -279,8 +287,8 @@ crawler = new CeL.work_crawler({
 			//
 			= _this.full_URL(image_page_list[index - 1].url);
 			// console.log('Get #' + index + ': ' + image_page_url);
-			process.stdout.write('Get image data page of §' + chapter_NO + ': '
-					+ image_NO + '/' + image_count + '...\r');
+			CeL.log_temporary('Get image data page of §' + chapter_NO + ': '
+					+ image_NO + '/' + image_count);
 			CeL.get_URL(image_page_url, function(XMLHttp) {
 				extract_image(XMLHttp);
 				run_next();

@@ -23,21 +23,11 @@ var crawler = CeL.qTcms2014({
 	base_URL : 'http://www.700mh.com/',
 
 	/**
-	 * 遇到下架章節時圖片會顯示 http://fo.700mh.com/2018/03/14/pb.jpg
+	 * 處理特殊圖片: 遇到下架章節時圖片會顯示 http://fo.700mh.com/2018/03/14/pb.jpg
 	 */
-	is_limited_image_url : function(image_url) {
-		return image_url.endsWith('2018/03/14/pb.jpg');
-	},
-	postfix_chapter_data : function(chapter_data, work_data) {
-		// 遇到下架章節避免下載到下架圖片。
-		if (chapter_data.image_list.some(this.is_limited_image_url)) {
-			chapter_data.limited = true;
-			if (chapter_data.image_list.every(this.is_limited_image_url)) {
-				// chapter_data.image_count 似乎全部都是 3
-				// chapter_data.image_length = chapter_data.image_list.length;
-				delete chapter_data.image_list;
-			}
-		}
+	is_limited_image_url : function(image_data) {
+		// 這時 chapter_data.image_count 似乎全部都是 3
+		return image_data.url && image_data.url.endsWith('2018/03/14/pb.jpg');
 	}
 });
 
