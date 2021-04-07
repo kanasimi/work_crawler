@@ -63,8 +63,8 @@ var crawler = CeL.SinMH({
 	/**
 	 * 處理特殊圖片: 有些會下載成盜鏈圖片 http://mhimg.acg.gd:44236/images/logo/dl.jpg
 	 */
-	is_limited_image_url : function(image_data) {
-		return image_data.url && image_data.url.endsWith('logo/dl.jpg');
+	is_limited_image_url : function(image_url) {
+		return image_url.endsWith('logo/dl.jpg');
 	}
 });
 

@@ -24,9 +24,9 @@ var crawler = CeL.qTcms2014({
 	  </div>
 	</code>
 	 */
-	is_limited_image_url : function(image_data) {
+	is_limited_image_url : function(image_url) {
 		// 這時 chapter_data.image_count 似乎全部都是 3
-		return image_data.url && image_data.url.endsWith('2018/03/14/pb.jpg');
+		return image_url.endsWith('2018/03/14/pb.jpg');
 	}
 });
 

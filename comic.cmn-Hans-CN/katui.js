@@ -25,9 +25,9 @@ var crawler = CeL.qTcms2014({
 	/**
 	 * 處理特殊圖片: 遇到下架章節時圖片會顯示 http://fo.700mh.com/2018/03/14/pb.jpg
 	 */
-	is_limited_image_url : function(image_data) {
+	is_limited_image_url : function(image_url) {
 		// 這時 chapter_data.image_count 似乎全部都是 3
-		return image_data.url && image_data.url.endsWith('2018/03/14/pb.jpg');
+		return image_url.endsWith('2018/03/14/pb.jpg');
 	}
 });
 

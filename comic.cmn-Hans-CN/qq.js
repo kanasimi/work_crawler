@@ -306,7 +306,7 @@ crawler = new CeL.work_crawler({
 		chapter_data.title = chapter_data.chapter.cTitle;
 		// chapter_data.image_count = chapter_data.picture.length;
 
-		// @see this.is_limited_image_url(image_data) @ work_crawler/chapter.js
+		// @see this.is_limited_image_url(image_url) @ work_crawler/chapter.js
 		if (chapter_data.picture[0].url.includes(
 		// 處理特殊圖片: 有些漫畫的最新話會設定只在APP觀看 會取得
 		// https://manhua.qpic.cn/manhua_detail/0/14_11_10_a1827afc3b8d37cfd3f7242cc713f5751_109708576.png/0

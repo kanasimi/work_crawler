@@ -202,9 +202,8 @@ var crawler = new CeL.work_crawler({
 	// 處理特殊圖片: 檢查是否下載到 padding 用的 404 檔案。
 	is_limited_image_url : function(image_url) {
 		// 2019/6/27: ct.png 14963 bytes
-		return image_data.url
 		// https://www.cartoonmad.com/image/ct.png
-		&& image_data.url.endsWith('/image/ct.png');
+		return image_url.endsWith('/image/ct.png');
 	}
 });
 
