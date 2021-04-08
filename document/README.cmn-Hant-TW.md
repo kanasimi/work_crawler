@@ -101,7 +101,7 @@
 | [漫畫狗](https://dogemanga.com/) | dogemanga.js | 以臺灣、大陸翻譯日本的漫畫為主。有些缺圖。 |
 | [動漫狂](https://www.cartoonmad.com/) | cartoonmad.js | 以臺灣翻譯日本的漫畫為主。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
 | [動漫伊甸園](http://dmeden.net/) | dmeden.js | 日本漫畫較多。 採用與汗汗酷漫相同系統。 |
-| [禁漫天堂](https://18comic.vip/) | 18comic.js | |
+| [禁漫天堂](https://18comic.vip/) | 18comic.js | 從 2021/3/12 開始將圖片分割、亂序排列。必須解開壓縮檔後，利用其中的 index.html 來瀏覽。 |
 | [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 | [Toomics 玩漫](https://toomics.com/tc/) | toomics_tc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |

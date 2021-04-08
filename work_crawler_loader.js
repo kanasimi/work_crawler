@@ -13,6 +13,10 @@ var node_fs = require('fs');
 var default_configuration_file = './work_crawler.default_configuration.js';
 var user_configuration_file = './work_crawler.configuration.js';
 
+if (typeof globalThis === 'undefined' && typeof global === 'object') {
+	global.globalThis = global;
+}
+
 try {
 	// Load default configuration.
 	require(default_configuration_file);
@@ -182,6 +186,7 @@ function option_type_token(arg_type_data, colors) {
 	return option_types;
 }
 
+// @see https://github.com/yargs/yargs
 if (is_CLI && !work_id && require.main
 // 檔案整理工具不需要下載作品，因此也不需要作品名稱。
 && (typeof need_work_id === 'undefined' || need_work_id)) {

@@ -1,0 +1,44 @@
+﻿<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<script type="text/javascript" charset="utf-8" src="chapter_data.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+
+document.title = chapter_data.title;
+
+function show_image(canvas) {
+	const width = canvas.width = this.width;
+	const height = canvas.height = this.height;
+	canvas.style.display = 'block';
+	const ctx = canvas.getContext('2d');
+
+	const slice_count = 10;
+	const remainder = height % slice_count;
+	for (let index = 0, cut_to_y = height, slice_height = Math.floor(height / slice_count); index < slice_count; index++) {
+		const copy_from_y = index * slice_height;
+		if (index === slice_count - 1) {
+			cut_to_y = 0;
+			slice_height += remainder;
+		} else
+			cut_to_y -= slice_height;
+		ctx.drawImage(this,
+			0, copy_from_y, width, slice_height,
+			0, cut_to_y, width, slice_height);
+	}
+}
+
+for (let index = 0; index < chapter_data.image_list.length;) {
+	const canvas = document.createElement('canvas');
+	document.body.appendChild(canvas);
+
+	const image = document.createElement('img');
+	image.onload = show_image.bind(image, canvas);
+	image.src = chapter_data.image_file_prefix + String(++index).padStart(3, 0) + chapter_data.image_file_postfix;
+}
+
+</script>
+
+</body>
+</html>

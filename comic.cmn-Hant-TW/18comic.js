@@ -1,5 +1,17 @@
 ﻿/**
  * 批量下載 禁漫天堂 的工具。 Download 18comic comics.
+ * 
+ * <code>
+
+function scramble_image(img, aid, scramble_id, load, speed) @ https://18comic.org/templates/frontend/airav/js/jquery.photo-0.3.js?v=20210312
+寫明，從 scramble_id = 220980 開始打亂圖片。
+
+function onImageLoaded(img) @ https://18comic.org/templates/frontend/airav/js/jquery.photo-0.3.js?v=20210312
+寫明，回復的方法是將圖片切割為10等份 (num=10)，從最後一個排回最前面。
+
+See 18comic.chapter.html
+
+</code>
  */
 
 'use strict';
@@ -168,6 +180,7 @@ var crawler = new CeL.work_crawler({
 				.between('<span>', '</span>').between('/');
 		// console.trace(image_count);
 		if (image_count > 500) {
+			TODO;
 		}
 
 		var next_image_page_url = html
@@ -178,24 +191,47 @@ var crawler = new CeL.work_crawler({
 		 */
 		.between('<ul class="pagination', '</ul>').between(' class="active"')
 				.between('<li', '</li>').between(' href="', '"');
-		if (!next_image_page_url) {
-			callback();
+		if (next_image_page_url) {
+			// console.log(next_image_page_url);
+			this.get_URL(next_image_page_url, function(XMLHttp) {
+				_this.pre_parse_chapter_data(XMLHttp, work_data, callback,
+						chapter_NO);
+			}, null, true);
 			return;
 		}
 
-		// console.log(next_image_page_url);
-		this.get_URL(next_image_page_url, function(XMLHttp) {
-			_this.pre_parse_chapter_data(XMLHttp, work_data, callback,
-					chapter_NO);
-		}, null, true);
-	},
-	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
-	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
-		var chapter_data = work_data.chapter_list[chapter_NO - 1];
-		// console.log(chapter_data);
+		var chapter_label = chapter_data.url.match(/\d+$/)[0];
+		if (chapter_label >= 220980) {
+			chapter_label = _this.get_chapter_directory_name(work_data,
+					chapter_NO, chapter_data, false);
+			var chapter_directory = CeL.append_path_separator(
+			//
+			work_data.directory + chapter_label);
+			CeL.create_directory(chapter_directory);
 
-		// 已在 pre_parse_chapter_data() 設定完 {Array}chapter_data.image_list
-		return chapter_data;
+			var chapter_data_to_write = Object.assign(Object
+					.clone(chapter_data), {
+				// chapter_NO : chapter_NO,
+				// work_id : work_data.id,
+
+				// @see function image_file_path_of_chapter_NO(chapter_NO)
+				image_file_prefix : work_data.id + '-' + chapter_NO + '-',
+				image_file_postfix : chapter_data.image_list[0].url
+						.match(/(\.[a-z]+)(?:\?[^?]*)$/)[1]
+			});
+
+			// 注意: 這會覆蓋原有的兩個檔案!
+
+			// For chapter id >= scramble_id, save chapter_data to
+			// chapter_directory, should including image_list.
+			CeL.write_file(chapter_directory + 'chapter_data.js',
+					'chapter_data=' + JSON.stringify(chapter_data_to_write));
+			// console.log(module.filename);
+			CeL.copy_file(module.filename.replace(/[^\\\/]+$/,
+					'18comic.chapter.html'), chapter_directory + 'index.html');
+		}
+
+		callback();
 	},
 
 	image_preprocessor : function(contents, image_data) {

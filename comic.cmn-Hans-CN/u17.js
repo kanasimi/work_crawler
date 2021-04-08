@@ -15,9 +15,6 @@ var PATTERN_chapter = /<a id="cpt_(\d+)" href="([^<>"]+)"[\n\s]+title="([^<>"]+)
 crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
-	// 圖像檔案下載失敗處理方式：忽略/跳過圖像錯誤。當404圖像不存在、檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。default:false
-	skip_error : true,
-
 	// one_by_one : true,
 	base_URL : 'http://www.u17.com/',
 

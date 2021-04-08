@@ -13,7 +13,7 @@ CeL.run('application.net.work_crawler.sites.PTCMS');
 // ----------------------------------------------------------------------------
 
 var crawler = CeL.PTCMS({
-	base_URL : 'http://www.xbiquge.cc/',
+	base_URL : 'https://www.xbiquge.cc/',
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
