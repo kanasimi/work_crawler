@@ -73,6 +73,7 @@ download_sites_set = {
 		'517' : '我要去漫画',
 		dagu : '大古漫画网',
 		manhuadb : '漫画DB',
+		manhuacat : '漫画猫',
 
 		// '2manhua' : '爱漫画',
 		'57mh' : '57漫画网',

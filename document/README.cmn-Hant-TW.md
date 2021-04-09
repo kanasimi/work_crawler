@@ -151,6 +151,7 @@
 | [扑飞漫画](http://www.pufei.net/) | pufei.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [塔多漫画](http://www.taduo.net/) | taduo.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
+| [漫画猫](https://www.manhuacat.com/) | manhuacat.js | 以臺灣翻譯日本的漫畫單行本為主 |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [Oh漫画](https://www.ohmanhua.com/) | ohmanhua.js | 原[ONE漫画](https://www.onemanhua.com/)。fed? 系統 |
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
