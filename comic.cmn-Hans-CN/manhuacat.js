@@ -1,7 +1,7 @@
 ﻿/**
- * 批量下載 漫画DB 的工具。 Download manhuadb comics.
+ * 批量下載 漫画猫 的工具。 Download manhuacat comics.
  * 
- * modify from 9mdm.js→dagu.js
+ * modify from manhuacat.js
  */
 
 'use strict';
@@ -12,11 +12,10 @@ require('../work_crawler_loader.js');
 
 // [ all, chapter url, title, part title tag name, part title ]
 var PATTERN_chapter
-// <a class="fixed-a-es" target="_blank" href="/manhua/000/....html"
-// title="第01回">第01回</a>
+// <a class="fixed-a-es" href="https://www.manhuacat.com/manga/475/523727.html"
+// title="第03话">第03话</a>
 //
-// <div class="align-self-center pr-2"><h3 class="h4 mb-0 font-weight-normal
-// comic_version_title">[辉夜姬想让人告白~天才们的恋爱头脑战~ 连载]</h3></div>
+// <h2 class="h2 mb-0 font-weight-normal comic_version_title">单话</h2>
 = /<li[\s\S]+?<a [^<>]*?href="([^<>"]+)"[^<>]*? title="([^<>"]+)"|<(h[23])[^<>]*>(.+?)<\/\3>/g,
 //
 crawler = new CeL.work_crawler({
@@ -36,19 +35,21 @@ crawler = new CeL.work_crawler({
 	// e.g., 736 黄昏流星群/单行本 0005 [黄昏流星群][弘兼宪史][尖端][volink]Vol_005/736-5-005.jpg
 	skip_error : true,
 
+	// manhuacat.js: 一次下載太多檔案，會造成IP被圖片伺服器封鎖超過1天。
+	// chapter_time_interval : '10s',
 	// 單行本圖片較多且大，因此採用一個圖一個圖取得的方式。
-	one_by_one : true,
+	one_by_one : '2s',
 	// 下載圖片的逾時ms數。若逾時時間太小（如10秒），下載大檔案容易失敗。
 	timeout : 90 * 1000,
-	// 2018/8: http://www.manhuadb.com/
-	// 2020/4/11: https://www.manhuadb.com/
-	base_URL : 'https://www.manhuadb.com/',
+	base_URL : 'https://www.manhuacat.com/',
 
 	// reget_image_page : true,
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'search?q=',
-	PATTERN_search : /<a href="\/manhua\/(\d+)" title="([^<>"]+)"/,
+	search_URL : 'search.html?q=',
+	PATTERN_search
+	//
+	: /<a href="(?:[^"]*?)\/manga\/(\d+)\.html" title="([^<>"]+)"/,
 	parse_search_result : function(html, get_label) {
 		// console.log(html);
 		var PATTERN_search = this.PATTERN_search;
@@ -65,7 +66,7 @@ crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return 'manhua/' + work_id;
+		return 'manga/' + work_id + '.html';
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
 		// console.log(html);
@@ -78,8 +79,8 @@ crawler = new CeL.work_crawler({
 					'<div class="comic-pub-data-section', '</div>')
 					.between('>')),
 			// 概要 synopsis
-			description : get_label(html.between(
-					'<div class="comic_detail_content">', '</div>'))
+			description : get_label(html.between('<p class="comic_story">',
+					'</p>').between('漫画简介：'))
 		};
 
 		extract_work_data(work_data, html);
@@ -94,6 +95,7 @@ crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	add_part : true,
+	inverted_order : true,
 	get_chapter_list : function(work_data, html, get_label) {
 		// <div class="comic-toc-section bg-white p-3">
 		// e.g., 一拳超人
@@ -172,9 +174,19 @@ crawler = new CeL.work_crawler({
 		// console.log(work_data);
 	},
 
+	decoder_URL :
+	//
+	'https://raw.githubusercontent.com/pieroxy/lz-string/master/libs/'
+			+ 'lz-string.js',
 	decode_chapter_data : function(chapter_data) {
-		return JSON.parse(atob(chapter_data));
+		// var LZString = require(this.main_directory + 'lz-string.js');
+		return LZString.decompressFromBase64(chapter_data)
+		//
+		.split(',');
 	},
+	// asset_domain=vg_r_data[_0x4cb2('0xc','s$hR')](_0x4cb2('0x4e','I8#P'));
+	// img_pre=_0x4cb2('0x52','yKDU');
+	image_prefix : "https://mao.mhtupian.com/uploads/",
 	pre_parse_chapter_data
 	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。
 	// 必須自行保證執行 callback()，不丟出異常、中斷。
@@ -322,4 +334,13 @@ crawler = new CeL.work_crawler({
 
 // CeL.set_debug(3);
 
-start_crawler(crawler, typeof module === 'object' && module);
+// 創建 main directory。
+CeL.create_directory(crawler.main_directory);
+
+var LZString;
+CeL.get_URL_cache(crawler.decoder_URL, function(contents, error) {
+	eval(contents.replace(/var\s+LZString/, 'LZString'));
+	start_crawler(crawler, typeof module === 'object' && module);
+}, {
+	directory : crawler.main_directory
+});
