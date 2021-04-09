@@ -1,0 +1,150 @@
+﻿<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<script type="text/javascript" charset="utf-8" src="work_data.js"></script>
+<style>
+#chapter_selector_header {
+	/* width: 20em; */
+	text-align: right;
+	cursor: pointer;
+	background: #afa;
+}
+
+#chapter_selector_panel {
+	max-height: 800px;
+	overflow: auto;
+}
+
+.chapter_selector {
+	cursor: pointer;
+	background: #ddf;
+	padding: 1pt .5em;
+}
+.chapter_selector:hover {
+	background: #aaf;
+}
+</style>
+</head>
+
+<body>
+
+<div style="float:right; width: 20em;">
+	<div style="position: fixed; top: 0;">
+		<div id="chapter_selector_header">Select chapters</div>
+		<div id="chapter_selector_panel"></div>
+	</div>
+</div>
+
+<h2 id="title_panel"></h2>
+<div id="image_panel"></div>
+
+本頁面僅能用於新版瀏覽器。且您必須先解開所有壓縮檔才能以本頁面瀏覽圖片！
+
+<script type="text/javascript">
+
+function set_title(chapter_data) {
+	const chapter_title = (chapter_data ? chapter_data.title + ' - ' : '') + work_data.title;
+	document.title = chapter_title;
+	document.getElementById("title_panel").innerText = chapter_title;
+}
+set_title();
+
+function show_image(image, canvas) {
+	const width = canvas.width = image.width;
+	const height = canvas.height = image.height;
+	canvas.style.display = 'block';
+	const ctx = canvas.getContext('2d');
+
+	const slice_count = 10;
+	const remainder = height % slice_count;
+	for (let index = 0, cut_to_y = height, slice_height = Math.floor(height / slice_count); index < slice_count; index++) {
+		const copy_from_y = index * slice_height;
+		if (index === slice_count - 1) {
+			cut_to_y = 0;
+			slice_height += remainder;
+		} else
+			cut_to_y -= slice_height;
+		ctx.drawImage(image,
+			0, copy_from_y, width, slice_height,
+			0, cut_to_y, width, slice_height);
+	}
+	// free
+	image.onload = image.src = null;
+	// hidden chapter_selector_panel
+	trigger_chapter_selector_panel('none');
+	location.hash = '';
+	location.hash = 'title_panel';
+}
+
+
+let chapter_index_now;
+function load_chapter(chapter_index) {
+	// reset
+	image_panel.innerHTML = '';
+
+	chapter_index_now = chapter_index;
+	const chapter_data = work_data.chapter_list[chapter_index];
+	//console.log(chapter_data);
+	set_title(chapter_data);
+	//const chapter_NO = chapter_index + 1;
+	//const chapter_directory = String(chapter_NO).padStart(4, 0) + ' ' + chapter_data.title + '/';
+	for (let index = 0; index < chapter_data.image_list.length; index++) {
+		const image = document.createElement('img');
+		const chapter_id = chapter_data.url.match(/\d+$/)[0];
+		if (chapter_id >= 220980) {
+			const canvas = document.createElement('canvas');
+			image_panel.appendChild(canvas);
+			image.onload = show_image.bind(null, image, canvas);
+		} else {
+			trigger_chapter_selector_panel('none');
+			image.style.display = 'block';
+			image_panel.appendChild(image);
+		}
+		if (false) {
+			const file_name =
+				//work_data.id+'-' +chapter_NO+'-' + String(++index).padStart(3, 0) + chapter_data.image_list[index].url.match(/(\.[a-z]+)(?:\?[^?]*)$/)[1]
+				chapter_data.image_list[index].file.match(/[^\\\/]+$/)[0];
+			image.src = chapter_directory + file_name;
+		}
+		image.src = chapter_data.image_list[index].file.match(/[^\\\/]+[\\\/][^\\\/]+$/)[0].replace(/\\/g, '/');
+	}
+}
+
+work_data.chapter_list.forEach((chapter_data, chapter_index) => {
+	const div = document.createElement('div');
+	div.innerText = chapter_data.title;
+	div.onclick = load_chapter.bind(null, chapter_index);
+	div.className = 'chapter_selector';
+	document.getElementById("chapter_selector_panel").appendChild(div);
+});
+
+
+function trigger_chapter_selector_panel(display) {
+	const chapter_selector_panel = document.getElementById("chapter_selector_panel");
+	if (typeof display !== 'string')
+		display = chapter_selector_panel.style.display === 'none' ? 'block' : 'none';
+	if (chapter_selector_panel.style.display !== display)
+		chapter_selector_panel.style.display = display;
+}
+document.getElementById("chapter_selector_header").onclick = trigger_chapter_selector_panel;
+
+
+document.addEventListener('keydown', event => {
+	// console.log(event);
+	if (!event.altKey && !event.ctrlKey && !event.altKey && !event.shiftKey) {
+		switch (event.key) {
+		case "ArrowLeft":
+			load_chapter(chapter_index_now > 0 ? chapter_index_now - 1 : work_data.chapter_list.length - 1);
+			break;
+
+		case "ArrowRight":
+			load_chapter(chapter_index_now + 1 < work_data.chapter_list.length ? chapter_index_now + 1 : 0);
+			break;
+		}
+	}
+});
+
+</script>
+
+</body>
+</html>

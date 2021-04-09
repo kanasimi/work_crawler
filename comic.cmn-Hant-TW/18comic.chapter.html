@@ -8,9 +8,9 @@
 
 document.title = chapter_data.title;
 
-function show_image(canvas) {
-	const width = canvas.width = this.width;
-	const height = canvas.height = this.height;
+function show_image(image, canvas) {
+	const width = canvas.width = image.width;
+	const height = canvas.height = image.height;
 	canvas.style.display = 'block';
 	const ctx = canvas.getContext('2d');
 
@@ -23,10 +23,12 @@ function show_image(canvas) {
 			slice_height += remainder;
 		} else
 			cut_to_y -= slice_height;
-		ctx.drawImage(this,
+		ctx.drawImage(image,
 			0, copy_from_y, width, slice_height,
 			0, cut_to_y, width, slice_height);
 	}
+	// free
+	image.onload = image.src = null;
 }
 
 for (let index = 0; index < chapter_data.image_list.length;) {
@@ -34,7 +36,7 @@ for (let index = 0; index < chapter_data.image_list.length;) {
 	document.body.appendChild(canvas);
 
 	const image = document.createElement('img');
-	image.onload = show_image.bind(image, canvas);
+	image.onload = show_image.bind(null, image, canvas);
 	image.src = chapter_data.image_file_prefix + String(++index).padStart(3, 0) + chapter_data.image_file_postfix;
 }
 

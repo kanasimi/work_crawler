@@ -137,7 +137,9 @@ var crawler = new CeL.work_crawler({
 				url : token.between(null, '"'),
 				date : token.between(
 						'<span class="hidden-xs" style="float: right;">',
-						'</span>')
+						'</span>'),
+				// 上一次下載本章節時，下載了幾個頁面。
+				latest_pages_got : 0
 			});
 		});
 		// console.log(work_data);
@@ -151,8 +153,11 @@ var crawler = new CeL.work_crawler({
 		//
 		html = XMLHttp.responseText, _this = this;
 
-		if (!chapter_data.image_list)
+		if (!chapter_data.latest_pages_got++) {
+			// 此時假如有 chapter_data.image_list，
+			// 應為 work_data.old_data.chapter_list 帶入。
 			chapter_data.image_list = [];
+		}
 
 		html.between('<div class="panel-body">', '<ul class="nav nav-tabs">')
 		//
@@ -200,9 +205,9 @@ var crawler = new CeL.work_crawler({
 			return;
 		}
 
-		var chapter_label = chapter_data.url.match(/\d+$/)[0];
-		if (chapter_label >= 220980) {
-			chapter_label = _this.get_chapter_directory_name(work_data,
+		if (this.write_chapter_index
+				&& chapter_data.url.match(/\d+$/)[0] >= 220980) {
+			var chapter_label = _this.get_chapter_directory_name(work_data,
 					chapter_NO, chapter_data, false);
 			var chapter_directory = CeL.append_path_separator(
 			//
@@ -228,10 +233,22 @@ var crawler = new CeL.work_crawler({
 					'chapter_data=' + JSON.stringify(chapter_data_to_write));
 			// console.log(module.filename);
 			CeL.copy_file(module.filename.replace(/[^\\\/]+$/,
-					'18comic.chapter.html'), chapter_directory + 'index.html');
+					'18comic.chapter.html'), chapter_directory + 'index.html',
+					true);
 		}
 
 		callback();
+	},
+
+	on_save_work_data_file : function(work_data, save_event) {
+		if (save_event !== 'finish_up')
+			return;
+
+		CeL.write_file(work_data.directory + 'work_data.js', 'work_data='
+				+ JSON.stringify(work_data));
+		CeL.copy_file(
+				module.filename.replace(/[^\\\/]+$/, '18comic.work.html'),
+				work_data.directory + 'index.html', true);
 	},
 
 	image_preprocessor : function(contents, image_data) {
