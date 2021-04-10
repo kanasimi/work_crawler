@@ -84,14 +84,17 @@ var crawler = new CeL.work_crawler({
 		html = eval(html
 		//
 		.between('<script>window.__NUXT__=', ';</script>')).data[0];
+		// console.trace(html);
 		Object.assign(work_data, html.topicInfo);
-		work_data.chapter_list = html.comics.reverse().map(
-				function(chapter_data) {
-					chapter_data.url = 'web/comic/' + chapter_data.id;
-					if (chapter_data.locked)
-						chapter_data.limited = true;
-					return chapter_data;
-				});
+		work_data.chapter_list = html.comics.reverse()
+		//
+		.map(function(chapter_data, index) {
+			chapter_data.url = 'web/comic/' + chapter_data.id;
+			if (chapter_data.locked) {
+				chapter_data.limited = true;
+			}
+			return chapter_data;
+		});
 		// console.log(work_data);
 		return work_data;
 	},
@@ -101,15 +104,22 @@ var crawler = new CeL.work_crawler({
 		html = eval(html
 		//
 		.between('<script>window.__NUXT__=', ';</script>')).data[0];
+		// console.trace(html);
 
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
 
 		chapter_data.image_list = html.comicInfo.comicImages;
 		// delete html.comicInfo.comicImages;
 
+		if (chapter_data.limited && !work_data.start_chapter_NO_next_time) {
+			CeL.info(CeL.gettext('下次從《%1》起下載。', chapter_data.title));
+			work_data.start_chapter_NO_next_time = chapter_NO;
+		}
+
 		// `comicInfo` 的資訊較不精確!
 		// Object.assign(chapter_data, html.comicInfo);
 		// console.log(chapter_data);
+		// console.log(work_data);
 
 		return chapter_data;
 	}
