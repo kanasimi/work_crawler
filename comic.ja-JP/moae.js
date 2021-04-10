@@ -106,8 +106,7 @@ var crawler = new CeL.work_crawler({
 			work_data.chapter_list = data.ep;
 
 			CeL.run_serial(function(run_next, item, index, list) {
-				process.stdout.write(item + '/' + work_data.pager.maxPage
-						+ '...\r');
+				CeL.log_temporary(item + '/' + work_data.pager.maxPage);
 
 				_this.get_URL(get_chapter_data_URL(item), function(XMLHttp) {
 					data = parse_JSON(XMLHttp);

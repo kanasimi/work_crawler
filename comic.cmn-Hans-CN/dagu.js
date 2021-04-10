@@ -124,8 +124,8 @@ var crawler = CeL.qTcms2017({
 				console.log('Get #' + index + '/' + image_count + ': '
 						+ image_page_url);
 			}
-			process.stdout.write('Get image data page of §' + chapter_NO + ': '
-					+ image_NO + '/' + image_count + '...\r');
+			CeL.log_temporary('Get image data page of §' + chapter_NO + ': '
+					+ image_NO + '/' + image_count);
 			_this.get_URL(image_page_url, function(XMLHttp) {
 				extract_image(XMLHttp);
 				run_next();

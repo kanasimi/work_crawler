@@ -69,8 +69,8 @@ CeL.storage.traverse_file_system(target_directory, function(file_path) {
 		// archive_file.verify();
 		return;
 	}
-	if (!archive_file.information.offset
-			&& !archive_file.information['tail size']) {
+	if (!archive_file.information.Offset
+			&& !archive_file.information['Tail Size']) {
 		// archive_file.verify();
 		return;
 	}

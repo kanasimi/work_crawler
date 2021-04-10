@@ -90,15 +90,18 @@ function most_frequently_byte(selector_configuration) {
 	return selected_byte;
 }
 
-
+const use_select_by_process_to = 0;
 let latest_block_index;
 function select_by_process_to(selector_configuration) {
 	const { from_buffer_list, buffer_index, bytesRead_array, start_index, base_byte, block_index } = selector_configuration;
 
 	let list_index = block_index < 3900 ? 1 : 0;
+	//list_index = block_index < 800 ? 1 : 0;
+	list_index = process_to / max_size > .95 ? 1 : 0;
+
 	if (list_index === 0 && latest_block_index !== block_index) {
 		latest_block_index = block_index;
-		console.log(block_index);
+		CeL.warn(`${select_by_process_to.name}: Different block: ${block_index} / ${max_size / BUFFER_SIZE + 1 | 0} (${block_index / (max_size / BUFFER_SIZE) * 100 | 0}%)`);
 	}
 
 	return from_buffer_list[list_index][buffer_index];
@@ -152,8 +155,9 @@ do {
 
 		const selector_configuration = { from_buffer_list, buffer_index, bytesRead_array, start_index, base_byte, block_index };
 
-		const selected_byte = most_frequently_byte(selector_configuration);
-		//const selected_byte = select_by_process_to(selector_configuration);
+		const selected_byte = use_select_by_process_to
+			? select_by_process_to(selector_configuration)
+			: most_frequently_byte(selector_configuration);
 
 		from_buffer_list[BUFFER_INDEX_TO_WRITE][buffer_index] = selected_byte;
 	}
@@ -162,8 +166,8 @@ do {
 		bad_block_list.push(block_index);
 	node_fs.writeSync(target_fd, from_buffer_list[BUFFER_INDEX_TO_WRITE], 0, max_buffer_index);
 	process_to += max_buffer_index;
-	process.stdout.write(`${process_to / max_size * 100 | 0}% ${CeL.to_KiB(process_to)} / ${CeL.to_KiB(max_size)
-		}${different_byte_count ? `, ${CeL.to_KiB(different_byte_count)} different` : ''} ...\r`);
+	CeL.log_temporary(`${process_to / max_size * 100 | 0}% ${CeL.to_KiB(process_to)} / ${CeL.to_KiB(max_size)
+		}${different_byte_count ? `, ${CeL.to_KiB(different_byte_count)} different` : ''}`);
 
 } while (not_ended);
 

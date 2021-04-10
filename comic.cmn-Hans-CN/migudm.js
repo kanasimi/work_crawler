@@ -8,7 +8,7 @@ require('../work_crawler_loader.js');
 
 // ----------------------------------------------------------------------------
 
-var PATTERN_characters = /<span class="authorItem">([\s\S]+?)<span class="authorDesc">([\s\S]+?)<\/span>/;
+var PATTERN_characters = /<span class="authorItem">([\s\S]+?)<span class="authorDesc">([\s\S]+?)<\/span>/g;
 var PATTERN_chapter_keys = /<input +type="hidden" +(?:class|id)="([a-zA-Z]+)" +value="([^<>"]+)"/g;
 var crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
@@ -120,7 +120,7 @@ var crawler = new CeL.work_crawler({
 			characters : Object.create(null)
 		};
 
-		Array.from(text.matchAll(/>([^<>]+)<\/a>/)).forEach(function(matched) {
+		Array.from(text.matchAll(/>([^<>]+)<\/a>/g)).forEach(function(matched) {
 			// delete matched.input;
 			// console.log(matched);
 			matched = get_label(matched[1]);

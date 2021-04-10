@@ -257,7 +257,8 @@ function check_fso(fso_name) {
 		// 經過測試，.pkg file 通常越壓縮越大。
 		if (false && PATTERN_executable_file.test(fso_name)) {
 			process_queue.push([ directory_path, 'game file',
-					CeL.gettext('為遊戲可執行檔或函式庫') ]);
+			// 為遊戲可執行檔或函式庫
+			CeL.gettext('為可執行檔或函式庫') ]);
 		} else
 			classify(fso_name, directory_path, fso_status);
 		return;

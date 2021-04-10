@@ -154,8 +154,8 @@ function download_next() {
 					// XMLHttp.status === 200
 					var time_interval = 60 * 1000;
 					setTimeout(download_next, time_interval);
-					process.stdout.write('Wait ' + CeL.age_of(0, time_interval)
-							+ ' to get next file...\r');
+					CeL.log_temporary('Wait ' + CeL.age_of(0, time_interval)
+							+ ' to get next file');
 				}
 			} else {
 				downloaded_count++;

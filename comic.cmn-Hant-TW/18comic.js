@@ -151,7 +151,7 @@ var crawler = new CeL.work_crawler({
 	: function(XMLHttp, work_data, callback, chapter_NO) {
 		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
-		html = XMLHttp.responseText, _this = this;
+		html = XMLHttp.responseText;
 
 		if (!chapter_data.latest_pages_got++) {
 			// 此時假如有 chapter_data.image_list，
@@ -198,6 +198,7 @@ var crawler = new CeL.work_crawler({
 				.between('<li', '</li>').between(' href="', '"');
 		if (next_image_page_url) {
 			// console.log(next_image_page_url);
+			var _this = this;
 			this.get_URL(next_image_page_url, function(XMLHttp) {
 				_this.pre_parse_chapter_data(XMLHttp, work_data, callback,
 						chapter_NO);
@@ -207,7 +208,7 @@ var crawler = new CeL.work_crawler({
 
 		if (this.write_chapter_index
 				&& chapter_data.url.match(/\d+$/)[0] >= 220980) {
-			var chapter_label = _this.get_chapter_directory_name(work_data,
+			var chapter_label = this.get_chapter_directory_name(work_data,
 					chapter_NO, chapter_data, false);
 			var chapter_directory = CeL.append_path_separator(
 			//

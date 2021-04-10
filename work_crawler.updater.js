@@ -32,9 +32,8 @@ function fetch_url(url, callback) {
 			url = url.parse(url);
 			url.agent = new SocksProxyAgent(process.env.socks_proxy);
 		} catch (e) {
-			console.error('Please install socks-proxy-agent to using proxy: '
-					+ '`npm install socks-proxy-agent`');
-			throw e;
+			//console.error('Please install socks-proxy-agent to using proxy: ' + '`npm install socks-proxy-agent`');
+			//throw e;
 		}
 	}
 

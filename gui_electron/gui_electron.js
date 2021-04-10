@@ -262,7 +262,7 @@ function start_update(event_sender) {
 		});
 
 		autoUpdater.on('download-progress', function(progressObj) {
-			// process.stdout.write(progressObj.percent + '%...\r'));
+			// CeL.log_temporary(progressObj.percent + '%'));
 			event_sender.send('send_message_debug', [
 					'安裝包已下載 %1，下載速度 %2 bytes/s。',
 					progressObj.percent.toFixed(2) + '%' + ' ('

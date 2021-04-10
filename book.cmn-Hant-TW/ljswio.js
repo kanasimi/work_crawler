@@ -78,7 +78,7 @@ var crawler = new CeL.work_crawler({
 		}
 
 		CeL.run_serial(function(run_next, item, index, list) {
-			process.stdout.write(item + '/' + last_list_NO + '...\r');
+			CeL.log_temporary(item + '/' + last_list_NO);
 
 			CeL.get_URL(_this.base_URL + chapter_base_URL + item, function(
 					XMLHttp) {
