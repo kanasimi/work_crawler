@@ -15,13 +15,17 @@ var crawler = new CeL.work_crawler({
 	// 所有的子檔案要修訂註解說明時，應該都要順便更改在CeL.application.net.comic中Comic_site.prototype內的母comments，並以其為主體。
 
 	// 當圖像檔案過小，或是被偵測出非圖像(如不具有EOI)時，依舊強制儲存檔案。
-	// e.g., 10560 春秋战雄\0203 第206回 神兵异宝
-	// skip_error : true,
+	// e.g.,
+	// 10560 春秋战雄\0203 第206回 神兵异宝
+	// 12436 最后的召唤师\云播放 0175 第29话3 再见，朵拉\12436-175-012 bad.jpg
+	skip_error : true,
 
 	// {Natural}MIN_LENGTH:最小容許圖案檔案大小 (bytes)。
 	MIN_LENGTH : 350,
 
 	// one_by_one : true,
+
+	recheck : 'multi_parts_changed',
 
 	// 2019/9/27-2020/4/27: ONE漫画 https://www.onemanhua.com/
 	// 2020/5/2-2020/12/13: Oh漫画 https://www.ohmanhua.com/
