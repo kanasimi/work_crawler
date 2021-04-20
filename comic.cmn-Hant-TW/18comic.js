@@ -40,6 +40,9 @@ var crawler = new CeL.work_crawler({
 
 	// acceptable_types : 'png',
 
+	// 漫畫下載完畢後壓縮圖片檔案。
+	archive_images : false,
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search/photos?main_tag=0&search_query=',
 	parse_search_result : function(html, get_label) {
