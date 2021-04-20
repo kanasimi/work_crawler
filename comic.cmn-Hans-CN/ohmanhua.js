@@ -99,26 +99,49 @@ var crawler = new CeL.work_crawler({
 		// console.log(work_data);
 		return work_data;
 	},
-	get_chapter_list : function(work_data, html) {
-		var chapter_list = [], data = html.between(
-				'fed-play-item fed-drop-item fed-visible')
-		// <div class="all_data_list">
-		.between('all_data_list', '</div>');
+	get_chapter_list : function(work_data, html, get_label) {
+		var _this = this, part_list = html.all_between(
+		/**
+		 * <code>
+		<ul class="fed-part-rows"> <li class="fed-drop-btns fed-padding fed-col-xs3 fed-col-md2"><a class="fed-btns-info fed-rims-info fed-part-eone fed-back-green" lineId="1" href="javascript:;">稳定路线</a> </li> <li class="fed-drop-btns fed-padding fed-col-xs3 fed-col-md2"><a class="fed-btns-info fed-rims-info fed-part-eone " lineId="2" href="javascript:;">云播放</a> </li> </ul>
+		</code>
+		 */
+		'<li class="fed-drop-btns fed-padding fed-col-xs3 fed-col-md2">',
+		//
+		'</li>').map(get_label);
+		// console.log(part_list);
 
-		// <li class="fed-padding fed-col-xs6 fed-col-md3 fed-col-lg3"><a
-		// class="fed-btns-info fed-rims-info fed-part-eone" title="第846话
-		// 亡魂山（下）" href="/10101/1/852.html">第846话 亡魂山（下） </a></li>
-		data.each_between('<li ', '</li>', function(token) {
-			var matched = token.match(
-			//
-			/<a [^<>]*?title="([^<>"]+?)"[^<>]*? href="([^<>"]+?)"/);
-			var chapter_data = {
-				title : matched[1],
-				url : matched[2]
-			};
-			chapter_list.push(chapter_data);
+		// reset work_data.chapter_list
+		work_data.chapter_list = [];
+
+		html.each_between('<div class="fed-play-item fed-drop-item fed-', null,
+		/**
+		 * <code>
+		<div class="fed-play-item fed-drop-item fed-visible"> <ul class="fed-drop-head fed-padding fed-part-rows">...</ul> <div class="all_data_list"> <ul class="fed-part-rows">...</ul> </div>
+		<div class="fed-play-item fed-drop-item fed-hidden"> <ul class="fed-drop-head fed-padding fed-part-rows"> ...</ul> <div class="all_data_list"> <ul class="fed-part-rows">...</ul> </div>
+		</code>
+		 */
+		function(text) {
+			_this.set_part(work_data, part_list.shift());
+			text = text.between('<div class="all_data_list">', '</div>');
+			/**
+			 * <code>
+			<li class="fed-padding fed-col-xs6 fed-col-md3 fed-col-lg3"><a class="fed-btns-info fed-rims-info fed-part-eone" title="第846话 亡魂山（下）" href="/10101/1/852.html">第846话 亡魂山（下） </a></li>
+			</code>
+			 */
+			text.each_between('<li ', '</li>', function(token) {
+				var matched = token.match(
+				//
+				/<a [^<>]*?title="([^<>"]+?)"[^<>]*? href="([^<>"]+?)"/);
+				var chapter_data = {
+					title : matched[1],
+					url : matched[2]
+				};
+				_this.add_chapter(work_data, chapter_data);
+			});
 		});
-		work_data.chapter_list = chapter_list.reverse();
+
+		work_data.inverted_order = true;
 		// console.log(work_data.chapter_list);
 	},
 
@@ -185,6 +208,8 @@ var crawler = new CeL.work_crawler({
 			return;
 		}
 		// console.log(chapter_data);
+		chapter_data = Object.assign(work_data.chapter_list[chapter_NO - 1],
+				chapter_data);
 
 		// chapter_data.startimg often "1"
 		var image_NO = parseInt(chapter_data.startimg) || 1;
