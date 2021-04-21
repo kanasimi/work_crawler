@@ -151,6 +151,10 @@ var crawler = new CeL.work_crawler({
 
 	using_webp : false,
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		function decode_base64(data) {
+			return CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8);
+		}
+
 		// 2019/9/27: "JRUIFMVJDIWE569j"
 		// 2020/8/21 14:39:33: "fw12558899ertyui"
 		// 2021/1/8: var __READKEY = 'fw122587mkertyui';
@@ -159,8 +163,7 @@ var crawler = new CeL.work_crawler({
 		function decode_data(C_DATA, key, default_key) {
 			// console.log(C_DATA);
 			// @see https://www.ohmanhua.com/js/custom.js
-			C_DATA = CryptoJS.enc.Base64.parse(C_DATA).toString(
-					CryptoJS.enc.Utf8);
+			C_DATA = decode_base64(C_DATA);
 
 			var KEY_list = default_READKEY_list.clone();
 			if (typeof default_key === 'string' && default_key)
@@ -189,6 +192,20 @@ var crawler = new CeL.work_crawler({
 
 			var mh_info, image_info;
 			eval(C_DATA);
+
+			// https://www.cocomanhua.com/js/custom.js
+			// last-modified: 2021-01-29T19:23:11Z
+			if (image_info.urls__direct) {
+				// Will be `chapter_data.image_list`
+				mh_info.image_list = decode_base64(image_info.urls__direct)
+						.split("|SEPARATER|").map(function(url) {
+							return encodeURI(url);
+						});
+				// free
+				delete image_info.urls__direct;
+			}
+
+			// before 2021-01-29T19:23:11Z
 			mh_info.image_info = image_info;
 			// @see `totalImageCount =
 			// parseInt(eval(base64[__Ox97c0e[0x4]](__Ox97c0e[0x3])))` @
@@ -197,15 +214,20 @@ var crawler = new CeL.work_crawler({
 				mh_info.totalimg = eval(decode_data(mh_info.enc_code1));
 			}
 			if (mh_info.enc_code2) {
+				// console.trace(mh_info.enc_code2);
 				mh_info.imgpath = decode_data(mh_info.enc_code2,
 				// 2020/9/3 前改版
 				// @see function __cr_getpice(_0xfb06x4a)
 				"fw125gjdi9ertyui", "");
+				// console.trace(mh_info.imgpath);
+				// free
+				delete mh_info.enc_code2;
 			}
 			return mh_info;
 		}
 
 		var chapter_data = html.between("var C_DATA='", "'");
+		// console.log(chapter_data);
 		if (!chapter_data || !(chapter_data = decode(chapter_data))) {
 			CeL.warn(work_data.title + ' #' + chapter_NO
 					+ ': No valid chapter data got!');
@@ -226,15 +248,21 @@ var crawler = new CeL.work_crawler({
 		var chapter_image_base_path = this.base_URL.replace(/:\/\/.+/, '://')
 		// "img.mljzmm.com"
 		+ chapter_data.domain + "/comic/" + encodeURI(chapter_data.imgpath);
-		chapter_data.image_list = [];
-		for (; image_NO <= chapter_data.totalimg; image_NO++) {
-			// @see __cr.PrefixInteger()
-			var image_url = chapter_image_base_path + image_NO.pad(4) + ".jpg";
-			if (this.using_webp) {
-				// @see __cr.switchWebp()
-				image_url += '.webp';
+
+		if (!chapter_data.image_list) {
+			// https://www.cocomanhua.com/js/custom.js
+			// last-modified: 2021-01-29T19:23:11Z
+			chapter_data.image_list = [];
+			for (; image_NO <= chapter_data.totalimg; image_NO++) {
+				// @see __cr.PrefixInteger()
+				var image_url = chapter_image_base_path + image_NO.pad(4)
+						+ ".jpg";
+				if (this.using_webp) {
+					// @see __cr.switchWebp()
+					image_url += '.webp';
+				}
+				chapter_data.image_list.push(image_url);
 			}
-			chapter_data.image_list.push(image_url);
 		}
 
 		// console.log(chapter_data);
