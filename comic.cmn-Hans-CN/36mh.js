@@ -13,7 +13,12 @@ CeL.run('application.net.work_crawler.sites.SinMH');
 // ----------------------------------------------------------------------------
 
 var crawler = CeL.SinMH({
-	base_URL : 'https://www.36mh.com/'
+	// 36mh\quanzhifashi 全职法师\0338 326 山道惊魂\quanzhifashi-338-015.jpg
+	skip_error : true,
+
+	base_URL : 'https://www.36mh.com/',
+
+	chapter_inverted_order : true
 });
 
 // ----------------------------------------------------------------------------
