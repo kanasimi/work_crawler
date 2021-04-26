@@ -249,7 +249,14 @@ var crawler = new CeL.work_crawler({
 		// "img.mljzmm.com"
 		+ chapter_data.domain + "/comic/" + encodeURI(chapter_data.imgpath);
 
-		if (!chapter_data.image_list) {
+		if (chapter_data.image_list) {
+			// 愛奇藝圖源不可設定 Referer
+			// e.g.,
+			// http://manhua.iqiyipic.com/image/20200514/45/ce/cc_13901115_c_601_800_2290.jpg
+			// if(/^https?:\/\/manhua\.iqiyipic\.com\//.test(chapter_data.image_list[0]))
+			this.setup_value('Referer', '');
+		} else {
+			// old version.
 			// https://www.cocomanhua.com/js/custom.js
 			// last-modified: 2021-01-29T19:23:11Z
 			chapter_data.image_list = [];
