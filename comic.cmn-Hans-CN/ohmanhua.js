@@ -251,7 +251,7 @@ var crawler = new CeL.work_crawler({
 		+ chapter_data.domain + "/comic/" + encodeURI(chapter_data.imgpath);
 
 		if (new_image_list) {
-			CeL.debug('不設定 Referer', 0);
+			CeL.debug('不設定 Referer', 3);
 			// 愛奇藝圖源不可設定 Referer
 			// e.g.,
 			// http://manhua.iqiyipic.com/image/20200514/45/ce/cc_13901115_c_601_800_2290.jpg
