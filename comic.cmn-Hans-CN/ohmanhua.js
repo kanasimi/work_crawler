@@ -234,6 +234,7 @@ var crawler = new CeL.work_crawler({
 			return;
 		}
 		// console.log(chapter_data);
+		var new_image_list = !!chapter_data.image_list;
 		chapter_data = Object.assign(work_data.chapter_list[chapter_NO - 1],
 				chapter_data);
 
@@ -249,7 +250,8 @@ var crawler = new CeL.work_crawler({
 		// "img.mljzmm.com"
 		+ chapter_data.domain + "/comic/" + encodeURI(chapter_data.imgpath);
 
-		if (chapter_data.image_list) {
+		if (new_image_list) {
+			CeL.debug('不設定 Referer', 0);
 			// 愛奇藝圖源不可設定 Referer
 			// e.g.,
 			// http://manhua.iqiyipic.com/image/20200514/45/ce/cc_13901115_c_601_800_2290.jpg
