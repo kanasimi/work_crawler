@@ -299,7 +299,7 @@ function check_fso(fso_name) {
 			image_count++;
 		} else if (PATTERN_executable_file.test(sub_fso_name)) {
 			exe_count++;
-		} else if (/\.(?:cue|iso|mdf|mds|bin|ccd|sub)$/i.test(sub_fso_name)) {
+		} else if (/\.(?:iso|mdf|mds|bin|ccd|sub)$/i.test(sub_fso_name)) {
 			iso_count++;
 		} else if (/\.(?:cue|mp3|flac|ape|wav)$/i.test(sub_fso_name)) {
 			music_count++;

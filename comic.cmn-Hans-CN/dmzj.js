@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載动漫之家漫画网 原创+漫画频道(日漫)的工具。 Download www.dmzj, manhua.dmzj comics.
+ * 
+ * TODO: https://github.com/tachiyomiorg/tachiyomi-extensions/pull/5624/files
  */
 
 'use strict';

@@ -210,13 +210,16 @@ crawler = new CeL.work_crawler({
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
 		// <!--头部结束-->
 		// <!--漫画主体内容开始-->
+		// console.trace(html);
 		html = html.between('<div class="manga-imgs" id="manga-imgs">',
 				'<div class="ewm-hook" id="ewm-hook">');
 
 		var matched, chapter_data = work_data.chapter_list[chapter_NO - 1];
 		chapter_data.image_list = [];
 
+		// console.trace(html);
 		while (matched = PATTERN_image.exec(html)) {
+			// console.trace(matched.slice());
 			// [ all <img>, src, image_additional_data ]
 			matched[2] = matched[2].match(/[\s\n]data-original="([^<>"]+)"/);
 			chapter_data.image_list.push(matched[2] ? matched[2][1]
@@ -236,6 +239,7 @@ crawler = new CeL.work_crawler({
 			chapter_data.limited = matched;
 		}
 
+		// console.log(chapter_data);
 		return chapter_data;
 	}
 });
