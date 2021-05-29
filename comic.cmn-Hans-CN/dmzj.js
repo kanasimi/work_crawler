@@ -215,7 +215,10 @@ var crawler = new CeL.work_crawler({
 
 		// console.log(chapter_data.image_list);
 		return chapter_data;
-	}
+	},
+
+	// e.g., diyilianren 第一恋人
+	trim_trailing_newline : true
 });
 
 // ----------------------------------------------------------------------------

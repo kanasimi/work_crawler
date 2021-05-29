@@ -237,16 +237,8 @@ var crawler = new CeL.work_crawler({
 	// 在 after_get_work_data() 時，就能分析出整個作品的圖片網址，因此不需要再取得每個章節。
 	skip_get_chapter_page : true,
 
-	image_preprocessor : function(contents, image_data) {
-		var index = contents && contents.length - 2;
-		if (index > 0 && contents[index] === 0x0D
-				&& contents[index + 1] === 0x0A) {
-			// 修正圖片結尾非正規格式之情況。
-			// 去掉最後的換行符號：有些圖片在檔案最後會添加上換行符號 "\r\n"，因此被判別為非正規圖片檔。
-			// r.g., 4945 龍虎五世W
-			return contents.slice(0, -2);
-		}
-	}
+	// e.g., 4945 龍虎五世W
+	trim_trailing_newline : true
 });
 
 // ----------------------------------------------------------------------------
