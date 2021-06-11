@@ -196,11 +196,13 @@ var crawler = new CeL.work_crawler({
 			// https://www.cocomanhua.com/js/custom.js
 			// last-modified: 2021-01-29T19:23:11Z
 			if (image_info.urls__direct) {
-				// Will be `chapter_data.image_list`
 				mh_info.image_list = decode_base64(image_info.urls__direct)
-						.split("|SEPARATER|").map(function(url) {
-							return encodeURI(url);
-						});
+				// Will be `chapter_data.image_list`
+				.split("|SEPARATER|").map(function(url) {
+					// e.g.,
+					// https://mhpic.xiaomingtaiji.net/comic/C/%E9%87%8D%E7%94%9F%E4%B9%8B%E5%89%91%E7%A5%9E%E5%BD%92%E6%9D%A5/%E7%AC%AC7%E8%AF%9DF0_295714/2.jpg-zymk.high.webp
+					return encodeURI(url.replace('.middle.', '.high.'));
+				});
 				// free
 				delete image_info.urls__direct;
 			}
@@ -271,9 +273,6 @@ var crawler = new CeL.work_crawler({
 					// @see __cr.switchWebp()
 					image_url += '.webp';
 				}
-				// e.g.,
-				// https://mhpic.xiaomingtaiji.net/comic/C/%E9%87%8D%E7%94%9F%E4%B9%8B%E5%89%91%E7%A5%9E%E5%BD%92%E6%9D%A5/%E7%AC%AC7%E8%AF%9DF0_295714/2.jpg-zymk.high.webp
-				image_url = image_url.replace('.middle.', '.high.');
 				chapter_data.image_list.push(image_url);
 			}
 		}
