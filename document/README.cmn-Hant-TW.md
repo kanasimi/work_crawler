@@ -158,6 +158,7 @@
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | [Toomics 玩漫](https://toomics.com/sc/) | toomics_sc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |
 | [57漫画网](http://www.wuqimh.com/) | 57mh.js | 缺話眾多。系統同 2manhua.js。可能是2013年版本的 圣樱漫画管理系统？ MHD模板？ |
+| [奇漫屋](http://www.qiman6.com/) | qiman5.js | 有些缺話。 |
 | ~~[哦漫画](http://www.omanhua.net/)~~ | ~~archive/omanhua.js~~ | 2019/7/3 5:4 最後一次成功連接。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
 | ~~[三七阅读](http://www.37yue.com/)~~ | ~~archive/37yue.js~~ | 自 2017/6/9 下午最後一次連接後，2017/6/10 9時起就持續 404 至 2018/6/11 未復原。 |

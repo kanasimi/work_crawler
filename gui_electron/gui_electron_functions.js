@@ -105,6 +105,8 @@ download_sites_set = {
 
 		hhcool : '汗汗酷漫',
 
+		qiman5 : '奇漫屋',
+
 		// fed 系統
 		ohmanhua : 'Oh漫画',
 
