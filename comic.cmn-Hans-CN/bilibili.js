@@ -56,7 +56,7 @@ var crawler = new CeL.work_crawler({
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
 		// console.log(html);
-		var work_data = JSON.parse(html).data;
+		var work_data = JSON.parse(html).data, start_chapter_NO_next_time;
 		// 正規化成 CeJS 網路作品爬蟲程式庫的格式。
 		Object.assign(work_data, {
 			author : work_data.author_name.join(' '),
@@ -76,7 +76,7 @@ var crawler = new CeL.work_crawler({
 					title : chapter_data.short_title
 					// e.g., https://manga.bilibili.com/detail/mc26723
 					+ (chapter_data.title ? ' ' + chapter_data.title : ''),
-					limited : chapter_data.is_locked,
+					limited : chapter_data.is_locked || chapter_data.pay_mode,
 					url : [ this.API_BASE + 'Index?device=h5&platform=h5',
 					//
 					{
@@ -95,6 +95,8 @@ var crawler = new CeL.work_crawler({
 			}, this).reverse(),
 			chapter_count : work_data.total
 		});
+		if (start_chapter_NO_next_time)
+			work_data.start_chapter_NO_next_time = start_chapter_NO_next_time;
 		// console.log(work_data);
 		return work_data;
 	},
