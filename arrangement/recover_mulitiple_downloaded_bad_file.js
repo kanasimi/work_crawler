@@ -1,13 +1,6 @@
 ﻿/**
  * @fileoverview 當多次下載一個大檔案，卻各有不同錯誤時，可利用本工具回復原先完整的檔案。將以多數檔案的內容為準。最好下載三次以上，方便比對。
  * 
- * @examples<code>
-
-node recover_mulitiple_downloaded_bad_file.js "target file.rar" "bad file.*.rar"
-node recover_mulitiple_downloaded_bad_file.js "target file path" "bad file 1" "bad file 2" "bad file 3"
-
-</code>
- * 
  * @since 2020/11/24 18:14:33 初版
  */
 
@@ -26,6 +19,26 @@ CeL.run(
 
 // ----------------------------------------------------------------------------
 
+const target_file_path = process.argv[2];
+
+const from_fso_list = [];
+for (let index = 3; index < process.argv.length; index++) {
+	//console.log([process.argv[index], CeL.extract_wildcard(process.argv[index])]);
+	from_fso_list.append(CeL.extract_wildcard(process.argv[index]));
+}
+
+if (!target_file_path || from_fso_list.length === 0) {
+	const cmd_prefix = `node ${process.argv[1]}`;
+	CeL.log(`當多次下載一個大檔案，卻各有不同錯誤時，可利用本工具回復原先完整的檔案。
+
+Usage:
+	${cmd_prefix} "target file.rar" "bad file.*.rar"
+	${cmd_prefix} "target file path" "bad file 1" "bad file 2" "bad file 3"`);
+	process.exit();
+}
+
+CeL.info(`合併損壞的檔案成 →	${target_file_path}：\n\t${from_fso_list.join('\n\t')}`);
+
 const node_fs = require('fs');
 // 1 MiB
 const BUFFER_SIZE = 1 * 1024 * 1024;
@@ -34,15 +47,8 @@ const BUFFER_INDEX_TO_WRITE = 0;
 
 let different_byte_count = 0, doubtful_byte_count = 0;
 
-const target_file_path = process.argv[2];
 const target_fd = node_fs.openSync(target_file_path, 'w');
-
-const from_fso_list = [], bad_block_list = [];
-for (let index = 3; index < process.argv.length; index++) {
-	//console.log([process.argv[index], CeL.extract_wildcard(process.argv[index])]);
-	from_fso_list.append(CeL.extract_wildcard(process.argv[index]));
-}
-CeL.info(`合併損壞的檔案成 →	${target_file_path}：\n\t${from_fso_list.join('\n\t')}`);
+const bad_block_list = [];
 const from_fd_list = [], from_buffer_list = [];
 let max_size = 0;
 from_fso_list.forEach(fso_name => {
