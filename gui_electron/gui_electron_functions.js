@@ -108,7 +108,8 @@ download_sites_set = {
 		qiman5 : '奇漫屋',
 
 		// fed 系統
-		ohmanhua : 'Oh漫画',
+		// 2021/8/2 採用 Cloudflare 的阻斷服務攻擊保護
+		// ohmanhua : 'Oh漫画',
 
 		migudm : '咪咕圈圈',
 
