@@ -1,6 +1,8 @@
 ﻿/**
  * 批量下載 Oh漫画 的工具。 Download ohmanhua comics.
  * 
+ * 2021/8/2 採用 Cloudflare 的阻斷服務攻擊保護
+ * 
  * @see 集云数据 https://www.acloudmerge.com/
  * @see http://www.z1i.cn/ https://www.007ts.co/
  */
@@ -30,7 +32,8 @@ var crawler = new CeL.work_crawler({
 	// 2019/9/27-2020/4/27: ONE漫画 https://www.onemanhua.com/
 	// 2020/5/2-2020/12/13: Oh漫画 https://www.ohmanhua.com/
 	// 2021/1/5: COCOMANHUA COCO漫画 https://www.cocomanhua.com/
-	base_URL : 'https://www.cocomanhua.com/',
+	// 2021/10/20前: 域名更改 https://www.cocomanga.com/
+	base_URL : 'https://www.cocomanga.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search?searchString=',
