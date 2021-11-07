@@ -71,7 +71,8 @@ cache_data = CeL.get_JSON(cache_file),
 // file / folder name
 PATTERN_latin_fso_name = /^([\u0020-\u007Fūûōôō@]+?)(\.[a-z\d]{2,9})?$/i,
 // [[en:Numerals_in_Unicode#Roman_numerals]]
-PATTERN_full_latin_or_sign = /^[\u0020-\u00FFūûōôō@’★☆♥♡Ⅰ-ↈ①-⑳⑴-⑽㈠-㈩／]+$/;
+// /^[a-z\d,:;.?!()<>{}\[\]\-+$%&'"’“”\s\n—–ūûōôō@’★☆♥♡Ⅰ-ↈ①-⑳⑴-⑽㈠-㈩]$/
+PATTERN_full_latin_or_sign = /^[\u0020-\u00FF’★☆♥♡Ⅰↈ①⑳⑴⑽㈠㈩／“”\n—–]+$/;
 
 if (target_directory) {
 	if (!/[\\\/]$/.test(target_directory)) {
@@ -95,7 +96,7 @@ if (target_directory) {
 					target_directory + fso_name, {
 						program_type : '7z'
 					});
-			// console.log(archive_file);
+			// console.trace(archive_file);
 			archive_file.info(function(file_info_hash) {
 				try {
 					rename_dlsite_works(fso_name, target_directory,
@@ -444,9 +445,10 @@ function rename_dlsite_works(fso_name, target_directory, file_info_hash) {
 	if (!file_info_hash)
 		return;
 	var file_list = Object.keys(file_info_hash);
+	// console.trace(file_list);
 	var directory_list = file_list.filter(function(file_path) {
 		var file_info = file_info_hash[file_path];
-		if (file_info.Folder === '+') {
+		if (file_info.is_folder) {
 			return !!file_path;
 		}
 	});
@@ -472,7 +474,7 @@ function rename_dlsite_works(fso_name, target_directory, file_info_hash) {
 
 	if (matched[1] && matched[1] !== fso_id) {
 		CeL.error(fso_name + ': ' + matched[1] + ' inside!');
-	} else {
+	} else if (!/^[a-z]$/.test(matched[2])) {
 		var move_to = '(同人) [dlsite] ' + matched[2] + '.' + fso_name
 		CeL.info('rename_dlsite_works: ' + fso_name + '→'
 		//
