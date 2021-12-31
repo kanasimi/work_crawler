@@ -578,7 +578,7 @@ function setup_theme_selecter() {
 		});
 	});
 	CeL.new_node(theme_nodes, 'select_theme_panel');
-	// free
+	// Release memory. 釋放被占用的記憶體。
 	theme_nodes = null;
 
 	// auto-detect navigator theme
@@ -892,7 +892,9 @@ function select_download_options_fso() {
 		// assert: Array.isArray(fso_path_list)
 		if (!fso_type.startsWith('file')) {
 			// assert: 選擇目錄。自動加上最後的目錄分隔符號。
-			fso_path_list = fso_path_list.map(CeL.append_path_separator);
+			fso_path_list = fso_path_list.map(function(fso_path) {
+				return CeL.append_path_separator(fso_path);
+			});
 		}
 		CeL.log([ 'select_download_options_fso: ', {
 			T : [ '選擇了%2的路徑：%1', JSON.stringify(fso_path_list), fso_type ]
@@ -2130,13 +2132,13 @@ function show_search_result(work_data_search_queue) {
 			table : not_found_list
 		});
 
-		// free
+		// Release memory. 釋放被占用的記憶體。
 		status_hash = not_found_list = null;
 	}
 
 	CeL.remove_all_child('search_results');
 	CeL.new_node(node_list, 'search_results');
-	// free
+	// Release memory. 釋放被占用的記憶體。
 	node_list = null;
 	delete CeL.get_element('search_results').running;
 }
@@ -2479,7 +2481,7 @@ function destruct_download_job(crawler) {
 	}
 
 	var job_index = work_data.job_index, job = Download_job.job_list[job_index];
-	// free
+	// Release memory. 釋放被占用的記憶體。
 	delete crawler.downloading_work_data;
 	delete work_data.job_index;
 	function remove_download_work_layer() {
