@@ -135,7 +135,7 @@ var crawler = new CeL.work_crawler({
 					+ '.tmp' + CeL.env.path_separator;
 			CeL.create_directory(data_file_directory);
 			data_file_path = data_file_directory + chapter_NO.pad(4)
-					+ '.data.zip';
+					+ '.data.7z';
 			CeL.write_file(data_file_path, indexData);
 
 			// using 7-Zip to extract data file
