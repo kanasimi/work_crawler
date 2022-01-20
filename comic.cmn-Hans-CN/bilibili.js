@@ -77,7 +77,9 @@ var crawler = new CeL.work_crawler({
 					// e.g., https://manga.bilibili.com/detail/mc26723
 					+ (chapter_data.title ? ' ' + chapter_data.title : ''),
 					limited : chapter_data.is_locked || chapter_data.pay_mode,
-					url : [ this.API_BASE + 'GetImageIndex?device=pc&platform=web',
+					url : [ this.API_BASE
+					// 2021/12/17 前 哔哩哔哩漫画 改版
+					+ 'GetImageIndex?device=pc&platform=web',
 					//
 					{
 						ep_id : chapter_data.id
@@ -135,7 +137,7 @@ var crawler = new CeL.work_crawler({
 					+ '.tmp' + CeL.env.path_separator;
 			CeL.create_directory(data_file_directory);
 			data_file_path = data_file_directory + chapter_NO.pad(4)
-					+ '.data.7z';
+					+ '.data.zip';
 			CeL.write_file(data_file_path, indexData);
 
 			// using 7-Zip to extract data file
