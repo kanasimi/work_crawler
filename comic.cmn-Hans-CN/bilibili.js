@@ -111,11 +111,30 @@ var crawler = new CeL.work_crawler({
 	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。
 	// 必須自行保證執行 callback()，不丟出異常、中斷。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
-		var _this = this, data_URL = JSON.parse(XMLHttp.responseText),
-		//
-		data_file_directory, data_file_path,
-		//
-		chapter_data = work_data.chapter_list[chapter_NO - 1];
+		var data_URL, chapter_data = work_data.chapter_list[chapter_NO - 1];
+		try {
+			data_URL = JSON.parse(XMLHttp.responseText);
+		} catch (e) {
+		}
+		if (!data_URL || !data_URL.data || !data_URL.data.path) {
+			// e.g., node bilibili.js 26470
+			// console.trace(data_URL);
+			if (work_data.is_limit
+			// && data_URL.code === 'invalid_argument'
+			) {
+				CeL.error(CeL
+						.gettext('無法閱覽%1《 %2》，直接跳過本漫畫！',
+								work_data.japan_comic ? '日本漫畫' : '本漫畫',
+								work_data.title));
+				work_data.start_chapter_NO_next_time
+				//
+				= work_data.chapter_list.length;
+			}
+			callback();
+			return;
+		}
+
+		var _this = this, data_file_directory, data_file_path;
 
 		data_URL = this.BFS_URL + data_URL.data.path;
 		this.get_URL(data_URL, function(XMLHttp) {
