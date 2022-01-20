@@ -21,7 +21,7 @@ var crawler = new CeL.work_crawler({
 	base_URL : 'https://manga.bilibili.com/',
 	API_BASE : 'twirp/comic.v1.Comic/',
 	// 圖床主機
-	BFS_URL : 'https://i0.hdslb.com',
+	BFS_URL : 'https://manga.hdslb.com',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
@@ -77,7 +77,7 @@ var crawler = new CeL.work_crawler({
 					// e.g., https://manga.bilibili.com/detail/mc26723
 					+ (chapter_data.title ? ' ' + chapter_data.title : ''),
 					limited : chapter_data.is_locked || chapter_data.pay_mode,
-					url : [ this.API_BASE + 'Index?device=h5&platform=h5',
+					url : [ this.API_BASE + 'GetImageIndex?device=pc&platform=web',
 					//
 					{
 						ep_id : chapter_data.id
@@ -115,7 +115,7 @@ var crawler = new CeL.work_crawler({
 		//
 		chapter_data = work_data.chapter_list[chapter_NO - 1];
 
-		data_URL = this.BFS_URL + data_URL.data;
+		data_URL = this.BFS_URL + data_URL.data.path;
 		this.get_URL(data_URL, function(XMLHttp) {
 			// console.log(XMLHttp);
 
@@ -158,18 +158,13 @@ var crawler = new CeL.work_crawler({
 			// 清理戰場。
 			CeL.remove_directory(data_file_directory, true);
 
-			chapter_data.image_list = chapter_data.pics.map(function(url) {
-				// e.prototype.getAndDecodeIndex = function(t) @
-				// https://s1.hdslb.com/bfs/static/manga/mobile/static/js/read.b8ba074e2011370f741a.js
-				return url.replace(".JPG", ".jpg");
-			});
-			// console.log(chapter_data);
+			chapter_data.image_list = chapter_data.pics;
 
 			var get_URL_options = chapter_data.url[2];
 			_this.get_URL_options.headers.Referer
 			// @see parse_work_data() above
 			= get_URL_options.headers.Referer;
-			_this.get_URL(_this.API_BASE + 'ImageToken?device=h5&platform=h5',
+			_this.get_URL(_this.API_BASE + 'ImageToken?device=pc&platform=web',
 			//
 			function(XMLHttp) {
 				// console.log(XMLHttp);
