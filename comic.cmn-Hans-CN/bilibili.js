@@ -78,7 +78,7 @@ var crawler = new CeL.work_crawler({
 					+ (chapter_data.title ? ' ' + chapter_data.title : ''),
 					limited : chapter_data.is_locked || chapter_data.pay_mode,
 					url : [ this.API_BASE
-					// 2021/12/17 前 哔哩哔哩漫画 改版
+					// 2021/12/2–2021/12/17 之間? 哔哩哔哩漫画 改版
 					+ 'GetImageIndex?device=pc&platform=web',
 					//
 					{
@@ -121,11 +121,19 @@ var crawler = new CeL.work_crawler({
 		this.get_URL(data_URL, function(XMLHttp) {
 			// console.log(XMLHttp);
 
+			if (XMLHttp.statusText === 'Forbidden'
+			// 2022/1/20 17:52:27 觀看此章節前需要先登錄
+			&& XMLHttp.responseText.includes('<h1>403 Forbidden</h1>')) {
+				chapter_data.limited = true;
+				callback();
+				return;
+			}
+
 			var indexData = XMLHttp.buffer;
 			if (!indexData || (indexData = indexData
 			// .slice(9): skip "BILICOMIC"...
 			.slice(9)).length === 0) {
-				// PC端只給看10話？或可由 pwork_data.age_allow 來檢查？
+				// 2021/12 改版前 PC端只給看10話？或可由 pwork_data.age_allow 來檢查？
 				// chapter_data.image_list = [];
 				callback();
 				return;
