@@ -122,13 +122,10 @@ var crawler = new CeL.work_crawler({
 			if (work_data.is_limit
 			// && data_URL.code === 'invalid_argument'
 			) {
-				CeL.error(CeL
-						.gettext('無法閱覽%1《 %2》，直接跳過本漫畫！',
-								work_data.japan_comic ? '日本漫畫' : '本漫畫',
-								work_data.title));
-				work_data.start_chapter_NO_next_time
-				//
-				= work_data.chapter_list.length;
+				CeL.error(CeL.gettext('無法閱覽%1《 %2》，直接跳過本漫畫！',
+				// 放棄下載
+				work_data.japan_comic ? '日本漫畫' : '本漫畫', work_data.title));
+				work_data.jump_to_chapter = work_data.chapter_list.length;
 			}
 			callback();
 			return;
