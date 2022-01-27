@@ -69,7 +69,7 @@
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
 | [起点中文网](https://www.qidian.com/) | qidian.js | **本工具無法下載 VIP章节內容** |
-| [笔趣阁](https://www.xs.la/)<br />[笔趣阁.cc](http://www.xbiquge.cc/)<br />[新笔趣阁](https://www.xbiquge6.com/) | biquge.js<br />xbiquge.cc.js<br />xbiquge.js | PTCMS |
+| ~~[笔趣阁](https://www.xs.la/)~~<br />[笔趣阁](http://www.biqugse.com/)<br />[笔趣阁.cc](http://www.xbiquge.cc/)<br />~~[新笔趣阁](https://www.xbiquge6.com/)~~ | ~~archive/biquge.js~~<br />biqugse.js<br />xbiquge.cc.js<br />~~archive/xbiquge.js~~ | PTCMS |
 | ~~[八一中文网](http://www.81xsw.com/)~~ | ~~archive/81xsw.js~~ | 最後一次成功下載此網站作品日期: 2019/1/12。[PTCMS](https://www.ptcms.com/)系统 |
 | [新八一中文网](https://www.x81zw.com/) | x81zw.js | [PTCMS](https://www.ptcms.com/)系统 |
 | [八一中文网](https://www.zwdu.com/) | zwdu.js | [PTCMS](https://www.ptcms.com/)系统 |

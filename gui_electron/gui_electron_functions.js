@@ -167,9 +167,11 @@ download_sites_set = {
 		x81zw : '新八一中文网',
 		'88dus' : '八八读书网',
 		'630book' : '恋上你看书网',
-		biquge : '笔趣阁',
+
+		// biquge : '笔趣阁',
+		biqugse : '笔趣阁',
 		'xbiquge.cc' : '笔趣阁.cc',
-		xbiquge : '新笔趣阁',
+		// xbiquge : '新笔趣阁',
 
 		// 杰奇小说连载系统
 		kanshushenzhan : '看书神站',
