@@ -125,7 +125,11 @@ var crawler = new CeL.work_crawler({
 				CeL.error(CeL.gettext('無法閱覽%1《 %2》，直接跳過本漫畫！',
 				// 放棄下載
 				work_data.japan_comic ? '日本漫畫' : '本漫畫', work_data.title));
-				work_data.jump_to_chapter = work_data.chapter_list.length;
+				if (false) {
+					console.trace(work_data.chapter_list.length,
+							work_data.chapter_count);
+				}
+				work_data.jump_to_chapter = work_data.chapter_count + 1;
 			}
 			callback();
 			return;
