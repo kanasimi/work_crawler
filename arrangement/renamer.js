@@ -30,9 +30,7 @@ CeL.run([
 CeL.get_URL.default_user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 		+ Math.random();
 
-// 自動下載 torrent 檔案。
-var torrent_directory// = 'torrent' + CeL.env.path_separator
-,
+var
 /** {String}下載完成、要處理的檔案/目錄所放置的目錄。 e.g., "node renamer.js C target_directory" */
 target_directory = process.argv[3]
 		|| CeL.first_exist_fso(global.completed_directory) || '.',
@@ -43,6 +41,10 @@ default_menu_page_starts = 1,
 // reget === true: reget till no more new menu files.
 // reget > 1: reget ALL menu list.
 reget = 2,
+//
+reget_torrent_files = false,
+// 2022/1/31: 1s OK, .5 s NG.
+MIN_INTERVAL = torrent_directory && 1 * 1000,
 //
 category_name = /^H$/i.test(work_id) || /成年|Hcomic|noACG_H/i.test(work_id) ? 'Hcomic'
 		: 'comic',
@@ -56,10 +58,27 @@ categories = {
 category_config = categories[category_name],
 //
 base_directory = data_directory + category_config[0] + CeL.env.path_separator,
+// 自動下載 torrent 檔案。
+torrent_directory = 'torrent' + CeL.env.path_separator + category_name
+		+ CeL.env.path_separator && false,
 //
 base_URL = category_config[1], category_NO = category_config[2], last_count = category_config[3];
 
-CeL.fs_mkdir(base_directory);
+CeL.create_directory(base_directory);
+
+var torrent_file_name_mapping, torrent_file_name_mapping_cache_file_name = 'torrent_id_to_file_name.json';
+if (torrent_directory) {
+	torrent_directory = base_directory + torrent_directory;
+	torrent_file_name_mapping = CeL.read_file(torrent_directory
+			+ torrent_file_name_mapping_cache_file_name);
+	torrent_file_name_mapping = torrent_file_name_mapping
+			&& JSON.parse(torrent_file_name_mapping.toString())
+			|| Object.create(null);
+	CeL.create_directory(torrent_directory, {
+		recursive : true
+	});
+	// console.trace(torrent_file_name_mapping);
+}
 
 var
 // target_files[fso name] = path
@@ -186,7 +205,10 @@ function get_menu_list(callback) {
 		});
 	}
 
-	CeL.run_serial(for_menu_NO, last_count, default_menu_page_starts, callback);
+	CeL.run_serial(for_menu_NO, last_count, default_menu_page_starts, callback,
+			{
+				run_interval : MIN_INTERVAL
+			});
 }
 
 function for_menu_list(html, callback) {
@@ -205,7 +227,8 @@ function for_menu_list(html, callback) {
 	// console.log(id_list.length);
 
 	CeL.run_serial(get_file_list, id_list, callback, {
-		new_files : 0
+		new_files : 0,
+		run_interval : MIN_INTERVAL
 	});
 }
 
@@ -257,24 +280,78 @@ function get_label(html) {
 }
 
 // 取得 .torrent 的檔案列表。
-function parse_file_list(html, error, XMLHttp, got_torrent) {
-	if (torrent_directory && !got_torrent) {
+function parse_file_list(html, error, XMLHttp, had_try_to_got_torrent) {
+	if (false) {
+		console.trace([ torrent_directory, reget_torrent_files,
+				had_try_to_got_torrent ]);
+	}
+
+	// <div class="col-md-5" data-timestamp="1643596207">2022-01-31 02:30
+	// UTC</div>
+	var upload_date = html.match(/ data-timestamp="(\d{10})"/);
+	if (upload_date) {
+		upload_date = new Date(1000 * upload_date[1]);
+	}
+
+	if (torrent_directory && !had_try_to_got_torrent) {
+		// <a href="/download/1485094.torrent"><i class="fa fa-download
+		// fa-fw"></i>Download Torrent</a> or
 		var _this = this, matched = html.match(/ href="([^<>"']+\.torrent)"/);
 		if (matched) {
-			matched = matched[1].replace(/^[\\\/]/, '');
-			CeL.get_URL_cache(base_URL + matched,
-			//
-			function(_html, error, XMLHttp) {
-				if (error)
+			function after_get_torrent_file(_html, error, XMLHttp) {
+				if (error) {
 					CeL.error(error);
+				} else if ((matched = XMLHttp.cached_file_path)
+				//
+				&& (matched = matched.match(/([^\\\/]+)\.torrent$/i))) {
+					matched = matched[1];
+					// assert: XMLHttp.cached_file_path ===
+					// download_directory + matched + '.torrent'
+					torrent_file_name_mapping[torrent_id] = matched[1];
+					CeL.write_file(torrent_directory
+					//
+					+ torrent_file_name_mapping_cache_file_name,
+							torrent_file_name_mapping);
+				}
 				parse_file_list.call(_this, html, error, XMLHttp, true);
-			}, {
-				reget : reget,
-				get_URL_options : get_URL_options,
-				directory : base_directory + torrent_directory
-			});
-			// 等取得.torrent檔案再執行。
-			return;
+			}
+
+			matched = matched[1].replace(/^[\\\/]/, '');
+			var torrent_id = matched.match(/([^\\\/]+)\.torrent$/i);
+			torrent_id = torrent_id && torrent_id[1];
+			var sub_directory = upload_date ? upload_date.format('%Y-%2m')
+					+ CeL.env.path_separator : '';
+			var download_directory = torrent_directory + sub_directory;
+			var file_name = torrent_file_name_mapping[torrent_id]
+					&& torrent_file_name_mapping[torrent_id] + '.torrent';
+			if (sub_directory) {
+				CeL.create_directory(download_directory);
+				if (file_name && CeL.file_exists(torrent_directory + file_name)) {
+					CeL.move_file(torrent_directory + file_name,
+							download_directory + file_name);
+				}
+			}
+			if (reget_torrent_files || !file_name
+					|| !CeL.file_exists(download_directory + file_name)) {
+				setTimeout(function() {
+					CeL.get_URL_cache(base_URL + matched,
+					//
+					after_get_torrent_file, {
+						reget : reget_torrent_files,
+						get_URL_options : get_URL_options,
+						directory : download_directory
+					});
+				}, MIN_INTERVAL);
+				// 等取得 .torrent 檔案再執行。
+				return;
+			}
+			if (file_name) {
+				CeL.debug('跳過先前已下載之檔案: ' + torrent_id + '→' + file_name, 1,
+						'parse_file_list');
+			}
+
+		} else {
+			// console.trace(html);
 		}
 	}
 
