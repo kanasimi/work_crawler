@@ -24,7 +24,8 @@ var crawler = CeL.SinMH({
 	// one_by_one : true,
 
 	// 2018/3/7 改變網址: http://www.gufengmh.com/ → https://www.gufengmh8.com/
-	base_URL : 'https://www.gufengmh8.com/',
+	// 2021/12/27之後改變網址: https://www.gufengmh8.com/ → https://www.gufengmh9.com/
+	base_URL : 'https://www.gufengmh9.com/',
 
 	search_URL : 'API',
 	id_of_search_result : 'slug'
