@@ -170,6 +170,7 @@ download_sites_set = {
 
 		// biquge : '笔趣阁',
 		biqugse : '笔趣阁',
+		xbiquke : '笔趣阁',
 		'xbiquge.cc' : '笔趣阁.cc',
 		// xbiquge : '新笔趣阁',
 

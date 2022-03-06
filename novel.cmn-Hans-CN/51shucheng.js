@@ -121,7 +121,9 @@ crawler = new CeL.work_crawler({
 				// console.log(XMLHttp);
 				var html = XMLHttp.responseText;
 				var matched = html.match(/发布时间：([^<>]+)/);
-				work_data.last_update = matched[1].trim();
+				work_data.last_update = matched && matched[1].trim()
+				// https://www.51shucheng.net/xiandai/huozhe
+				|| (new Date).toISOString();
 				// console.log(work_data);
 				resolve();
 			}, {

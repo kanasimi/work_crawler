@@ -58,7 +58,7 @@ function extract_image_urls(XMLHttp, work_data) {
 
 	function add_image(site_chapter_NO, url) {
 		// console.log([ chapter_NO, image_NO, url ]);
-		var chapter_data = work_data.chapter_mapper[site_chapter_NO];
+		var chapter_data = work_data.chapter_mapping[site_chapter_NO];
 		if (!chapter_data)
 			throw 'Do not has §' + site_chapter_NO;
 		if (!Array.isArray(chapter_data.image_list))
@@ -87,7 +87,7 @@ function extract_image_urls(XMLHttp, work_data) {
 	eval(html);
 
 	// free
-	delete work_data.chapter_mapper;
+	delete work_data.chapter_mapping;
 	// console.log(JSON.stringify(chapter_data));
 }
 
@@ -184,7 +184,7 @@ var crawler = new CeL.work_crawler({
 		'<table id="div_li2"');
 
 		work_data.chapter_list = [];
-		work_data.chapter_mapper = [];
+		work_data.chapter_mapping = [];
 
 		var PATTERN_chapter =
 		// matched: [ all, url arguments, ? 卷/話 ]
@@ -211,7 +211,7 @@ var crawler = new CeL.work_crawler({
 							+ matched[1].replace(/'/g, '"') + ']'))
 				};
 				this.add_chapter(work_data, chapter_data);
-				work_data.chapter_mapper[chapter_data.url
+				work_data.chapter_mapping[chapter_data.url
 				//
 				.match(/ch=(\d+)/)[1]] = chapter_data;
 			}

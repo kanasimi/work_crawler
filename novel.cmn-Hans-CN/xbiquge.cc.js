@@ -13,8 +13,11 @@ CeL.run('application.net.work_crawler.sites.PTCMS');
 // ----------------------------------------------------------------------------
 
 var crawler = CeL.PTCMS({
-	base_URL : 'https://www.xbiquge.cc/',
+	// 2021/10/3 前: https://www.xbiquge.cc/ → https://www.xbiquge.so/
+	base_URL : 'https://www.xbiquge.so/',
 	charset : 'gbk',
+
+	chapter_time_interval : '6s',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'modules/article/search.php?searchkey=',

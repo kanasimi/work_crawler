@@ -31,6 +31,9 @@ crawler = new CeL.work_crawler({
 	// recheck='changed': 若是已變更，例如有新的章節，則重新下載/檢查所有章節內容。否則只會自上次下載過的章節接續下載。
 	// recheck : 'changed',
 
+	// 下載每個作品更換一次 user agent。
+	regenerate_user_agent : 'work',
+
 	site_name : '飘天文学',
 	// 2018: http://www.piaotian.com/
 	// 2019/11/23 前改為: https://www.ptwxz.com/
@@ -47,8 +50,9 @@ crawler = new CeL.work_crawler({
 	parse_search_result : function(html, get_label) {
 		// console.log(html);
 		if (html.includes('<span class="hottext">最新章节：</span>')) {
-			// 只有一個作品完全符合，引導到了作品資訊頁面。
+			// 只有一個作品完全符合，直接 redirects 引導到了作品資訊頁面。
 			var matched = html.match(/ href="[^<>"]+?\/\d{1,2}\/(\d{1,5})\/"/);
+			// console.log(matched);
 			return [ [ matched[1] ],
 					[ get_label(html.between('<h1>', '</h1>')) ] ];
 		}
@@ -184,7 +188,14 @@ crawler = new CeL.work_crawler({
 		// 去除掉廣告。
 		.replace(PATTERN_AD, '')
 		// https://www.ptwxz.com/html/10/10231/7979150.html
-		.replace(/水印广告测试(?:&nbsp;)*/g, '');
+		.replace(/水印广告测试(?:&nbsp;)*/g, '')
+
+		// https://www.ptwxz.com/html/9/9503/6476110.html
+		// https://www.ptwxz.com/html/9/9503/6750266.html
+		// <br /><br />&nbsp;&nbsp;&nbsp;&nbsp;https:
+		// <br /><br />&nbsp;&nbsp;&nbsp;&nbsp;天才本站地址：。m.
+		// .replace('https:<br', '<br').replace('天才本站地址：。m.', '')
+		;
 		// console.log(text);
 
 		this.add_ebook_chapter(work_data, chapter_NO, {

@@ -148,6 +148,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 		url = html.between(
 				'<script id="__NEXT_DATA__" type="application/json">',
 				'</script>');
+		// console.trace(url);
 		if (url) {
 			// 2020/6 via Google Chrome
 			Object.assign(chapter_data, JSON.parse(url));
@@ -189,6 +190,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 				'X-Client-Time' : time,
 				'X-Client-Hash' : hash
 			});
+			// console.trace([ url, this.get_URL_options ]);
 			this.get_URL(url, callback, null, work_data.token_options);
 			return;
 		}
@@ -196,6 +198,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 		url = html.between('<meta name="token-api-url" content="',
 		// /api/v1/viewer/token/d220bbe0ed815ceea5fd0308021fff9f.json
 		'"');
+		// console.trace(url);
 		if (!url) {
 			if (typeof html === 'string' && html.includes('期限')) {
 				// e.g., html==="エピソードの公開期限が過ぎました"
@@ -208,6 +211,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 		// https://comic.pixiv.net/assets/viewer-ae2940cef41fd61c265fde4c14916a3f49e96326e5542df3a12cc9a06fce8678.js
 		// 'X-CSRF-Token': e('meta[name="csrf-token"]').attr('content')
 		this.get_URL(url, function(XMLHttp, error) {
+			// console.trace(XMLHttp);
 			try {
 				html = XMLHttp.responseText;
 				if (/<html/.test(html)) {
@@ -238,6 +242,7 @@ var base_URL = 'https://comic.pixiv.net/', crawler = new CeL.work_crawler({
 		}.bind(this), {}, work_data.token_options);
 	},
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
+		// console.trace(html);
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
 		try {
 			html = JSON.parse(html);

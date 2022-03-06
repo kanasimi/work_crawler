@@ -538,6 +538,13 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
+	// [2021.11.17] TVアニメ「大正オトメ御伽話」EDテーマ「真心に奏」／土岐隼一 [FLAC 96kHz／24bit]
+	// [2021.11.17] 走れ！「バトルアスリーテス大運動会 ReSTART!」究極のキャラソンアルバム [FLAC]
+	if (/TVアニメ/.test(fso_name) && /\[FLAC/.test(fso_name)) {
+		move_to('anime_music');
+		return;
+	}
+
 	// ------------------------------------------
 
 	if (/\.(zip|rar|7z)$/.test(fso_name)
@@ -547,7 +554,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 	}
 
 	matched = fso_name
-			.match(/\(([^()\[\]]+)\)(?: *[\[【](?:DL版|Digital|見本|ページ欠落)[\]】])*(?: *\(\d\))?\.(zip|rar|7z|cbz)$/);
+			.match(/\(([^()\[\]]+)\)(?: *[\[【](?:DL版|Digital|見本|ページ欠落|無修正)[\]】])*(?: *\(\d\))?\.(zip|rar|7z|cbz)$/);
 	if (matched) {
 		if (/^x\d{3,4}$/.test(matched[1])
 		// COMIC 阿吽, コミックマグナム

@@ -29,6 +29,7 @@ var crawler = new CeL.work_crawler({
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search?kw=',
 	parse_search_result : function(html, get_label) {
+		// TODO: 2021/10: 似乎會自動把 HTTP/1 轉成手機版網頁。
 		html = html.between('<div class="book-img-text">', '</ul>').between(
 				'<ul');
 		// test: 吞噬星空,百煉成神,不存在作品
@@ -53,7 +54,7 @@ var crawler = new CeL.work_crawler({
 	convert_id : {
 		// 篩出限时免费作品
 		free : {
-			url : 'free',
+			url : 'free/',
 			parser : function(html, get_label) {
 				html = html.between('limit-book-list', 'right-side-wrap');
 				var id_list = [], matched, PATTERN =
@@ -266,8 +267,8 @@ function fix_HTML_error(html) {
 		// https://github.com/kekee000/fonteditor-core/tree/master/src/ttf
 		// https://github.com/fontello/ttf2woff/blob/master/index.js
 		html = html.replace(/&#(58\d{3});/g, function(entity, code) {
-			if (+code in char_mapper)
-				return char_mapper[+code];
+			if (+code in char_mapping)
+				return char_mapping[+code];
 			return entity;
 		});
 	}
@@ -275,24 +276,24 @@ function fix_HTML_error(html) {
 	return html + '</p>';
 }
 
-var char_mapper = [];
+var char_mapping = [];
 
-function initialize_char_mapper() {
-	var char_mapper_data = {
+function initialize_char_mapping() {
+	var char_mapping_data = {
 		// Only works for shs-ms-a47a8681.ttf
 		E290 : '各手须光同上每置共中省色土或除支再大取只高住京例到最般前家任革次得法又百划教子影代放改几身受机叫水提江多表何持及种于族究治路起看老一志采五流消引收品日石且准院西第式特的信率照活始部之知越律加列去市年用地人器至北等能基确被海技拉反美后利方所象比六思价保事油度公往因原易由素生是真通那些管然千气花二商强片速适很小音干型你查其什程十酸常局者接历七和具精力制类口意府候在他据建八青示界半团安性角而主行才包整天么造位正林育外我向她入成眼明世即自出形米空打系不新面体走想相本存厂好低命太根理以解南别四金指物平都题完证先有化目需格使研分效月便派作道近周科更重直快就元深火斯白按步清山回定工量合算个了感非也毛把件政但情要发果委民斗做并史它下克交此王名段容立料布期值今文社三心九复集求展己'
 	};
 
-	for ( var start_code in char_mapper_data) {
-		var char_list = char_mapper_data[start_code].chars();
+	for ( var start_code in char_mapping_data) {
+		var char_list = char_mapping_data[start_code].chars();
 		var index = 0, char_code = parseInt(start_code, 16);
 		while (index < char_list.length) {
-			char_mapper[char_code++] = char_list[index++];
+			char_mapping[char_code++] = char_list[index++];
 		}
 	}
 }
 
-// initialize_char_mapper();
+// initialize_char_mapping();
 
 // ----------------------------------------------------------------------------
 

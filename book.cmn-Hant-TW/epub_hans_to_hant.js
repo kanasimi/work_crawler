@@ -70,12 +70,22 @@ function handle_files() {
 	var file_count = 0;
 
 	var convert_options = {
+		work_title : work_title,
 		// only for debug CeCC 繁簡轉換。
 		cache_directory : CeL.append_path_separator(
 		// "main file name - 繁簡轉換 cache/"
 		epub_directory.replace(/[\/]*$/, ' - 繁簡轉換 cache')),
 		cache_file_for_short_sentences : true,
-		// 超過此長度才 cache。
+
+		// default (undefined) or 'word': 每個解析出的詞單獨作 zh_conversion。
+		// 'combine': 結合未符合分詞字典規則之詞一併轉換。converter 必須有提供輸入陣列的功能。
+		// false: 按照原始輸入，不作 zh_conversion。
+		forced_convert_mode : 'combine',
+
+		// 檢查字典檔的規則。debug 用，會拖累效能。
+		// check_dictionary : true,
+
+		// 超過此長度才創建個別的 cache 檔案，否則會放在 .cache_file_for_short_sentences。
 		min_cache_length : 20
 	};
 
