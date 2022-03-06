@@ -141,7 +141,6 @@
 | [36漫画网](https://www.36mh.com/) | 36mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [漫画牛](https://www.manhuaniu.com/) | manhuaniu.js | 速度稍微慢。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [亲亲漫画网](http://www.duzhez.com/) | 930mh.js | 有些韓國漫畫。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
-| [50漫画网](https://www.manhuadui.com/) | 50mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。可能為早期[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板？ |
 | [漫画160](https://www.laimanhua.com/) | mh160.js | 與 733mh.js 相同系統。 |
 | [漫画1234](https://www.mh1234.com/) | mh1234.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) + 改了 733mh.js？ |
@@ -158,6 +157,7 @@
 | [Toomics 玩漫](https://toomics.com/sc/) | toomics_sc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |
 | [57漫画网](http://www.wuqimh.com/) | 57mh.js | 缺話眾多。系統同 2manhua.js。可能是2013年版本的 圣樱漫画管理系统？ MHD模板？ |
 | [奇漫屋](http://www.qiman6.com/) | qiman5.js | 有些缺話。 |
+| ~~[50漫画网](https://www.manhuadui.com/)~~ | ~~archive/50mh.js~~ | 2020/8/12 19:58 最後一次成功連接。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
 | ~~[Oh漫画](https://www.ohmanhua.com/)~~ | ~~archive/ohmanhua.js~~ | 2021/8/2 採用 Cloudflare 的阻斷服務攻擊保護。原[ONE漫画](https://www.onemanhua.com/)。fed? 系統 |
 | ~~[哦漫画](http://www.omanhua.net/)~~ | ~~archive/omanhua.js~~ | 2019/7/3 5:4 最後一次成功連接。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |
