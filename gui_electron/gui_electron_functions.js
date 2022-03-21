@@ -179,6 +179,8 @@ download_sites_set = {
 		huaxiangju : '花香居',
 		zhuishubang : '追书帮',
 
+		xshuyaya : '丫丫电子书',
+
 		daocaoren : '稻草人书屋',
 		'51shucheng' : '无忧书城',
 		luoxia : '落霞小说网',
