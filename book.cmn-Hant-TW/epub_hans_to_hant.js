@@ -22,6 +22,7 @@ var gettext;
 function initialization() {
 	gettext = CeL.gettext;
 	return Promise.resolve(CeL.using_CeCC({
+		skip_server_test : true,
 		try_LTP_server : true
 	})).then(handle_files);
 }
@@ -85,6 +86,9 @@ function handle_files() {
 		// 檢查字典檔的規則。debug 用，會拖累效能。
 		// check_dictionary : true,
 
+		// 不檢查/跳過通同字/同義詞，通用詞彙不算錯誤。用於無法校訂原始文件的情況。
+		skip_check_for_synonyms : true,
+
 		// 超過此長度才創建個別的 cache 檔案，否則會放在 .cache_file_for_short_sentences。
 		min_cache_length : 20
 	};
@@ -109,12 +113,13 @@ function handle_files() {
 				});
 				if (CeL.is_thenable(promise_load_text_to_check)) {
 					// console.trace(promise_load_text_to_check);
-					return promise_load_text_to_check.then(convert_files.bind(
-							null, output));
+					return promise_load_text_to_check.then(
+							convert_files.bind(null, output)).then(resolve,
+							reject);
 				}
 			}
 
-			convert_files(output).then(resolve);
+			convert_files(output).then(resolve, reject);
 		});
 	});
 

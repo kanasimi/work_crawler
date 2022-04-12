@@ -202,8 +202,8 @@ var crawler = new CeL.work_crawler({
 					// 指定圖片要儲存檔的檔名。
 					file_name : function(work_data, chapter, index) {
 						return (matched ? matched[1] : work_data.id)
-						// @see function process_images() @
-						// CeL.application.net.work_crawler
+						// 3: @see function normalize_image_data() @
+						// CeL.application.net.work_crawler.chapter
 						+ '-' + chapter + '-' + (index + 1).pad(3) + '.jpg'
 					},
 					url : 'http://images.dmzj.com/' + url

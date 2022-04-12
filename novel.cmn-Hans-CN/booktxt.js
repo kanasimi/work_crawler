@@ -12,6 +12,10 @@ CeL.run('application.net.work_crawler.sites.PTCMS');
 
 // ----------------------------------------------------------------------------
 
+// for Error: unable to verify the first certificate
+// code: 'UNABLE_TO_VERIFY_LEAF_SIGNATURE'
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 var crawler = CeL.PTCMS({
 	base_URL : 'https://www.booktxt.net/',
 	charset : 'gbk',

@@ -130,8 +130,9 @@ var crawler = new CeL.work_crawler({
 			CeL.create_directory(directory);
 			var url = matched[1], extension = url.match(/\.[^.]+$/)[0];
 			this.media_list.push({
-				file : directory + chapter_NO.pad(4) + ' '
-						+ CeL.to_file_name(title)
+				file : directory
+						+ chapter_NO.pad(work_data.chapter_NO_pad_digits || 4)
+						+ ' ' + CeL.to_file_name(title)
 						+ (++count > 1 ? '-' + count : '') + extension,
 				url : url
 			});

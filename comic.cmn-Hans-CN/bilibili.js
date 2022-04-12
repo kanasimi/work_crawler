@@ -161,10 +161,14 @@ var crawler = new CeL.work_crawler({
 
 			unhashContent(chapter_data.id, work_data.id, indexData);
 
-			data_file_directory = work_data.directory + chapter_NO.pad(4)
-					+ '.tmp' + CeL.env.path_separator;
+			data_file_directory = work_data.directory
+			// 4: @see chapter_directory_name
+			// @ CeL.application.net.work_crawler.chapter
+			+ chapter_NO.pad(work_data.chapter_NO_pad_digits || 4) + '.tmp'
+					+ CeL.env.path_separator;
 			CeL.create_directory(data_file_directory);
-			data_file_path = data_file_directory + chapter_NO.pad(4)
+			data_file_path = data_file_directory
+					+ chapter_NO.pad(work_data.chapter_NO_pad_digits || 4)
 					+ '.data.zip';
 			CeL.write_file(data_file_path, indexData);
 

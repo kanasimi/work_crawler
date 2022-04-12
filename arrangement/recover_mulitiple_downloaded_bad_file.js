@@ -27,11 +27,52 @@ for (let index = 3; index < process.argv.length; index++) {
 	from_fso_list.append(CeL.extract_wildcard(process.argv[index]));
 }
 
+if (target_file_path && from_fso_list.length === 0) {
+	// for `${cmd_prefix} "target file.rar"`
+	let PATTERN_file_name = target_file_path.match(/^(.+[\\\/])?([^\\\/]+)$/, '');
+	const base_directory = PATTERN_file_name[1] || './';
+	//console.trace(base_directory);
+	PATTERN_file_name = PATTERN_file_name[2].match(/^(.+)(\.[^.]+)/) || [, PATTERN_file_name[2], ''];
+	PATTERN_file_name = new RegExp('^' + CeL.to_RegExp_pattern(PATTERN_file_name[1]) + ' \\((\\d+)\\)' + CeL.to_RegExp_pattern(PATTERN_file_name[2]) + '$');
+	//console.trace(PATTERN_file_name);
+	const serials = [];
+	CeL.read_directory(base_directory).filter(file_name => {
+		const matched = file_name.match(PATTERN_file_name);
+		if (matched) {
+			serials.push(matched[1]);
+			from_fso_list.push(base_directory + file_name);
+			return true;
+		}
+	});
+	//console.trace(from_fso_list);
+	if (from_fso_list.length < 2) {
+		CeL.error('符合模式的檔案少於兩個，無足夠資料合併。 ' + PATTERN_file_name);
+		from_fso_list.truncate();
+	} else {
+		let rename_to;
+		//可用的 serial
+		for (let available_serial = 1; ; available_serial++) {
+			rename_to = target_file_path.replace(/(\.[^.]+)$/, ' (' + available_serial + ')$1');
+			if (!from_fso_list.includes(rename_to)) {
+				break;
+			}
+		}
+		//console.trace(rename_to);
+		CeL.info(`Rename [${target_file_path}] → [${rename_to}]`);
+		CeL.move_file(target_file_path, rename_to);
+		from_fso_list.unshift(rename_to);
+	}
+}
+
 if (!target_file_path || from_fso_list.length === 0) {
 	const cmd_prefix = `node ${process.argv[1]}`;
 	CeL.log(`當多次下載一個大檔案，卻各有不同錯誤時，可利用本工具回復原先完整的檔案。
 
 Usage:
+	${cmd_prefix} "target file.rar"
+		- This will find "target file (2).rar", "target file (3).rar",
+		  rename "target file.rar" to → "target file (1).rar",
+		  and combine to "target file.rar".
 	${cmd_prefix} "target file.rar" "bad file.*.rar"
 	${cmd_prefix} "target file path" "bad file 1" "bad file 2" "bad file 3"`);
 	process.exit();
