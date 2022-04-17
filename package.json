@@ -109,11 +109,11 @@
 		"node" : ">=8.12.0"
 	},
 	"devDependencies" : {
-		"electron" : "^13.6.6",
+		"electron" : "latest",
 		"electron-builder" : "latest"
 	},
 	"dependencies" : {
-		"electron-updater" : "^4.0.0",
+		"electron-updater" : "latest",
 		"gh-updater" : "latest",
 		"cejs" : "latest"
 	}
