@@ -122,6 +122,7 @@ crawler = new CeL.work_crawler({
 		eval('chapter_data=' + html);
 		if (!chapter_data) {
 			CeL.warn({
+				// gettext_config:{"id":"unable-to-parse-chapter-data-for-«$1»-§$2"}
 				T : [ '無法解析《%1》§%2 之章節資料！', work_data.title, chapter_NO ]
 			});
 			return;

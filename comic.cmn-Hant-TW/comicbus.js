@@ -119,6 +119,7 @@ var crawler = new CeL.work_crawler({
 		// {Array}id_data = [ title, title, ... ]
 		id_data = [];
 
+		// gettext_config:{"id":"search-results"}
 		html = html.between('搜尋結果');
 		// console.log(html);
 

@@ -194,6 +194,7 @@ setup_crawler(crawler, typeof module === 'object' && module);
 
 if (crawler.password && crawler.mail_tel) {
 	CeL.log([ crawler.id + ': ', {
+		// gettext_config:{"id":"login-as-$1"}
 		T : [ 'Login as [%1]', crawler.mail_tel ]
 	} ]);
 

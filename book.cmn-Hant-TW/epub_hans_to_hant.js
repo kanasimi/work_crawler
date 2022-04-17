@@ -49,11 +49,13 @@ function handle_files() {
 	// CeL.set_debug();
 	var epub_directory = epub_file_path.replace(/\.[^.]+$/, '').trim();
 	CeL.debug({
-		T : [ '移除目錄：%1', epub_directory ]
+		// gettext_config:{"id":"removing-directory-$1"}
+		T : [ 'Removing directory: %1', epub_directory ]
 	});
 	CeL.remove_directory(epub_directory, true);
 
 	CeL.debug({
+		// gettext_config:{"id":"extract-ebook-as-cache-$1"}
 		T : [ 'Extract ebook as cache: [%1]', epub_file_path ]
 	});
 	archive_file.ebook_file_list = [];
@@ -94,6 +96,7 @@ function handle_files() {
 	};
 
 	return new Promise(function(resolve, reject) {
+		// gettext_config:{"id":"extract-ebook-as-cache-$1"}
 		CeL.log_temporary(gettext('Extract ebook as cache: [%1]',
 				epub_file_path));
 		archive_file.extract({
@@ -145,6 +148,7 @@ function handle_files() {
 				+ gettext.to_standard('cmn-Hant-TW') + ')$1');
 		CeL.remove_file(converted_epub_file);
 
+		// gettext_config:{"id":"start-building-e-books"}
 		CeL.log_temporary(gettext('開始建構電子書……', converted_epub_file));
 		// 打包 epub。結果會存放到與 epub_file_path 相同的目錄。
 		(new CeL.EPUB(epub_directory)).archive(converted_epub_file, true,
@@ -152,7 +156,8 @@ function handle_files() {
 
 		// TODO: if error occurred, do not remove directory.
 		CeL.debug({
-			T : [ '移除目錄：%1', epub_directory ]
+			// gettext_config:{"id":"removing-directory-$1"}
+			T : [ 'Removing directory: %1', epub_directory ]
 		});
 		CeL.remove_directory(epub_directory, true);
 		CeL.info('Convert epub: 繁簡轉換完畢: ' + converted_epub_file);

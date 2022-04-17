@@ -97,6 +97,7 @@ var crawler = new CeL.work_crawler({
 			var time = chapter_data.chapter.charge_end_time * 1000;
 			if (time > Date.now()) {
 				CeL.info([ this.id + ':', {
+					// gettext_config:{"id":"§$1-«$2»-must-wait-until-$3-to-read.-skipping-the-remaining-chapters"}
 					T : [ '§%1《%2》之後必須等到 %3  才能閱讀。跳過餘下的章節。',
 					//
 					chapter_NO + '/' + work_data.chapter_count,
@@ -116,6 +117,7 @@ var crawler = new CeL.work_crawler({
 		//
 		&& chapter_data.json_content.page[0].mobileImgUrl) {
 			CeL.warn([ this.id + ':', {
+				// gettext_config:{"id":"«$1»-is-a-paid-member-only-work-you-must-purchase-before-reading"}
 				T : [ '《%1》為會員專屬作品，必須充值後才能閱讀！', work_data.title ]
 			} ]);
 			return;

@@ -180,7 +180,9 @@ electron.ipcMain.on('send_message', function(event, message) {
 // 📦安裝包圖形介面自動更新功能
 function start_update(event_sender) {
 	try {
-		event_sender.send('send_message_debug', '開始檢測並更新安裝包……');
+		event_sender.send('send_message_debug',
+		// gettext_config:{"id":"start-release-updating"}
+		'開始檢測並更新安裝包……');
 
 		// https://github.com/iffy/electron-updater-example/blob/master/main.js
 		// https://nicholaslee119.github.io/2018/01/11/electronBuilder%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/
@@ -197,7 +199,8 @@ function start_update(event_sender) {
 				.send('send_message_isPackaged', autoUpdater.app.isPackaged);
 		if (!autoUpdater.app.isPackaged) {
 			event_sender.send('send_message_log',
-					'所執行的並非安裝包版本，因此不執行安裝包版本的升級檢查。');
+			// gettext_config:{"id":"you-are-on-git-master-branch-skipping-release-upgrade-check"}
+			'所執行的並非安裝包版本，因此不執行安裝包版本的升級檢查。');
 			return;
 		}
 
@@ -210,9 +213,9 @@ function start_update(event_sender) {
 		}
 
 		autoUpdater.on('checking-for-update', function() {
-			event_sender.send('send_message_log', '開始檢測安裝包更新……'
-			//
-			+ JSON.stringify({
+			event_sender.send('send_message_log',
+			// gettext_config:{"id":"checking-for-release-update"}
+			'開始檢測安裝包更新……' + JSON.stringify({
 				autoDownload : autoUpdater.autoDownload,
 				autoInstallOnAppQuit : autoUpdater.autoInstallOnAppQuit,
 				currentVersion : autoUpdater.currentVersion,
@@ -222,12 +225,14 @@ function start_update(event_sender) {
 
 		var start_time = Date.now(), latest_time = Date.now(), latest_progress = 10;
 		autoUpdater.on('update-available', function(info) {
-			event_sender.send('send_message_info', [ '有新版安裝包：%1',
-					JSON.stringify(info) ]);
+			event_sender.send('send_message_info',
+			// gettext_config:{"id":"release-update-available-$1"}
+			[ '有新版安裝包：%1', JSON.stringify(info) ]);
 			// 已經下載完畢則不會再下載，會直接跳到 'update-downloaded'。
 			if (autoUpdater.autoDownload) {
 				event_sender.send('send_message_info',
-						'開始下載安裝包。若還沒下載完就離開程式、出錯，下次會從頭下載。您可升高訊息欄的偵錯等級，以得知下載進度。');
+				// gettext_config:{"id":"started-downloading-the-installation-package.-if-you-have-not-downloaded-the-program-leave-the-program-and-download-it-from-the-beginning.-you-can-increase-the-debug-level-of-the-message-bar-to-know"}
+				'開始下載安裝包。若還沒下載完就離開程式、出錯，下次會從頭下載。您可升高訊息欄的偵錯等級，以得知下載進度。');
 				latest_time = Date.now();
 			}
 			return;
@@ -248,7 +253,9 @@ function start_update(event_sender) {
 			}, 2000);
 		});
 		autoUpdater.on('update-not-available', function(info) {
-			event_sender.send('send_message_log', [ '沒有新安裝包。當前版本：%1',
+			event_sender.send('send_message_log',
+			// gettext_config:{"id":"release-update-not-available.-current-version-$1"}
+			[ '沒有新安裝包。當前版本：%1',
 			// {Object}info 會包含 .releaseNotes
 			JSON.stringify(info && info.version) ]);
 		});
@@ -256,7 +263,9 @@ function start_update(event_sender) {
 		autoUpdater.on('error', function(error) {
 			// 安裝包環境無 CLI console。
 			// console.error(error);
-			event_sender.send('send_message_warn', [ '安裝包更新出錯：%1',
+			event_sender.send('send_message_warn',
+			// gettext_config:{"id":"error-in-auto-updater-$1"}
+			[ '安裝包更新出錯：%1',
 			// {Error}error 不能用 `JSON.stringify(error)`。
 			String(error) ]);
 		});
@@ -264,6 +273,7 @@ function start_update(event_sender) {
 		autoUpdater.on('download-progress', function(progressObj) {
 			// CeL.log_temporary(progressObj.percent + '%'));
 			event_sender.send('send_message_debug', [
+					// gettext_config:{"id":"download-speed-$2-bytes-s-downloaded-$1"}
 					'安裝包已下載 %1，下載速度 %2 bytes/s。',
 					progressObj.percent.toFixed(2) + '%' + ' ('
 							+ progressObj.transferred + "/" + progressObj.total
@@ -273,9 +283,13 @@ function start_update(event_sender) {
 			if (time_diff > 1 * 60 * 1000 || time_diff > 10 * 1000
 					&& progressObj.percent >= latest_progress) {
 				event_sender.send('send_message_log', [
+						// gettext_config:{"id":"the-installation-package-has-been-downloaded-$1-and-it-is-estimated-that-it-will-take-$2-minutes-to-complete"}
 						'安裝包已下載 %1，預估還需 %2 分鐘下載完畢。',
 						progressObj.percent.toFixed(2) + '%',
-						((Date.now() - start_time) * (progressObj.total - progressObj.transferred) / progressObj.transferred / (60 * 1000)).toFixed(1) ]);
+						((Date.now() - start_time)
+								* (progressObj.total - progressObj.transferred)
+								/ progressObj.transferred / (60 * 1000))
+								.toFixed(1) ]);
 				// 每 10% 顯示一次訊息。
 				latest_progress = Math.ceil(progressObj.percent / 10) * 10;
 				latest_time = Date.now();
@@ -283,13 +297,15 @@ function start_update(event_sender) {
 		});
 		autoUpdater.on('update-downloaded', function(event, releaseNotes,
 				releaseName, releaseDate, updateUrl, quitAndUpdate) {
-			event_sender.send('send_message_log', [ '新版安裝包下載完成：%1',
-					JSON.stringify(event) ]);
+			event_sender.send('send_message_log',
+			// gettext_config:{"id":"new-release-downloaded-$1"}
+			[ '新版安裝包下載完成：%1', JSON.stringify(event) ]);
 
 			electron.ipcMain.on('start-install-now', function(e, arg) {
 				// some code here to handle event
 				autoUpdater.quitAndInstall();
 				console.log(arguments);
+				// gettext_config:{"id":"restart-the-application-to-apply-the-updates"}
 				console.log("重新啟動程式即可更新。");
 			});
 		});
@@ -303,6 +319,8 @@ function start_update(event_sender) {
 		// e.g., Error: Cannot find module 'electron-updater'
 		// win.webContents.send()
 		// console.error(e);
-		event_sender.send('send_message_warn', [ '安裝包更新失敗：%1', String(e) ]);
+		event_sender.send('send_message_warn',
+		// gettext_config:{"id":"there-was-a-problem-updating-the-application-$1"}
+		[ '安裝包更新失敗：%1', String(e) ]);
 	}
 }

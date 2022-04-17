@@ -32,6 +32,7 @@ var fso_name_list = CeL.read_directory(target_directory);
 
 if (!fso_name_list) {
 	CeL.error({
+		// gettext_config:{"id":"$2-the-target-directory-$1-does-not-exist"}
 		T : [ '%2: The target directory [%1] does not exist?',
 				target_directory, CeL.env.script_name ]
 	});
@@ -41,6 +42,7 @@ if (!fso_name_list) {
 // -----------------------------------------------------------------
 
 CeL.info({
+	// gettext_config:{"id":"$3-$1-$2-files-directories-to-check"}
 	T : [ '%3: %1: %2 files / directories to check.', target_directory,
 			fso_name_list.length, CeL.env.script_name ]
 });
@@ -195,7 +197,7 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 			main_catalog_directory + directory[sub_catalog]);
 			if (!CeL.directory_exists(sub_catalog_directory)) {
 				var message = CeL.gettext(
-				//
+				// gettext_config:{"id":"create-directory-of-sub-catalog-$1"}
 				'Create directory of sub-catalog [%1]:',
 				//
 				sub_catalog) + '	' + sub_catalog_directory;
@@ -209,6 +211,7 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 		return;
 	} else if (catalog !== 'root') {
 		CeL.error({
+			// gettext_config:{"id":"invalid-catalog-$1"}
 			T : [ 'Invalid catalog: %1', catalog ]
 		});
 	}
@@ -237,7 +240,8 @@ function check_fso(fso_name) {
 		}
 
 		CeL.warn({
-			T : [ '因為最大的檔案有 %1 bytes，因此跳過這個%2的目錄：%3', biggest_file_size,
+			// gettext_config:{"id":"because-the-largest-file-has-$1-bytes-skipping-this-$2-directory-$3"}
+			T : [ '因為最大的檔案有 %1 位元組，因此跳過這個%2的目錄：%3', biggest_file_size,
 					message, directory_path ]
 		});
 	}
@@ -247,6 +251,7 @@ function check_fso(fso_name) {
 	fso_status = CeL.fso_status(directory_path);
 	if (!fso_status) {
 		CeL.error({
+			// gettext_config:{"id":"can-not-read-file-directory-$1"}
 			T : [ 'Can not read file / directory: %1', directory_path ]
 		});
 		return;
@@ -258,6 +263,7 @@ function check_fso(fso_name) {
 		if (false && PATTERN_executable_file.test(fso_name)) {
 			process_queue.push([ directory_path, 'game file',
 			// 為遊戲可執行檔或函式庫
+			// gettext_config:{"id":"it-is-a-executable-or-dll-file"}
 			CeL.gettext('為可執行檔或函式庫') ]);
 		} else
 			classify(fso_name, directory_path, fso_status);
@@ -269,6 +275,7 @@ function check_fso(fso_name) {
 	var sub_fso_list = CeL.read_directory(directory_path);
 	if (!sub_fso_list) {
 		CeL.error({
+			// gettext_config:{"id":"can-not-read-directory-$1"}
 			T : [ 'Can not read directory: %1', directory_path ]
 		});
 		return;
@@ -276,6 +283,7 @@ function check_fso(fso_name) {
 	if (sub_fso_list.length === 0) {
 		if (!Object.values(catalog_directory).includes(directory_path))
 			CeL.warn({
+				// gettext_config:{"id":"empty-directory-$1"}
 				T : [ 'Empty directory: %1', directory_path ]
 			});
 		return;
@@ -378,7 +386,8 @@ function check_fso(fso_name) {
 	if ((exe_count > 0 && sub_sub_files_count - archive_count > 3
 			|| iso_count > 1 && sub_sub_files_count < 20 || iso_count === sub_sub_files_count)
 			&& test_size_OK(1e10, 'game folder', CeL.gettext(
-					'含有 %1/%2 個可執行檔或函式庫', exe_count, sub_sub_files_count))) {
+			// gettext_config:{"id":"contains-$1-$2-executable-files-or-libraries"}
+			'含有 %1/%2 個可執行檔或函式庫', exe_count, sub_sub_files_count))) {
 		return;
 	}
 
@@ -387,8 +396,9 @@ function check_fso(fso_name) {
 	: image_count > 2 && image_count > sub_sub_files_count - 2)) {
 		fso_status.maybe_image = true;
 		// 壓縮大多只有圖片的目錄。
-		if (test_size_OK(5e7, 'image folder', CeL.gettext('含有 %1/%2 張圖片',
-				image_count, sub_sub_files_count))) {
+		if (test_size_OK(5e7, 'image folder',
+		// gettext_config:{"id":"contains-$1-$2-images"}
+		CeL.gettext('含有 %1/%2 張圖片', image_count, sub_sub_files_count))) {
 			return;
 		}
 	}
@@ -403,13 +413,16 @@ function check_fso(fso_name) {
 		return sub_fso_name_list.some(function(name) {
 			return PATTERN_executable_file.test(name);
 		});
-	}) && test_size_OK(null, 'game folder', CeL.gettext('次目錄中含有可執行檔或函式庫'))) {
+	}) && test_size_OK(null, 'game folder',
+	// gettext_config:{"id":"subdirectory-contains-executable-files-or-libraries"}
+	CeL.gettext('次目錄中含有可執行檔或函式庫'))) {
 		return;
 	}
 
 	if (image_count > 9 && image_count / sub_sub_files_count > .5) {
 		fso_status.maybe_image = true;
 		CeL.warn({
+			// gettext_config:{"id":"directory-to-be-checked-manually-$1"}
 			T : [ '需要手動檢查的目錄：%1', directory_path ]
 		});
 		// return;
@@ -435,9 +448,10 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 			return;
 		}
 		move_to_path = CeL.next_fso_NO_unused(move_to_path + fso_name, true);
-		CeL.info(CeL.display_align([
-				[ CeL.gettext('Move %1: ', catalog), fso_path ],
-				[ '→ ', move_to_path ] ]));
+		CeL.info(CeL.display_align([ [ CeL.gettext.append_message_tail_space(
+		// gettext_config:{"id":"move-$1"}
+		'Move %1:', catalog), fso_path ], [ '→ ', move_to_path ] ]));
+		// gettext_config:{"id":"move-$1"}
 		add_log(CeL.gettext('Move %1:', catalog) + '	' + fso_path + '	→	'
 				+ move_to_path);
 		CeL.move_fso(fso_path, move_to_path);
@@ -665,11 +679,13 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 	// 移除空的擬分類目錄/子分類目錄。
 	if (CeL.directory_is_empty(move_to_path)) {
 		CeL.log({
+			// gettext_config:{"id":"remove-empty-directory-$1"}
 			T : [ 'Remove empty directory: %1', move_to_path ]
 		});
 		CeL.remove_directory(move_to_path);
 	} else if (is_sub_catalog(catalog)) {
 		CeL.info({
+			// gettext_config:{"id":"directory-of-sub-catalog-$1-created-$2"}
 			T : [ 'Directory of sub-catalog [%1] created: %2',
 			//
 			catalog, move_to_path ]
@@ -680,6 +696,7 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 // -----------------------------------------------------------------
 
 CeL.info({
+	// gettext_config:{"id":"$2-$1-directories-to-compress"}
 	T : [ '%2: %1 directories to compress.', process_queue.length,
 			CeL.env.script_name ]
 });
@@ -697,7 +714,8 @@ if (process_queue.length > 0) {
 		process_queue.forEach(compress_each_directory);
 	else
 		CeL.info({
-			T : [ '因為未設定要壓縮 (do_compress)，有 %1 個檔案或資料夾沒有壓縮。',
+			// gettext_config:{"id":"since-there-is-no-compression-(do_compress)-there-are-$1-files-or-folders-that-are-not-compressed"}
+			T : [ '因為未設定要壓縮 (do_compress)，有 %1 個檔案或目錄沒有壓縮。',
 					process_queue.length ]
 		});
 }
@@ -724,19 +742,23 @@ function compress_each_directory(config, index) {
 		profile_name = profile_name.profile;
 	}
 
+	// gettext_config:{"id":"$1-$2-compressing"}
 	process.title = CeL.gettext('%1/%2 compressing', index + 1,
 			process_queue.length);
 	CeL.info((index + 1) + '/' + process_queue.length + ' '
-			+ CeL.gettext('Compress') + ' ' + profile_name + ': ['
-			+ directory_path + '] ' + (message || '') + '...');
+	// gettext_config:{"id":"compress-$1"}
+	+ CeL.gettext('Compress %1:', profile_name) + ' [' + directory_path + '] '
+			+ (message || '') + '...');
 
 	if (CeL.fs_status(profile.archive)) {
 		CeL.error({
+			// gettext_config:{"id":"target-exists-$1"}
 			T : [ 'Target exists: %1', profile.archive ]
 		});
 		return;
 	}
 
+	// gettext_config:{"id":"compress-$1"}
 	add_log(CeL.gettext('Compress %1:', profile_name) + '	' + profile.archive);
 
 	var command = '"'

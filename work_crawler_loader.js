@@ -135,8 +135,10 @@ if (data_directory
 	} catch (e) {
 		// 只 call 一次 CeL.warn()，這樣在 GUI 會顯示在同一行。
 		CeL.warn([ {
+			// gettext_config:{"id":"warning-unable-to-access-the-storage-directory-$1"}
 			T : [ '警告：無法存取作品存放目錄 [%1]！', data_directory ]
 		}, '\n', {
+			// gettext_config:{"id":"the-downloaded-file-will-be-placed-in-the-default-directory"}
 			T : '下載的檔案將放在預設目錄下。'
 		} ]);
 		data_directory = '';
@@ -191,10 +193,12 @@ if (is_CLI && !work_id && require.main
 // 檔案整理工具不需要下載作品，因此也不需要作品名稱。
 && (typeof need_work_id === 'undefined' || need_work_id)) {
 	CeL.info({
+		// gettext_config:{"id":"cejs-online-novels-comics-downloader"}
 		T : 'CeJS 網路小說漫畫下載工具'
 	});
 	CeL.log({
 		T : [
+				// gettext_config:{"id":"to-use-the-graphical-interface-please-execute-`$1`"}
 				'欲採用圖形介面請執行 `%1`。',
 				'start_gui_electron.'
 						+ (CeL.platform.is_Windows() ? 'bat' : 'sh') ]
@@ -206,25 +210,31 @@ if (is_CLI && !work_id && require.main
 	var main_script = require.main
 			&& require.main.filename.match(/[^\\\/]+$/)[0],
 	//
-	options_arguments = ' [' + CeL.gettext('option=true') + '] ["'
-			+ CeL.gettext('option=value') + '"]';
+	options_arguments = ' ['
+	// gettext_config:{"id":"option=true"}
+	+ CeL.gettext('option=true') + '] ["'
+	// gettext_config:{"id":"option=value"}
+	+ CeL.gettext('option=value') + '"]';
 
 	// 顯示幫助信息/用法說明。
 	CeL.log({
+		// gettext_config:{"id":"usage"}
 		T : 'Usage:'
 	});
 	// 分兩行顯示可以避免大螢幕上紫色背景不斷行問題。
 	CeL.log({
-		T : '	node ' + main_script + ' "' + CeL.gettext('作品標題或 id') + '"'
-				+ options_arguments,
+		T : '	node ' + main_script + ' "'
+		// gettext_config:{"id":"work-title-work-id"}
+		+ CeL.gettext('作品標題或 id') + '"' + options_arguments,
 		S : {
 			color : 'white',
 			backgroundColor : 'magenta'
 		}
 	});
 	CeL.log({
-		T : '	node ' + main_script + ' "l=' + CeL.gettext('作品列表檔案') + '"'
-				+ options_arguments,
+		T : '	node ' + main_script + ' "l='
+		// gettext_config:{"id":"work-list-file"}
+		+ CeL.gettext('作品列表檔案') + '"' + options_arguments,
 		S : {
 			color : 'white',
 			backgroundColor : 'magenta'
@@ -235,6 +245,7 @@ if (is_CLI && !work_id && require.main
 	// --------------------------------
 
 	CeL.log({
+		// gettext_config:{"id":"options"}
 		T : 'Options:'
 	});
 	Object.entries(CeL.work_crawler.prototype.import_arg_hash)
