@@ -275,22 +275,26 @@ var _;
 // 設定國際性語言 language force convert. @see setup_language_menu()
 var force_convert = [ 'en' ];
 
-// @see setup_language_menu()
-// for i18n: define gettext() user domain resources location.
-// gettext() will auto load (CeL.env.domain_location + language + '.js').
-// e.g., resources/cmn-Hant-TW.js, resources/ja-JP.js
-CeL.env.domain_location = function() {
-	is_installation_package = CeL.is_installation_package();
+// 2022/4/20 18:31:47 採用單一語系檔，轉移至系統語系檔: CeJS/application/locale/resources/*.js
+// 現在此處僅提供一個使用範例。
+if (false) {
+	// @see setup_language_menu()
+	// for i18n: define gettext() user domain resources location.
+	// gettext() will auto load (CeL.env.domain_location + language + '.js').
+	// e.g., resources/cmn-Hant-TW.js, resources/ja-JP.js
+	CeL.env.domain_location = function() {
+		is_installation_package = CeL.is_installation_package();
 
-	return CeL.env.domain_location
-	// CeL.env.script_base_path: 形如 ...'/work_crawler/gui_electron/'
-	= CeL.env.script_base_path.replace(/gui_electron[\\\/]$/, '')
-	// resources/
-	+ CeL.env.resources_directory_name + '/';
-	// 在安裝包中， `process.cwd()` 可能為
-	// C:\Users\user\AppData\Local\Programs\work_crawler
+		return CeL.env.domain_location
+		// CeL.env.script_base_path: 形如 ...'/work_crawler/gui_electron/'
+		= CeL.env.script_base_path.replace(/gui_electron[\\\/]$/, '')
+		// resources/
+		+ CeL.env.resources_directory_name + '/';
+		// 在安裝包中， `process.cwd()` 可能為
+		// C:\Users\user\AppData\Local\Programs\work_crawler
 // 因此 CeL.env.domain_location 必須提供完整路徑。
-};
+	};
+}
 
 CeL.run([ 'application.debug.log', 'interact.DOM' ], initializer);
 
@@ -426,8 +430,8 @@ function on_menu_changed() {
 			// gettext_config:{"id":"untranslated-message-count"}
 			_('untranslated message count'),
 			// CeL.gettext.get_alias(CeL.gettext.default_domain)
-			// gettext_config:{"id":"using-language"}
-			_('using language') ]
+			// gettext_config:{"id":"local-language-name"}
+			_('local-language-name') ]
 		});
 	}
 }
@@ -481,18 +485,28 @@ function setup_initial_messages() {
 
 	// --------------------------------
 
-	// gettext_config:{"id":"let-s-<a>translate-the-interface<-a>-together"}
-	var translation_message = CeL.gettext('歡迎與我們一同<a>翻譯介面文字</a>！');
-	var matched = translation_message
-			.match(/^([\s\S]*?)<a>([\s\S]*?)<\/a>([\s\S]*?)$/);
-	CeL.info(matched ? {
-		// 🚧 https://weblate.org/zh-hant/
-		span : [ matched[1], {
-			a : matched[2],
-			href : 'https://github.com/kanasimi/work_crawler/issues/185',
-			onclick : open_URL
-		}, matched[3] ]
-	} : translation_message);
+	CeL.info({
+		// gettext_config:{"id":"let-s-<a>translate-the-interface<-a>-together"}
+		T : '歡迎與我們一同<a>翻譯介面文字</a>！',
+		on_language_changed : function(conversion) {
+			conversion = CeL.gettext.apply(this, conversion);
+			var matched = conversion
+					.match(/^([\s\S]*?)<a>([\s\S]*?)<\/a>([\s\S]*?)$/);
+			if (matched) {
+				conversion = {
+					// 🚧 https://weblate.org/zh-hant/
+					span : [ matched[1], {
+						a : matched[2],
+						href :
+						//
+						'https://github.com/kanasimi/work_crawler/issues/185',
+						onclick : open_URL
+					}, matched[3] ]
+				};
+			}
+			CeL.new_node(conversion, [ this, null ]);
+		}
+	});
 	on_menu_changed();
 
 	// --------------------------------
