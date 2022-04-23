@@ -20,7 +20,9 @@ CeL.manhuadb({
 	// 2021/12/5 2s 太過頻繁會被封鎖。
 	one_by_one : '4s',
 
-	base_URL : 'https://www.manhuacat.com/',
+	// 2022/3/21 6:37 最後一次成功連接 https://www.manhuacat.com/
+	// 2022/4/24 6:49:8 域名更換 https://www.maofly.com/
+	base_URL : 'https://www.maofly.com/',
 
 	acceptable_types : 'webp|jpg',
 

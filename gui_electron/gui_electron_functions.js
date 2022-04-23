@@ -439,9 +439,9 @@ function on_menu_changed() {
 function setup_language_menu() {
 	_ = CeL.gettext;
 
-	_.create_menu('language_menu', [ 'TW', 'CN', 'ja', 'en', 'pt', 'ko' ],
+	_.create_menu('language_menu',
 	// 預設介面語言繁體中文+...
-	on_menu_changed);
+	[ 'TW', 'CN', 'ja', 'en', 'pt', 'fr', 'ko' ], on_menu_changed);
 
 	// translate all nodes to show in specified language (or default domain).
 	_.translate_nodes();
