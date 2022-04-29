@@ -245,6 +245,51 @@ theme_hash = {
 var DEFAULT_THEME_TEXT = 'default', default_theme_name;
 theme_list.push(DEFAULT_THEME_TEXT);
 
+// gettext_config:{"id":"download_options.recheck","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.show_information_only","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.start_chapter","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.start_chapter_no","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.start_chapter_title","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.start_list_serial","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.rearrange_list_file","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.regenerate","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.reget_chapter","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.search_again","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.cache_title_to_id","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.chapter_time_interval","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.chapter_filter","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.acceptable_types","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.archive_images","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.archive_all_good_images_only","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.remove_images_after_archive","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.images_archive_extension","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.max_error_retry","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.allow_eoi_error","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.min_length","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.timeout","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.skip_error","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.skip_chapter_data_error","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.preserve_work_page","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.preserve_chapter_page","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.remove_ebook_directory","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.one_by_one","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.overwrite_old_file","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.convert_to_language","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.discard_old_ebook_file","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.vertical_writing","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.main_directory","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.user_agent","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.proxy","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.cookie","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.write_chapter_metadata","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.write_image_metadata","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.archive_old_works","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.modify_work_list_when_archive_old_works","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.save_preference","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.data_directory","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.preserve_download_work_layer","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.play_finished_sound","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.archive_program_path","mark_type":"combination_message_id"}
 'data_directory,recheck,start_chapter_NO,start_chapter_title,chapter_filter,regenerate,reget_chapter,search_again,cache_title_to_id,acceptable_types,archive_images,images_archive_extension,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,chapter_time_interval,main_directory,vertical_writing,convert_to_language,user_agent,proxy,cookie,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound,archive_program_path'
 // @see work_crawler/resource/locale of work_crawler - locale.csv
 .split(',').forEach(function(item) {
@@ -610,6 +655,9 @@ function setup_theme_selecter() {
 		? default_theme_name : theme_name;
 		theme_nodes.push({
 			span : [ theme_hash[_theme_name] || '', {
+				// gettext_config:{"id":"light-theme","mark_type":"combination_message_id"}
+				// gettext_config:{"id":"dark-theme","mark_type":"combination_message_id"}
+				// gettext_config:{"id":"default-theme","mark_type":"combination_message_id"}
 				T : theme_name + ' theme',
 				force_convert : force_convert
 			} ],
