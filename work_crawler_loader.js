@@ -160,6 +160,14 @@ function option_type_token(arg_type_data, colors) {
 			condition = JSON.stringify(condition);
 		}
 		option_types.push({
+			// gettext_config:{"id":"number","mark_type":"combination_message_id"}
+			// gettext_config:{"id":"function","mark_type":"combination_message_id"}
+			// gettext_config:{"id":"boolean","mark_type":"combination_message_id"}
+			// gettext_config:{"id":"string","mark_type":"combination_message_id"}
+			// gettext_config:{"id":"fso_file","mark_type":"combination_message_id"}
+			// gettext_config:{"id":"fso_files","mark_type":"combination_message_id"}
+			// gettext_config:{"id":"fso_directory","mark_type":"combination_message_id"}
+			// gettext_config:{"id":"fso_directories","mark_type":"combination_message_id"}
 			T : type,
 			S : {
 				color : colors && colors[0] || 'green'
