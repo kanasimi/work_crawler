@@ -73,7 +73,7 @@ var crawler = new CeL.work_crawler({
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
 		return 'm/'
-				// includes "/", so can not use encodeURIComponent()
+				// includes "/", so cannot use encodeURIComponent()
 				+ encodeURI(work_id.replace(PATTERN_converted_id_last_part,
 						id_revert_to));
 	},
@@ -145,7 +145,7 @@ var crawler = new CeL.work_crawler({
 			text = html.between(text, '<div class="tab-pane')
 					|| html.between(text);
 			if (!text) {
-				throw new Error(work_data.id + ': Can not find id: ' + id);
+				throw new Error(work_data.id + ': Cannot find id: ' + id);
 			}
 			// console.log(JSON.stringify(text));
 			text.each_between('<div class="site-manga">', null,

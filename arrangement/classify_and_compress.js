@@ -241,8 +241,8 @@ function check_fso(fso_name) {
 
 		CeL.warn({
 			// gettext_config:{"id":"because-the-largest-file-has-$1-bytes-skipping-this-$2-directory-$3"}
-			T : [ '因為最大的檔案有 %1 位元組，因此跳過這個%2的目錄：%3', biggest_file_size,
-					message, directory_path ]
+			T : [ '因為最大的檔案有 %1 位元組，因此跳過這個%2的目錄：%3', biggest_file_size, message,
+					directory_path ]
 		});
 	}
 
@@ -251,8 +251,8 @@ function check_fso(fso_name) {
 	fso_status = CeL.fso_status(directory_path);
 	if (!fso_status) {
 		CeL.error({
-			// gettext_config:{"id":"can-not-read-file-directory-$1"}
-			T : [ 'Can not read file / directory: %1', directory_path ]
+			// gettext_config:{"id":"cannot-read-file-directory-$1"}
+			T : [ 'Cannot read file / directory: %1', directory_path ]
 		});
 		return;
 	}
@@ -275,8 +275,8 @@ function check_fso(fso_name) {
 	var sub_fso_list = CeL.read_directory(directory_path);
 	if (!sub_fso_list) {
 		CeL.error({
-			// gettext_config:{"id":"can-not-read-directory-$1"}
-			T : [ 'Can not read directory: %1', directory_path ]
+			// gettext_config:{"id":"cannot-read-directory-$1"}
+			T : [ 'Cannot read directory: %1', directory_path ]
 		});
 		return;
 	}
@@ -303,7 +303,8 @@ function check_fso(fso_name) {
 				biggest_file_size = sub_fso_status.size;
 			non_zero_size_count++;
 		}
-		if (/\.(?:jpg|jpeg|webp|png|gif|bmp|ico|icon)$/i.test(sub_fso_name)) {
+		if (/\.(?:jpg|jpeg|webp|avif|png|gif|bmp|ico|icon)$/i
+				.test(sub_fso_name)) {
 			image_count++;
 		} else if (PATTERN_executable_file.test(sub_fso_name)) {
 			exe_count++;

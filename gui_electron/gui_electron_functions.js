@@ -469,14 +469,16 @@ function initializer() {
 function on_menu_changed() {
 	// gettext_config:{"id":"untranslated-message-count"}
 	if (+_('untranslated message count') > 0) {
+		// CeL.gettext.get_alias(CeL.gettext.default_domain)
+		// gettext_config:{"id":"local-language-name"}
+		var language_name = _('local-language-name');
+		if (language_name === 'local-language-name')
+			language_name = CeL.gettext.get_domain_name();
 		CeL.info({
 			// gettext_config:{"id":"there-are-currently-$1-$2-messages-that-have-not-been-translated.-welcome-to-translate-with-us"}
 			T : [ '現有%1條%2訊息尚未翻譯，歡迎您一同參與翻譯訊息！',
 			// gettext_config:{"id":"untranslated-message-count"}
-			_('untranslated message count'),
-			// CeL.gettext.get_alias(CeL.gettext.default_domain)
-			// gettext_config:{"id":"local-language-name"}
-			_('local-language-name') ]
+			_('untranslated message count'), language_name ]
 		});
 	}
 }
@@ -1893,7 +1895,8 @@ function prepare_crawler(crawler, crawler_module) {
 	if (default_configuration[site_id]) {
 		// e.g., crawler.main_directory
 		CeL.info({
-			T : [ 'import configuration of %1: %2', site_id,
+			// gettext_config:{"id":"imported-configuration-of-$1-$2"}
+			T : [ 'Imported configuration of %1: %2', site_id,
 					JSON.stringify(default_configuration[site_id]) ]
 		});
 		Object.assign(crawler, default_configuration[site_id]);
@@ -1914,7 +1917,8 @@ function prepare_crawler(crawler, crawler_module) {
 		crawler.default_save_to_preference[key] = crawler[key];
 		if (key in crawler_configuration) {
 			CeL.info({
-				T : [ 'import preference of %1: %2', site_id,
+				// gettext_config:{"id":"imported-preference-of-$1-$2"}
+				T : [ 'Imported preference of %1: %2', site_id,
 				//
 				key + '=' + crawler_configuration[key] + '←' + crawler[key] ]
 			});
@@ -2944,7 +2948,7 @@ function check_update_NOT_package() {
 	});
 
 	// 非安裝包圖形介面自動更新功能。
-	// This method can not get update result.
+	// This method cannot get update result.
 	require('child_process').exec('node work_crawler.updater.js', {
 		// pass I/O to the child process
 		// https://nodejs.org/api/child_process.html#child_process_options_stdio

@@ -87,7 +87,7 @@ var crawler = new CeL.work_crawler({
 			try {
 				return JSON.parse(XMLHttp.responseText);
 			} catch (e) {
-				_this.onerror('Can not parse chapter list!', work_data);
+				_this.onerror('Cannot parse chapter list!', work_data);
 				callback();
 			}
 		}

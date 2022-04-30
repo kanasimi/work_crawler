@@ -162,7 +162,7 @@ function check_reget(XMLHttp, options) {
 		var key = html.between("setCookie('", "'"), value = html.between(
 				"'cookie' : \"", '"');
 		if (!key || !value) {
-			throw 'Can not parse cookie!';
+			throw 'Cannot parse cookie!';
 		}
 		if (!options.headers) {
 			options.headers = Object.create(null);
