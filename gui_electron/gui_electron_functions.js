@@ -468,7 +468,7 @@ function initializer() {
 
 function on_menu_changed() {
 	// gettext_config:{"id":"untranslated-message-count"}
-	if (+_('untranslated message count') > 0) {
+	if (_('untranslated message count') != 0) {
 		// CeL.gettext.get_alias(CeL.gettext.default_domain)
 		// gettext_config:{"id":"local-language-name"}
 		var language_name = _('local-language-name');

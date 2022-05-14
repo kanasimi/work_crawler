@@ -98,7 +98,7 @@ var crawler = new CeL.work_crawler({
 			if (time > Date.now()) {
 				CeL.info([ this.id + ':', {
 					// gettext_config:{"id":"§$1-«$2»-must-wait-until-$3-to-read.-skipping-the-remaining-chapters"}
-					T : [ '§%1《%2》之後必須等到 %3  才能閱讀。跳過餘下的章節。',
+					T : [ '§%1《%2》之後必須等到 %3 才能閱讀。跳過餘下的章節。',
 					//
 					chapter_NO + '/' + work_data.chapter_count,
 					//

@@ -41,11 +41,13 @@ if (!fso_name_list) {
 
 // -----------------------------------------------------------------
 
-CeL.info({
-	// gettext_config:{"id":"$3-$1-$2-files-directories-to-check"}
-	T : [ '%3: %1: %2 files / directories to check.', target_directory,
-			fso_name_list.length, CeL.env.script_name ]
-});
+CeL
+		.info({
+			T : [
+					// gettext_config:{"id":"$3-$1-$2-files-directories-to-check"}
+					'%3: %1: %2 {{PLURAL:%2|file|files}} / {{PLURAL:%2|directory|directories}} to check.',
+					target_directory, fso_name_list.length, CeL.env.script_name ]
+		});
 
 // console.log(fso_name_list.slice(0, 3));
 
@@ -698,8 +700,8 @@ Object.keys(catalog_directory).forEach(function(catalog) {
 
 CeL.info({
 	// gettext_config:{"id":"$2-$1-directories-to-compress"}
-	T : [ '%2: %1 directories to compress.', process_queue.length,
-			CeL.env.script_name ]
+	T : [ '%2: %1 {{PLURAL:%1|directory|directories}} to compress.',
+			process_queue.length, CeL.env.script_name ]
 });
 
 // cache the path of p7z executable file
