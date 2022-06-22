@@ -104,6 +104,7 @@ download_sites_set = {
 
 		manhuagui : '看漫画/漫画柜',
 		gufengmh : '古风漫画网',
+		'90mh' : '90漫画网',
 		duoduomh : '多多漫画',
 		'36mh' : '36漫画网',
 		manhuaniu : '漫画牛',
@@ -1450,7 +1451,7 @@ function get_favorite_list_file_path(crawler) {
 }
 
 function favorites_toString(favorites) {
-	return favorites.hasOwnProperty('toString')
+	return Object.hasOwn(favorites, 'toString')
 	//
 	? favorites.toString() : favorites.join('\n');
 }
