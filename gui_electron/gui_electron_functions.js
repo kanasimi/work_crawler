@@ -158,14 +158,14 @@ download_sites_set = {
 
 		toomics_en : 'Toomics',
 
-	// 不再維護
-	// mangamew : 'Manga Mew',
-	// manganew : 'Manga New',
+		// 不再維護
+		// mangamew : 'Manga Mew',
+		// manganew : 'Manga New',
 
-	// Rocaca : [ 'rocaca (', {
-	// gettext_config:{"id":"no-longer-maintained"}
-	// T : '不再維護'
-	// }, ')' ]
+		Rocaca : [ 'rocaca (', {
+			// gettext_config:{"id":"no-longer-maintained"}
+			T : '不再維護'
+		}, ')' ]
 
 	// mrblue : 'Mr.Blue'
 	},
@@ -2699,8 +2699,7 @@ function destruct_download_job(crawler) {
 	}
 	if (work_data.error_list
 			|| default_configuration.preserve_download_work_layer) {
-		// gettext_config:{"id":"stop"}
-		// remove "暫停"
+		// remove "暫停" (gettext_config:{"id":"stop"})
 		// job.layer.removeChild(job.layer.firstChild);
 		CeL.new_node([ {
 			T : '↻',

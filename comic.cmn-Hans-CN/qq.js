@@ -97,7 +97,7 @@ crawler = new CeL.work_crawler({
 				free = CeL.get_JSON(free_file) || Object.create(null);
 
 				for ( var title in _this.free_title) {
-					if (_this.free_title.hasOwnProperty(title)) {
+					if (Object.hasOwn(_this.free_title, title)) {
 						id_list.push(title);
 						// TODO: should use UTF+8
 						free[title] = (new Date).toISOString();
