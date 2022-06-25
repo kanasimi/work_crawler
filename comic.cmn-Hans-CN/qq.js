@@ -312,12 +312,8 @@ crawler = new CeL.work_crawler({
 		// https://manhua.qpic.cn/manhua_detail/0/14_11_10_a1827afc3b8d37cfd3f7242cc713f5751_109708576.png/0
 		'/14_11_10_a1827afc3b8d37cfd3f7242cc713f5751_109708576.png')) {
 			// assert: chapter_data.picture[0].pid === 16111
-			if (!work_data.start_chapter_NO_next_time) {
-				CeL.info(CeL.gettext('下次從《%1》起下載。', chapter_data.title));
-				work_data.start_chapter_NO_next_time = chapter_NO;
-			}
-			// work_data.chapter_list.truncate(chapter_NO);
 			chapter_data.limited = true;
+			this.set_start_chapter_NO_next_time(work_data, chapter_NO);
 		} else {
 			// 正常情況。
 			chapter_data.image_list = chapter_data.picture;

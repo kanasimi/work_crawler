@@ -111,9 +111,8 @@ var crawler = new CeL.work_crawler({
 		chapter_data.image_list = html.comicInfo.comicImages;
 		// delete html.comicInfo.comicImages;
 
-		if (chapter_data.limited && !work_data.start_chapter_NO_next_time) {
-			CeL.info(CeL.gettext('下次從《%1》起下載。', chapter_data.title));
-			work_data.start_chapter_NO_next_time = chapter_NO;
+		if (chapter_data.limited) {
+			this.set_start_chapter_NO_next_time(work_data, chapter_NO);
 		}
 
 		// `comicInfo` 的資訊較不精確!

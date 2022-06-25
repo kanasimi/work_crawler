@@ -56,7 +56,7 @@ var crawler = new CeL.work_crawler({
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
 		// console.log(html);
-		var work_data = JSON.parse(html).data, start_chapter_NO_next_time;
+		var work_data = JSON.parse(html).data;
 		// 正規化成 CeJS 網路作品爬蟲程式庫的格式。
 		Object.assign(work_data, {
 			author : work_data.author_name.join(' '),
@@ -71,7 +71,7 @@ var crawler = new CeL.work_crawler({
 			some_limited : work_data.is_limit || work_data.comic_type,
 
 			chapter_list : work_data.ep_list.map(function(chapter_data) {
-				return {
+				chapter_data = {
 					id : chapter_data.id,
 					title : chapter_data.short_title
 					// e.g., https://manga.bilibili.com/detail/mc26723
@@ -94,11 +94,10 @@ var crawler = new CeL.work_crawler({
 						}
 					} ]
 				};
+				return chapter_data;
 			}, this).reverse(),
 			chapter_count : work_data.total
 		});
-		if (start_chapter_NO_next_time)
-			work_data.start_chapter_NO_next_time = start_chapter_NO_next_time;
 		// console.log(work_data);
 		return work_data;
 	},
@@ -111,11 +110,14 @@ var crawler = new CeL.work_crawler({
 	// 執行在解析章節資料 process_chapter_data() 之前的作業 (async)。
 	// 必須自行保證執行 callback()，不丟出異常、中斷。
 	: function(XMLHttp, work_data, callback, chapter_NO) {
+		// console.log(XMLHttp);
+		// console.log(XMLHttp.responseText);
 		var data_URL, chapter_data = work_data.chapter_list[chapter_NO - 1];
 		try {
 			data_URL = JSON.parse(XMLHttp.responseText);
 		} catch (e) {
 		}
+		// console.log(data_URL.msg);
 		if (!data_URL || !data_URL.data || !data_URL.data.path) {
 			// e.g., node bilibili.js 26470
 			// console.trace(data_URL);
@@ -131,6 +133,9 @@ var crawler = new CeL.work_crawler({
 				}
 				work_data.jump_to_chapter = work_data.chapter_count + 1;
 			}
+			if (chapter_data.limited) {
+				this.set_start_chapter_NO_next_time(work_data, chapter_NO);
+			}
 			callback();
 			return;
 		}
@@ -140,6 +145,7 @@ var crawler = new CeL.work_crawler({
 		data_URL = this.BFS_URL + data_URL.data.path;
 		this.get_URL(data_URL, function(XMLHttp) {
 			// console.log(XMLHttp);
+			// console.log(XMLHttp.responseText);
 
 			if (XMLHttp.statusText === 'Forbidden'
 			// 2022/1/20 17:52:27 觀看此章節前需要先登錄
@@ -203,11 +209,13 @@ var crawler = new CeL.work_crawler({
 			function(XMLHttp) {
 				// console.log(XMLHttp);
 				var response = XMLHttp.responseText;
+				// console.log(response);
 				try {
 					response = JSON.parse(response);
 				} catch (e) {
 					// TODO: handle exception
 				}
+				// console.log(response);
 				if (!response || !response.data) {
 					CeL.error('下載出錯！假如反覆出現此錯誤，並且確認圖片沒問題，煩請回報。取得資料：'
 							+ XMLHttp.responseText);
