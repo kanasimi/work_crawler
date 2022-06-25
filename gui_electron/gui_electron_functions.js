@@ -1321,7 +1321,9 @@ function save_preference(crawler) {
 	}
 
 	// prepare work directory.
-	CeL.create_directory(crawler.main_directory);
+	CeL.create_directory(crawler.main_directory, {
+		no_throw : true
+	});
 
 	var preference = crawler.preference;
 	if (get_favorite_list_file_path(crawler)) {
