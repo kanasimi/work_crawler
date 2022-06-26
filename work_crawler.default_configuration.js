@@ -1,6 +1,8 @@
 ﻿/**
- * @name CeJS online novels / comics downloader configuration. CeJS 網路小說漫畫下載工具的主要設定。
- * @fileoverview ** This file is private. Please fill the data and rename this file to "work_crawler.configuration.js".
+ * @name CeJS online novels / comics downloader configuration. CeJS
+ *       網路小說漫畫下載工具的主要設定。
+ * @fileoverview ** This file is private. Please fill the data and rename this
+ *               file to "work_crawler.configuration.js".
  * 
  * 請注意：請別直接改變 `work_crawler.default_configuration.js` 的設定。
  * 這個檔案在每次更新時，都會被覆寫成新版本的預設設定。若欲更改設定，請編輯 `work_crawler.configuration.js`
@@ -62,7 +64,9 @@ site_configuration.comico = site_configuration.comico_jp = site_configuration.co
 
 // ニコニコ静画を利用する為にはniconicoのアカウントが必要です。
 site_configuration.nico_seiga = {
+	// account
 	mail_tel : '',
 	// 警告:帳號資訊是用明碼存放在檔案中。
-	password : ''
+	password : '',
+	cookie : ''
 };

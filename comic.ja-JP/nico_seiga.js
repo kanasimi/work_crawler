@@ -146,18 +146,33 @@ var crawler = new CeL.work_crawler({
 	},
 
 	parse_chapter_data : function(html, work_data, get_label, chapter_NO) {
-		html = html.between('var args =', ';\n');
 		// console.log(html);
-		html = JSON.parse(html);
+		var text = html.between('var args =', ';\n');
+		// text = html.between(' id="page_contents"', '</ul>');
 
+		// console.trace(text || html);
 		var chapter_data = work_data.chapter_list[chapter_NO - 1];
-		chapter_data.image_list = html.pages;
-		delete html.pages;
-		Object.assign(chapter_data, html);
+		try {
+			text = JSON.parse(text);
+		} catch (e) {
+			text = html.between('<div class="error__title">', '</div>');
+			if (text) {
+				CeL.error({
+					T : [ '《%1》：%2', chapter_data.title, text.trim() ]
+				});
+				chapter_data.limited = true;
+				return chapter_data;
+			}
+		}
+
+		chapter_data.image_list = text.pages;
+		delete text.pages;
+		Object.assign(chapter_data, text);
 
 		// console.log(chapter_data);
 		return chapter_data;
 	},
+
 	image_preprocessor : function(contents, image_data) {
 		if (!contents)
 			return;
@@ -192,12 +207,18 @@ var crawler = new CeL.work_crawler({
 
 setup_crawler(crawler, typeof module === 'object' && module);
 
-if (crawler.password && crawler.mail_tel) {
-	CeL.log([ crawler.id + ': ', {
-		// gettext_config:{"id":"login-as-$1"}
-		T : [ 'Login as [%1]', crawler.mail_tel ]
-	} ]);
+if (crawler.password && crawler.mail_tel || crawler.site_configuration.cookie) {
+	if (crawler.account) {
+		CeL.log([ crawler.id + ': ', {
+			// gettext_config:{"id":"login-as-$1"}
+			T : [ 'Login as [%1]', crawler.mail_tel ]
+		} ]);
+	}
 
+	if (crawler.site_configuration.cookie) {
+		start_crawler(crawler, typeof module === 'object' && module);
+		return;
+	}
 	crawler.get_URL('https://account.nicovideo.jp/login/redirector'
 			+ '?show_button_twitter=1&site=seiga&show_button_facebook=1'
 			+ '&next_url=%2Fmanga%2F%3Ftrack%3Dhome', function(XMLHttp) {
@@ -209,6 +230,9 @@ if (crawler.password && crawler.mail_tel) {
 	});
 } else {
 	// https://qa.nicovideo.jp/faq/show/2756?site_domain=default
-	CeL.error('ニコニコ静画を利用する為にはniconicoのアカウントが必要です。');
-	CeL.info('work_crawler.configuration.js でアカウントを設置してください。');
+	// CeL.error('ニコニコ静画を利用する為にはniconicoのアカウントが必要です。');
+	// CeL.info('work_crawler.configuration.js でアカウントを設置してください。');
+
+	// 2022/6/26 12:3:47
+	CeL.error('nicovideo 採兩步驗證，必須改採 cookie 的方法。');
 }

@@ -342,7 +342,9 @@ function setup_crawler(crawler, crawler_module) {
 	// 下載檔案儲存目錄路徑。圖片檔與紀錄檔的下載位置。下載網路的作品檔案後，將儲存於此目錄下。
 	crawler.setup_value('main_directory', data_directory + crawler.id);
 
-	crawler.setup_value(site_configuration[crawler.id]);
+	crawler.setup_value(
+	//
+	crawler.site_configuration = site_configuration[crawler.id]);
 
 	if (proxy_server) {
 		crawler.setup_value('proxy', proxy_server);
