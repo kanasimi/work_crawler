@@ -52,15 +52,17 @@ require('../work_crawler_loader.js');
 require('tls').DEFAULT_MIN_VERSION = 'TLSv1';
 
 function extract_image_urls(XMLHttp, work_data) {
+	// console.log(work_data);
+
 	// console.log(XMLHttp);
 	var html = XMLHttp.responseText;
 	// console.log(html);
 
 	function add_image(site_chapter_NO, url) {
-		// console.log([ chapter_NO, image_NO, url ]);
 		var chapter_data = work_data.chapter_mapping[site_chapter_NO];
+		// console.log([ site_chapter_NO, /* image_NO, */url, chapter_data ]);
 		if (!chapter_data)
-			throw 'Do not has §' + site_chapter_NO;
+			throw new Error('Do not has §' + site_chapter_NO);
 		if (!Array.isArray(chapter_data.image_list))
 			chapter_data.image_list = [];
 		chapter_data.image_list.push(url);
@@ -69,7 +71,7 @@ function extract_image_urls(XMLHttp, work_data) {
 	html = 'var pi=ch;' + html.between('var pi=ch;', 'var pt=');
 
 	// if(hyghv== ch){ci=i;ge('TheImg').src=
-	html = html.replace(/if\(([a-z\d]+)== ch\)({ci=i;)/,
+	html = html.replace(/if\(([a-z\d_]+)== ch\)({ci=i;)/,
 	// assert: (ch=$1) >= 1
 	'if(ch=$1)$2')
 	// Do not jump out.
@@ -77,24 +79,35 @@ function extract_image_urls(XMLHttp, work_data) {
 	// if(hyghv== ch){ci=i;ge('TheImg').src='//img'+su(slusb, 0,
 	// 1)+'.8comic.com/'+su(slusb,1,1)+'/'+ti+'/'+hyghv+'/'+
 	// nn(p)+'_'+su(xbvgf,mm(p),3)+'.jpg';
-	.replace(/ge\([^()]+\)\.src=([^;]+)/, 'for(p=1;p<=ps;p++)add_image(ch,$1)');
+	.replace(/;ge\(.+?\)\.src=([^;]+)/, ';for(p=1;p<=ps;p++)add_image(ch,$1)');
 
 	// {y,lc,su,nn,mm}: 各章節頁面共通
 	// from https://www.comicbus.me/js/nview.js?20180806
-	html = 'var ch,p,{y,lc,su,nn,mm}=decoder;' + html;
+	html = 'var ch,p,{lc,nn,mm}=decoder;' + html;
 
-	// console.log(html);
+	// console.trace(html);
 	eval(html);
 
 	// free
 	delete work_data.chapter_mapping;
-	// console.log(JSON.stringify(chapter_data));
+	// console.log(JSON.stringify(work_data));
+	// console.log(work_data);
 }
 
-// <td nowrap="nowrap" width="80"><img src="../images/bl.gif" width="17"
-// height="16" hspace="6" align="absmiddle" />類別：</td>
-// <td nowrap="nowrap"><a href='/comic/4-1.html'>戰國系列</a></td>
-var PATTERN_work_data = /hspace="6" align="absmiddle" \/>([^<>：]+)：<\/td>([\s\S]*?)<\/td>/g;
+/**
+ * <code>
+
+ <div class="col-6 item_comic_eps_div">
+ 漫畫：<a class="item_comic_eps badge badge-primary font_small text-light" href="#Comic">1-1053</a> 連載中
+ </div>
+
+ <div class="col-6">
+ 更新：<span class="font_small">2022-06-22</span>
+ </div>
+
+ </code>
+ */
+var PATTERN_work_data = /<div class="col-6.*?>([^<>：]+)：([\s\S]*?)<\/div>/g;
 
 var crawler = new CeL.work_crawler({
 	// 當有多個分部的時候才重新檢查。
@@ -107,11 +120,12 @@ var crawler = new CeL.work_crawler({
 
 	// 2019/6/28-2020/4/30: https://www.comicbus.com/
 	// 2020/4/30 無限動漫 改變網址: https://comicbus.live/
-	base_URL : 'https://comicbus.live/',
-	charset : 'big5',
+	// 2022/4/3前改變網址: https://www.comicabc.com/
+	base_URL : 'https://www.comicabc.com/',
+	// charset : 'big5',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : 'member/search.aspx?k=',
+	search_URL : 'https://v.comicabc.com/member/search.aspx?key=',
 	parse_search_result : function(html, get_label) {
 		var
 		// {Array}id_list = [ id, id, ... ]
@@ -119,19 +133,29 @@ var crawler = new CeL.work_crawler({
 		// {Array}id_data = [ title, title, ... ]
 		id_data = [];
 
-		// gettext_config:{"id":"search-results"}
-		html = html.between('搜尋結果');
+		// <li><h5 class="m-0">檢索結果</h5></li>
+		html = html.between('檢索結果</');
 		// console.log(html);
 
-		html.each_between('<td width="100%" height="150" valign="top"',
-		//
-		'</tr>', function(token) {
+		/**
+		 * <code>
+
+		<div class="col-2 p-0">
+		<div class="cat2_list text-center mb-4">
+		<a href="https://www.comicabc.com/html/11231.html">
+		<img src="/pics/0/11231.jpg">
+		<li class="cat2_list_name text-center mx-2 my-1 nowraphide"><span><font color=red>朋友</font>游戲</span>
+		</li>
+
+		</code>
+		 */
+		html.each_between('<div class="col-2 p-0">', '</li>', function(token) {
 			// console.log(token);
-			var matched = token.match(
-			//
-			/<a href='\/html\/(\d+).html'[^<>]*>([\s\S]+?)<\/b>/);
+			var matched = token
+					.match(/<a href="[^<>"]*?\/html\/(\d+).html"[^<>]*>/);
 			id_list.push(+matched[1]);
-			id_data.push(get_label(matched[2]));
+			id_data.push(get_label(token.between('<span><font color=red>',
+					'</span>')));
 		});
 
 		// console.log([ id_list, id_data ]);
@@ -143,28 +167,44 @@ var crawler = new CeL.work_crawler({
 		return 'html/' + work_id + '.html';
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
-		//
-		html = html.between('<td height="35" bgcolor="#24a9e2">',
-		// <table id="rp_tb_comic_0" width="100%" bgcolor="#F9F9F9" border="0"
-		// align="center" cellpadding="0" cellspacing="0"
-		// style="margin-bottom:20px">
-		'<table id="rp_tb_comic_');
-
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
-			title : get_label(html.between(null, '</font>')),
+			/**
+			 * <code>
 
-		// 選擇性屬性：須配合網站平台更改。
+			<h3 class="item_name" title="海賊王">
+			海賊王
+			</h3>
+
+			<li class="item_detail_color_gray">
+			<a class="btn btn-sm btn-secondary text-white my-0 ml-0 mr-3 py-0 px-1" href='/comic/1-1.html'>格鬥系列</a>
+			尾田榮一郎
+			</li>
+
+			<li class="item_info_detail">
+			...
+			<span class="gradient"></span>
+			</li>
+
+			</code>
+			 */
+			title : get_label(html.between(' class="item_name" title="', '"')),
+			author : get_label(html.between(
+					'<li class="item_detail_color_gray">', '</li>').between(
+					'</a>')),
+
+			// 選擇性屬性：須配合網站平台更改。
+			tag : get_label(html.between('<li class="item_detail_color_gray">',
+					'</li>').between(null, '</a>')),
 		};
 
 		extract_work_data(work_data, html, PATTERN_work_data);
 
 		Object.assign(work_data, {
-			author : work_data.作者,
 			last_update : work_data.更新,
 
-			description : get_label(html.between(
-					'<td style="line-height:25px">', '</tr>'))
+			description : get_label(html.between(' class="item_info_detail">',
+					'</li>'))
 		});
 
 		var matched = work_data.漫畫 && work_data.漫畫.match(/(完|連載中)$/);
@@ -175,15 +215,43 @@ var crawler = new CeL.work_crawler({
 		return work_data;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
-		// <div class="tabs1" style="height:30px; margin-top:0.8%;
-		// margin-left:20px">
-		// <table id="div_li1" width="100%" border="0" cellspacing="0"
-		// cellpadding="0">
-		html = html.between('<table id="div_li1"',
-		// <table id="div_li2" class="hide" width="100%" border="0"
-		// cellspacing="0" cellpadding="0">
-		'<table id="div_li2"');
+		/**
+		 * <code>
 
+		https://www.comicabc.com/html/103.html
+
+		<li>
+		<a name="Comic" id="Comic">漫畫
+		連載中
+		<span class="badge badge-primary">1-1053</span></a>
+		</li>
+
+		<div id="div_li1">
+
+		<table id="rp_ctl00_0_dl_0" cellspacing="0" cellpadding="5" align="Center" style="width:95%;border-collapse:collapse;">
+		<tr>
+
+		<td style="width:10%;white-space:nowrap;"><a href='#' onclick="cview('103-1.html',6,1);return false;" id="c1" class="Vol">
+		01卷</a></td>
+
+		</table>
+
+
+		<table id="rp_ctl01_0_dl_0" cellspacing="0" cellpadding="5" align="Center" style="width:95%;border-collapse:collapse;">
+		<tr>
+
+		<td style="width:33%;white-space:nowrap;"><a href='#' onclick="cview('103-471.html',6,1);return false;" id="c471" class="Ch">
+		471話 My Friend</a></td>
+
+		</table>
+
+		<div id="div_li2" class="hide">
+
+		</code>
+		 */
+		html = html.between('<div id="div_li1"', '<div id="div_li2"');
+
+		// reset work_data.chapter_list
 		work_data.chapter_list = [];
 		work_data.chapter_mapping = [];
 
@@ -262,6 +330,7 @@ CeL.get_URL_cache(crawler.base_URL + 'js/' + url_converter_decode_filename,
 //
 function(contents, error) {
 	// console.log(contents);
+	contents = contents.between(null, 'window.onload = ') || contents;
 	contents = contents
 			.replace(/window\.open\(([^(),]+),[^()]+\)/, 'return $1');
 	// `getcookie=()=>3` 會擷取 "c-" 系列，但此系列網頁更新似乎較慢，有時會在獲取最新章節時會得不到圖片網址資料。

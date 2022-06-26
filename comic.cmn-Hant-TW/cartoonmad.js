@@ -90,7 +90,7 @@ var crawler = new CeL.work_crawler({
 					'<input type="hidden" name="name" value="', '">')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			last_update : matched[1].trim()
+			last_update : matched && matched[1].trim()
 		};
 
 		extract_work_data(work_data, html.between('瀏覽記錄', '我要推薦').replace(
@@ -115,8 +115,9 @@ var crawler = new CeL.work_crawler({
 
 		Object.assign(work_data, {
 			author : work_data.原創作者,
-			收錄漫畫 : work_data.收錄漫畫.replace(/(\d+)[\s\n]+(~)[\s\n]+(\d+)/,
-					'$1$2$3'),
+			收錄漫畫 : work_data.收錄漫畫
+			//
+			&& work_data.收錄漫畫.replace(/(\d+)[\s\n]+(~)[\s\n]+(\d+)/, '$1$2$3'),
 
 			description : get_label(html
 			// <legend>&nbsp;火影忍者簡介&nbsp;</legend>

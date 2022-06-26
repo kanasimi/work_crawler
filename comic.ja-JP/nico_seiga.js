@@ -230,9 +230,8 @@ if (crawler.password && crawler.mail_tel || crawler.site_configuration.cookie) {
 	});
 } else {
 	// https://qa.nicovideo.jp/faq/show/2756?site_domain=default
-	// CeL.error('ニコニコ静画を利用する為にはniconicoのアカウントが必要です。');
-	// CeL.info('work_crawler.configuration.js でアカウントを設置してください。');
-
+	CeL.error('ニコニコ静画を利用する為にはniconicoのアカウントが必要です。');
 	// 2022/6/26 12:3:47
-	CeL.error('nicovideo 採兩步驗證，必須改採 cookie 的方法。');
+	CeL.error('ニコニコ採兩步驗證，必須改採 cookie 的方法。');
+	CeL.info('work_crawler.configuration.js でアカウントを設置してください。');
 }
