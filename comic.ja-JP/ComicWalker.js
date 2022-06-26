@@ -76,6 +76,9 @@ var crawler = new CeL.work_crawler({
 	// 日本的網路漫畫網站習慣刪掉舊章節，因此每一次都必須從頭檢查。
 	recheck : true,
 
+	// 不檢查是否久未更新。 https://github.com/kanasimi/work_crawler/issues/524
+	no_checking_of_long_time_no_updated : true,
+
 	// one_by_one : true,
 	base_URL : 'https://comic-walker.com/',
 
