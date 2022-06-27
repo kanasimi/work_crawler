@@ -28,7 +28,7 @@ crawler = new CeL.work_crawler({
 	// 模仿實際人工請求。
 	// chapter_time_interval : '1s',
 
-	// one_by_one : true,
+	one_by_one : true,
 	base_URL : 'https://www.zymk.cn/',
 
 	// https://github.com/kanasimi/work_crawler/issues/247
@@ -49,12 +49,18 @@ crawler = new CeL.work_crawler({
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
-		return 'api/getsortlist/?callback=getsortlistCb&key='
-				+ encodeURIComponent(work_title.replace(/\s+\d+$/, ''))
+		work_title = encodeURIComponent(work_title.replace(/\s+\d+$/, ''));
+		return 'apinew/getsortlist/?key=' + work_title
+		// 2022/4/23前改版。
+		+ '&topnum=20&client=pc';
+		// 2018/8/26前–2021/5/17。
+		return 'api/getsortlist/?callback=getsortlistCb&key=' + work_title
 				+ '&topnum=20&client=pc';
 	},
 	parse_search_result : function(html, get_label) {
-		html = JSON.parse(html.between('getsortlistCb(', ')')).data;
+		// 2018/8/26前–2021/5/17。2022/4/23前改成 JSON。
+		// html = html.between('getsortlistCb(', ')');
+		html = JSON.parse(html).data;
 		return [ html, html ];
 	},
 	id_of_search_result : 'comic_id',
@@ -114,12 +120,26 @@ crawler = new CeL.work_crawler({
 			// 但是過幾秒鐘又可以接續下載
 			return this.REGET_PAGE;
 		}
+		// console.trace(html);
 
 		var chapter_data;
-		html = html.between('__cr.init(', '</script>').between(null, {
-			tail : ')'
-		});
-		eval('chapter_data=' + html);
+		if (true) {
+			// 2022/4/23前改版。
+			html = ('window.$definitions=' + html.between(
+					'window.$definitions=', '</script>')).replace(/window\./g,
+					'chapter_data.')
+			// console.trace(html);
+			chapter_data = Object.create(null);
+			eval(html);
+		} else {
+			// 2018/8/26前–2021/5/17。
+			html = html.between('__cr.init(', '</script>').between(null, {
+				tail : ')'
+			});
+			eval('chapter_data=' + html);
+		}
+
+		// console.trace(chapter_data);
 		if (!chapter_data) {
 			CeL.warn({
 				// gettext_config:{"id":"unable-to-parse-chapter-data-for-«$1»-§$2"}
@@ -127,35 +147,55 @@ crawler = new CeL.work_crawler({
 			});
 			return;
 		}
-		chapter_data.imgpath = chapter_data.chapter_addr
-		// https://www.zymk.cn/static/js/default/entry.read.a8c614.js
-		// @see e.prototype.charcode
-		.replace(/./g, function(a) {
-			return String.fromCharCode(a.charCodeAt(0)
-					- chapter_data.chapter_id % 10);
-		});
-		delete chapter_data.chapter_addr;
-		if (!(chapter_data.end_var > chapter_data.start_var)) {
-			// @see e.prototype.setInitData
-			chapter_data.end_var = chapter_data.start_var;
-		}
-		// console.log(JSON.stringify(chapter_data));
 
-		var postfix = (chapter_data.image_type || ".jpg")
-				+ (chapter_data.comic_definition.high
-						|| chapter_data.comic_definition.middle || "");
-		chapter_data.image_list = [];
-		for (var index = chapter_data.start_var;
-		// @see e.prototype.getPicUrl
-		index <= chapter_data.end_var; index++) {
-			chapter_data.image_list.push({
-				url : chapter_data.imgpath + index + postfix,
-				// 有些圖檔其實是png格式。
-				acceptable_types : [ 'png' ]
+		if (true) {
+			// 2022/4/23前改版。
+			var postfix = Object.values(chapter_data['$definitions']).at(-1);
+			postfix = chapter_data['$definitions'].middle;
+			chapter_data.image_list = chapter_data
+			//
+			.comicInfo.current_chapter.chapter_img_list.map(function(url) {
+				return {
+					url : url.replace(/(\.[a-z]+)(\?)/g,
+					//
+					'$1' + postfix + '.webp' + '$2'),
+					// 有些圖檔其實是png格式。
+					acceptable_types : [ 'png' ]
+				};
 			});
-		}
-		// console.log(JSON.stringify(chapter_data));
+		} else {
+			// 2018/8/26前–2021/5/17。
+			chapter_data.imgpath = chapter_data.chapter_addr
+			// https://www.zymk.cn/static/js/default/entry.read.a8c614.js
+			// @see e.prototype.charcode
+			.replace(/./g, function(a) {
+				return String.fromCharCode(a.charCodeAt(0)
+						- chapter_data.chapter_id % 10);
+			});
+			delete chapter_data.chapter_addr;
+			if (!(chapter_data.end_var > chapter_data.start_var)) {
+				// @see e.prototype.setInitData
+				chapter_data.end_var = chapter_data.start_var;
+			}
+			// console.log(JSON.stringify(chapter_data));
 
+			var postfix = (chapter_data.image_type || ".jpg")
+					+ (chapter_data.comic_definition.high
+							|| chapter_data.comic_definition.middle || "");
+			chapter_data.image_list = [];
+			for (var index = chapter_data.start_var;
+			// @see e.prototype.getPicUrl
+			index <= chapter_data.end_var; index++) {
+				chapter_data.image_list.push({
+					url : chapter_data.imgpath + index + postfix,
+					// 有些圖檔其實是png格式。
+					acceptable_types : [ 'png' ]
+				});
+			}
+		}
+
+		// console.trace(chapter_data);
+		// console.log(JSON.stringify(chapter_data));
 		return chapter_data;
 	}
 });
