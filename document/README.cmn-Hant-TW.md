@@ -87,7 +87,7 @@
 | [稻草人书屋](http://www.daocaorenshuwu.com/) | daocaoren.js | 有些非流行網路小說的書 |
 | [无忧书城](https://www.51shucheng.net/) | 51shucheng.js | 有些書未受關鍵字審查 |
 | [丫丫电子书](http://www.xshuyaya.net/) | xshuyaya.js | 有一些舊書。 |
-| ~~[卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180)~~ | ~~ck101.js~~ | Discuz! X3 可能因[版權問題](https://ck101.com/thread-5106627-1-1.html)，自2019-10-01關小說版。 |
+| ~~[卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180)~~ | ~~archive/ck101.js~~ | Discuz! X3 可能因[版權問題](https://ck101.com/thread-5106627-1-1.html)，自2019-10-01關小說版。 |
 
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。
 
@@ -96,16 +96,16 @@
 
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
-| [99漫畫網](https://www.999comics.com/) | 999comics.js | 可能是2013年版本的 圣樱漫画管理系统？ MHD模板（漫画岛）？2019/6/18 19:46 測試中陸續發現PC端有頁面404。 |
 | [繁體版漫畫櫃](https://tw.manhuagui.com/) | manhuagui_tw.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
 | [無限動漫](https://www.comicbus.com/comic/) | comicbus.js | 以臺灣翻譯日本的漫畫為主，還有些港漫。僅免費漫畫，無法下載VIP動畫。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
 | [漫畫狗](https://dogemanga.com/) | dogemanga.js | 以臺灣、大陸翻譯日本的漫畫為主。有些缺圖。 |
 | [動漫狂](https://www.cartoonmad.com/) | cartoonmad.js | 以臺灣翻譯日本的漫畫為主。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
 | [動漫伊甸園](http://dmeden.net/) | dmeden.js | 日本漫畫較多。 採用與汗汗酷漫相同系統。 |
 | [禁漫天堂](https://18comic.vip/) | 18comic.js | 從 2021/3/12 開始將圖片分割、亂序排列。必須解開章節壓縮檔後，利用作品資料夾中的 index.html 來瀏覽。 |
-| [comico](http://www.comico.com.tw/) | comico.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 | [Toomics 玩漫](https://toomics.com/tc/) | toomics_tc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |
+| ~~[99漫畫網](https://www.999comics.com/)~~ | ~~archive/999comics.js~~ | 可能是2013年版本的 圣樱漫画管理系统？ MHD模板（漫画岛）？2019/6/18 19:46 測試中陸續發現PC端有頁面404。2021/12/2 5:18:17 最後一次成功連結。 |
+| ~~[comico](http://www.comico.com.tw/)~~ | ~~archive/comico.js~~ | 2022/1 改板幅度過大，不再支援此網站。本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 
 ### Simplified Chinese webcomics 中国内地漫画 中国簡体字のウェブコミック
 [../comic.cmn-Hans-CN/](comic.cmn-Hans-CN/)*.js, images → zip
@@ -115,7 +115,6 @@
 | --- | --- | --- |
 | [腾讯漫画](http://ac.qq.com/) | qq.js | **本工具無法下載VIP付費內容** 2017/8/15 起取消了今日限免 |
 | [有妖气](http://www.u17.com/) | u17.js | **本工具無法下載VIP付費內容** |
-| [知音漫客](https://www.zymk.cn/) | zymk.js | |
 | [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
 | [哔哩哔哩漫画](https://manga.bilibili.com/m) | bilibili.js | 收費作品太多，PC端只給看10話，感覺很難用。並且系統太複雜，每次改版得花許多時間來修正，恐不再維護。 **本工具無法下載 APP only & 付費內容** |
 | [布卡漫画](http://www.buka.cn/) | buka.js | 有少數遺失圖片。請注意：搜索某些名稱，如包含"纪元"一詞之作品時，會造成連線重設。對於這類作品必須輸入id而非標題。 **本工具無法下載VIP付費內容** |
@@ -173,6 +172,7 @@
 | ~~[76漫画](http://www.srweh.com/)~~ | ~~archive/76.js~~ | 2019/11/16 5:20 最後一次成功連接。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | ~~[土豪漫画](https://www.tohomh123.com/)~~ | ~~archive/tohomh.js~~ | 2020/6/21 無法連接。系統似 dm5.js。 |
 | ~~[乙女漫画](http://www.nokiacn.net/)~~ | ~~archive/nokiacn.js~~ | 2020/9/15 6:4 最後一次成功連接。日本漫畫較多。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
+| ~~[知音漫客](https://www.zymk.cn/)~~ | ~~archive/zymk.js~~ | 知音漫客网的資料似乎全轉到了看漫画。 |
 
 ### Japanese webcomics 日語網路漫畫 日本語のウェブコミック
 [../comic.ja-JP/](comic.ja-JP/)*.js, images → zip
@@ -188,10 +188,10 @@
 | [モアイ](http://www.moae.jp/) | moae.js | 講談社 モーニング・アフタヌーン・イブニング合同Webコミックサイト |
 | [pixivコミック](https://comic.pixiv.net/) | pixivcomic.js | pixivコミック(ぴくしぶこみっく) |
 | [サイコミ](https://cycomi.com/fw/cycomibrowser/title/serialization/0) | cycomi.js | |
-| [コミコ](https://www.comico.jp/)<br />[オトナ限定 コミコ](http://plus.comico.jp/) | comico_jp.js<br />comico_jp_plus.js | 本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 | ~~[MAGCOMI](https://comic.mag-garden.co.jp/)~~ | ~~archive/MAGCOMI.js~~ | マグコミ: [ActiBook](https://ebook.digitalink.ne.jp/)系統。2020/3 圖片經過特殊處理 |
 | ~~[XOY](https://xoy.webtoons.com/)~~ | ~~archive/XOY.js~~ | NAVER WEBTOON ja<br />2018.09.13: [XOYの作品が「LINEマンガ」に移行されます。](https://xoy.webtoons.com/ja/notice/detail?noticeNo=849) |
 | ~~[OVERLAP](https://over-lap.co.jp/gardo/)~~ | ~~archive/OVERLAP.js~~ | オーバーラップ コミックガルド: [ActiBook](https://ebook.digitalink.ne.jp/)系統。2019/7/5 改版，域名移至[コミックガルド](https://comic-gardo.com/)，之後轉成與[となりのヤングジャンプ](https://tonarinoyj.jp/)相同系統，圖片經過 canvas 處理以展示。不再支援。 |
+| ~~[コミコ](https://www.comico.jp/)~~<br />~~[オトナ限定 コミコ](http://plus.comico.jp/)~~ | ~~archive/comico_jp.js~~<br />~~archive/comico_jp_plus.js~~ | 2021/12 改板幅度過大，不再支援此網站。本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 
 ### English webcomics 英語網路漫畫 英語のウェブコミック
 [../comic.en-US/](comic.en-US/)*.js, images → zip

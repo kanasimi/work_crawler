@@ -36,7 +36,7 @@ site_type_description = {
 // const 縱使語言不同，也應該採用不同的 site id。否則檔案會存放到同一個目錄底下，可能造成檔案錯亂。
 download_sites_set = {
 	'comic.cmn-Hant-TW' : {
-		'999comics' : '99漫畫網',
+		// '999comics' : '99漫畫網',
 
 		manhuagui_tw : '繁體版漫畫櫃',
 
@@ -50,7 +50,7 @@ download_sites_set = {
 
 		'18comic' : '禁漫天堂',
 
-		comico : 'comico',
+		// comico : 'comico',
 
 		webtoon : 'WEBTOON',
 
@@ -60,7 +60,7 @@ download_sites_set = {
 		qq : '腾讯漫画',
 		// '163' : '网易漫画',
 		u17 : '有妖气',
-		zymk : '知音漫客',
+		// zymk : '知音漫客',
 		dajiaochong : '大角虫漫画',
 		kuaikan : '快看漫画',
 		weibo : '微博动漫',
@@ -148,10 +148,10 @@ download_sites_set = {
 		// MAGCOMI : 'MAGCOMI',
 		cycomi : 'サイコミ',
 
-		// XOY : 'WEBTOON ja',
+	// XOY : 'WEBTOON ja',
 
-		comico_jp : 'コミコ',
-		comico_jp_plus : 'オトナ限定 コミコ'
+	// comico_jp : 'コミコ',
+	// comico_jp_plus : 'オトナ限定 コミコ'
 	},
 	'comic.en-US' : {
 		webtoon_en : 'WEBTOON en',
