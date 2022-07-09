@@ -124,6 +124,8 @@ download_sites_set = {
 		// 2021/8/2 採用 Cloudflare 的阻斷服務攻擊保護
 		// ohmanhua : 'Oh漫画',
 
+		// kanman : '看漫画',
+
 		migudm : '咪咕圈圈',
 
 		dongman : '咚漫',
@@ -143,7 +145,7 @@ download_sites_set = {
 
 		moae : 'モアイ',
 
-		pixivcomic : 'pixivコミック',
+		// pixivcomic : 'pixivコミック',
 		// OVERLAP : 'OVERLAP',
 		// MAGCOMI : 'MAGCOMI',
 		cycomi : 'サイコミ',
@@ -2383,7 +2385,7 @@ function search_work_title() {
 			CeL.remove_all_child('search_results');
 			delete CeL.get_element('search_results').running;
 		},
-		C : 'button'
+		C : 'button cancel'
 	}, {
 		b : {
 			// gettext_config:{"id":"abandon-the-website-that-has-not-yet-completed-the-search"}

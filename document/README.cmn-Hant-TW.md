@@ -153,6 +153,7 @@
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
 | [漫画猫](https://www.manhuacat.com/) | manhuacat.js | 以臺灣翻譯日本的漫畫單行本為主 |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
+| [看漫画](https://www.kanman.com/) | kanman.js | 女性向的作品很熱門。 |
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | [Toomics 玩漫](https://toomics.com/sc/) | toomics_sc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |
@@ -172,7 +173,7 @@
 | ~~[76漫画](http://www.srweh.com/)~~ | ~~archive/76.js~~ | 2019/11/16 5:20 最後一次成功連接。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
 | ~~[土豪漫画](https://www.tohomh123.com/)~~ | ~~archive/tohomh.js~~ | 2020/6/21 無法連接。系統似 dm5.js。 |
 | ~~[乙女漫画](http://www.nokiacn.net/)~~ | ~~archive/nokiacn.js~~ | 2020/9/15 6:4 最後一次成功連接。日本漫畫較多。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) |
-| ~~[知音漫客](https://www.zymk.cn/)~~ | ~~archive/zymk.js~~ | 知音漫客网的資料似乎全轉到了看漫画。 |
+| ~~[知音漫客](https://www.zymk.cn/)~~ | ~~archive/zymk.js~~ | 知音漫客网的資料似乎全轉到了看漫画(kanman.js)。 |
 
 ### Japanese webcomics 日語網路漫畫 日本語のウェブコミック
 [../comic.ja-JP/](comic.ja-JP/)*.js, images → zip
@@ -186,12 +187,12 @@
 | [アルファポリスの公式Web漫画](https://www.alphapolis.co.jp/manga/official) | AlphaPolis_official_manga.js | レンタルする話は取得できません |
 | [アルファポリスの無料の漫画投稿](https://www.alphapolis.co.jp/manga/user) | AlphaPolis_user_manga.js | |
 | [モアイ](http://www.moae.jp/) | moae.js | 講談社 モーニング・アフタヌーン・イブニング合同Webコミックサイト |
-| [pixivコミック](https://comic.pixiv.net/) | pixivcomic.js | pixivコミック(ぴくしぶこみっく) |
 | [サイコミ](https://cycomi.com/fw/cycomibrowser/title/serialization/0) | cycomi.js | |
 | ~~[MAGCOMI](https://comic.mag-garden.co.jp/)~~ | ~~archive/MAGCOMI.js~~ | マグコミ: [ActiBook](https://ebook.digitalink.ne.jp/)系統。2020/3 圖片經過特殊處理 |
 | ~~[XOY](https://xoy.webtoons.com/)~~ | ~~archive/XOY.js~~ | NAVER WEBTOON ja<br />2018.09.13: [XOYの作品が「LINEマンガ」に移行されます。](https://xoy.webtoons.com/ja/notice/detail?noticeNo=849) |
 | ~~[OVERLAP](https://over-lap.co.jp/gardo/)~~ | ~~archive/OVERLAP.js~~ | オーバーラップ コミックガルド: [ActiBook](https://ebook.digitalink.ne.jp/)系統。2019/7/5 改版，域名移至[コミックガルド](https://comic-gardo.com/)，之後轉成與[となりのヤングジャンプ](https://tonarinoyj.jp/)相同系統，圖片經過 canvas 處理以展示。不再支援。 |
 | ~~[コミコ](https://www.comico.jp/)~~<br />~~[オトナ限定 コミコ](http://plus.comico.jp/)~~ | ~~archive/comico_jp.js~~<br />~~archive/comico_jp_plus.js~~ | 2021/12 改板幅度過大，不再支援此網站。本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
+| ~~[pixivコミック](https://comic.pixiv.net/)~~ | ~~pixivcomic.js~~ | pixivコミック(ぴくしぶこみっく) 2019/3 改版過一次，2022/6/26至2022/7/4 之間再度改版，因改版幅度過大而不再支援。 |
 
 ### English webcomics 英語網路漫畫 英語のウェブコミック
 [../comic.en-US/](comic.en-US/)*.js, images → zip
