@@ -21,6 +21,7 @@ var crawler = CeL.AlphaPolis({
 
 	// 取得作品的章節資料。 get_work_data()
 	parse_work_data : function(html, get_label, extract_work_data) {
+		// console.log(html);
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between(
@@ -34,7 +35,8 @@ var crawler = CeL.AlphaPolis({
 			// e.g., 连载中, 連載中
 			// <div class="wrap-content-status">
 			status : html.between('<div class="status">', '</div>').split(
-					'</span>').map(get_label),
+			// 2022/7: </a>
+			'</span>' && '</a>').map(get_label),
 			author : get_label(html.between('<div class="author-label">',
 					'</a>')),
 			last_update : get_label(html.between('<div class="up-time">',
@@ -65,22 +67,26 @@ var crawler = CeL.AlphaPolis({
 	},
 	get_chapter_list : function(work_data, html) {
 		work_data.chapter_list = [];
-		// <a data-order="34" class="episode RentalContent"
+		// 2020/7/17: <a data-order="34" class="episode RentalContent"
 		// <a data-order="35" class="episode "
-		html = html.between('<div class="episode', '<div class="scroll')
+		// 2022/7/2: <div class="episode-list"
+		html = html.between('class="episode-list', '<div class="scroll')
 		// <div class="scroll scroll-up" id="ScrollUp"><img
 		// src="/img/official_manga/under_arrow.svg?1543454323"
 		// alt="最上部へ"/></div>
 		.between('>');
 
-		// <div data-order="0000" class="episode-unit">...</div>
-		html.each_between(' class="episode-unit">', null, function(text) {
+		// 2020/7/17: <div data-order="0000" class="episode-unit">...</div>
+		// 2022/7/2: <div class="episode-unit" data-order="6067">
+		html.each_between(' class="episode-unit"', null, function(text) {
 			// console.log(JSON.stringify(text));
 			var chapter_data = {
 				// <div class="title">第1回</div>
-				title : text.between(' class="title">', '</'),
+				title : text.between(' class="title">', '</').trim(),
 				url : '/manga/official/'
-						+ text.between(' href="/manga/official/', '"'),
+				// <a
+				// href="https://www.alphapolis.co.jp/manga/official/995000294/5863"
+				+ text.between('/manga/official/', '"'),
 				date : text.between('<div class="up-time">', '</div>')
 				//
 				.replace('更新', ''),
@@ -92,7 +98,7 @@ var crawler = CeL.AlphaPolis({
 				limited : text.between(' class="rental-coin">', '</'),
 				// <div class="volume"> 1巻収録 </div>
 				// <div class="volume">13巻収録</div>
-				収録 : text.between(' class="volume">', '</')
+				収録 : text.between(' class="volume">', '</').trim()
 			};
 			// console.log(chapter_data);
 			work_data.chapter_list.push(chapter_data);
