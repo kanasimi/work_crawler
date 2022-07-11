@@ -32,7 +32,7 @@ if (target_file_path && from_fso_list.length === 0) {
 	let PATTERN_file_name = target_file_path.match(/^(.+[\\\/])?([^\\\/]+)$/, '');
 	const base_directory = PATTERN_file_name[1] || './';
 	//console.trace(base_directory);
-	PATTERN_file_name = PATTERN_file_name[2].match(/^(.+)(\.[^.]+)/) || [, PATTERN_file_name[2], ''];
+	PATTERN_file_name = PATTERN_file_name[2].match(/^(.+)(\.[^.]+)$/) || [, PATTERN_file_name[2], ''];
 	PATTERN_file_name = new RegExp('^' + CeL.to_RegExp_pattern(PATTERN_file_name[1]) + ' \\((\\d+)\\)' + CeL.to_RegExp_pattern(PATTERN_file_name[2]) + '$');
 	//console.trace(PATTERN_file_name);
 	const serials = [];
