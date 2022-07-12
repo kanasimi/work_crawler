@@ -124,7 +124,7 @@ download_sites_set = {
 		// 2021/8/2 採用 Cloudflare 的阻斷服務攻擊保護
 		// ohmanhua : 'Oh漫画',
 
-		// kanman : '看漫画',
+		kanman : '看漫画',
 
 		migudm : '咪咕圈圈',
 

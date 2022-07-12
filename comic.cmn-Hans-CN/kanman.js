@@ -11,7 +11,7 @@ require('../work_crawler_loader.js');
 /**
  * <code>
 
-<li class="item" data-id="0" data-chapter="1650644"><a title="第1话 一梦八万年" href="/107447/1.html" target="_self"><div class="img"><img src="//resource.mhxk.com/kanman_pc/static/images/comm/space.gif" data-src="//image.yqmh.com/chapter_cover/107447/1650644.jpg-300x150.jpg" data-error="//image.yqmh.com/mh/107447_2_1.jpg-300x150.jpg" alt="第1话 一梦八万年"> <i class="j_chapter_badge"></i></div><p class="name"><i class="j_chapter_badge"></i>第1话 一梦八万年</p></a></li>
+ <li class="item" data-id="0" data-chapter="1650644"><a title="第1话 一梦八万年" href="/107447/1.html" target="_self"><div class="img"><img src="//resource.mhxk.com/kanman_pc/static/images/comm/space.gif" data-src="//image.yqmh.com/chapter_cover/107447/1650644.jpg-300x150.jpg" data-error="//image.yqmh.com/mh/107447_2_1.jpg-300x150.jpg" alt="第1话 一梦八万年"> <i class="j_chapter_badge"></i></div><p class="name"><i class="j_chapter_badge"></i>第1话 一梦八万年</p></a></li>
 
  </code>
  */
@@ -68,37 +68,40 @@ crawler = new CeL.work_crawler({
 	get_chapter_list : function(work_data, html, get_label) {
 		html = html.between(' id="j_chapter_list"', '</ol>');
 
-		var matched;
-
 		work_data.chapter_list = [];
+		var matched;
 		while (matched = PATTERN_chapter.exec(html)) {
 			var chapter_data = {
 				url : matched[3],
 				title : get_label(matched[2])
 			};
-			if (matched[3].includes('lock')) {
+			if (matched[1].includes('lock')) {
 				chapter_data.limited = true;
 				work_data.some_limited = true;
 			}
+			matched = matched[3].match(/\/\d+\/(.+?)\.html$/);
+			chapter_data.id = matched[1];
 			work_data.chapter_list.push(chapter_data);
 		}
 	},
 
 	// 取得每一個章節的內容與各個影像資料。
 	chapter_URL : function(work_data, chapter_NO) {
+		var chapter_data = work_data.chapter_list[chapter_NO - 1];
+		// console.trace(chapter_data);
 		var url = new CeL.URI('https://www.kanman.com/api/getchapterinfov2');
 		url.search_params.set_parameters({
 			product_id : 1,
 			productname : "kmh",
 			platformname : "pc",
 			comic_id : work_data.id,
-			chapter_newid : chapter_NO,
+			chapter_newid : chapter_data.id,
 			isWebp : 0,
 			quality : "high"
 		});
 		// e.g.,
 		// https://www.kanman.com/api/getchapterinfov2?product_id=1&productname=kmh&platformname=pc&comic_id=105967&chapter_newid=2&isWebp=0&quality=high
-		//console.trace(url.toString());
+		// console.trace(url.toString());
 		return url.toString();
 	},
 	pre_parse_chapter_data
@@ -108,6 +111,7 @@ crawler = new CeL.work_crawler({
 		var chapter_data = work_data.chapter_list[chapter_NO - 1],
 		//
 		html = XMLHttp.responseText, _this = this;
+		// console.trace(html);
 		try {
 			html = JSON.parse(html).data;
 		} catch (e) {
@@ -118,13 +122,21 @@ crawler = new CeL.work_crawler({
 			callback();
 			return;
 		}
-		// console.log(html);
+		// console.trace(html);
 		Object.assign(chapter_data, html);
-		chapter_data.image_list = chapter_data.current_chapter.chapter_img_list;
+		chapter_data.image_list
+		//
+		= chapter_data.current_chapter.chapter_img_list;
 		// 減少寫入的資料大小。
 		delete chapter_data.current_chapter.chapter_img_list;
 		delete chapter_data.prev_chapter;
-		delete chapter_data.next_chapter;
+		if (chapter_data.next_chapter) {
+			var next_chapter_data = work_data.chapter_list[chapter_NO - 1];
+			next_chapter_data.chapter_img_list
+			//
+			= chapter_data.next_chapter.chapter_img_list;
+			delete chapter_data.next_chapter;
+		}
 		callback();
 	}
 });
