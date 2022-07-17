@@ -23,9 +23,12 @@ var crawler = CeL.SinMH({
 
 	// one_by_one : true,
 
+	// chapter_time_interval : '5s',
+
 	// 2018/3/7 改變網址: http://www.gufengmh.com/ → https://www.gufengmh8.com/
-	// 2021/12/27之後改變網址: https://www.gufengmh8.com/ → https://www.gufengmh9.com/
-	base_URL : 'https://www.gufengmh9.com/',
+	// 2021/12/27–2022/7/12 網址: https://www.gufengmh9.com/
+	// 2022/7/16– : → https://www.123gf.com/
+	base_URL : 'https://www.123gf.com/',
 
 	search_URL : 'API',
 	id_of_search_result : 'slug'
