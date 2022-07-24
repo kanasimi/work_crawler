@@ -76,13 +76,12 @@
 		"linux" : {
 			"target" : [ {
 				"target" : "AppImage",
-				"arch" : [ "x64", "ia32" ]
+				"arch" : [ "x64" ]
 			}, {
 				"target" : "deb",
-				"arch" : [ "x64", "ia32" ]
-			}, {
-				"target" : "apk",
 				"arch" : [ "x64" ]
+			}, {
+				"target" : "apk"
 			} ],
 			"category" : "Network",
 			"icon" : "gui_electron/icon/rasen2.png"
