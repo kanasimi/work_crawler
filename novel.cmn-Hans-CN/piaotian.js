@@ -184,13 +184,22 @@ crawler = new CeL.work_crawler({
 		|| text.between('<div class="ad_content">', '<div class="bottomlink">')
 		//
 		.between('</div>', '</div>');
-		text = text.replace(/<script[^<>]*>[^<>]*<\/script>/g, '')
+
+		text = text
+		// 去除掉 <script> 功能碼。
+		.replace(/<script[^<>]*>[^<>]*<\/script>/g, '')
+
+		// 琥珀之剑 第四卷 第二百八十九幕 时间的长度 https://www.ptwxz.com/html/2/2827/1322197.html
+		.replace(/&lt;a href=&quot;[\x20-\xff]+&lt;\/a&gt;(?:<\/a>)*/, '')
+
 		// 去除掉廣告。
 		.replace(PATTERN_AD, '')
-		// https://www.ptwxz.com/html/10/10231/7979150.html
+		// 咫尺之间人尽敌国 第一千零四章 神国 https://www.ptwxz.com/html/10/10231/7979150.html
 		.replace(/水印广告测试(?:&nbsp;)*/g, '')
 
+		// 一品修仙 正文 第二四三章 我不是幻觉，不信你捅我一剑试试
 		// https://www.ptwxz.com/html/9/9503/6476110.html
+		// 一品修仙 正文 第三六四章 黎族的大佬套路深，还没动手他就快完蛋了
 		// https://www.ptwxz.com/html/9/9503/6750266.html
 		// <br /><br />&nbsp;&nbsp;&nbsp;&nbsp;https:
 		// <br /><br />&nbsp;&nbsp;&nbsp;&nbsp;天才本站地址：。m.
