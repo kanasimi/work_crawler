@@ -24,6 +24,8 @@ var crawler = new CeL.work_crawler({
 
 	// site_name : '丫丫电子书',
 
+	language : 'cmn-Hans-CN',
+
 	// old: shuyaya.com
 	base_URL : 'http://www.xshuyaya.net/',
 
