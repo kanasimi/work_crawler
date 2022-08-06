@@ -197,6 +197,18 @@ crawler = new CeL.work_crawler({
 		// 咫尺之间人尽敌国 第一千零四章 神国 https://www.ptwxz.com/html/10/10231/7979150.html
 		.replace(/水印广告测试(?:&nbsp;)*/g, '')
 
+		// 开局奖励一亿条命 第30章对着空气输出 https://www.ptwxz.com/html/12/12788/8819018.html
+		// [新筆趣閣 www.xsbiquge.info]
+		// [紅旗小說 www.hongqibook.com]
+		// 开局奖励一亿条命 第39章还来 https://www.ptwxz.com/html/12/12788/8819027.html
+		// [筆趣閣5200 www.bqg5200.co]
+		// [新筆趣閣 www.xxbiquge.vip]
+		// [新筆趣閣 www.biqule.info]
+		// 开局奖励一亿条命 第192章人家点的是你的名
+		// https://www.ptwxz.com/html/12/12788/8819376.html
+		// [txt小说 www.txtyuan.com]
+		.replace(/\[\w*[\u4e00-\u9fff]+\d* www\.\w+\.\w+\]/g, '')
+
 		// 一品修仙 正文 第二四三章 我不是幻觉，不信你捅我一剑试试
 		// https://www.ptwxz.com/html/9/9503/6476110.html
 		// 一品修仙 正文 第三六四章 黎族的大佬套路深，还没动手他就快完蛋了
