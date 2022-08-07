@@ -27,7 +27,10 @@ var crawler = new CeL.work_crawler({
 	language : 'cmn-Hans-CN',
 
 	// old: shuyaya.com
-	base_URL : 'http://www.xshuyaya.net/',
+	// 2022/3/22: http://www.xshuyaya.net/
+	// 2022/6/1: http://www.shuyy.cc/
+	// 2022/6/21: http://www.shuyyw.com/
+	base_URL : 'http://www.shuyyw.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search?wd=',
@@ -133,6 +136,9 @@ var crawler = new CeL.work_crawler({
 		var text = html.between('<div id="content">', '</div>');
 		// <div class="bzend"><span>本章结束</span>
 		text = text.replace(/<div class="bzend"[\s\S]+/, '');
+
+		// e.g., http://www.shuyyw.com/read/24334/16566634.html
+		text = text.replace(/\.asxs\./g, '起点');
 
 		this.add_ebook_chapter(work_data, chapter_NO, text);
 	}
