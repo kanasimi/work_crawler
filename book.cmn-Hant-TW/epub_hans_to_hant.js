@@ -179,10 +179,10 @@ function handle_files() {
 			return;
 
 		++file_count;
-		process.title = file_count + '/' + options.all_file_count + ' → hant';
-		CeL.log_temporary('Convert to hant ' + file_count + '/'
+		process.title = file_count + '/' + options.all_file_count + ' → 繁體中文';
+		CeL.log_temporary('轉換為繁體中文 ' + file_count + '/'
 				+ options.all_file_count + '+ ' + path);
-		// CeL.info('for_text_file: Convert to hant: ' + path);
+		// CeL.info('for_text_file: Convert to 繁體中文: ' + path);
 		var contents = CeL.get_file(path);
 		return Promise.resolve().then(
 				CeL.CN_to_TW.bind(null, contents, convert_options))
@@ -194,7 +194,7 @@ function handle_files() {
 			// "zh-TW"
 			'"zh-cmn-Hant-TW"');
 			if (false) {
-				CeL.info('for_text_file: Converted to hant: ' + path + ', '
+				CeL.info('for_text_file: ' + '轉換為繁體中文: ' + path + ', '
 				//
 				+ contents.slice(0, 40) + '...');
 			}
