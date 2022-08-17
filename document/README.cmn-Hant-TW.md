@@ -69,7 +69,7 @@
 | Site 平臺名稱 | Tool file | Note 說明 |
 | --- | --- | --- |
 | [起点中文网](https://www.qidian.com/) | qidian.js | **本工具無法下載 VIP章节內容** |
-| ~~[笔趣阁](https://www.xs.la/)~~<br />[笔趣阁](http://www.biqugse.com/)<br />[笔趣阁](http://www.xbiquke.net/)<br />[笔趣阁.cc](http://www.xbiquge.cc/)<br />~~[新笔趣阁](https://www.xbiquge6.com/)~~ | ~~archive/biquge.js~~<br />biqugse.js<br />xbiquke.js<br />xbiquge.cc.js<br />~~archive/xbiquge.js~~ | PTCMS |
+| ~~[笔趣阁](https://www.xs.la/)~~<br />[笔趣阁](http://www.biqugse.com/)<br />[笔趣阁](http://www.xbiquke.net/)<br />[笔趣阁.cc](http://www.xbiquge.cc/)<br />[笔趣阁.so](http://www.xbiquge.so/)<br />~~[新笔趣阁](https://www.xbiquge6.com/)~~ | ~~archive/biquge.js~~<br />biqugse.js<br />xbiquke.js<br />xbiquge.cc.js<br />xbiquge.so.js<br />~~archive/xbiquge.js~~ | 筆趣閣系列 PTCMS |
 | ~~[八一中文网](http://www.81xsw.com/)~~ | ~~archive/81xsw.js~~ | 最後一次成功下載此網站作品日期: 2019/1/12。[PTCMS](https://www.ptcms.com/)系统 |
 | [新八一中文网](https://www.x81zw.com/) | x81zw.js | [PTCMS](https://www.ptcms.com/)系统 |
 | [八一中文网](https://www.zwdu.com/) | zwdu.js | [PTCMS](https://www.ptcms.com/)系统 |
@@ -119,8 +119,8 @@
 | [哔哩哔哩漫画](https://manga.bilibili.com/m) | bilibili.js | 收費作品太多，PC端只給看10話，感覺很難用。並且系統太複雜，每次改版得花許多時間來修正，恐不再維護。 **本工具無法下載 APP only & 付費內容** |
 | [布卡漫画](http://www.buka.cn/) | buka.js | 有少數遺失圖片。請注意：搜索某些名稱，如包含"纪元"一詞之作品時，會造成連線重設。對於這類作品必須輸入id而非標題。 **本工具無法下載VIP付費內容** |
 | [SF漫画](https://manhua.sfacg.com/) | sfacg.js | **本工具無法下載VIP付費內容** |
-| [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。拿來下載日本漫畫的人好像比較多。  **本工具無法下載付费章节** |
-| [漫画人](http://www.1kkk.com/) | 1kkk.js | 系統與 dm5.js 幾乎相同。和 dm5 一樣，很多作品要收費。  **本工具無法下載付费章节** |
+| [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。拿來下載日本漫畫的人好像比較多。不支援 achive_images 功能。  **本工具無法下載付费章节** |
+| [漫画人](http://www.1kkk.com/) | 1kkk.js | 系統與 dm5.js 幾乎相同。和 dm5 一樣，很多作品要收費。不支援 achive_images 功能。  **本工具無法下載付费章节** |
 | [韩漫窝](http://www.hanmanwo.com/) | hanmanwo.js | 有些韓國漫畫。系統似 dm5.js。 |
 | [有码漫画](https://www.youma.org/) | youma.js | 大多為韓國漫畫。系統似 hanmanwo.js。 |
 | [梦游漫画](https://mymhh.com/) | mymhh.js | 有許多韓國漫畫。系統似 hanmanwo.js。僅能以手機觀看。 |
@@ -150,7 +150,7 @@
 | [卡推漫画](http://www.katui.net/) | katui.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [扑飞漫画](http://www.pufei.net/) | pufei.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [塔多漫画](http://www.taduo.net/) | taduo.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
-| [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主 |
+| [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主。不支援 achive_images 功能。 |
 | [漫画猫](https://www.manhuacat.com/) | manhuacat.js | 以臺灣翻譯日本的漫畫單行本為主 |
 | [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [看漫画](https://www.kanman.com/) | kanman.js | 女性向的作品很熱門。 |
