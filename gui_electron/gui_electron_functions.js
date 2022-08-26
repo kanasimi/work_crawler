@@ -188,6 +188,7 @@ download_sites_set = {
 		biqugse : '笔趣阁',
 		xbiquke : '笔趣阁',
 		'xbiquge.cc' : '笔趣阁.cc',
+		'xbiquge.so':'笔趣阁.so',
 		// xbiquge : '新笔趣阁',
 
 		// 杰奇小说连载系统
