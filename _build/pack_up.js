@@ -165,6 +165,7 @@ function build_package(update_script_name) {
 
 	remove_directory('node_modules/cejs');
 
+	// 2022/8/13 15:46:53	不知為何，electron-builder 23 移至 node_modules/cejs 後，`require('cejs');` 會得到 {Promise}。若放在原位則能正常使用。
 	// mv CeJS-master node_modules/cejs
 	node_fs.renameSync('CeJS-master', 'node_modules' + path_separator + 'cejs');
 
