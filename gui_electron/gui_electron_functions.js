@@ -188,7 +188,7 @@ download_sites_set = {
 		biqugse : '笔趣阁',
 		xbiquke : '笔趣阁',
 		'xbiquge.cc' : '笔趣阁.cc',
-		'xbiquge.so':'笔趣阁.so',
+		'xbiquge.so' : '笔趣阁.so',
 		// xbiquge : '新笔趣阁',
 
 		// 杰奇小说连载系统
@@ -274,6 +274,7 @@ theme_list.push(DEFAULT_THEME_TEXT);
 // gettext_config:{"id":"download_options.timeout","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.skip_error","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.skip_chapter_data_error","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.directory_name_pattern","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.preserve_work_page","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.preserve_chapter_page","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.remove_ebook_directory","mark_type":"combination_message_id"}
@@ -295,7 +296,7 @@ theme_list.push(DEFAULT_THEME_TEXT);
 // gettext_config:{"id":"download_options.preserve_download_work_layer","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.play_finished_sound","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.archive_program_path","mark_type":"combination_message_id"}
-'data_directory,recheck,start_chapter_NO,chapter_NO_range,start_chapter_title,chapter_filter,regenerate,reget_chapter,search_again,cache_title_to_id,acceptable_types,archive_images,images_archive_extension,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,one_by_one,chapter_time_interval,main_directory,vertical_writing,convert_to_language,user_agent,proxy,cookie,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound,archive_program_path'
+'data_directory,recheck,start_chapter_NO,chapter_NO_range,start_chapter_title,chapter_filter,regenerate,reget_chapter,search_again,cache_title_to_id,acceptable_types,archive_images,images_archive_extension,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,directory_name_pattern,one_by_one,chapter_time_interval,main_directory,vertical_writing,convert_to_language,user_agent,proxy,cookie,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound,archive_program_path'
 // @see work_crawler/resource/locale of work_crawler - locale.csv
 .split(',').forEach(function(item) {
 	download_options_set[item] = 'download_options.' + item;
