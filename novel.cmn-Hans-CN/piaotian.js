@@ -189,6 +189,8 @@ crawler = new CeL.work_crawler({
 		// 去除掉 <script> 功能碼。
 		.replace(/<script[^<>]*>[^<>]*<\/script>/g, '')
 
+		// 去除廣告。
+
 		// 琥珀之剑 第四卷 第二百八十九幕 时间的长度 https://www.ptwxz.com/html/2/2827/1322197.html
 		.replace(/&lt;a href=&quot;[\x20-\xff]+&lt;\/a&gt;(?:<\/a>)*/, '')
 
@@ -208,6 +210,37 @@ crawler = new CeL.work_crawler({
 		// https://www.ptwxz.com/html/12/12788/8819376.html
 		// [txt小说 www.txtyuan.com]
 		.replace(/\[\w*[\u4e00-\u9fff]+\d* www\.\w+\.\w+\]/g, '')
+
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/14/14466/9866209.html
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;銆愯瘽璇达紝鐩鍓嶆湕璇诲惉涔︽渶濂界敤鐨刟pp锛屽挭鍜闃呰伙紝 瀹夎呮渶鏂扮増銆傘<br /><br />
+		// https://www.bqg9527.com/zh_hant/book/194082/167532218.html
+		&nbsp;&nbsp;&nbsp;&nbsp;銆愯瘽璇達紝鐩?鍓嶆湕璇誨惉涔︽滃ソ鐢1殑app錛屽挭鍜?闃呰?夥紝?瀹夎?呮滄柊鐗堛?傘?/p&amp;gt;<br/>
+		// https://uukanshu.cc/book/16523/11534208.html
+		&emsp;&emsp;銆愯瘽璇達紝鐩鍓嶆湕璇誨惉涔︽渶濂界敤鐨刟pp錛屽挭鍜闃呰伙紝 瀹夎呮渶鏂扮増銆傘<br />
+		// https://www.ptwxz.com/html/14/14466/9867006.html
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;銆愭帹鑽愪笅锛屽挭鍜闃呰昏拷涔︾湡鐨勫ソ鐢锛岃繖閲屼笅杞&nbsp;&nbsp;澶у跺幓蹇鍙浠ヨ瘯璇曞惂銆傘<br /><br />
+		// https://www.ptwxz.com/html/14/14466/9828256.html
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;銆愯茬湡锛屾渶杩戜竴鐩寸敤鍜鍜闃呰荤湅涔﹁拷鏇达紝鎹㈡簮鍒囨崲锛屾湕璇婚煶鑹插氾紝 瀹夊崜鑻规灉鍧囧彲銆傘<br /><br />
+
+		</code>
+		 */
+		.replace(/銆[愯愭][^<>\n]{30,60}傘[\w\/?&;]*(?:<br\s*\/>)*/g, '')
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/14/14466/9830853.html
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;銆愯よ瘑鍗佸勾鐨勮佷功鍙嬬粰鎴戞帹鑽愮殑杩戒功app锛屽挭鍜闃呰伙紒鐪熺壒涔堝ソ鐢锛屽紑杞︺佺潯鍓嶉兘闈犺繖涓鏈楄诲惉涔︽墦鍙戞椂闂达紝杩欓噷鍙浠ヤ笅杞&nbsp;&nbsp;銆<br /><br />
+
+		</code>
+		 */
+		.replace(/銆[愯愭][^<>\n]{80,90}銆[\w\/?&;]*(?:<br\s*\/>)*/g, '')
+
+		// https://www.ptwxz.com/html/14/14466/10115811.html
+		// 女主从书里跑出来了怎么办 第四百三十三章 复更
+		.replace(/\.asxs\./g, '起点')
 
 		// 一品修仙 正文 第二四三章 我不是幻觉，不信你捅我一剑试试
 		// https://www.ptwxz.com/html/9/9503/6476110.html
