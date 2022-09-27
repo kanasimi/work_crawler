@@ -129,18 +129,24 @@ if (target_directory) {
 		}
 
 		target_files[fso_name] = path;
-	}, PATTERN_full_latin_or_sign, 1);
-
-	if (CeL.is_empty_object(target_files)
-			&& CeL.is_empty_object(target_directories)) {
-		CeL.info(CeL.env.script_name + ': No target to rename.');
-	} else {
-		// console.log([target_directories, target_files]);
-		CeL.info(CeL.env.script_name + ': Rename ' + category_name + ' @ '
-				+ target_directory + '\n' + Object.keys(target_files).length
-				+ ' files, ' + Object.keys(target_directories).length
-				+ ' directories to rename.');
-	}
+	}, {
+		filter : PATTERN_full_latin_or_sign,
+		callback : function() {
+			// console.trace(target_files);
+			// console.trace(target_directories);
+			if (CeL.is_empty_object(target_files)
+					&& CeL.is_empty_object(target_directories)) {
+				CeL.info(CeL.env.script_name + ': No target to rename.');
+			} else {
+				// console.log([target_directories, target_files]);
+				CeL.info(CeL.env.script_name + ': Rename ' + category_name
+						+ ' @ ' + target_directory + '\n'
+						+ Object.keys(target_files).length + ' files, '
+						+ Object.keys(target_directories).length
+						+ ' directories to rename.');
+			}
+		}
+	}, 1);
 }
 
 // CeL.set_debug(3);
@@ -437,6 +443,7 @@ function parse_file_list(html, error, XMLHttp, had_try_to_got_torrent) {
 		function rename(fso_name, is_file) {
 			var fso_key = is_file ? target_files[fso_name]
 					: target_directories[fso_name];
+			// console.log([ fso_name, is_file, fso_key ]);
 			if (!fso_key) {
 				for ( var file_name in target_files) {
 					var _matched = file_name.match(/^(.+)(\.[^.]+)$/);
@@ -493,6 +500,12 @@ function parse_file_list(html, error, XMLHttp, had_try_to_got_torrent) {
 		rename(matched[1]);
 		rename(matched[1].replace(/ /g, '_'));
 		rename(matched[1].replace(/_/g, ' '));
+
+		// e.g., for 'Meshibana Keiji Tachibana v01-46 DL-Raw.Net'
+		// '.Net' 被當成副檔名
+		rename(matched[0]);
+		rename(matched[0].replace(/ /g, '_'));
+		rename(matched[0].replace(/_/g, ' '));
 	}
 
 	if (false) {
