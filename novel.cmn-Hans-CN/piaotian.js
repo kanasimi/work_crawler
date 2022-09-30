@@ -238,6 +238,26 @@ crawler = new CeL.work_crawler({
 		 */
 		.replace(/銆[愯愭][^<>\n]{80,90}銆[\w\/?&;]*(?:<br\s*\/>)*/g, '')
 
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/13/13305/9231800.html	我宅了百年出门已无敌 第一百一十五章老贼，休想乱我道心
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;7017k<br /><br />
+
+		</code>
+		 */
+		.replace(/7017k(?:<br\s*\/>)*/g, '')
+
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/13/13305/9697354.html	我宅了百年出门已无敌 第四百零五章开道神速
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;请记住本书首发域名：。_wap.<br /><br />
+
+		</code>
+		 */
+		.replace(/请记住本书首发域名：[\w.。]*(?:<br\s*\/>)*/g, '')
+
 		// https://www.ptwxz.com/html/14/14466/10115811.html
 		// 女主从书里跑出来了怎么办 第四百三十三章 复更
 		.replace(/\.asxs\./g, '起点')
