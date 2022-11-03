@@ -17,6 +17,8 @@ var crawler = CeL.SinMH({
 	// 有些漫畫作品分區分單行本、章節與外傳，當章節數量改變、添加新章節時就需要重新檢查。
 	// recheck : 'changed',
 
+	// 2019/5/9: https://www.manhuaniu.com/
+	// 2022/11/3前: https://www.manhuaniu.com/
 	base_URL : 'https://www.manhuaniu.com/'
 });
 
