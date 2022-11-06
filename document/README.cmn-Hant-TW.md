@@ -100,10 +100,10 @@
 | [無限動漫](https://www.comicbus.com/comic/) | comicbus.js | 以臺灣翻譯日本的漫畫為主，還有些港漫。僅免費漫畫，無法下載VIP動畫。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
 | [漫畫狗](https://dogemanga.com/) | dogemanga.js | 以臺灣、大陸翻譯日本的漫畫為主。有些缺圖。 |
 | [動漫狂](https://www.cartoonmad.com/) | cartoonmad.js | 以臺灣翻譯日本的漫畫為主。這個網站有許多表格標籤，卻很少使用class或者id屬性。 |
-| [動漫伊甸園](http://dmeden.net/) | dmeden.js | 日本漫畫較多。 採用與汗汗酷漫相同系統。 |
 | [禁漫天堂](https://18comic.vip/) | 18comic.js | 從 2021/3/12 開始將圖片分割、亂序排列。必須解開章節壓縮檔後，利用作品資料夾中的 index.html 來瀏覽。 |
 | [WEBTOON](https://www.webtoons.com/zh-hant/) | webtoon.js | NAVER WEBTOON 中文官網 韓國漫畫<br />本工具無法下載有動態效果的漫畫。 |
 | [Toomics 玩漫](https://toomics.com/tc/) | toomics_tc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |
+| ~~[動漫伊甸園](http://dmeden.net/)~~ | ~~archive/dmeden.js~~ | 日本漫畫較多。 採用與汗汗酷漫相同系統。2019/7/19 最後一次成功下載。 |
 | ~~[99漫畫網](https://www.999comics.com/)~~ | ~~archive/999comics.js~~ | 可能是2013年版本的 圣樱漫画管理系统？ MHD模板（漫画岛）？2019/6/18 19:46 測試中陸續發現PC端有頁面404。2021/12/2 5:18:17 最後一次成功連結。 |
 | ~~[comico](http://www.comico.com.tw/)~~ | ~~archive/comico.js~~ | 2022/1 改板幅度過大，不再支援此網站。本工具經設定帳號資訊後，可自動使用閱讀卷(レンタル券)，但無法處理互動式漫畫、coin收費作業。 |
 
@@ -117,49 +117,49 @@
 | [有妖气](http://www.u17.com/) | u17.js | **本工具無法下載VIP付費內容** |
 | [大角虫漫画](https://www.dajiaochongmanhua.com/) | dajiaochong.js | 2018/6/12 開始永久付費制。 |
 | [哔哩哔哩漫画](https://manga.bilibili.com/m) | bilibili.js | 收費作品太多，PC端只給看10話，感覺很難用。並且系統太複雜，每次改版得花許多時間來修正，恐不再維護。 **本工具無法下載 APP only & 付費內容** |
-| [布卡漫画](http://www.buka.cn/) | buka.js | 有少數遺失圖片。請注意：搜索某些名稱，如包含"纪元"一詞之作品時，會造成連線重設。對於這類作品必須輸入id而非標題。 **本工具無法下載VIP付費內容** |
 | [SF漫画](https://manhua.sfacg.com/) | sfacg.js | **本工具無法下載VIP付費內容** |
 | [动漫屋网](http://www.dm5.com/) | dm5.js | 似乎不能並行下載圖片，下載速度較慢。拿來下載日本漫畫的人好像比較多。不支援 achive_images 功能。  **本工具無法下載付费章节** |
 | [漫画人](http://www.1kkk.com/) | 1kkk.js | 系統與 dm5.js 幾乎相同。和 dm5 一樣，很多作品要收費。不支援 achive_images 功能。  **本工具無法下載付费章节** |
 | [韩漫窝](http://www.hanmanwo.com/) | hanmanwo.js | 有些韓國漫畫。系統似 dm5.js。 |
-| [有码漫画](https://www.youma.org/) | youma.js | 大多為韓國漫畫。系統似 hanmanwo.js。 |
-| [梦游漫画](https://mymhh.com/) | mymhh.js | 有許多韓國漫畫。系統似 hanmanwo.js。僅能以手機觀看。 |
-| [无双漫画](https://r2hm.com/) | r2hm.js | 有些韓國漫畫。系統與內容極似 hanmanwo.js。內容是自動採集生成的？有少許缺圖。 |
+| [梦游漫画](https://mymhh.com/) | archive/mymhh.js | 有許多韓國漫畫。系統似 hanmanwo.js。僅能以手機觀看。 |
 | [快看漫画](https://www.kuaikanmanhua.com/) | kuaikan.js | **本工具無法下載VIP付費內容** |
 | [微博动漫](http://manhua.weibo.com/) | weibo.js | **本工具無法下載VIP付費內容**<br />竟然所有資料皆可由API取得，實在是程序猿的好搭檔！ |
-| [大古漫画网](https://www.dagumanhua.com/) | dagu.js | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。 |
-| [我要去漫画](http://www.517manhua.com/) | 517.js | 採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端 |
-| [365漫画网](http://www.iqg365.com/) | iqg365.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
-| [一漫网](http://www.muyict.com/) | emw.js | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
-| [爱看漫画](http://www.aikanmh.cn/) | aikanmh.js | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
-| [友绘漫画网](http://m.wuyouhui.net/) | wuyouhui.js | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
-| [188漫画网](http://m.88bag.net/) | 88bag.js | 有些缺圖，圖片似乎多從其他網站採集而來。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
-| [乙女漫画](https://www.yinvmh.com/) | yinvmh.js | 日本漫畫較多，幾乎都是 BL。自 2020/12/18 起無更新？用[晴天新漫画系统](http://www.qingtiancms.com/manhua/) |
 | [看漫画](https://www.manhuagui.com/) | manhuagui.js | 頻率限制太嚴格，一次就封禁一整天，非常難用。 **漫画柜**原[爱看漫](http://www.ikanman.com/)。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) [MHD模板](http://www.manhua.demo.shenl.com/?theme=mhd)?<!-- MHD:漫画岛? <br />[晴天漫画系统](http://manhua.qingtiancms.com/)改? --> |
-| [古风漫画网](http://www.gufengmh.com/) | gufengmh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
+| [古风漫画网](https://www.123gf.com/) | gufengmh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [90漫画网](http://www.90mh.com/) | 90mh.js | 似乎只有日本漫畫。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
-| [欢乐漫画网/多多漫画](https://www.hlgoo.cn/) | duoduomh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
-| [36漫画网](https://www.36mh.com/) | 36mh.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [漫画牛](https://www.manhuaniu.com/) | manhuaniu.js | 速度稍微慢。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板 |
 | [亲亲漫画网](http://www.duzhez.com/) | 930mh.js | 有些韓國漫畫。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
 | [动漫之家](https://www.dmzj.com/) | dmzj.js | 僅處理漫畫。有時會無法讀取。可能為早期[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板？ |
 | [漫画160](https://www.laimanhua.com/) | mh160.js | 與 733mh.js 相同系統。 |
 | [漫画1234](https://www.mh1234.com/) | mh1234.js | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) + 改了 733mh.js？ |
-| [733漫画网](http://www.733mh.net/) | 733mh.js | 有時會無法讀取。733mh與733dm內容類似...<br />可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板3](http://manhua4.qingtiancms.net/)?? |
 | [733动漫网](https://www.733.so/) | 733dm.js | 僅處理漫畫。2018/11/9 之後 (11/16之後?) 改版成 晴天漫画系统 |
-| [卡推漫画](http://www.katui.net/) | katui.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
+| [卡推漫画](http://www.700mh.com/) | katui.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [扑飞漫画](http://www.pufei.net/) | pufei.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [塔多漫画](http://www.taduo.net/) | taduo.js | 系統同 archive/733dm.201808.js，可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？ |
 | [漫画DB](http://www.manhuadb.com/) | manhuadb.js | 以臺灣翻譯日本的漫畫單行本為主。不支援 achive_images 功能。 |
 | [漫画猫](https://www.manhuacat.com/) | manhuacat.js | 以臺灣翻譯日本的漫畫單行本為主 |
-| [汗汗酷漫](http://www.hhimm.com/) | hhcool.js | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | [看漫画](https://www.kanman.com/) | kanman.js | 女性向的作品很熱門。 |
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | [Toomics 玩漫](https://toomics.com/sc/) | toomics_sc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |
 | [57漫画网](http://www.wuqimh.com/) | 57mh.js | 缺話眾多。系統同 2manhua.js。可能是2013年版本的 圣樱漫画管理系统？ MHD模板？ |
 | [奇漫屋](http://www.qiman6.com/) | qiman5.js | 有些缺話。 |
-| ~~[50漫画网](https://www.manhuadui.com/)~~ | ~~archive/50mh.js~~ | 2020/8/12 19:58 最後一次成功連接。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密 |
+| ~~[布卡漫画](http://www.buka.cn/)~~ | ~~archive/buka.js~~ | 有少數遺失圖片。請注意：搜索某些名稱，如包含"纪元"一詞之作品時，會造成連線重設。對於這類作品必須輸入id而非標題。2022/3/14 最後一次成功連接。 **本工具無法下載VIP付費內容** |
+| ~~[汗汗酷漫](http://www.hhimm.com/)~~ | ~~archive/hhcool.js~~ | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
+| ~~[有码漫画](https://www.youma.org/)~~ | ~~archive/youma.js~~ | 大多為韓國漫畫。系統似 hanmanwo.js。 |
+| ~~[无双漫画](https://r2hm.com/)~~ | ~~archive/r2hm.js~~ | 有些韓國漫畫。系統與內容極似 hanmanwo.js。內容是自動採集生成的？有少許缺圖。2020/1/16 最後一次成功連接。 |
+| ~~[大古漫画网](https://www.dagumanhua.com/)~~ | ~~archive/dagu.js~~ | 2018/10/19–11/24 間，[9妹漫画网](http://www.9mdm.com/)改名大古漫画网。2020/1/21 最後一次成功連接。有個[大古漫画](https://www.dgmh123.com/) |
+| ~~[我要去漫画](http://www.517manhua.com/)~~ | ~~archive/517.js~~ | 採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板1](http://manhua2.qingtiancms.net/) PC端。2022/8/5 最後一次成功連接。 |
+| ~~[365漫画网](http://www.iqg365.com/)~~ | ~~archive/iqg365.js~~ | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端。2020/8/16 最後一次成功連接。 |
+| ~~[一漫网](http://www.muyict.com/)~~ | ~~archive/emw.js~~ | 速度頗慢。有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端 |
+| ~~[爱看漫画](http://www.aikanmh.cn/)~~ | ~~archive/aikanmh.js~~ | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) PC端。2020/3/3 最後一次成功連接。有個[爱看漫画](https://www.ikmh66.com/)，系統不同。 |
+| ~~[友绘漫画网](http://m.wuyouhui.net/)~~ | ~~archive/wuyouhui.js~~ | 有些缺圖。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端 |
+| ~~[188漫画网](http://m.88bag.net/)~~ | ~~archive/88bag.js~~ | 有些缺圖，圖片似乎多從其他網站採集而來。採用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板2](http://manhua3.qingtiancms.net/) 手机端。2022/9/26 最後一次成功連接。 |
+| ~~[乙女漫画](https://www.yinvmh.com/)~~ | ~~archive/yinvmh.js~~ | 日本漫畫較多，幾乎都是 BL。自 2020/12/18 起無更新？用[晴天新漫画系统](http://www.qingtiancms.com/manhua/)。 |
+| ~~[欢乐漫画网/多多漫画](https://www.hlgoo.cn/)~~ | ~~archive/duoduomh.js~~ | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板。2019/10/23 最後一次成功連接。 |
+| ~~[36漫画网](https://www.36mh.com/)~~ | ~~archive/36mh.js~~ | 採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) MHD模板。2022/7/17 最後一次成功連接。 |
+| ~~[733漫画网](http://www.733mh.net/)~~ | ~~archive/733mh.js~~ | 有時會無法讀取。733mh與733dm內容類似...<br />可能為早期[晴天漫画系统](http://manhua.qingtiancms.com/)？[晴天新漫画系统](http://www.qingtiancms.com/manhua/)[模板3](http://manhua4.qingtiancms.net/)?? 2020/11/30 最後一次成功連接。 |
+| ~~[50漫画网](https://www.manhuadui.com/)~~ | ~~archive/50mh.js~~ | 2020/8/12 19:58 最後一次成功連接。採用[圣樱漫画管理系统](http://cms.shenl.com/sinmh/) DMZJ模板 + 使用 CryptoJS 加密。2019/10/26 最後一次成功連接。 |
 | ~~[Oh漫画](https://www.ohmanhua.com/)~~ | ~~archive/ohmanhua.js~~ | 2021/8/2 採用 Cloudflare 的阻斷服務攻擊保護。原[ONE漫画](https://www.onemanhua.com/)。fed? 系統 |
 | ~~[哦漫画](http://www.omanhua.net/)~~ | ~~archive/omanhua.js~~ | 2019/7/3 5:4 最後一次成功連接。 |
 | ~~[热漫吧](http://www.remanba.com/)~~ | ~~archive/remanba.js~~ | 自 2016/12/27 14:42 最後一次成功連接後，下午起就持續 404 至 2018/6/11 未復原。 |

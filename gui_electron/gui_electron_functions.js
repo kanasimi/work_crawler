@@ -46,7 +46,7 @@ download_sites_set = {
 
 		dogemanga : '漫畫狗',
 
-		dmeden : '動漫伊甸園',
+		// dmeden : '動漫伊甸園',
 
 		'18comic' : '禁漫天堂',
 
@@ -65,25 +65,25 @@ download_sites_set = {
 		kuaikan : '快看漫画',
 		weibo : '微博动漫',
 		bilibili : '哔哩哔哩漫画',
-		buka : '布卡漫画',
+		// buka : '布卡漫画',
 		sfacg : 'SF漫画',
 
 		katui : '卡推漫画',
 		pufei : '扑飞漫画',
 		taduo : '塔多漫画',
 		'733dm' : '733动漫网',
-		'733mh' : '733漫画网',
+		// '733mh' : '733漫画网',
 		mh160 : '漫画160',
 		// nokiacn : '乙女漫画',
-		yinvmh : '乙女漫画',
-		iqg365 : '365漫画网',
-		emw : '一漫网',
-		aikanmh : '爱看漫画',
-		wuyouhui : '友绘漫画网',
-		'88bag' : '188漫画网',
+		// yinvmh : '乙女漫画',
+		// iqg365 : '365漫画网',
+		// emw : '一漫网',
+		// aikanmh : '爱看漫画',
+		// wuyouhui : '友绘漫画网',
+		// '88bag' : '188漫画网',
 		// '76' : '76漫画',
-		'517' : '我要去漫画',
-		dagu : '大古漫画网',
+		// '517' : '我要去漫画',
+		// dagu : '大古漫画网',
 		manhuadb : '漫画DB',
 		manhuacat : '漫画猫',
 
@@ -95,9 +95,9 @@ download_sites_set = {
 		'1kkk' : '漫画人',
 		// tohomh : '土豪漫画',
 		// ikmhw : '爱看漫画网',
-		r2hm : '无双漫画',
+		// r2hm : '无双漫画',
 		hanmanwo : '韩漫窝',
-		youma : '有码漫画',
+		// youma : '有码漫画',
 		mymhh : '梦游漫画',
 
 		// manhuatai : '漫画台',
@@ -105,8 +105,8 @@ download_sites_set = {
 		manhuagui : '看漫画/漫画柜',
 		gufengmh : '古风漫画网',
 		'90mh' : '90漫画网',
-		duoduomh : '多多漫画',
-		'36mh' : '36漫画网',
+		// duoduomh : '多多漫画',
+		// '36mh' : '36漫画网',
 		manhuaniu : '漫画牛',
 		// mhkan: deprecated
 		// mhkan : '漫画看',
@@ -116,7 +116,7 @@ download_sites_set = {
 
 		// omanhua : '哦漫画',
 
-		hhcool : '汗汗酷漫',
+		// hhcool : '汗汗酷漫',
 
 		qiman5 : '奇漫屋',
 
@@ -1742,10 +1742,11 @@ function reset_favorites(crawler) {
 		|| favorites.duplicated > 0 ? {
 			// abandon
 			b : [ old_Unicode_support ? '❌' : '🛑', {
+				T : [
 				// gettext_config:{"id":"delete-all-$1-annotations-$2-repetitions-and-$3-blank-lines"}
-				T : [ '刪除所有%1個注解、%2個重複與%3個空白行。',
+				'刪除所有 %1 個{{PLURAL:%1|註解}}、%2 個{{PLURAL:%2|重複作品名稱}}與 %3 個{{PLURAL:%3|空行}}。'
 				//
-				favorites.comments, favorites.duplicated, favorites.blank ]
+				, favorites.comments, favorites.duplicated, favorites.blank ]
 			} ],
 			onclick : function() {
 				save_favorites(crawler, crawler.preference
@@ -1805,7 +1806,7 @@ function reset_favorites(crawler) {
 	|| crawler.read_work_data ? '' : [ {
 		b : [ '⌛️', {
 			// gettext_config:{"id":"reading-the-website-information-file-of-this-website-to-determine-whether-the-work-has-been-downloaded-and-completed"}
-			T : '讀取本網站作品資訊檔案以判別作品是否已下載過、是否完結。'
+			T : '讀取本網站各作品之資訊檔案，以判別作品是否已下載過、是否完結。'
 		}, {
 			// gettext_config:{"id":"when-choosing-a-website-it-can-cause-few-seconds-of-unresponsiveness"}
 			T : '選擇網站時，這可能造成幾十秒鐘無回應。',
@@ -2206,7 +2207,7 @@ function show_search_result(work_data_search_queue) {
 			// save
 			b : [ '📥', {
 				// gettext_config:{"id":"download-all-works-found-on-$1-websites"}
-				T : [ '下載所有%1個網站找到的作品', OK ]
+				T : [ '下載所有%1個{{PLURAL:%1|網站}}找到的作品', OK ]
 			} ],
 			onclick : function() {
 				for ( var site_id in work_data_search_queue) {
@@ -2333,7 +2334,7 @@ var type_and_language_used;
 function search_work_title() {
 	// 點選 語言
 	// gettext_config:{"id":"please-specify-the-category-of-the-item-you-want-to-search-in-the-online-production-area"}
-	if (test_and_attention('請先在網路作品區指定要搜尋的作品類別。', !type_and_language_used)) {
+	if (test_and_attention('請先在網路作品區指定要搜尋的項目類別。', !type_and_language_used)) {
 		return;
 	}
 
@@ -2459,8 +2460,9 @@ function search_work_title() {
 
 				CeL.remove_all_child('still_searching');
 				CeL.new_node({
+					T : [
 					// gettext_config:{"id":"$1-sites-are-still-searching-$2"}
-					T : [ '%1個網站仍在搜尋中：%2', still_searching.length,
+					'%1個{{PLURAL:%1|網站}}仍在搜尋中：%2', still_searching.length,
 							still_searching.join(', ') ]
 				}, 'still_searching');
 			}
@@ -2744,9 +2746,10 @@ function destruct_download_job(crawler) {
 			+ work_data.error_list[work_data.error_list.length - 1] + '</span>'
 			//
 			+ (work_data.error_list.length > 1 ? ' <small>'
-			//
 			// gettext_config:{"id":"(there-are-$1-errors-in-total)"}
-			+ _('（總共有%1個錯誤）', work_data.error_list.length) + '</small>' : '');
+			+ _('（總共有%1個{{PLURAL:%1|錯誤}}）',
+			//
+			work_data.error_list.length) + '</small>' : '');
 			job.layer.title = work_data.error_list.join(CeL.env.line_separator);
 			if (false)
 				CeL.new_node([ {

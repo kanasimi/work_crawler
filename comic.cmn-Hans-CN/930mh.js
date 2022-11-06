@@ -25,7 +25,8 @@ var crawler = CeL.SinMH({
 	// 2019/8 改網址: http://www.93gmh.com/
 	// 2019/10/17 改網址: http://www.rubobo.com/
 	// 2021/2/25 改網址: https://www.acgcd.com/
-	base_URL : 'https://www.acgcd.com/',
+	// 2022/11/3前: https://www.acgqd.com/
+	base_URL : 'https://www.acgqd.com/',
 
 	extract_work_id : function(work_information) {
 		return CeL.is_digits(work_information) && work_information;

@@ -18,8 +18,8 @@ var crawler = CeL.SinMH({
 	// recheck : 'changed',
 
 	// 2019/5/9: https://www.manhuaniu.com/
-	// 2022/11/3前: https://www.manhuaniu.com/
-	base_URL : 'https://www.manhuaniu.com/'
+	// 2022/11/3前: https://www.manhuatian.com/
+	base_URL : 'https://www.manhuatian.com/'
 });
 
 // ----------------------------------------------------------------------------

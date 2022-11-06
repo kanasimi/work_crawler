@@ -19,7 +19,8 @@ var crawler = CeL.qTcms2014({
 	// e.g., 蓝翅 http://www.700mh.com/manhua/736/
 	acceptable_types : 'webp',
 
-	// 2019/6: 改 http://www.katui.net/
+	// 2018/8/8: http://www.katui.net/
+	// 2019/6: 改 http://www.700mh.com/
 	base_URL : 'http://www.700mh.com/',
 
 	/**

@@ -243,8 +243,8 @@ function check_fso(fso_name) {
 
 		CeL.warn({
 			// gettext_config:{"id":"because-the-largest-file-has-$1-bytes-skipping-this-$2-directory-$3"}
-			T : [ '因為最大的檔案有 %1 位元組，因此跳過這個%2的目錄：%3', biggest_file_size, message,
-					directory_path ]
+			T : [ '因為最大的檔案有 %1 {{PLURAL:%1|位元組}}，因此跳過這個%2的目錄：%3',
+					biggest_file_size, message, directory_path ]
 		});
 	}
 
@@ -390,7 +390,8 @@ function check_fso(fso_name) {
 			|| iso_count > 1 && sub_sub_files_count < 20 || iso_count === sub_sub_files_count)
 			&& test_size_OK(1e10, 'game folder', CeL.gettext(
 			// gettext_config:{"id":"contains-$1-$2-executable-files-or-libraries"}
-			'含有 %1/%2 個可執行檔或函式庫', exe_count, sub_sub_files_count))) {
+			'含有 %1/%2 個可執行{{PLURAL:%1|檔案}}或{{PLURAL:%1|函式庫}}', exe_count,
+					sub_sub_files_count))) {
 		return;
 	}
 
@@ -401,7 +402,8 @@ function check_fso(fso_name) {
 		// 壓縮大多只有圖片的目錄。
 		if (test_size_OK(5e7, 'image folder',
 		// gettext_config:{"id":"contains-$1-$2-images"}
-		CeL.gettext('含有 %1/%2 張圖片', image_count, sub_sub_files_count))) {
+		CeL.gettext('含有 %1/%2 張{{PLURAL:%1|圖片}}', image_count,
+				sub_sub_files_count))) {
 			return;
 		}
 	}
@@ -713,14 +715,17 @@ var p7zip_path = CeL.executable_file_path('7z')
 execSync = require('child_process').execSync;
 
 if (process_queue.length > 0) {
-	if (do_compress)
+	if (do_compress) {
 		process_queue.forEach(compress_each_directory);
-	else
+	} else {
 		CeL.info({
+			T : [
 			// gettext_config:{"id":"since-there-is-no-compression-(do_compress)-there-are-$1-files-or-folders-that-are-not-compressed"}
-			T : [ '因為未設定要壓縮 (do_compress)，有 %1 個檔案或目錄沒有壓縮。',
-					process_queue.length ]
+			'因為未設定要壓縮（do_compress），有 %1 個{{PLURAL:%1|檔案}}或{{PLURAL:%1|目錄}}沒有壓縮。'
+			//
+			, process_queue.length ]
 		});
+	}
 }
 
 function escape_filename(filename) {

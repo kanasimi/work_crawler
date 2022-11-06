@@ -274,7 +274,7 @@ function start_update(event_sender) {
 			// CeL.log_temporary(progressObj.percent + '%'));
 			event_sender.send('send_message_debug', [
 					// gettext_config:{"id":"download-speed-$2-bytes-s-downloaded-$1"}
-					'安裝包已下載 %1，下載速度 %2 bytes/s。',
+					'安裝包已下載 %1，下載速度 %2 {{PLURAL:%2|byte|bytes}}/s。',
 					progressObj.percent.toFixed(2) + '%' + ' ('
 							+ progressObj.transferred + "/" + progressObj.total
 							+ ')', progressObj.bytesPerSecond ]);
@@ -284,7 +284,7 @@ function start_update(event_sender) {
 					&& progressObj.percent >= latest_progress) {
 				event_sender.send('send_message_log', [
 						// gettext_config:{"id":"the-installation-package-has-been-downloaded-$1-and-it-is-estimated-that-it-will-take-$2-minutes-to-complete"}
-						'安裝包已下載 %1，預估還需 %2 分鐘下載完畢。',
+						'安裝包已下載 %1，預估還需 %2 {{PLURAL:%2|分鐘}}下載完畢。',
 						progressObj.percent.toFixed(2) + '%',
 						((Date.now() - start_time)
 								* (progressObj.total - progressObj.transferred)
