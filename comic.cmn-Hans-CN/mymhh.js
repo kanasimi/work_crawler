@@ -20,7 +20,8 @@ var crawler = CeL.dm5({
 	// 2020/1: https://mymhh.com/
 	// 2020/2: https://www.mumumh.com/
 	// 2020/3/26: Also https://www.mymhh.com/
-	base_URL : 'https://www.mymhh.com/',
+	// 2022/11/4前: 404 https://www.mymhh.com/
+	base_URL : 'https://www.17te.com/',
 	// 2020/1: 僅能以手機觀看。
 	user_agent : 'Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X)'
 			+ ' AppleWebKit/604.1.34 (KHTML, like Gecko)'

@@ -93,6 +93,8 @@ var crawler = new CeL.work_crawler({
 		// 選擇性屬性：須配合網站平台更改。
 		// 2019/3: 总热度 <span class="hot-num">12.83亿</span>, 2019/4: 人气值
 		};
+
+		// 由 meta data 取得作品資訊。
 		// extract_work_data(work_data, html);
 
 		html = eval(html

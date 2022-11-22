@@ -141,8 +141,19 @@ var crawler = new CeL.work_crawler({
 			// var
 			// newImgs=["https://p.pstatp.com/origin/pgc-image/56dae64dc3cb4d6c92791f78927bd0e9...
 			if (/^\s*eval\(function\(/.test(text)) {
-				chapter_data.image_list = JSON.parse(eval(text.between('eval'))
-						.replace(/^\s*var\s+\w+\s*=/, ''));
+				chapter_data.image_list = JSON.parse(
+						eval(text.between('eval')).replace(/^\s*var\s+\w+\s*=/,
+								'')).map(function(url) {
+					return {
+						url : url,
+						// 2022/10/17: 設了 Referer 會403 Forbidden
+						get_URL_options : {
+							headers : {
+								Referer : undefined
+							}
+						}
+					};
+				});
 			}
 		});
 		// console.log(chapter_data.image_list);
