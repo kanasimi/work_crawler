@@ -227,7 +227,7 @@ crawler = new CeL.work_crawler({
 
 		</code>
 		 */
-		.replace(/銆[愯愭][^<>\n]{30,60}傘[\w\/?&;]*(?:<br\s*\/>)*/g, '')
+		.replace(/銆[愯愭][^<>\n]{30,60}傘[\w\/?&;]*(?:<br\s*\/?>)*/g, '')
 		/**
 		 * <code>
 
@@ -236,7 +236,87 @@ crawler = new CeL.work_crawler({
 
 		</code>
 		 */
-		.replace(/銆[愯愭][^<>\n]{80,90}銆[\w\/?&;]*(?:<br\s*\/>)*/g, '')
+		.replace(/銆[愯愭][^<>\n]{80,90}銆[\w\/?&;]*(?:<br\s*\/?>)*/g, '')
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/13/13305/9960310.html
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;谷輥<br /><br />
+		// https://www.ptwxz.com/html/13/13305/9961817.html
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;谷婚<br /><br />
+
+		</code>
+		 */
+		.replace(/(?:<br\s*\/?>)+(?:&nbsp;)*谷.(<br\s*\/?>)/g, '$1')
+
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/6/6682/3766047.html 最仙遊 正文 第四十二章 镇天关内
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;;
+
+		</code>
+		 */
+		.replace(/(?:<br\s*\/?>)+(?:&nbsp;)*;+[\s\n]*$/, '')
+
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/1/1073/2450032.html 斩仙 正文 给个鼓励吧
+		(未完待续。请搜索飄天文學，小说更好更新更快!)
+
+		// https://www.ptwxz.com/html/6/6682/3844397.html 最仙遊 正文 第一百一十四章 选拔（下）
+		(未完待续请搜索飄天文學，小说更好更新更快!
+
+		// https://www.ptwxz.com/html/3/3704/2309955.html 极品天骄 第一卷 今天只有两更了，求一下保底月票！
+		(未完待续。请搜索飄天文學，小说更好更新更快!手机用户请到m.本站阅读。)
+
+		// http://www.tyksjq.com/bqg/13026/2628523_2.html
+		(未完待续。请搜索飄天文學，小说更好更新更快!)&nbsp;&nbsp;&lt;!--章节内容结束--&gt;
+
+		// https://m.77xsw.cc/article/1108/2168117_2.html
+		(未完待续请搜索飄天文學，小说更好更新更快!<br /><br /> &nbsp;&nbsp;&nbsp;&nbsp;ps：明天是端午节，猪三在这里视兄弟们合家安康！ 
+
+		// https://m.ijjxsw.co/txt/9868/12896239_2.html
+		<p>未完待续未完待续请搜索飄天文學，小说更好更新更快!</p><p>ps：衷心感谢：嘉存书友的打赏支持，多谢！</p>
+
+		// http://m.xhytd.com/5/5819/5436882_3.html
+		(未完待续。请搜索飄天文學，)    
+
+		// https://m.tszw.org/read/2/2799/2512310_1.html
+		（未完待续。请搜索飄天文學，）</p><p>手机用户请浏览吞噬小说网{m.tszw.org}</p></div>
+
+		// https://m.tianyibook.la/book/6311/5018720_2.html
+		(未完待续请搜索飄天文學，小说更好更新更快!<br /><br />
+
+		// https://www.ptwxz.com/html/6/6682/3831784.html 最仙遊 正文 第九十五章 试探
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;手机用户请到m..阅读。
+
+		https://www.ptwxz.com/html/6/6682/3997171.html
+		您的支持，就是我最大的动力请搜索飄天文學，小说更好更新更快!88读书<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;...
+
+		</code>
+		 */
+		.replace(/([(（]?未完待续[^<>\n]{1,20}|请搜索)飄天文學(?:[^<>\n]*\n*|.*\n*$)/, '')
+		/**
+		 * <code>
+
+		https://www.ptwxz.com/html/6/6682/3831784.html 最仙遊 正文 第九十五章 试探
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;手机用户请到m..阅读。
+
+		</code>
+		 */
+		.replace(/(?:<br\s*\/?>)+(?:&nbsp;)*手机用户请[^<>]*$/, '')
+
+		/**
+		 * <code>
+
+		https://www.ptwxz.com/html/6/6682/4072541.html 最仙遊 正文 第三百五十二章 九凤古鼎
+		&nbsp;&nbsp;&nbsp;&nbsp;纯文字在线阅读本站域名手机同步阅读请访问<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;
+
+		</code>
+		 */
+		.replace(/(?:&nbsp;)*纯文字在线阅读[^<>]*(?:<br\s*\/?>)+/, '')
 
 		/**
 		 * <code>
@@ -246,7 +326,7 @@ crawler = new CeL.work_crawler({
 
 		</code>
 		 */
-		.replace(/7017k(?:<br\s*\/>)*/g, '')
+		.replace(/7017k(?:<br\s*\/?>)+/g, '')
 
 		/**
 		 * <code>
@@ -254,13 +334,32 @@ crawler = new CeL.work_crawler({
 		// https://www.ptwxz.com/html/13/13305/9697354.html	我宅了百年出门已无敌 第四百零五章开道神速
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;请记住本书首发域名：。_wap.<br /><br />
 
+		// https://www.ptwxz.com/html/14/14466/10213364.html 女主从书里跑出来了怎么办 第五百三十一章 紫薇大帝
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;请记住本书首发域名：。手机版阅读网址：wap.<br /><br />
+
 		</code>
 		 */
-		.replace(/请记住本书首发域名：[\w.。]*(?:<br\s*\/>)*/g, '')
+		.replace(/请记住本书首发域名：[\w.。]*(?:手机版阅读网址：[\w.。]*)?(?:<br\s*\/?>)+/g, '')
 
-		// https://www.ptwxz.com/html/14/14466/10115811.html
-		// 女主从书里跑出来了怎么办 第四百三十三章 复更
-		.replace(/\.asxs\./g, '起点')
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/6/6682/3932535.html	最仙遊 正文 第两百三十九章 星罗密布
+		&nbsp;&nbsp;&nbsp;&nbsp;纯文字在线阅读本站域名<foncolor=red>手机同步阅读请访问<br /><br />
+
+		</code>
+		 */
+		.replace(/(?:&nbsp;)*纯文字在线阅读本站域名<[^<>]+>手机同步阅读请访问(?:<br\s*\/?>)+/g, '')
+
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/6/6682/3851642.html 最仙遊 正文 第一百二十六章 强敌 （谢盟更之一）
+		其所说十有*为真。
+
+		</code>
+		 */
+		.replace(/十有\*{1,2}([^*])/g, '十有八九$1')
 
 		// 一品修仙 正文 第二四三章 我不是幻觉，不信你捅我一剑试试
 		// https://www.ptwxz.com/html/9/9503/6476110.html
@@ -271,6 +370,8 @@ crawler = new CeL.work_crawler({
 		// .replace('https:<br', '<br').replace('天才本站地址：。m.', '')
 		;
 		// console.log(text);
+
+		text = CeL.work_crawler.fix_general_ADs(text);
 
 		this.add_ebook_chapter(work_data, chapter_NO, {
 			title : chapter_data.part_title,

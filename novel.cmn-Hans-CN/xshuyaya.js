@@ -30,7 +30,8 @@ var crawler = new CeL.work_crawler({
 	// 2022/3/22: http://www.xshuyaya.net/
 	// 2022/6/1: http://www.shuyy.cc/
 	// 2022/6/21: http://www.shuyyw.com/
-	base_URL : 'http://www.shuyyw.com/',
+	// 2022/11/4前: http://www.shuyyw.cc/ → http://www.shuyy8.com/
+	base_URL : 'http://www.shuyy8.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'search?wd=',
@@ -119,7 +120,7 @@ var crawler = new CeL.work_crawler({
 					return;
 				var chapter_data = {
 					url : matched[1],
-					title : get_label(matched[2]),
+					title : get_label(matched[2])
 				};
 				crawler.add_chapter(work_data, chapter_data);
 			});
@@ -137,8 +138,7 @@ var crawler = new CeL.work_crawler({
 		// <div class="bzend"><span>本章结束</span>
 		text = text.replace(/<div class="bzend"[\s\S]+/, '');
 
-		// e.g., http://www.shuyyw.com/read/24334/16566634.html
-		text = text.replace(/\.asxs\./g, '起点');
+		text = CeL.work_crawler.fix_general_ADs(text);
 
 		this.add_ebook_chapter(work_data, chapter_NO, text);
 	}
