@@ -262,6 +262,17 @@ crawler = new CeL.work_crawler({
 		/**
 		 * <code>
 
+		// https://www.ptwxz.com/html/13/13305/9231800.html	我宅了百年出门已无敌 第一百一十五章老贼，休想乱我道心
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;7017k<br /><br />
+
+		</code>
+		 */
+		.replace(/7017k(?:<br\s*\/?>)+/g, '')
+
+		.replace(
+		/**
+		 * <code>
+
 		// https://www.ptwxz.com/html/1/1073/2450032.html 斩仙 正文 给个鼓励吧
 		(未完待续。请搜索飄天文學，小说更好更新更快!)
 
@@ -280,17 +291,31 @@ crawler = new CeL.work_crawler({
 		// https://m.ijjxsw.co/txt/9868/12896239_2.html
 		<p>未完待续未完待续请搜索飄天文學，小说更好更新更快!</p><p>ps：衷心感谢：嘉存书友的打赏支持，多谢！</p>
 
+		// https://m.tianyibook.la/book/6311/5018720_2.html
+		(未完待续请搜索飄天文學，小说更好更新更快!<br /><br />
+
+		https://www.ptwxz.com/html/5/5150/2668008.html
+		茜茜的麒麟，s请搜索飄天文學，小说更好更新更快!g的打赏！感谢大家的推荐票！
+
+		https://www.ptwxz.com/html/6/6682/3891370.html 最仙遊 正文 第一百八十七章 破碎虚空 （1800）
+		烈火老祖就没有了这颗棋子。(未完待续请搜索飄天文學，小说更好更新更快!u<br /><br />
+
+		https://www.ptwxz.com/html/6/6682/3997171.html 最仙遊 正文 第两百七十一章 东海城
+		就是我最大的动力请搜索飄天文學，小说更好更新更快!88读书<br /><br />
+
+		</code>
+		 */
+		/[(（]?(?:未完待续)*。?请搜索飄天文學，小说更好更新更快!(?:手机用户[^)]+)?\)?(?:88读书)?(\w(?=<))?/
+		//
+		, '')
+		/**
+		 * <code>
+
 		// http://m.xhytd.com/5/5819/5436882_3.html
 		(未完待续。请搜索飄天文學，)    
 
 		// https://m.tszw.org/read/2/2799/2512310_1.html
 		（未完待续。请搜索飄天文學，）</p><p>手机用户请浏览吞噬小说网{m.tszw.org}</p></div>
-
-		// https://m.tianyibook.la/book/6311/5018720_2.html
-		(未完待续请搜索飄天文學，小说更好更新更快!<br /><br />
-
-		// https://www.ptwxz.com/html/6/6682/3831784.html 最仙遊 正文 第九十五章 试探
-		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;手机用户请到m..阅读。
 
 		https://www.ptwxz.com/html/6/6682/3997171.html
 		您的支持，就是我最大的动力请搜索飄天文學，小说更好更新更快!88读书<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;...
@@ -308,26 +333,7 @@ crawler = new CeL.work_crawler({
 		 */
 		.replace(/(?:<br\s*\/?>)+(?:&nbsp;)*手机用户请[^<>]*$/, '')
 
-		/**
-		 * <code>
-
-		https://www.ptwxz.com/html/6/6682/4072541.html 最仙遊 正文 第三百五十二章 九凤古鼎
-		&nbsp;&nbsp;&nbsp;&nbsp;纯文字在线阅读本站域名手机同步阅读请访问<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;
-
-		</code>
-		 */
-		.replace(/(?:&nbsp;)*纯文字在线阅读[^<>]*(?:<br\s*\/?>)+/, '')
-
-		/**
-		 * <code>
-
-		// https://www.ptwxz.com/html/13/13305/9231800.html	我宅了百年出门已无敌 第一百一十五章老贼，休想乱我道心
-		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;7017k<br /><br />
-
-		</code>
-		 */
-		.replace(/7017k(?:<br\s*\/?>)+/g, '')
-
+		.replace(
 		/**
 		 * <code>
 
@@ -339,17 +345,47 @@ crawler = new CeL.work_crawler({
 
 		</code>
 		 */
-		.replace(/请记住本书首发域名：[\w.。]*(?:手机版阅读网址：[\w.。]*)?(?:<br\s*\/?>)+/g, '')
+		/(?:&nbsp;)*请记住本书首发域名：[\w.。]*(?:手机版阅读网址：[\w.。]*)?(?:<br\s*\/?>)+/g, '')
 
+		.replace(
 		/**
 		 * <code>
 
 		// https://www.ptwxz.com/html/6/6682/3932535.html	最仙遊 正文 第两百三十九章 星罗密布
 		&nbsp;&nbsp;&nbsp;&nbsp;纯文字在线阅读本站域名<foncolor=red>手机同步阅读请访问<br /><br />
 
+		https://www.ptwxz.com/html/6/6682/4072541.html 最仙遊 正文 第三百五十二章 九凤古鼎
+		&nbsp;&nbsp;&nbsp;&nbsp;纯文字在线阅读本站域名手机同步阅读请访问<br /><br />
+
 		</code>
 		 */
-		.replace(/(?:&nbsp;)*纯文字在线阅读本站域名<[^<>]+>手机同步阅读请访问(?:<br\s*\/?>)+/g, '')
+		/(?:&nbsp;)*纯文字在线阅读本站域名(?:<[^<>]+>)?手机同步阅读请访问(?:<br\s*\/?>)+/g, '')
+
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/14/14741/10090277.html 大乘期才有逆袭系统 第四百二十九章 姬空空的烦恼
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;天才本站地址：。阅读网址：<br /><br />
+
+		</code>
+		 */
+		.replace(/(?:&nbsp;)*天才本站地址：。阅读网址：(?:<br\s*\/?>)+/g, '')
+
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/14/14741/10229293.html 大乘期才有逆袭系统 第五百七十八章 音律秘境
+		也只有她，意志力坚定，不为所动，没有受到影响。uu看书 www.uukanshu.com<br /><br />
+
+		// https://www.ptwxz.com/html/14/14741/10229295.html 大乘期才有逆袭系统 第五百八十章 唱歌
+		各有特色的演唱在此地上演，uu看书www.uukanshu.com 能看出组队的两人都可以配合对方。
+
+		// https://www.ptwxz.com/html/14/14741/10236146.html 大乘期才有逆袭系统 第五百八十一章 乐器
+		玉隐拉弓，uu看书 www.uukanshu.com 眼神锐利，
+
+		</code>
+		 */
+		.replace(/uu看书 *www\.uukanshu\.com */g, '')
 
 		/**
 		 * <code>
