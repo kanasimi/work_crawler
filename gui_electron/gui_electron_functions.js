@@ -50,6 +50,8 @@ download_sites_set = {
 
 		'18comic' : '禁漫天堂',
 
+		// baozimh : '包子漫畫',
+
 		// comico : 'comico',
 
 		webtoon : 'WEBTOON',
@@ -119,6 +121,8 @@ download_sites_set = {
 		// hhcool : '汗汗酷漫',
 
 		qiman5 : '奇漫屋',
+
+		// baozimh_cn : '包子漫画',
 
 		// fed 系統
 		// 2021/8/2 採用 Cloudflare 的阻斷服務攻擊保護
@@ -197,6 +201,10 @@ download_sites_set = {
 		zhuishubang : '追书帮',
 
 		xshuyaya : '丫丫电子书',
+
+		fxnzw : '飞翔鸟中文',
+
+		'69shu' : '69书吧',
 
 		daocaoren : '稻草人书屋',
 		'51shucheng' : '无忧书城',
@@ -1346,7 +1354,7 @@ function check_favorites_line_separator(favorites) {
 	|| favorites.line_separator === CeL.env.line_separator ? '' : [ ' ', {
 		// 分行
 		// gettext_config:{"id":"file-new-line-$1-which-does-not-match-the-system-new-line-$2"}
-		T : [ '檔案換行為 %1，和系統換行 %2 不符。',
+		T : [ '檔案換行%1和系統換行%2不符。',
 		//
 		JSON.stringify(favorites.line_separator),
 		//
@@ -2057,7 +2065,7 @@ var search_result_columns = {
 	// gettext_config:{"id":"work_crawler-search_result_columns-restricted"}
 	'work_crawler-search_result_columns-restricted' : [
 	// gettext_config:{"id":"some-chapters-need-to-be-paid-locked-restricted"}
-	'部份章節需要付費/被鎖住/被限制', function(crawler, work_data) {
+	'部份章節須付費／已鎖定／受限', function(crawler, work_data) {
 		// 💰
 		return work_data.some_limited ? '🔒' : '';
 	} ],
