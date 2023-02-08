@@ -26,14 +26,15 @@ function show_info(message) {
 var node_https = require('https'), node_fs = require('fs');
 
 function fetch_url(url, callback) {
+	var url_str = url;
 	if (process.env.socks_proxy) {
 		try {
-			var SocksProxyAgent = require('socks-proxy-agent');
-			url = url.parse(url);
+			var { SocksProxyAgent } = require('socks-proxy-agent');
+			url = require('url').parse(url);
 			url.agent = new SocksProxyAgent(process.env.socks_proxy);
 		} catch (e) {
-			//console.error('Please install socks-proxy-agent to using proxy: ' + '`npm install socks-proxy-agent`');
-			//throw e;
+			console.error('Please install socks-proxy-agent to using proxy: ' + '`npm install socks-proxy-agent`');
+			throw e;
 		}
 	}
 
@@ -48,7 +49,7 @@ function fetch_url(url, callback) {
 		response.on('end', function(e) {
 			var contents = Buffer.concat(buffer_array, sum_size).toString(),
 			//
-			file_name = url.match(/[^\\\/]+$/)[0];
+			file_name = url_str.match(/[^\\\/]+$/)[0];
 			console.info(file_name + ': ' + sum_size + ' bytes.');
 			try {
 				node_fs.writeFileSync(file_name, contents);
