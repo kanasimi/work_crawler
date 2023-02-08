@@ -29,7 +29,7 @@ function fetch_url(url, callback) {
 	var url_str = url;
 	if (process.env.socks_proxy) {
 		try {
-			var { SocksProxyAgent } = require('socks-proxy-agent');
+			var SocksProxyAgent = require('socks-proxy-agent').SocksProxyAgent;
 			url = require('url').parse(url);
 			url.agent = new SocksProxyAgent(process.env.socks_proxy);
 		} catch (e) {
@@ -48,8 +48,8 @@ function fetch_url(url, callback) {
 
 		response.on('end', function(e) {
 			var contents = Buffer.concat(buffer_array, sum_size).toString(),
-			//
-			file_name = url_str.match(/[^\\\/]+$/)[0];
+			// {String}url
+			file_name = url.match(/[^\\\/]+$/)[0];
 			console.info(file_name + ': ' + sum_size + ' bytes.');
 			try {
 				node_fs.writeFileSync(file_name, contents);
