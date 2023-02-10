@@ -90,7 +90,7 @@ download_sites_set = {
 		manhuacat : '漫画猫',
 
 		// '2manhua' : '爱漫画',
-		'57mh' : '57漫画网',
+		// '57mh' : '57漫画网',
 
 		dmzj : '动漫之家',
 		dm5 : '动漫屋',

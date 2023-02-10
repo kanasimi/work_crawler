@@ -145,8 +145,8 @@
 | [咪咕圈圈](http://www.migudm.cn/) | migudm.js | **本工具無法下載付費內容** |
 | [咚漫中文官网](https://www.dongmanmanhua.cn/) | dongman.js | NAVER WEBTOON 中文官网 韩国漫画<br />本工具無法下載有動態效果的漫畫。 |
 | [Toomics 玩漫](https://toomics.com/sc/) | toomics_sc.js | Toomics 韓國漫畫 **本工具無法下載VIP付費內容** |
-| [57漫画网](http://www.wuqimh.com/) | 57mh.js | 缺話眾多。系統同 2manhua.js。可能是2013年版本的 圣樱漫画管理系统？ MHD模板？ |
 | [奇漫屋](http://www.qiman6.com/) | qiman5.js | 有些缺話。 |
+| ~~[57漫画网](http://www.wuqimh.com/)~~ | ~~archive/57mh.js~~ | 缺話眾多。系統同 2manhua.js。可能是2013年版本的 圣樱漫画管理系统？ MHD模板？ |
 | ~~[布卡漫画](http://www.buka.cn/)~~ | ~~archive/buka.js~~ | 有少數遺失圖片。請注意：搜索某些名稱，如包含"纪元"一詞之作品時，會造成連線重設。對於這類作品必須輸入id而非標題。2022/3/14 最後一次成功連接。 **本工具無法下載VIP付費內容** |
 | ~~[汗汗酷漫](http://www.hhimm.com/)~~ | ~~archive/hhcool.js~~ | 日本漫畫較多。 2018/4/27 最後一次存取域名 http://www.hhcool.com/ |
 | ~~[有码漫画](https://www.youma.org/)~~ | ~~archive/youma.js~~ | 大多為韓國漫畫。系統似 hanmanwo.js。 |
