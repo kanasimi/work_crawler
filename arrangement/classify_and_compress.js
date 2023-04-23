@@ -65,6 +65,10 @@ compress_each_directory.profiles = {
 		file_type : '7z',
 		switches : '-mx=9 -r -sdel -sccUTF-8'
 	},
+	'sound folder' : {
+		file_type : '7z',
+		switches : '-mx=9 -r -sdel -sccUTF-8'
+	},
 	'padding files' : {
 		file_type : '7z',
 		switches : '-mx=9 -r -sdel -sccUTF-8'
@@ -292,7 +296,7 @@ function check_fso(fso_name) {
 	}
 	// TODO: 這會漏掉只有空目錄的情況。
 
-	var image_count = 0, exe_count = 0, iso_count = 0, music_count = 0, anime_count = 0, archive_count = 0, _____padding_file_count = 0, non_zero_size_count = 0,
+	var image_count = 0, exe_count = 0, iso_count = 0, wav_count = 0, music_count = 0, anime_count = 0, archive_count = 0, _____padding_file_count = 0, non_zero_size_count = 0,
 	//
 	sub_files = [], sub_directories = [], sub_sub_files_count = 0,
 	// 最大的檔案size
@@ -313,6 +317,8 @@ function check_fso(fso_name) {
 		} else if (/\.(?:iso|mdf|mds|bin|ccd|sub)$/i.test(sub_fso_name)) {
 			iso_count++;
 		} else if (/\.(?:cue|mp3|flac|ape|wav)$/i.test(sub_fso_name)) {
+			if (/\.(?:wav)$/i.test(sub_fso_name))
+				wav_count++;
 			music_count++;
 		} else if (/\.(?:avi|mp4|mkv|ass)$/i.test(sub_fso_name)) {
 			anime_count++;
@@ -367,6 +373,7 @@ function check_fso(fso_name) {
 		exe : exe_count,
 		iso : iso_count,
 		music : music_count,
+		wav : wav_count,
 		anime : anime_count,
 		zero_size : non_zero_size_count,
 		image : image_count,
@@ -422,6 +429,18 @@ function check_fso(fso_name) {
 	// gettext_config:{"id":"subdirectory-contains-executable-files-or-libraries"}
 	CeL.gettext('次目錄中含有可執行檔或函式庫'))) {
 		return;
+	}
+
+	if (wav_count > 4 && wav_count / sub_sub_files_count > .3
+	// || wav_count > 8 && wav_count / sub_sub_files_count > .2
+	) {
+		fso_status.maybe_sound = true;
+		// 壓縮大多只有WAV音檔的目錄。
+		if (test_size_OK(1e10, 'sound folder', CeL
+				.gettext('含有 %1/%2 個{{PLURAL:%1|WAV音檔}}', wav_count,
+						sub_sub_files_count))) {
+			return;
+		}
 	}
 
 	if (image_count > 9 && image_count / sub_sub_files_count > .5) {
@@ -504,7 +523,7 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
-	if (/[\[(（【](?:ゲームCG|Game CG|HCG)/i.test(fso_name)) {
+	if (/[\[(（【](?:(?:同人)?ゲームCG|Game CG|HCG)/i.test(fso_name)) {
 		move_to('game_CG');
 		return;
 	}
@@ -654,7 +673,9 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
-	if (fso_status.counter.music > 0) {
+	if (fso_status.counter.music > 0
+			&& (fso_status.counter.music - fso_status.counter.wav)
+					/ fso_status.counter.sub_sub_files > .5) {
 		move_to('_maybe_music');
 		return;
 	}
