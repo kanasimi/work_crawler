@@ -22,6 +22,8 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 var PATTERN_chapter = /<div class="list">(.+)<\/div>|<a href="(\d+\.html)">(.+)<\/a>/g,
 // 打廣告就算了；每個章節都要檢查這個資源檔，有些煩人了。
 PATTERN_AD = /<a href="http:\/\/www\.piaotian\.com\/?(?:&[a-z]+;[^"]*)?"[^<>]*>[^<>]*<\/a>/ig,
+// https://github.com/gedoor/legado/issues/1961
+PATTERN_wzsy = /(?:&nbsp;)*(?:<p>)?<a\s([^<>]+)>[^<>]*<\/a>(?:<br\s*\/?>)*(?:<\/p>)?/g,
 //
 crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
@@ -199,17 +201,27 @@ crawler = new CeL.work_crawler({
 		// 咫尺之间人尽敌国 第一千零四章 神国 https://www.ptwxz.com/html/10/10231/7979150.html
 		.replace(/水印广告测试(?:&nbsp;)*/g, '')
 
-		// 开局奖励一亿条命 第30章对着空气输出 https://www.ptwxz.com/html/12/12788/8819018.html
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/12/12788/8819018.html	开局奖励一亿条命 第30章对着空气输出
 		// [新筆趣閣 www.xsbiquge.info]
 		// [紅旗小說 www.hongqibook.com]
-		// 开局奖励一亿条命 第39章还来 https://www.ptwxz.com/html/12/12788/8819027.html
+
+		// https://www.ptwxz.com/html/12/12788/8819027.html	开局奖励一亿条命 第39章还来
 		// [筆趣閣5200 www.bqg5200.co]
 		// [新筆趣閣 www.xxbiquge.vip]
 		// [新筆趣閣 www.biqule.info]
-		// 开局奖励一亿条命 第192章人家点的是你的名
-		// https://www.ptwxz.com/html/12/12788/8819376.html
+
+		// https://www.ptwxz.com/html/12/12788/8819376.html	开局奖励一亿条命 第192章人家点的是你的名
 		// [txt小说 www.txtyuan.com]
-		.replace(/\[\w*[\u4e00-\u9fff]+\d* www\.\w+\.\w+\]/g, '')
+
+		// https://www.piaotian.com/html/11/11627/8733404.html	剑宗旁门 第五百五十六章 大衍书阁
+		// 说是有上界大能要借这大衍学宫的书阁降下意念来[ www.biqugexx.xyz]与剑崖教众人进行沟通。<br /><br />
+
+		</code>
+		 */
+		.replace(/\[\w*[\u4e00-\u9fff]*\d* www\.\w+\.\w+\]/g, '')
 
 		/**
 		 * <code>
@@ -252,7 +264,7 @@ crawler = new CeL.work_crawler({
 		/**
 		 * <code>
 
-		// https://www.ptwxz.com/html/6/6682/3766047.html 最仙遊 正文 第四十二章 镇天关内
+		// https://www.ptwxz.com/html/6/6682/3766047.html	最仙遊 正文 第四十二章 镇天关内
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;;
 
 		</code>
@@ -273,13 +285,13 @@ crawler = new CeL.work_crawler({
 		/**
 		 * <code>
 
-		// https://www.ptwxz.com/html/1/1073/2450032.html 斩仙 正文 给个鼓励吧
+		// https://www.ptwxz.com/html/1/1073/2450032.html	斩仙 正文 给个鼓励吧
 		(未完待续。请搜索飄天文學，小说更好更新更快!)
 
-		// https://www.ptwxz.com/html/6/6682/3844397.html 最仙遊 正文 第一百一十四章 选拔（下）
+		// https://www.ptwxz.com/html/6/6682/3844397.html	最仙遊 正文 第一百一十四章 选拔（下）
 		(未完待续请搜索飄天文學，小说更好更新更快!
 
-		// https://www.ptwxz.com/html/3/3704/2309955.html 极品天骄 第一卷 今天只有两更了，求一下保底月票！
+		// https://www.ptwxz.com/html/3/3704/2309955.html	极品天骄 第一卷 今天只有两更了，求一下保底月票！
 		(未完待续。请搜索飄天文學，小说更好更新更快!手机用户请到m.本站阅读。)
 
 		// http://www.tyksjq.com/bqg/13026/2628523_2.html
@@ -297,10 +309,10 @@ crawler = new CeL.work_crawler({
 		https://www.ptwxz.com/html/5/5150/2668008.html
 		茜茜的麒麟，s请搜索飄天文學，小说更好更新更快!g的打赏！感谢大家的推荐票！
 
-		https://www.ptwxz.com/html/6/6682/3891370.html 最仙遊 正文 第一百八十七章 破碎虚空 （1800）
+		https://www.ptwxz.com/html/6/6682/3891370.html	最仙遊 正文 第一百八十七章 破碎虚空 （1800）
 		烈火老祖就没有了这颗棋子。(未完待续请搜索飄天文學，小说更好更新更快!u<br /><br />
 
-		https://www.ptwxz.com/html/6/6682/3997171.html 最仙遊 正文 第两百七十一章 东海城
+		https://www.ptwxz.com/html/6/6682/3997171.html	最仙遊 正文 第两百七十一章 东海城
 		就是我最大的动力请搜索飄天文學，小说更好更新更快!88读书<br /><br />
 
 		</code>
@@ -326,12 +338,21 @@ crawler = new CeL.work_crawler({
 		/**
 		 * <code>
 
-		https://www.ptwxz.com/html/6/6682/3831784.html 最仙遊 正文 第九十五章 试探
+		https://www.ptwxz.com/html/6/6682/3831784.html	最仙遊 正文 第九十五章 试探
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;手机用户请到m..阅读。
 
 		</code>
 		 */
 		.replace(/(?:<br\s*\/?>)+(?:&nbsp;)*手机用户请[^<>]*$/, '')
+		/**
+		 * <code>
+
+		https://www.piaotian.com/html/3/3353/1705022.html	问镜 正文 第1章 上仙
+		&nbsp;&nbsp;&nbsp;&nbsp;{飘天文学<a href="https://www.piaotian.com" target="_blank">www.piaotian.com</a>感谢各位书友的支持，您的支持就是我们最大的动力}
+
+		</code>
+		 */
+		.replace(/(?:<br\s*\/?>|\n)*(?:&nbsp;)*.*?您的支持就是我们[^<>]*/g, '')
 
 		.replace(
 		/**
@@ -340,7 +361,7 @@ crawler = new CeL.work_crawler({
 		// https://www.ptwxz.com/html/13/13305/9697354.html	我宅了百年出门已无敌 第四百零五章开道神速
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;请记住本书首发域名：。_wap.<br /><br />
 
-		// https://www.ptwxz.com/html/14/14466/10213364.html 女主从书里跑出来了怎么办 第五百三十一章 紫薇大帝
+		// https://www.ptwxz.com/html/14/14466/10213364.html	女主从书里跑出来了怎么办 第五百三十一章 紫薇大帝
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;请记住本书首发域名：。手机版阅读网址：wap.<br /><br />
 
 		</code>
@@ -354,7 +375,7 @@ crawler = new CeL.work_crawler({
 		// https://www.ptwxz.com/html/6/6682/3932535.html	最仙遊 正文 第两百三十九章 星罗密布
 		&nbsp;&nbsp;&nbsp;&nbsp;纯文字在线阅读本站域名<foncolor=red>手机同步阅读请访问<br /><br />
 
-		https://www.ptwxz.com/html/6/6682/4072541.html 最仙遊 正文 第三百五十二章 九凤古鼎
+		https://www.ptwxz.com/html/6/6682/4072541.html	最仙遊 正文 第三百五十二章 九凤古鼎
 		&nbsp;&nbsp;&nbsp;&nbsp;纯文字在线阅读本站域名手机同步阅读请访问<br /><br />
 
 		</code>
@@ -364,33 +385,102 @@ crawler = new CeL.work_crawler({
 		/**
 		 * <code>
 
-		// https://www.ptwxz.com/html/14/14741/10090277.html 大乘期才有逆袭系统 第四百二十九章 姬空空的烦恼
+		// https://www.ptwxz.com/html/14/14741/10090277.html	大乘期才有逆袭系统 第四百二十九章 姬空空的烦恼
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;天才本站地址：。阅读网址：<br /><br />
 
 		</code>
 		 */
 		.replace(/(?:&nbsp;)*天才本站地址：。阅读网址：(?:<br\s*\/?>)+/g, '')
 
+		.replace(
 		/**
 		 * <code>
 
-		// https://www.ptwxz.com/html/14/14741/10229293.html 大乘期才有逆袭系统 第五百七十八章 音律秘境
-		也只有她，意志力坚定，不为所动，没有受到影响。uu看书 www.uukanshu.com<br /><br />
+		// https://www.piaotian.com/html/11/11627/8687967.html	剑宗旁门 第五百三十一章 中洲见闻
+		&nbsp;&nbsp;&nbsp;&nbsp;【看书领现金】关注vx公.众号【书友大本营】，看书还可领现金！<br /><br />
 
-		// https://www.ptwxz.com/html/14/14741/10229295.html 大乘期才有逆袭系统 第五百八十章 唱歌
-		各有特色的演唱在此地上演，uu看书www.uukanshu.com 能看出组队的两人都可以配合对方。
+		// https://www.piaotian.com/html/11/11627/8705477.html	剑宗旁门 第五百四十章 自我感觉良好的叛逆
+		&nbsp;&nbsp;&nbsp;&nbsp;&emsp;&emsp;关注公众号：书友大本营，关注即送现金、点币！<br /><br />
 
-		// https://www.ptwxz.com/html/14/14741/10236146.html 大乘期才有逆袭系统 第五百八十一章 乐器
-		玉隐拉弓，uu看书 www.uukanshu.com 眼神锐利，
+		// https://www.piaotian.com/html/11/11627/8696399.html	剑宗旁门 第五百三十三章 婆婆妈妈
+		&nbsp;&nbsp;&nbsp;&nbsp;【领红包】现金or点币红包已经发放到你的账户！微信关注公.众.号【书粉基地】领取！<br /><br />
+
+		// https://www.piaotian.com/html/11/11627/8743189.html	剑宗旁门 第五百六十三章 被玩坏的祖师
+		&nbsp;&nbsp;&nbsp;&nbsp;&emsp;&emsp;领红包现金or点币红包已经发放到你的账户！微信关注公.众.号领取！<br /><br />
+
+		// https://www.piaotian.com/html/11/11627/9040949.html	剑宗旁门 第七百六十二章 冥渊天地
+		&nbsp;&nbsp;&nbsp;&nbsp;&emsp;&emsp;本书由公众号整理制作。关注VX看书领现金红包！<br /><br />
+
+		// https://www.piaotian.com/html/11/11627/9035564.html	剑宗旁门 第七百五十七章 不甘心失败的明珠界
+		&nbsp;&nbsp;&nbsp;&nbsp;&emsp;&emsp;【看书福利】关注公众号每天看书抽现金/点币!<br /><br />
 
 		</code>
 		 */
-		.replace(/uu看书 *www\.uukanshu\.com */g, '')
+		/(?:&nbsp;)*[^<>]*?(?:书友大本营|书粉基地|领红包现金|领现金红包|看书抽现金)[^<>]*(?:<br\s*\/?>)+/g
+		// 整行抽掉
+		, '')
+
+		.replace(
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/11/11627/8856761.html	剑宗旁门 第六百三十二章 上界仙宴
+		&nbsp;&nbsp;&nbsp;&nbsp;&emsp;&emsp;插播一个app: 完美复刻追书神器旧版本可换源的APP—— 。<br /><br />
+
+		// https://www.piaotian.com/html/11/11627/8951740.html	剑宗旁门 第七百章 神力轰击
+		&nbsp;&nbsp;&nbsp;&nbsp;&emsp;&emsp;推荐下，我最近在用的看书app，【 app&emsp;】书源多，书籍全，更新快！<br /><br />
+
+		// https://www.piaotian.com/html/11/11627/8960916.html	剑宗旁门 第七百零七章 无限投影战术
+		&nbsp;&nbsp;&nbsp;&nbsp;&emsp;&emsp;广个告，【 app&emsp;】真心不错，值得装个，竟然安卓苹果手机都支持！<br /><br />
+
+		// https://www.piaotian.com/html/11/11627/8988597.html	剑宗旁门 第七百二十七章 让人操心的祖师
+		&nbsp;&nbsp;&nbsp;&nbsp;&emsp;&emsp;求助下，【app 】可以像偷菜一样的偷书票了，快来偷好友的书票投给我的书吧。<br /><br />
+
+		</code>
+		 */
+		/(?:&nbsp;)*(?:&emsp;)*(?:推荐下|广个告|求助下|插播一个)[^<>]*?app[^<>]*?(?:<br\s*\/?>)+/g
+		// 整行抽掉
+		, '')
 
 		/**
 		 * <code>
 
-		// https://www.ptwxz.com/html/6/6682/3851642.html 最仙遊 正文 第一百二十六章 强敌 （谢盟更之一）
+		// https://www.ptwxz.com/html/14/14951/10288410.html	我在修仙界长生不死 第二百八十四章 元婴道君
+		&nbsp;&nbsp;&nbsp;&nbsp;<a id="wzsy" href="http://m.xiaoshuting.info">小书亭</a><br /><br />
+
+		// https://www.doupocangq.com/jianlai/172311_2.html	第一千零六十一章 假无敌真无敌(2)
+		<p>id=wzsy></a></p>
+
+		</code>
+		 */
+		.replace(PATTERN_wzsy, function(all, a_attributes) {
+			return a_attributes.includes('id="wzsy"') ? '' : all;
+		})
+
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/14/14741/10229293.html	大乘期才有逆袭系统 第五百七十八章 音律秘境
+		也只有她，意志力坚定，不为所动，没有受到影响。uu看书 www.uukanshu.com<br /><br />
+
+		// https://www.ptwxz.com/html/14/14741/10229295.html	大乘期才有逆袭系统 第五百八十章 唱歌
+		各有特色的演唱在此地上演，uu看书www.uukanshu.com 能看出组队的两人都可以配合对方。
+
+		// https://www.ptwxz.com/html/14/14741/10236146.html	大乘期才有逆袭系统 第五百八十一章 乐器
+		玉隐拉弓，uu看书 www.uukanshu.com 眼神锐利，
+
+		// https://www.ptwxz.com/html/14/14951/10234904.html	我在修仙界长生不死 第二百六十七章 龙血武者
+		，uu看书 <a href="http://www.uukanshu.com" target="_blank" class="linkcontent">www.uukanshu.com</a> 根本
+
+		</code>
+		 */
+		.replace(/uu看书 *(?:<a(?:\s[^<>]*)*>)?www\.uukanshu\.com(?:<\/a>)? */g,
+				'')
+
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/6/6682/3851642.html	最仙遊 正文 第一百二十六章 强敌 （谢盟更之一）
 		其所说十有*为真。
 
 		</code>
@@ -406,6 +496,9 @@ crawler = new CeL.work_crawler({
 		// .replace('https:<br', '<br').replace('天才本站地址：。m.', '')
 		;
 		// console.log(text);
+
+		// TODO: https://www.ptwxz.com/html/14/14951/10203091.html
+		// &nbsp;&nbsp;&nbsp;&nbsp;一秒记住ｈｔｔｐs://.\nvip<br /><br />
 
 		text = CeL.work_crawler.fix_general_ADs(text);
 
