@@ -39,7 +39,9 @@ crawler = new CeL.work_crawler({
 	site_name : '飘天文学',
 	// 2018: http://www.piaotian.com/
 	// 2019/11/23 前改為: https://www.ptwxz.com/
-	base_URL : 'https://www.ptwxz.com/',
+	// 2023/8/17 前改為: https://www.piaotian.com/
+	base_URL : 'https://www.piaotian.com/',
+	// <meta HTTP-EQUIV="Content-Type" content="text/html; charset=gb2312" />
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -391,6 +393,16 @@ crawler = new CeL.work_crawler({
 		</code>
 		 */
 		.replace(/(?:&nbsp;)*天才本站地址：。阅读网址：(?:<br\s*\/?>)+/g, '')
+
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/14/14431/9827254.html	道诡异仙 第一百零九章 伤
+		。 为你提供最快的道诡异仙更新，第一百三十二章 路上免费阅读。:.<br /><br />
+
+		</code>
+		 */
+		.replace(/\s*为你提供最快的[^<>]*?更新，[^<>]*?免费阅读。[^<>]*(?:<br\s*\/?>)+/g, '')
 
 		.replace(
 		/**
