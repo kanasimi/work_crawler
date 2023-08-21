@@ -123,6 +123,7 @@ download_sites_set = {
 		qiman5 : '奇漫屋',
 
 		// baozimh_cn : '包子漫画',
+		'baozimh.org' : '包子漫畫.org',
 
 		// fed 系統
 		// 2021/8/2 採用 Cloudflare 的阻斷服務攻擊保護
@@ -2232,7 +2233,7 @@ function show_search_result(work_data_search_queue) {
 		}, {
 			// add, append
 			b : [ {
-				span : '➕',
+				span : '➕😘',
 				S : old_Unicode_support ? 'color: #888;' : ''
 			}, {
 				// gettext_config:{"id":"add-all-the-works-found-on-$1-websites-to-the-website-s-favorite-list"}
