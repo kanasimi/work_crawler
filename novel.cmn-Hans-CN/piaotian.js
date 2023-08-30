@@ -44,6 +44,8 @@ crawler = new CeL.work_crawler({
 	// <meta HTTP-EQUIV="Content-Type" content="text/html; charset=gb2312" />
 	charset : 'gbk',
 
+	chapter_time_interval : '1s',
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
 		return [ 'modules/article/search.php', {
@@ -147,7 +149,9 @@ crawler = new CeL.work_crawler({
 	},
 	get_chapter_list : function(work_data, html, get_label) {
 		html = html.between('<div class="centent">', '<div class="bottom">');
+
 		work_data.chapter_list = [];
+
 		var matched, part_title, base_url = work_data.base_url = this
 				.chapter_list_URL(work_data.id).replace(/[^\/]+$/, '');
 		while (matched = PATTERN_chapter.exec(html)) {
@@ -168,6 +172,7 @@ crawler = new CeL.work_crawler({
 				work_data.chapter_list.push(chapter_data);
 			}
 		}
+		// console.log(work_data);
 	},
 
 	// 取得每一個章節的各個影像內容資料。 get_chapter_data()
@@ -191,12 +196,34 @@ crawler = new CeL.work_crawler({
 
 		text = text
 		// 去除掉 <script> 功能碼。
-		.replace(/<script[^<>]*>[^<>]*<\/script>/g, '')
+		.replace(/<script[^<>]*>[^<>]*<\/script>/g, '');
 
+		// 去除一開始的標題。
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/14/14431/10164343.html	道诡异仙 第434章 北风
+		// &nbsp;&nbsp;&nbsp;&nbsp;第434章 北风
+
+		// https://www.piaotian.com/html/9/9051/5938845.html	超神机械师 011 天若有情天亦老，我为萧哥***
+
+		// https://www.piaotian.com/html/5/5982/3239153.html	随波逐流之一代军师 外传 清梵曲
+
+		</code>
+		 */
+		if (true || /第.+章/.test(chapter_data.title)) {
+			text = text.replace(new RegExp(/^(?:&nbsp;|\s)*/.source
+					+ CeL.to_RegExp_pattern(chapter_data.title)
+					+ /(?:<br\s*\/?>)*/.source), '')
+		}
+
+		// ----------------------------
 		// 去除廣告。
 
-		// 琥珀之剑 第四卷 第二百八十九幕 时间的长度 https://www.ptwxz.com/html/2/2827/1322197.html
-		.replace(/&lt;a href=&quot;[\x20-\xff]+&lt;\/a&gt;(?:<\/a>)*/, '')
+		// 琥珀之剑 第四卷 第二百八十九幕 时间的长度
+		// https://www.ptwxz.com/html/2/2827/1322197.html
+		text = text.replace(
+				/&lt;a href=&quot;[\x20-\xff]+&lt;\/a&gt;(?:<\/a>)*/, '')
 
 		// 去除掉廣告。
 		.replace(PATTERN_AD, '')
@@ -230,18 +257,26 @@ crawler = new CeL.work_crawler({
 
 		// https://www.ptwxz.com/html/14/14466/9866209.html
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;銆愯瘽璇达紝鐩鍓嶆湕璇诲惉涔︽渶濂界敤鐨刟pp锛屽挭鍜闃呰伙紝 瀹夎呮渶鏂扮増銆傘<br /><br />
+
 		// https://www.bqg9527.com/zh_hant/book/194082/167532218.html
 		&nbsp;&nbsp;&nbsp;&nbsp;銆愯瘽璇達紝鐩?鍓嶆湕璇誨惉涔︽滃ソ鐢1殑app錛屽挭鍜?闃呰?夥紝?瀹夎?呮滄柊鐗堛?傘?/p&amp;gt;<br/>
+
+		// https://www.piaotian.com/html/12/12964/9918868.html	顶级气运，悄悄修炼千年 第990章 踏魔路
+		&nbsp;&nbsp;&nbsp;&nbsp;銆愭帹鑽愪笅锛屽挭鍜槄璇昏拷涔︾湡鐨勫ソ鐢紝杩欓噷涓嬭浇澶у鍘诲揩鍙互璇曡瘯鍚с€傘€/p><br /><br />
+
 		// https://uukanshu.cc/book/16523/11534208.html
 		&emsp;&emsp;銆愯瘽璇達紝鐩鍓嶆湕璇誨惉涔︽渶濂界敤鐨刟pp錛屽挭鍜闃呰伙紝 瀹夎呮渶鏂扮増銆傘<br />
+
 		// https://www.ptwxz.com/html/14/14466/9867006.html
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;銆愭帹鑽愪笅锛屽挭鍜闃呰昏拷涔︾湡鐨勫ソ鐢锛岃繖閲屼笅杞&nbsp;&nbsp;澶у跺幓蹇鍙浠ヨ瘯璇曞惂銆傘<br /><br />
+
 		// https://www.ptwxz.com/html/14/14466/9828256.html
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;銆愯茬湡锛屾渶杩戜竴鐩寸敤鍜鍜闃呰荤湅涔﹁拷鏇达紝鎹㈡簮鍒囨崲锛屾湕璇婚煶鑹插氾紝 瀹夊崜鑻规灉鍧囧彲銆傘<br /><br />
 
 		</code>
 		 */
-		.replace(/銆[愯愭][^<>\n]{30,60}傘[\w\/?&;]*(?:<br\s*\/?>)*/g, '')
+		.replace(/(?:&nbsp;)*銆[愯愭][^<>\n]{30,60}傘[\w\/?&;€>]*(?:<br\s*\/?>)*/g,
+				'')
 		/**
 		 * <code>
 
@@ -250,7 +285,8 @@ crawler = new CeL.work_crawler({
 
 		</code>
 		 */
-		.replace(/銆[愯愭][^<>\n]{80,90}銆[\w\/?&;]*(?:<br\s*\/?>)*/g, '')
+		.replace(/(?:&nbsp;)*銆[愯愭][^<>\n]{80,90}銆[\w\/?&;]*(?:<br\s*\/?>)*/g,
+				'')
 		/**
 		 * <code>
 
