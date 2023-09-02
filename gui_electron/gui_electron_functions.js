@@ -211,6 +211,7 @@ download_sites_set = {
 		'51shucheng' : '无忧书城',
 		luoxia : '落霞小说网',
 		kanunu : '努努书坊',
+		quanben : '全本小说网',
 		piaotian : '飘天文学'
 	},
 	'novel.ja-JP' : {

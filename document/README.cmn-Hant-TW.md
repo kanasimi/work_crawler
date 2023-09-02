@@ -82,6 +82,7 @@
 | [花香居](https://www.huaxiangju.com/) | huaxiangju.js | 杰奇小说连载系统 |
 | [追书帮](http://www.zhuishubang.com/) | zhuishubang.js | 杰奇小说连载系统 |
 | [飘天文学](http://www.piaotian.com/) | piaotian.js | NOT PTCMS. 杰奇小说连载系统? |
+| [全本小说网](https://www.quanben5.com/) | quanben.js | 看起來非PTCMS，有獨自的系統？有自我審查。於某些小說較少錯落字。 |
 | [落霞小说网](http://www.luoxia.com/) | luoxia.js | WordPress，數量少、速度較慢但品質較高，較少錯字和自我審查。 |
 | [努努书坊](https://www.kanunu8.com/) | kanunu.js | 有些非流行網路小說的書。 |
 | [稻草人书屋](http://www.daocaorenshuwu.com/) | daocaoren.js | 有些非流行網路小說的書 |
