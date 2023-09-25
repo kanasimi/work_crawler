@@ -25,6 +25,8 @@ PATTERN_AD = /<a href="http:\/\/www\.piaotian\.com\/?(?:&[a-z]+;[^"]*)?"[^<>]*>[
 // https://github.com/gedoor/legado/issues/1961
 PATTERN_wzsy = /(?:&nbsp;)*(?:<p>)?<a\s([^<>]+)>[^<>]*<\/a>(?:<br\s*\/?>)*(?:<\/p>)?/g,
 //
+PATTERN_app_1 = /(?:&nbsp;)*(?:&emsp;)*(?:推荐下|广个告|求助下|插播一个)[^<>]*?app[^<>]{0,50}(?:<br\s*\/?>)+/g,
+//
 crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!
@@ -44,7 +46,7 @@ crawler = new CeL.work_crawler({
 	// <meta HTTP-EQUIV="Content-Type" content="text/html; charset=gb2312" />
 	charset : 'gbk',
 
-	chapter_time_interval : '1s',
+	chapter_time_interval : 500,
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
@@ -198,6 +200,8 @@ crawler = new CeL.work_crawler({
 		// 去除掉 <script> 功能碼。
 		.replace(/<script[^<>]*>[^<>]*<\/script>/g, '');
 
+		// ----------------------------
+
 		// 去除一開始的標題。
 		/**
 		 * <code>
@@ -209,13 +213,94 @@ crawler = new CeL.work_crawler({
 
 		// https://www.piaotian.com/html/5/5982/3239153.html	随波逐流之一代军师 外传 清梵曲
 
+		// https://www.piaotian.com/html/14/14431/10565524.html	道诡异仙 第1027章 番外1 感谢白银盟主（李火旺0402生
+		&nbsp;&nbsp;&nbsp;&nbsp;第1027章 番外1 感谢白银盟主（李火旺0402生日快乐）的打赏。<br/><br/>
+
 		</code>
 		 */
 		if (true || /第.+章/.test(chapter_data.title)) {
 			text = text.replace(new RegExp(/^(?:&nbsp;|\s)*/.source
 					+ CeL.to_RegExp_pattern(chapter_data.title)
-					+ /(?:<br\s*\/?>)*/.source), '')
+					+ /\s*(?:<br\s*\/?>)+/.source), '')
 		}
+
+		// ----------------------------
+		// 回復被審核屏蔽的文字
+
+		text = text
+
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/13/13793/9355310.html	我只想安静的做个苟道中人 第一百七十六章：你想要什么？（第一更！求订阅！）
+		艹亻尔女马的郑荆山！
+		扌喿扌喿扌喿！！！
+		// avoid: "那位少女馬上眼前一亮"	劍仙三千萬-第六十六章武宗
+
+		// https://www.piaotian.com/html/13/13793/9355452.html	我只想安静的做个苟道中人 第四十八章：再来一次。（第四更！求订阅！）
+		接着就开始被厉师姐采衤卜……
+
+		// https://www.piaotian.com/html/13/13793/9355454.html	我只想安静的做个苟道中人 第五十章：太刺激了。（第一更！求订阅！）
+		这是要在光天化日之下里予占戈？
+
+		// https://www.piaotian.com/html/13/13793/9355285.html	我只想安静的做个苟道中人 第一百五十一章：厉仙子的大长腿。（第二更！求订阅！）
+		艹亻也女马白勺！
+
+		女干氵?掳掠
+		女干夫氵女彐
+		钅肖魂入骨
+		禁女干乱
+		那月匈……
+
+		</code>
+		 */
+		.replace(/亻尔女马/g, '你媽').replace(/亻尔/g, '你').replace(/扌喿/g, '操')
+		//
+		.replace(/衤卜/g, '補').replace(/里予占戈/g, '野戰')
+		//
+		.replace(/米青丬士/g, '精壮').replace(/口申口今/g, '呻吟').replace(/月几月夫/g, '肌肤')
+		// 孚乚汁
+		.replace(/酉禾月匈/g, '酥胸').replace(/酉禾孚乚/g, '酥乳').replace(/孚乚/g, '乳')
+		// 冫夌辱
+		.replace(/冫夌/g, '凌')
+		// 忄青趣
+		.replace(/忄青/g, '情')
+		// 忄夬感
+		.replace(/忄夬/g, '快')
+		// 衤果体 衤果露
+		.replace(/衤果/g, '裸')
+
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/14/14229/9757030.html	修仙三百年突然发现是武侠 第一百二十五章 飞剑千里取人头
+		我渡法马上就要彻底蜕去这**凡胎，成就罗汉金身了！
+
+		// 肉眼凡胎
+
+		</code>
+		 */
+		.replace(/([^*])\*{2}凡胎/g, '$1肉体凡胎')
+
+		/**
+		 * <code>
+
+		// https://www.ptwxz.com/html/6/6682/3851642.html	最仙遊 正文 第一百二十六章 强敌 （谢盟更之一）
+		其所说十有*为真。
+
+		</code>
+		 */
+		.replace(/十有\*{1,2}([^*])/g, '十有八九$1')
+
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/14/14229/9785496.html	修仙三百年突然发现是武侠 第一百四十八章 心魔蛊惑，恭请九火炎龙！
+		意味着这个猜测**不离十。
+
+		</code>
+		 */
+		.replace(/([^*])\*{2}不离十/g, '$1八九不离十');
 
 		// ----------------------------
 		// 去除廣告。
@@ -287,6 +372,7 @@ crawler = new CeL.work_crawler({
 		 */
 		.replace(/(?:&nbsp;)*銆[愯愭][^<>\n]{80,90}銆[\w\/?&;]*(?:<br\s*\/?>)*/g,
 				'')
+
 		/**
 		 * <code>
 
@@ -298,6 +384,50 @@ crawler = new CeL.work_crawler({
 		</code>
 		 */
 		.replace(/(?:<br\s*\/?>)+(?:&nbsp;)*谷.(<br\s*\/?>)/g, '$1')
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/14/14229/9733468.html	修仙三百年突然发现是武侠 第一百零九章 她叫姜七七
+		还能引动仙剑异象时更加震惊。谷<br/><br/>
+
+		</code>
+		 */
+		.replace(/(。)谷(<br\s*\/?>)/g, '$1$2')
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/14/14229/9707828.html	修仙三百年突然发现是武侠 第九十三章 这都是道一宫的阴谋
+		任太守觉得这有几分可信？”spanstyle>谷/spanstyle><br/><br/>
+
+		</code>
+		 */
+		.replace(/spanstyle>谷\/spanstyle>/g, '')
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/14/14229/9712346.html	修仙三百年突然发现是武侠 第九十九章 百年前的那一战
+		&nbsp;&nbsp;&nbsp;&nbsp;谷/span>　　天仙？<br/><br/>
+
+		</code>
+		 */
+		.replace(/谷\/span>/g, '')
+
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/14/14229/9907283.html	修仙三百年突然发现是武侠 第二百五十章 三十万年前，上天崩灭
+		强牺tianlaixw.读牺<br/><br/>
+		// https://www.piaotian.com/html/14/14229/9923535.html	修仙三百年突然发现是武侠 第二百六十五章 肉身之力，徒手撕飞梭
+		。强牺读牺<br/><br/>
+		// https://www.cpafarm.com/book/34437/44.html	石更俞凤琴 > 第44章：这招对我没用
+		&#24378&#29306&#32&#116&#105&#97&#110&#108&#97&#105&#120&#119&#46&#99&#111&#109&#32&#35835&#29306<br /><br />
+
+		// https://www.piaotian.com/html/12/12964/9952296.html	顶级气运，悄悄修炼千年 第1022章 帝星之盛势
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;强牺读牺。坐于首座的中年男子正是厉遥之子，韩云瑾。<br/><br/>
+
+		</code>
+		 */
+		.replace(/强牺\s*[a-z.]*\s*读牺。?/g, '')
 
 		/**
 		 * <code>
@@ -440,6 +570,18 @@ crawler = new CeL.work_crawler({
 		 */
 		.replace(/\s*为你提供最快的[^<>]*?更新，[^<>]*?免费阅读。[^<>]*(?:<br\s*\/?>)+/g, '')
 
+		/**
+		 * TODO <code>
+
+		// https://www.piaotian.com/html/14/14229/9962425.html	修仙三百年突然发现是武侠 第二百九十章 那好似来自无穷高处的目光
+		&nbsp;&nbsp;&nbsp;&nbsp;没有弹窗,更新及时 !<br/><br/>
+
+		// https://www.piaotian.com/html/14/14229/9962689.html	修仙三百年突然发现是武侠 第二百九十一章 这是一个小小的意外
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没有弹窗,更新及时&nbsp;&nbsp;!<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;7<br/><br/>
+
+		</code>
+		 */
+
 		.replace(
 		/**
 		 * <code>
@@ -464,11 +606,10 @@ crawler = new CeL.work_crawler({
 
 		</code>
 		 */
-		/(?:&nbsp;)*[^<>]*?(?:书友大本营|书粉基地|领红包现金|领现金红包|看书抽现金)[^<>]*(?:<br\s*\/?>)+/g
+		/(?:&nbsp;)*[^<>]*?(?:书友大本营|书粉基地|领红包现金|领现金红包|看书抽现金)[^<>]{0,50}(?:<br\s*\/?>)+/g
 		// 整行抽掉
 		, '')
 
-		.replace(
 		/**
 		 * <code>
 
@@ -486,7 +627,21 @@ crawler = new CeL.work_crawler({
 
 		</code>
 		 */
-		/(?:&nbsp;)*(?:&emsp;)*(?:推荐下|广个告|求助下|插播一个)[^<>]*?app[^<>]*?(?:<br\s*\/?>)+/g
+		.replace(PATTERN_app_1, '')
+
+		.replace(
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/14/14229/9821798.html	修仙三百年突然发现是武侠 第一百七十七章 巨大收获，火龙至天合
+		&nbsp;&nbsp;&nbsp;&nbsp;【话说，目前朗读听书最好用的app，， 安装最新版。】<br/><br/>
+
+		// http://www.shuhuang.la/xs/353/353456/5083138.html	第876章 不怂不行
+		<br />　　【话说，目前朗读听书最好用的app，换源app，www.huanyuanapp.com安装最新版。】<br />
+
+		</code>
+		 */
+		/(?:&nbsp;|　)*【话说，目前朗读听书最好用的app[^<>]{0,50}(?:<br\s*\/?>)+/g
 		// 整行抽掉
 		, '')
 
@@ -524,16 +679,6 @@ crawler = new CeL.work_crawler({
 		 */
 		.replace(/uu看书 *(?:<a(?:\s[^<>]*)*>)?www\.uukanshu\.com(?:<\/a>)? */g,
 				'')
-
-		/**
-		 * <code>
-
-		// https://www.ptwxz.com/html/6/6682/3851642.html	最仙遊 正文 第一百二十六章 强敌 （谢盟更之一）
-		其所说十有*为真。
-
-		</code>
-		 */
-		.replace(/十有\*{1,2}([^*])/g, '十有八九$1')
 
 		// 一品修仙 正文 第二四三章 我不是幻觉，不信你捅我一剑试试
 		// https://www.ptwxz.com/html/9/9503/6476110.html
