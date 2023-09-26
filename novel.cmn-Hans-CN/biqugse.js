@@ -12,9 +12,13 @@ CeL.run('application.net.work_crawler.sites.PTCMS');
 
 // ----------------------------------------------------------------------------
 
+var PATTERN_pages = /(?:<br\s*\/?>)*(?:&nbsp;)*(?:（本章未完，请点击下一页继续阅读）)?最新网址：(?:<br\s*\/?>)*(?:&nbsp;)*第[^<>()]+?章 [^<>()]+? \(第\d\/\d页\)(?:<br\s*\/?>)+/g;
+
 var crawler = CeL.PTCMS({
 	base_URL : 'http://www.biqugse.com/',
 	must_browse_first : true,
+
+	chapter_time_interval : 200,
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(key) {
@@ -60,6 +64,25 @@ var crawler = CeL.PTCMS({
 	// 取得包含章節列表的文字範圍。
 	get_chapter_list_contents : function(html) {
 		return html.between('<div id="list">', '</div>');
+	},
+
+	remove_ads : function(text, chapter_data) {
+		text = text
+
+		/**
+		 * <code>
+
+		// http://www.biqugse.com/107322/103843803.html	长生，从养鸡杂役开始 >第79章博弈
+		<br/>最新网址：&nbsp;&nbsp;&nbsp;&nbsp;第七十九章 博弈 (第1/3页)<br/>
+		<br/>&nbsp;&nbsp;&nbsp;&nbsp;（本章未完，请点击下一页继续阅读）最新网址：<br/>&nbsp;&nbsp;&nbsp;&nbsp;第七十九章 博弈 (第2/3页)<br/>
+
+		</code>
+		 */
+		.replace(PATTERN_pages, '')
+
+		;
+
+		return text;
 	}
 });
 
