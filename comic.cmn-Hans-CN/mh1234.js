@@ -30,7 +30,8 @@ var crawler = CeL.SinMH({
 	// https://www.mh1234.com/assets/d74ff3d8/js/theme.js
 	// Created by Shen.L on 2016/1/28.
 	// SinMH.initChapter, SinTheme.initChapter, SinConf.resHost
-	base_URL : 'https://www.mh1234.com/',
+	// 2023/6/25 前自 https://www.mh1234.com/ 改成 https://www.ymh1234.com/
+	base_URL : 'https://www.ymh1234.com/',
 
 	work_URL : function(work_id) {
 		return 'comic/' + work_id + '.html';

@@ -224,83 +224,7 @@ crawler = new CeL.work_crawler({
 					+ /\s*(?:<br\s*\/?>)+/.source), '')
 		}
 
-		// ----------------------------
-		// 回復被審核屏蔽的文字
-
-		text = text
-
-		/**
-		 * <code>
-
-		// https://www.piaotian.com/html/13/13793/9355310.html	我只想安静的做个苟道中人 第一百七十六章：你想要什么？（第一更！求订阅！）
-		艹亻尔女马的郑荆山！
-		扌喿扌喿扌喿！！！
-		// avoid: "那位少女馬上眼前一亮"	劍仙三千萬-第六十六章武宗
-
-		// https://www.piaotian.com/html/13/13793/9355452.html	我只想安静的做个苟道中人 第四十八章：再来一次。（第四更！求订阅！）
-		接着就开始被厉师姐采衤卜……
-
-		// https://www.piaotian.com/html/13/13793/9355454.html	我只想安静的做个苟道中人 第五十章：太刺激了。（第一更！求订阅！）
-		这是要在光天化日之下里予占戈？
-
-		// https://www.piaotian.com/html/13/13793/9355285.html	我只想安静的做个苟道中人 第一百五十一章：厉仙子的大长腿。（第二更！求订阅！）
-		艹亻也女马白勺！
-
-		女干氵?掳掠
-		女干夫氵女彐
-		钅肖魂入骨
-		禁女干乱
-		那月匈……
-
-		</code>
-		 */
-		.replace(/亻尔女马/g, '你媽').replace(/亻尔/g, '你').replace(/扌喿/g, '操')
-		//
-		.replace(/衤卜/g, '補').replace(/里予占戈/g, '野戰')
-		//
-		.replace(/米青丬士/g, '精壮').replace(/口申口今/g, '呻吟').replace(/月几月夫/g, '肌肤')
-		// 孚乚汁
-		.replace(/酉禾月匈/g, '酥胸').replace(/酉禾孚乚/g, '酥乳').replace(/孚乚/g, '乳')
-		// 冫夌辱
-		.replace(/冫夌/g, '凌')
-		// 忄青趣
-		.replace(/忄青/g, '情')
-		// 忄夬感
-		.replace(/忄夬/g, '快')
-		// 衤果体 衤果露
-		.replace(/衤果/g, '裸')
-
-		/**
-		 * <code>
-
-		// https://www.piaotian.com/html/14/14229/9757030.html	修仙三百年突然发现是武侠 第一百二十五章 飞剑千里取人头
-		我渡法马上就要彻底蜕去这**凡胎，成就罗汉金身了！
-
-		// 肉眼凡胎
-
-		</code>
-		 */
-		.replace(/([^*])\*{2}凡胎/g, '$1肉体凡胎')
-
-		/**
-		 * <code>
-
-		// https://www.ptwxz.com/html/6/6682/3851642.html	最仙遊 正文 第一百二十六章 强敌 （谢盟更之一）
-		其所说十有*为真。
-
-		</code>
-		 */
-		.replace(/十有\*{1,2}([^*])/g, '十有八九$1')
-
-		/**
-		 * <code>
-
-		// https://www.piaotian.com/html/14/14229/9785496.html	修仙三百年突然发现是武侠 第一百四十八章 心魔蛊惑，恭请九火炎龙！
-		意味着这个猜测**不离十。
-
-		</code>
-		 */
-		.replace(/([^*])\*{2}不离十/g, '$1八九不离十');
+		text = CeL.work_crawler.fix_general_censorship(text);
 
 		// ----------------------------
 		// 去除廣告。
@@ -378,6 +302,7 @@ crawler = new CeL.work_crawler({
 
 		// https://www.ptwxz.com/html/13/13305/9960310.html
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;谷輥<br /><br />
+
 		// https://www.ptwxz.com/html/13/13305/9961817.html
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;谷婚<br /><br />
 
@@ -387,12 +312,27 @@ crawler = new CeL.work_crawler({
 		/**
 		 * <code>
 
-		// https://www.piaotian.com/html/14/14229/9733468.html	修仙三百年突然发现是武侠 第一百零九章 她叫姜七七
-		还能引动仙剑异象时更加震惊。谷<br/><br/>
+		// https://www.piaotian.com/html/13/13793/9811250.html	我只想安静的做个苟道中人 第一百五十六章：何以证明？（第二更！求订阅！）
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;谷　　罡风呼啸间，所有气劲齐齐一聚，化作一只遮天蔽日的巨掌，显现虚空，咆哮着扑向裴凌。<br/><br/>
 
 		</code>
 		 */
-		.replace(/(。)谷(<br\s*\/?>)/g, '$1$2')
+		.replace(/(&nbsp;)谷(　　)/g, '$1$2')
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/14/14229/9733468.html	修仙三百年突然发现是武侠 第一百零九章 她叫姜七七
+		还能引动仙剑异象时更加震惊。谷<br/><br/>
+
+		// https://www.piaotian.com/html/13/13793/9750872.html	我只想安静的做个苟道中人 第七十章：陌生记忆。（第二更！求订阅！）
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;萧家现在，应该没有丫鬟才对！谷<br/><br/>
+
+		// https://www.piaotian.com/html/13/13793/9756592.html	我只想安静的做个苟道中人 第七十二章：同样的方法。（第二更！求订阅！）
+		婢子……似乎听说过，但现在就是想不起来了。”谷<br/><br/>
+
+		</code>
+		 */
+		.replace(/([。！”])谷(<br\s*\/?>)/g, '$1$2')
 		/**
 		 * <code>
 
@@ -425,9 +365,19 @@ crawler = new CeL.work_crawler({
 		// https://www.piaotian.com/html/12/12964/9952296.html	顶级气运，悄悄修炼千年 第1022章 帝星之盛势
 		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;强牺读牺。坐于首座的中年男子正是厉遥之子，韩云瑾。<br/><br/>
 
+		// https://www.piaotian.com/html/13/13793/9858834.html		我只想安静的做个苟道中人 第一百九十六章：阴影中的禁忌！（第一更！求订阅！）
+		制大制枭。
+		// https://www.qbtr.cc/tongren/6840/64.html	斗罗：转生海魂兽，比奇堡三大将 第64章
+		...制大 . 制枭</p><p>
+		// https://www.piaotian.com/html/14/14431/10248218.html	道诡异仙 第545章 交易
+		“洪兄，后会有期了。”制大 . 制枭这候 章汜<br/><br/>
+
+		// https://www.piaotian.com/html/13/13793/9858835.html	我只想安静的做个苟道中人 第一百九十七章：言说尊号。（第二更！求订阅！）
+		却都毫无用处。这候TI**X*章汜<br/><br/>
+
 		</code>
 		 */
-		.replace(/强牺\s*[a-z.]*\s*读牺。?/g, '')
+		.replace(/(?:强牺|制大|这候)\s*(?:[A-Za-z.*]*\s*)?(?:读牺|制枭|章汜)。?/g, '')
 
 		/**
 		 * <code>
@@ -644,6 +594,20 @@ crawler = new CeL.work_crawler({
 		/(?:&nbsp;|　)*【话说，目前朗读听书最好用的app[^<>]{0,50}(?:<br\s*\/?>)+/g
 		// 整行抽掉
 		, '')
+
+		/**
+		 * <code>
+
+		// https://www.piaotian.com/html/13/13793/9846812.html	我只想安静的做个苟道中人 第一百八十七章：皇朝合道。（第一更！求订阅！）
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;喜欢我只想安静的做个苟道中人请大家收藏：我只想安静的做个苟道中人更新速度最快。<br/><br/>
+
+		// https://www.piaotian.com/html/13/13793/9858834.html		我只想安静的做个苟道中人 第一百九十六章：阴影中的禁忌！（第一更！求订阅！）
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;喜欢我只想安静的做个苟道中人请大家收藏：我只想安静的做个苟道中人笔下文学更新速度最快。<br/><br/>
+
+		</code>
+		 */
+		.replace(/(?:&nbsp;)+喜欢.{2,40}?请大家收藏：.{2,40}?更新速度最快。(?:<br\s*\/?>)+/g,
+				'')
 
 		/**
 		 * <code>

@@ -118,7 +118,7 @@ var crawler = new CeL.work_crawler({
 		&& chapter_data.json_content.page[0].mobileImgUrl) {
 			CeL.warn([ this.id + ':', {
 				// gettext_config:{"id":"«$1»-is-a-paid-member-only-work-you-must-purchase-before-reading"}
-				T : [ '《%1》為會員專屬作品，必須充值後才能閱讀！', work_data.title ]
+				T : [ '《%1》是付費會員專享作品，您必須購買後才能閱讀！', work_data.title ]
 			} ]);
 			return;
 		}

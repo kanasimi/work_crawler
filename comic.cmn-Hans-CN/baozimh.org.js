@@ -10,6 +10,7 @@ require('../work_crawler_loader.js');
 
 var crawler = new CeL.work_crawler({
 	// 2023/6/16: https://baozimh.org/
+	// 2023/9/1 前網站改版為手機友好外觀
 	base_URL : 'https://baozimh.org/',
 
 	// 最小容許圖案檔案大小 (bytes)。

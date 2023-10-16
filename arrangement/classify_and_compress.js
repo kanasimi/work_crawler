@@ -517,13 +517,13 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
-	if (/[\[(（【](?:18禁ゲーム|ACT|ADV|RPG|SLG|3D|PL\])/i.test(fso_name)
+	if (/[\[(（【](?:18禁ゲーム|ACT|ADV|RPG|SLG|3D|PL)\]/i.test(fso_name)
 			|| /パッケージ版|修正パッチ|予約特典|本編同梱|\+ ?update/i.test(fso_name)) {
 		move_to('game');
 		return;
 	}
 
-	if (/[\[(（【](?:(?:同人)?ゲームCG|Game CG|HCG)/i.test(fso_name)) {
+	if (/[\[(（【](?:18禁ゲーム ?CG|(?:同人)?ゲームCG|Game CG|HCG)/i.test(fso_name)) {
 		move_to('game_CG');
 		return;
 	}

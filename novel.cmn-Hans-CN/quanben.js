@@ -176,7 +176,7 @@ var crawler = new CeL.work_crawler({
 		//
 		text = html.between('<div id="content">', '</div>');
 
-		text = text.replace(/(空|浩浩|坦坦)\*{2,}/g, '$1荡荡');
+		text = CeL.work_crawler.fix_general_censorship(text);
 
 		this.add_ebook_chapter(work_data, chapter_NO, {
 			title : chapter_data.part_title,

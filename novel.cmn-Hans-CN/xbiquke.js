@@ -12,7 +12,15 @@ CeL.run('application.net.work_crawler.sites.PTCMS');
 
 // ----------------------------------------------------------------------------
 
-var crawler = CeL.PTCMS({
+var // https://www.xxbiquke.net/64_64816/29478622.html
+// 记住网址m.ｘｂｅｑｕｇｅ．ｃｏｍ
+PATTERN_ads_base = generate_bi_width_pattern('b') + '.'
+		+ generate_bi_width_pattern('qu') + '.'
+		+ generate_bi_width_pattern('e.'),
+//
+crawler = CeL.PTCMS({
+	// 2023/8/20 之前: http://www.xbiquke.net/ → https://www.xxbiquke.net/
+	// 但直接連結似乎會被屏蔽?
 	base_URL : 'http://www.xbiquke.net/',
 	// must_browse_first : true,
 
@@ -46,16 +54,22 @@ var crawler = CeL.PTCMS({
 
 	PATTERN_ads_1 : new RegExp('(?:一秒记住|记住网址|首发网址)(?:'
 			+ generate_bi_width_pattern('http://') + ')?(?:'
-			+ generate_bi_width_pattern('m.xbiquke.net/') + '?)', 'g'),
-	remove_ads : function(text) {
+			// https://www.xxbiquke.net/64_64816/29478099.html
+			// "一秒记住ｈｔｔｐ://ｍ．xxbiquｋｅ．ｎｅｔ"
+			+ generate_bi_width_pattern('m.xx') + '?' + PATTERN_ads_base
+			+ '[a-zａ-ｚ]+' + generate_bi_width_pattern('/') + '?)', 'g'),
+	remove_ads : function(text, chapter_data) {
 		// http://www.xbiquke.net/29_29775/21316959.html
 		text = text.replace(/(?:\s|&nbsp;)*<p\s+class="[^"]*">\s*/g, '<p>')
 				.replace(/\s*<\/p>\s*<br\s*\/?>/g, '</p>').replace(
 						this.PATTERN_ads_1, '');
-		var matched = text.match(new RegExp('(.{0,20}'
-				+ generate_bi_width_pattern('m.xbiquke.net/') + '?)'));
-		if (matched)
-			CeL.warn('remove_ads: 發現廣告標記: ' + matched[1]);
+		var matched = text.match(new RegExp('(.{0,20}' + PATTERN_ads_base
+				+ '.{0,20})'));
+		if (matched) {
+			CeL.warn('remove_ads: 發現《' + chapter_data.title + '》尚殘留廣告標記: '
+					+ matched[1]);
+			// console.trace(chapter_data);
+		}
 		return text;
 	}
 });

@@ -27,7 +27,8 @@ var crawler = new CeL.work_crawler({
 	// chapter_time_interval : '2s',
 
 	// 2018/2/4前: https://www.69shu.com/
-	base_URL : 'https://www.69shu.com/',
+	// 2023/8/18前改: https://www.69shuba.com/
+	base_URL : 'https://www.69shuba.com/',
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -45,9 +46,16 @@ var crawler = new CeL.work_crawler({
 
 		function parse_section(text) {
 			var matched = text.match(
-			// <h3><a
-			// href="https://www.69shu.com/txt/39297.htm">女主从书里跑出来了怎么办</a></h3>
-			/<a href="[^"]+?\/(\d+)\.htm">([\s\S]+?)<\/a>/);
+			/**
+			 * <code>
+			<li>
+
+			...
+
+			<h3><a target="_blank" href="https://www.69shuba.com/book/47114.htm"><span class="hottext">苟</span><span class="hottext">在</span><span class="hottext">仙</span><span class="hottext">武</span><span class="hottext">娶妻</span><span class="hottext">长生</span></a></h3>
+			</code>
+			 */
+			/<a [^<>]*?href="[^"]+?\/(\d+)\.htm">([\s\S]+?)<\/a>/);
 			id_list.push(matched[1]);
 			id_data.push(get_label(matched[2]));
 		}
@@ -57,7 +65,16 @@ var crawler = new CeL.work_crawler({
 			// 直接跳轉到作品資訊頁面。
 			parse_section(text);
 		} else {
-			html.between('<div class="container">').between('<ul>', '</ul>')
+			/**
+			 * <code>
+			<!--头部内容结束-->
+			<div class="container">
+			<div class="mybox">
+			<ul class="row">
+			    <li class="col-88">
+			</code>
+			 */
+			html.between('<div class="container">').between('<ul', '</ul>')
 			//
 			.each_between('<li>', '<li>', function(text) {
 				parse_section(text.between('<h3>', '</h3>'));
@@ -74,9 +91,11 @@ var crawler = new CeL.work_crawler({
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
 		// console.trace(html);
-		// <a href="https://www.69shu.com">69书吧</a>
-		this.site_name = get_label(html.between('<div class="logoimg">')
-				.between('<a ', '</a>').between('>'));
+		if (!this.site_name) {
+			// <a href="https://www.69shu.com">69书吧</a>
+			this.site_name = get_label(html.between('<div class="logoimg">')
+					.between('<a ', '</a>').between('>'));
+		}
 		var text = html.between('<div class="container">');
 		// console.log(text);
 		var work_data = {
@@ -94,6 +113,13 @@ var crawler = new CeL.work_crawler({
 				return get_label(text.between('>'));
 			})
 		};
+
+		text = html.between('var bookinfo =', '</script>');
+		eval('text = ' + text);
+		// console.trace(text);
+		Object.assign(work_data, text);
+		if (!work_data.site_name)
+			work_data.site_name = work_data.siteName;
 
 		// 由 meta data 取得作品資訊。
 		extract_work_data(work_data, html);
@@ -160,6 +186,16 @@ var crawler = new CeL.work_crawler({
 
 		// 會先以作品標題起頭。
 		text = CeL.work_crawler.trim_start_title(html, chapter_data);
+
+		/**
+		 * <code>
+
+		// https://www.69shuba.com/txt/47114/31439934	第1章 老祖又纳妾了
+		&emsp;&emsp;(本章完)
+
+		</code>
+		 */
+		text = text.replace(/\(本章完\)\s*$/, '');
 
 		// text = CeL.work_crawler.fix_general_ADs(text);
 

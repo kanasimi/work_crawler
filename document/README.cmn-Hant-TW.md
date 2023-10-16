@@ -90,6 +90,7 @@
 | [丫丫电子书](http://www.xshuyaya.net/) | xshuyaya.js | 有一些舊書。 |
 | [飞翔鸟中文](https://www.fxnzw.com/) | fxnzw.js | 少了一些新書。資訊來源與飘天文学不同。 |
 | [69书吧](https://www.69shu.com/) | 69shu.js | 部分書目資訊來源與飘天文学不同。 |
+| [翠微居](https://www.cwjjj.com//) | cwjjj.js | 有些反和諧加料版。 |
 | ~~[卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180)~~ | ~~archive/ck101.js~~ | Discuz! X3 可能因[版權問題](https://ck101.com/thread-5106627-1-1.html)，自2019-10-01關小說版。 |
 
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。

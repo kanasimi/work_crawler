@@ -207,6 +207,8 @@ download_sites_set = {
 
 		'69shu' : '69书吧',
 
+		cwjjj : '翠微居',
+
 		daocaoren : '稻草人书屋',
 		'51shucheng' : '无忧书城',
 		luoxia : '落霞小说网',
@@ -1767,7 +1769,7 @@ function reset_favorites(crawler) {
 			C : 'favorites_button cancel'
 		} : '', favorites.duplicated > 0 ? [ ' ', {
 			// gettext_config:{"id":"there-are-$1-duplicate-titles-or-ids-in-the-list"}
-			T : [ '列表檔案中有%1個重複作品名稱或 id。', favorites.duplicated ]
+			T : [ '列表檔案中有 %1 個重複作品名稱或🆔。', favorites.duplicated ]
 		}, {
 			// 我的最愛
 			b : [ '🔨', {
@@ -2192,7 +2194,7 @@ function show_search_result(work_data_search_queue) {
 			table : node_list
 		}, {
 			// gettext_config:{"id":"click-on-the-website-name-to-download-this-work-on-this-website"}
-			T : '點擊網站名稱可下載此網站之本作品。'
+			T : '點擊網站名稱即可下載此網站之本作品。'
 		}, {
 			br : null
 		} ];

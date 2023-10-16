@@ -13,7 +13,7 @@ CeL.run('application.net.work_crawler.sites.baozimh');
 // ----------------------------------------------------------------------------
 
 var crawler = new CeL.baozimh({
-	// https://cn.baozimh.com/ , https://cn.webmota.com/
+	// 2022: https://cn.baozimh.com/ , https://cn.webmota.com/
 	// 2022/11/19 已採用 Cloudflare 的阻斷服務攻擊保護。
 	base_URL : 'https://cn.baozimh.com/'
 });
