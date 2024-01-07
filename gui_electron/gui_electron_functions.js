@@ -261,6 +261,17 @@ theme_hash = {
 var DEFAULT_THEME_TEXT = 'default', default_theme_name;
 theme_list.push(DEFAULT_THEME_TEXT);
 
+/**
+ * <code>
+
+ 增加選項的方法:
+ # 在 CeL.application.net.work_crawler.arguments 的 import_arg_hash 添加選項名稱與數據類型。
+ # 更改 work_crawler/gui_electron/gui_electron_functions.js 的 download_options_set（見下方）並加入說明資訊 "en":"","zh-hant":"" 。
+ // {"id":"download_options.","mark_type":"combination_message_id","en":"","zh-hant":""}
+
+ </code>
+ */
+
 // gettext_config:{"id":"download_options.recheck","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.show_information_only","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.start_chapter","mark_type":"combination_message_id"}
@@ -294,6 +305,7 @@ theme_list.push(DEFAULT_THEME_TEXT);
 // gettext_config:{"id":"download_options.overwrite_old_file","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.convert_to_language","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.discard_old_ebook_file","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.hide_chapter_information","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.vertical_writing","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.main_directory","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.user_agent","mark_type":"combination_message_id"}
@@ -302,13 +314,14 @@ theme_list.push(DEFAULT_THEME_TEXT);
 // gettext_config:{"id":"download_options.write_chapter_metadata","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.write_image_metadata","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.archive_old_works","mark_type":"combination_message_id"}
+// gettext_config:{"id":"download_options.use_finished_date_to_archive_old_works","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.modify_work_list_when_archive_old_works","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.save_preference","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.data_directory","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.preserve_download_work_layer","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.play_finished_sound","mark_type":"combination_message_id"}
 // gettext_config:{"id":"download_options.archive_program_path","mark_type":"combination_message_id"}
-'data_directory,recheck,start_chapter_NO,chapter_NO_range,start_chapter_title,chapter_filter,regenerate,reget_chapter,search_again,cache_title_to_id,acceptable_types,archive_images,images_archive_extension,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,directory_name_pattern,one_by_one,chapter_time_interval,main_directory,vertical_writing,convert_to_language,user_agent,proxy,cookie,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound,archive_program_path'
+'data_directory,recheck,start_chapter_NO,chapter_NO_range,start_chapter_title,chapter_filter,regenerate,reget_chapter,search_again,cache_title_to_id,acceptable_types,archive_images,images_archive_extension,MAX_ERROR_RETRY,allow_EOI_error,MIN_LENGTH,timeout,skip_error,skip_chapter_data_error,directory_name_pattern,one_by_one,chapter_time_interval,main_directory,hide_chapter_information,vertical_writing,convert_to_language,user_agent,proxy,cookie,write_chapter_metadata,write_image_metadata,preserve_download_work_layer,play_finished_sound,archive_program_path'
 // @see work_crawler/resource/locale of work_crawler - locale.csv
 .split(',').forEach(function(item) {
 	download_options_set[item] = 'download_options.' + item;
