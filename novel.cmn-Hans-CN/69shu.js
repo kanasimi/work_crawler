@@ -24,7 +24,8 @@ var crawler = new CeL.work_crawler({
 
 	// Using AmazonS3
 	search_work_interval : '2s',
-	// chapter_time_interval : '2s',
+	// 速度過快會被封鎖數個小時。
+	chapter_time_interval : '2s',
 
 	// 2018/2/4前: https://www.69shu.com/
 	// 2023/8/18前改: https://www.69shuba.com/
@@ -184,20 +185,30 @@ var crawler = new CeL.work_crawler({
 				|| text.between(null, '</div>');
 		// console.log(html);
 
-		// 會先以作品標題起頭。
+		// 有些章節會先以章節標題起頭。
 		text = CeL.work_crawler.trim_start_title(html, chapter_data);
 
 		/**
 		 * <code>
+		https://www.69shuba.com/txt/51594/33706898	请公子斩妖 第788章 神器回来了 【求月票！】
+		以后东躲XZ的日子就过去了，
+		</code>
+		 */
+		text = CeL.work_crawler.fix_general_censorship(text);
 
-		// https://www.69shuba.com/txt/47114/31439934	第1章 老祖又纳妾了
-		&emsp;&emsp;(本章完)
+		text = CeL.work_crawler.fix_general_ADs(text);
+
+		/**
+		 * <code>
+
+		// https://www.69shuba.com/txt/51594/33699533	請公子斬妖 > 第3章 換劍閣
+		&emsp;&emsp;<div class="contentadv"><script>loadAdv(7,3);</script></div>
 
 		</code>
 		 */
-		text = text.replace(/\(本章完\)\s*$/, '');
-
-		// text = CeL.work_crawler.fix_general_ADs(text);
+		text = text.replace(/<script[^<>]*>[\s\S]*?<\/script>/g, '');
+		text = text.replace(/&emsp;&emsp;<div class="contentadv"><\/div>/g,
+				'<br /><br />');
 
 		// console.trace([ html, text ]);
 		this.add_ebook_chapter(work_data, chapter_NO, text);
