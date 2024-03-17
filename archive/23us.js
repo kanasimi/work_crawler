@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載 2011 顶点小说 的工具。 Download 23us novels.
+ * 
+ * 這網站可能使用 PTCMS?
  */
 
 'use strict';
@@ -21,14 +23,16 @@ var crawler = new CeL.work_crawler({
 	recheck : 'changed',
 
 	// one_by_one : true,
-	base_URL : 'https://www.x23us.com/',
+
+	// 2020/2/29: https://www.x23us.com/
+	base_URL : 'https://www.23ddw.cc/',
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'modules/article/search.php?searchtype=keywords&searchkey=',
 	parse_search_result : function(html, get_label) {
 		// console.log(html);
-		var matched = html.match(/og:url" content="[^<>"]+?\/(\d+)"/);
+		var matched = html.match(/og:url" content="[^<>"]+?\/(\d+)\/?"/);
 		if (matched) {
 			return [ [ +matched[1] ],
 			//
@@ -48,7 +52,9 @@ var crawler = new CeL.work_crawler({
 			// console.log(text);
 			var matched = text.match(
 			//
-			/<a href="[^<>"]+?\/(\d+)">([\s\S]+?)<\/a>/);
+			/<a href="[^<>"]+?\/(\d+)\/?"[^<>]*>([\s\S]+?)<\/a>/);
+			if (!matched)
+				return;
 			id_list.push(+matched[1]);
 			id_data.push(get_label(matched[2]));
 		});
