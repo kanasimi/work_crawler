@@ -99,26 +99,70 @@ var crawler = new CeL.work_crawler({
 		return work_data;
 	},
 
-	get_chapter_list : function(work_data, html, get_label) {
+	pre_get_chapter_list : function(callback, work_data, html, get_label) {
 		// <div class="catalog" id="catalog">
 		// <h3>目录</h3>
 
-		var data = html.between(' id="shoebox-media-api-cache-amp-podcasts">',
-				'</script>');
-		data = JSON.parse(data);
-		data = data[Object.keys(data)[0]];
-		data = JSON.parse(data);
-		data = data.d;
-		data = data[0];
-		data = data.relationships.episodes.data;
-		// console.trace(data, Object.keys(data));
+		var episodes_data = html.between(
+				' id="shoebox-media-api-cache-amp-podcasts">', '</script>');
+		episodes_data = JSON.parse(episodes_data);
+		episodes_data = episodes_data[Object.keys(episodes_data)[0]];
+		episodes_data = JSON.parse(episodes_data);
+		episodes_data = episodes_data.d;
+		episodes_data = episodes_data[0];
+		episodes_data = episodes_data.relationships.episodes;
+		// console.trace(episodes_data);
 
-		data.forEach(function(chapter_data) {
+		// reset work_data.chapter_list
+		work_data.chapter_list = episodes_data.data;
+		// console.log(work_data.chapter_list);
+
+		// console.trace(work_data);
+		var environment = html.between(
+				'<meta name="web-experience-app/config/environment" content="',
+				'"');
+		environment = decodeURIComponent(environment);
+		environment = JSON.parse(environment);
+		// console.trace(environment);
+
+		var originaal_headers = crawler.get_URL_options.headers;
+		// console.trace(crawler.get_URL_options.headers);
+		crawler.get_URL_options.headers = Object.assign(Object
+				.clone(crawler.get_URL_options.headers), {
+			Origin : 'https://podcasts.apple.com',
+			Authorization : 'Bearer ' + environment.MEDIA_API.token,
+			'Sec-Fetch-Site' : 'same-site'
+		});
+		// console.trace(crawler.get_URL_options.headers);
+
+		function get_next_chapter_list_slice(episodes_data) {
+			if (!episodes_data.next) {
+				// recover
+				crawler.get_URL_options.headers = originaal_headers;
+				callback();
+				return;
+			}
+
+			crawler.get_URL('https://amp-api.podcasts.apple.com'
+					+ episodes_data.next, function(XMLHttp, error) {
+				// console.trace(XMLHttp, error);
+				var episodes_data = JSON.parse(XMLHttp.responseText);
+				// console.trace(episodes_data);
+				work_data.chapter_list.append(episodes_data.data);
+				get_next_chapter_list_slice(episodes_data);
+			});
+		}
+
+		get_next_chapter_list_slice(episodes_data);
+		// free
+		episodes_data = environment = null;
+	},
+	get_chapter_list : function(work_data, html, get_label) {
+		work_data.chapter_list.reverse();
+		work_data.chapter_list.forEach(function(chapter_data) {
 			chapter_data.title = chapter_data.attributes.name;
 			chapter_data.url = chapter_data.attributes.url;
 		});
-		// reset work_data.chapter_list
-		work_data.chapter_list = data;
 		// console.log(work_data.chapter_list);
 	},
 
@@ -135,17 +179,30 @@ var crawler = new CeL.work_crawler({
 		//
 		url = decodeURI(chapter_data.attributes.assetUrl),
 		//
-		extension = url.match(/(\.[^.?]+)(?:\?.*)?$/)[1],
+		extension = url.match(/(\.[^.?]+)(?:\?.*)?$/)[1];
+
+		var old_file_name = directory
 		//
-		file_name = directory
-		// + chapter_NO.pad(work_data.chapter_NO_pad_digits || 4) + ' '
 		+ CeL.to_file_name(title) + extension;
+
+		var file_name = directory
+		//
+		+ chapter_NO.pad(work_data.chapter_NO_pad_digits || 4) + ' '
+		//
+		+ CeL.to_file_name(title) + extension;
+
+		if (CeL.file_exists(old_file_name)) {
+			CeL.move_file(old_file_name, file_name);
+		}
+
 		// console.trace({directory,title,url,extension});
 		CeL.create_directory(directory);
 
 		var matched = url.match(/https%3A%2F%2F[^?]+/);
-		if (matched)
+		// 像《斐姨所思》需要此手段。但Google文件之類無法直接取得資源。
+		if (matched && !/google/.test(matched[0])) {
 			url = decodeURIComponent(matched[0]);
+		}
 
 		CeL.log_temporary('Fetching [' + file_name + '] (' + url + ')...');
 		// CeL.set_debug(9);
