@@ -42,7 +42,8 @@ crawler = new CeL.work_crawler({
 	// 2018: http://www.piaotian.com/
 	// 2019/11/23 前改為: https://www.ptwxz.com/
 	// 2023/8/17 前改為: https://www.piaotian.com/
-	base_URL : 'https://www.piaotian.com/',
+	// 2024/1/31 前改為: https://www.piaotia.com/
+	base_URL : 'https://www.piaotia.com/',
 	// <meta HTTP-EQUIV="Content-Type" content="text/html; charset=gb2312" />
 	charset : 'gbk',
 
@@ -202,27 +203,8 @@ crawler = new CeL.work_crawler({
 
 		// ----------------------------
 
-		// 去除一開始的標題。
-		/**
-		 * <code>
-
-		// https://www.piaotian.com/html/14/14431/10164343.html	道诡异仙 第434章 北风
-		// &nbsp;&nbsp;&nbsp;&nbsp;第434章 北风
-
-		// https://www.piaotian.com/html/9/9051/5938845.html	超神机械师 011 天若有情天亦老，我为萧哥***
-
-		// https://www.piaotian.com/html/5/5982/3239153.html	随波逐流之一代军师 外传 清梵曲
-
-		// https://www.piaotian.com/html/14/14431/10565524.html	道诡异仙 第1027章 番外1 感谢白银盟主（李火旺0402生
-		&nbsp;&nbsp;&nbsp;&nbsp;第1027章 番外1 感谢白银盟主（李火旺0402生日快乐）的打赏。<br/><br/>
-
-		</code>
-		 */
-		if (true || /第.+章/.test(chapter_data.title)) {
-			text = text.replace(new RegExp(/^(?:&nbsp;|\s)*/.source
-					+ CeL.to_RegExp_pattern(chapter_data.title)
-					+ /\s*(?:<br\s*\/?>)+/.source), '')
-		}
+		// 有些章節會先以章節標題起頭。
+		text = CeL.work_crawler.trim_start_title(text, chapter_data);
 
 		text = CeL.work_crawler.fix_general_censorship(text);
 
@@ -383,11 +365,21 @@ crawler = new CeL.work_crawler({
 		 * <code>
 
 		// https://www.ptwxz.com/html/6/6682/3766047.html	最仙遊 正文 第四十二章 镇天关内
-		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;;
+		&nbsp;&nbsp;&nbsp;&nbsp;<iframe sandbox="allow-top-navigation allow-scripts allow-same-origin allow-popups-to-escape-sandbox" id="amzn_assoc_ad_0" style="border:none;display:inline-block;width:300px;height:250px" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://rcm-na.amazon-adsystem.com/e/cm?t=69shuba-20&amp;o=1&amp;l=ur1&amp;lc=pf4&amp;category=audibleplus&amp;f=ifr&amp;m=amazon&amp;banner=0MG2XKQ7PYPP84NBNFR2&amp;p=12&amp;linkid=e274df4d705e7635649b8c7c5a4dade8"></iframe><br/>
 
 		</code>
 		 */
-		.replace(/(?:<br\s*\/?>)+(?:&nbsp;)*;+[\s\n]*$/, '')
+		.replace(/(?:&nbsp;)*<iframe [^<>]*><\/iframe>(?:<br\s*\/?>)+/g, '')
+
+		/**
+		 * <code>
+
+		// https://www.piaotia.com/html/15/15247/11207176.html	女侠且慢 第527章 沧海横流
+		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;7017k<br /><br />
+
+		</code>
+		 */
+		.replace(/7017k(?:<br\s*\/?>)+/g, '')
 
 		/**
 		 * <code>
@@ -398,6 +390,22 @@ crawler = new CeL.work_crawler({
 		</code>
 		 */
 		.replace(/7017k(?:<br\s*\/?>)+/g, '')
+
+		.replace(
+		/**
+		 * <code>
+
+		// https://www.piaotia.com/html/11/11059/10278660.html	剑道第一仙 第2127章 再遇帝厄
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;<a id="”wzsy”" href="https://www.tsxsw.la">tsxsw.la</a><br/><br/>
+
+		// https://www.piaotia.com/html/11/11059/10278661.html	剑道第一仙 第2128章 一巴掌
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;<a id="”wzsy”" href="http://m.epzw.com/html/96/96305/">《无敌从献祭祖师爷开始》</a><br/><br/>
+
+		</code>
+		 */
+		/(?:&nbsp;)*<a\s[^<>]+>(?:\w+\.\w+|《[^<>《》]+》)<\/a>(?:<br\s*\/?>)+/g
+		// 整行抽掉
+		, '')
 
 		.replace(
 		/**
@@ -476,6 +484,35 @@ crawler = new CeL.work_crawler({
 		/**
 		 * <code>
 
+		// https://www.piaotia.com/html/11/11059/10317376.html	剑道第一仙 第2192章 吕青玫和蟾宫桂树
+		&nbsp;&nbsp;&nbsp;&nbsp;<div id="”center_tip”"><b>最新网址：<a href="http://www.ishuquge.com</b>" target="_blank" class="linkcontent">www.ishuquge.com</b></a><br/><br/>
+
+		// https://www.piaotia.com/html/11/11059/10317377.html	剑道第一仙 第2193章 落魄簪、倒悬笔札
+		&nbsp;&nbsp;&nbsp;&nbsp;<div id="center_tip"><b>最新网址：www.ishuquge.com</b><br/><br/>
+
+		</code>
+		 */
+		/(?:&nbsp;)*[<>="\w\s””]*最新网址：[<>="\w\s\.:\/_]+?<\/[ab]>(?:<br\s*\/?>)+/g
+		// 整行抽掉
+		, '')
+
+		.replace(
+		/**
+		 * <code>
+
+		// https://www.piaotia.com/html/11/11059/10317376.html	剑道第一仙 第2192章 吕青玫和蟾宫桂树
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;//www.ishuquge.com/txt/118640/<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;请记住本书首发域名：<a href="http://www.ishuquge.com" target="_blank" class="linkcontent">www.ishuquge.com</a>。手机版阅读网址：wap.<br/><br/>
+
+		</code>
+		 */
+		/(?:&nbsp;)*\/\/[\w.\/]+(?:<br\s*\/?>)+/g
+		// 整行抽掉
+		, '')
+
+		.replace(
+		/**
+		 * <code>
+
 		// https://www.ptwxz.com/html/13/13305/9697354.html	我宅了百年出门已无敌 第四百零五章开道神速
 		<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;请记住本书首发域名：。_wap.<br /><br />
 
@@ -484,7 +521,9 @@ crawler = new CeL.work_crawler({
 
 		</code>
 		 */
-		/(?:&nbsp;)*请记住本书首发域名：[\w.。]*(?:手机版阅读网址：[\w.。]*)?(?:<br\s*\/?>)+/g, '')
+		/(?:&nbsp;)*请记住本书首发域名：[<>="\w\s\.:\/_。]*(?:手机版阅读网址：[\w.。]*)?(?:<br\s*\/?>)+/g
+		// 整行抽掉
+		, '')
 
 		.replace(
 		/**
@@ -583,15 +622,34 @@ crawler = new CeL.work_crawler({
 		/**
 		 * <code>
 
+		// https://www.piaotia.com/html/11/11059/10385093.html	剑道第一仙 第2328章 引发太始浩劫的真相
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;【推荐下，野果阅读追书真的好用，这里下载 www.yeguoyuedu.com 大家去快可以试试吧。】<br/><br/>
+
+		// https://www.piaotia.com/html/11/11059/10386718.html	剑道第一仙 第2331章 吞炼神焰
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;【讲真，最近一直用野果阅读看书追更，换源切换，朗读音色多，www.yeguoyuedu.com 安卓苹果均可。】<br/><br/>
+
+		</code>
+		 */
+		/(?:&nbsp;|　)*【(?:推荐下，|讲真，最近一直用)[^<>【】]{0,60}】(?:<br\s*\/?>)+/g
+		// 整行抽掉
+		, '')
+
+		.replace(
+		/**
+		 * <code>
+
 		// https://www.piaotian.com/html/14/14229/9821798.html	修仙三百年突然发现是武侠 第一百七十七章 巨大收获，火龙至天合
 		&nbsp;&nbsp;&nbsp;&nbsp;【话说，目前朗读听书最好用的app，， 安装最新版。】<br/><br/>
 
 		// http://www.shuhuang.la/xs/353/353456/5083138.html	第876章 不怂不行
 		<br />　　【话说，目前朗读听书最好用的app，换源app，www.huanyuanapp.com安装最新版。】<br />
 
+		// https://www.piaotia.com/html/11/11059/10384237.html	剑道第一仙 第2327章 指一条明路
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;【认识十年的老书友给我推荐的追书app，野果阅读！真特么好用，开车、睡前都靠这个朗读听书打发时间，这里可以下载 www.yeguoyuedu.com 】<br/><br/>
+
 		</code>
 		 */
-		/(?:&nbsp;|　)*【话说，目前朗读听书最好用的app[^<>]{0,50}(?:<br\s*\/?>)+/g
+		/(?:&nbsp;|　)*【.{,20}?(?:推荐的追书app|最好用的app)[^<>]{0,60}(?:<br\s*\/?>)+/g
 		// 整行抽掉
 		, '')
 
@@ -608,6 +666,18 @@ crawler = new CeL.work_crawler({
 		 */
 		.replace(/(?:&nbsp;)+喜欢.{2,40}?请大家收藏：.{2,40}?更新速度最快。(?:<br\s*\/?>)+/g,
 				'')
+
+		/**
+		 * <code>
+
+		// https://www.piaotia.com/html/11/11059/10384228.html	剑道第一仙 第2323章 大道暗烬
+		刀锋涌动毁天灭地的熔炼之力。m.biqupai.com<br/><br/>
+		TODO:
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;网页版章节内容慢，请下载好阅小说app阅读最新内容<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;请退出转码页面，请下载好阅小说app 阅读最新章节。<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;笔趣派为你提供最快的剑道第一仙更新，第2323章 大道暗烬免费阅读。https://www.biqupai.com<br/><br/>
+
+		</code>
+		 */
+		.replace(/(。)m\.\w+\.com(<br\s*\/?>)/g, '$1$2')
 
 		/**
 		 * <code>
@@ -654,10 +724,29 @@ crawler = new CeL.work_crawler({
 		;
 		// console.log(text);
 
+		/**
+		 * <code>
+
+		// https://www.piaotia.com/html/15/15347/10692820.html	修炼9999级了老祖才100级 第22章 小乞丐
+		一屁股从梨树上跌了下来。<b<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;</di><br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;r><br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;这下摔得不轻。
+
+		// https://www.piaotia.com/html/15/15347/10692824.html	修炼9999级了老祖才100级 第26章 干饭人吃饭得用盆
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;考验吗？<<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;</di><br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;br><br/><br/>
+
+		</code>
+		 */
+		text = text.replace(/(?:&nbsp;)+<\/di>(?:<br\s*\/?>)+/g, '').replace(
+				/<\w*(?:<br\s*\/?>)+(?:&nbsp;)+\w*>/g, '');
+
 		// TODO: https://www.ptwxz.com/html/14/14951/10203091.html
 		// &nbsp;&nbsp;&nbsp;&nbsp;一秒记住ｈｔｔｐs://.\nvip<br /><br />
 
 		text = CeL.work_crawler.fix_general_ADs(text);
+
+		// 可能有廣告連結。
+		if (false && /\.com/i.test(text)) {
+			console.trace(text, chapter_data);
+		}
 
 		this.add_ebook_chapter(work_data, chapter_NO, {
 			title : chapter_data.part_title,
