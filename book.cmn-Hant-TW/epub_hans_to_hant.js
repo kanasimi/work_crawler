@@ -4,6 +4,12 @@
  * @since 2018/8/7<br />
  *        2018/8/20 18:10:52 use (new CeL.EPUB(epub_directory)).archive()
  * 
+ * <code>
+
+node "path/to/work_crawler/book.cmn-Hant-TW/epub_hans_to_hant.js" "path/to/ebook.epub" "work_title=work title"
+
+</code>
+ * 
  * @see CeL.application.net.work_crawler.ebook
  *      https://github.com/ThanatosDi/EpubConv_Python
  */
@@ -25,6 +31,33 @@ function initialization() {
 		skip_server_test : true,
 		try_LTP_server : true
 	})).then(handle_files);
+}
+
+function guess_work_title(epub_directory) {
+	var work_title = CeL.env.arg_hash && CeL.env.arg_hash.work_title;
+	if (work_title)
+		return work_title;
+
+	var matched = epub_directory.match(/《([^《》]+)》$/);
+	if (matched) {
+		work_title = matched[1];
+	}
+	if (!work_title) {
+		work_title = epub_directory.match(/[^\\\/]+$/)[0].replace(/\.[^.]+$/,
+				'');
+	}
+	// Calibre2 轉存時，會存成 "work title - author.epub"
+	matched = work_title.match(/^(.+?) - (.+)$/);
+	if (matched)
+		work_title = matched[1].trim();
+
+	if (work_title) {
+		// 偵測作品標題：
+		CeL.info('guess_work_title: 《' + work_title + '》');
+	}
+
+	// console.trace([work_title,matched]);
+	return work_title;
 }
 
 function handle_files() {
@@ -60,13 +93,7 @@ function handle_files() {
 	});
 	archive_file.ebook_file_list = [];
 
-	var work_title = epub_directory.match(/[^\\\/]+$/)[0].replace(/\.[^.]+$/,
-			'');
-	// Calibre2 轉存時，會存成 "work title - author.epub"
-	var matched = work_title.match(/^(.+?) - (.+)$/);
-	if (matched)
-		work_title = matched[1];
-	// console.trace([work_title,matched]);
+	work_title = guess_work_title(epub_directory);
 
 	// --------------------------------
 
