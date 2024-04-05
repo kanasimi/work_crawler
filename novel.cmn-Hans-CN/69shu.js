@@ -29,14 +29,20 @@ var crawler = new CeL.work_crawler({
 
 	// 2018/2/4前: https://www.69shu.com/
 	// 2023/8/18前改: https://www.69shuba.com/
-	base_URL : 'https://www.69shuba.com/',
+	// 2024/1/29前改: https://www.69xinshu.com/
+	// 2024/3/13前改: https://www.69shu.pro/
+	base_URL : 'https://www.69shu.pro/',
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(work_title) {
 		return [ 'modules/article/search.php', {
-			searchtype : 'all',
-			searchkey : work_title
+			// 2023/8/18
+			// searchtype : 'all',
+
+			searchkey : work_title,
+			// 2024/1/29 +
+			submit : 'Search'
 		} ];
 	},
 	parse_search_result : function(html, get_label) {
@@ -48,12 +54,20 @@ var crawler = new CeL.work_crawler({
 		function parse_section(text) {
 			var matched = text.match(
 			/**
-			 * <code>
+			 * 2023/8/18<code>
 			<li>
 
 			...
 
 			<h3><a target="_blank" href="https://www.69shuba.com/book/47114.htm"><span class="hottext">苟</span><span class="hottext">在</span><span class="hottext">仙</span><span class="hottext">武</span><span class="hottext">娶妻</span><span class="hottext">长生</span></a></h3>
+			</code>
+			 * 
+			 * 2024/1/29<code>
+			<li>
+
+			...
+
+			<h3><a target="_blank" href="https://www.69xinshu.com/book/47093.htm">我为长生仙</a></h3>
 			</code>
 			 */
 			/<a [^<>]*?href="[^"]+?\/(\d+)\.htm">([\s\S]+?)<\/a>/);
@@ -75,9 +89,12 @@ var crawler = new CeL.work_crawler({
 			    <li class="col-88">
 			</code>
 			 */
-			html.between('<div class="container">').between('<ul', '</ul>')
-			//
-			.each_between('<li>', '<li>', function(text) {
+			html = html.between('<div class="container">').between('<ul',
+					'</ul>');
+			html = html.between('<ul>') || html;
+			// console.trace(html);
+			html.each_between('<li>', null, function(text) {
+				// console.trace(text);
 				parse_section(text.between('<h3>', '</h3>'));
 			});
 		}
