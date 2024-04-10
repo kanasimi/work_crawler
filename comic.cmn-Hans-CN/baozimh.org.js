@@ -51,37 +51,32 @@ var crawler = new CeL.work_crawler({
 		var work_data = {
 			// 必要屬性：須配合網站平台更改。
 			title : get_label(html.between(
-			// <div class="gb-inside-container"><h1 class="gb-headline
-			// gb-headline-60777e5b gb-headline-text">全知读者视角</h1>
-			'<h1 class="gb-headline', '</h1>').between('>')),
+			// <h1 class="mb-2 text-xl">武炼巅峰 <span class="
+			'<h1 class="', '</h1>').between('>')
+			//
+			.replace(/<span [\s\S]+$/, '')),
 			author : get_label(html.between(
-			// <div class="author-content">作者：<a
-			// href="https://baozimh.org/manga-author/singsyong/"
-			// rel="tag">SingSyong</a>，<a
-			// href="https://baozimh.org/manga-author/sleep-c/"
-			// rel="tag">Sleep-C</a></div>
-			'<div class="author-content">作者：', '</div>').between('>')),
+			// <span class="font-medium">作者：</span><a
+			// href="/manga-author/pi-ka-pi"><span>噼咔噼,
+			'<span class="font-medium">作者：', '</div>')),
 
 			// 選擇性屬性：須配合網站平台更改。
-			tags : html.all_between('<div class="genres-content">', '</div>')
-			// <div class="genres-content">类型：<a
-			// href="https://baozimh.org/manga-genre/kr/"
-			// rel="tag">韩漫</a></div><div class="genres-content">标签：<a
-			// href="https://baozimh.org/manga-tag/qihuan/"
-			// rel="tag">奇幻</a></div>
-			.map(function(tag) {
-				return get_label(tag.between('：') || tag);
+			tags : html.between('<span class="font-medium">類型：', '</div>')
+			//
+			.split('</a>').map(function(tag) {
+				return get_label(tag).replace(/,$/, '').replace(/^#/, '');
 			}),
-			description : get_label(html.between(
-					'<div class="dynamic-entry-content">', '</div>')),
-			/**
-			 * cover image<code>
-			<div class="gb-inside-container"> <img post-id="10384" fifu-featured="1" width="420" height="560" src="https://cover1.baozimh.org/cover/bzcom/quanzhidouzheshijiao/quanzhiduzheshijiao-sleepcsingsyong.webp" class="dynamic-featured-image manga-feature wp-post-image" alt="全知读者视角" title="全知读者视角" title="全知读者视角" decoding="async" />
-			<code>
-			 */
-			cover_image : html.between('<img post-id="', '>').between(' src="',
-					'"')
+			description : get_label(html
+					.between('<p class="text-medium line-clamp-4 my-unit-md">',
+							'</div>'))
+		/**
+		 * cover image<code>
+		<div class="w-full h-full relative flex  justify-center items-center backdrop-blur-lg md:p-20 px-28 py-unit-sm rounded-lg"><img src="https://cover1.baozimh.org/cover/tx/wuliandianfeng/30_19_15_325982f153d0f3d4b52d617a579da96e_1640862941502.webp" alt="武炼巅峰"
+		<code>
+		 */
+		// cover_image :
 		};
+		// console.log(work_data);
 
 		// 由 meta data 取得作品資訊。
 		extract_work_data(work_data, html);
