@@ -37,16 +37,26 @@ var crawler = CeL.AlphaPolis({
 
 	// 解析 作品名稱 → 作品id get_work()
 	parse_search_result : function(html, get_label) {
+		// console.trace(html);
 		var id_data = [],
 		// {Array}id_list = [id,id,...]
 		id_list = [];
 		html.each_between('<h2 class="title">', '</h2>', function(text) {
-			id_list.push(text.between(' href="/novel/', '"')
+			/**
+			 * <code>
+
+			<a href="https://www.alphapolis.co.jp/novel/904773584/638380930" target="_blank" class="">余りモノ異世界人の自由生活～勇者じゃないので勝手にやらせてもらいます～</a>
+
+			</code>
+			 */
+			// console.trace(text);
+			id_list.push(text.between('/novel/', '"')
 			//
 			.replace('/', '-'));
 			// get <a>.innerText
 			id_data.push(get_label(text.between('>', '<')));
 		});
+		// console.trace([ id_list, id_data ]);
 		return [ id_list, id_data ];
 	},
 
