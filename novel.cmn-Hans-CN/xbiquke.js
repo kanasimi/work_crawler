@@ -24,6 +24,9 @@ crawler = CeL.PTCMS({
 	base_URL : 'http://www.xbiquke.net/',
 	// must_browse_first : true,
 
+	// 2024/1/30 速度太快似乎會被禁?
+	chapter_time_interval : '5s',
+
 	search_URL : 'search?keyword=',
 	parse_search_result : 'biquge',
 
@@ -70,6 +73,11 @@ crawler = CeL.PTCMS({
 					+ matched[1]);
 			// console.trace(chapter_data);
 		}
+
+		text = CeL.work_crawler.fix_general_censorship(text);
+
+		text = CeL.work_crawler.fix_general_ADs(text);
+
 		return text;
 	}
 });
