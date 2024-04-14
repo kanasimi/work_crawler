@@ -138,6 +138,8 @@ var crawler = new CeL.work_crawler({
 		// <div class="bzend"><span>本章结束</span>
 		text = text.replace(/<div class="bzend"[\s\S]+/, '');
 
+		text = CeL.work_crawler.fix_general_censorship(text);
+
 		text = CeL.work_crawler.fix_general_ADs(text);
 
 		this.add_ebook_chapter(work_data, chapter_NO, text);
