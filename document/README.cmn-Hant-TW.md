@@ -74,10 +74,12 @@
 | [新八一中文网](https://www.x81zw.com/) | x81zw.js | [PTCMS](https://www.ptcms.com/)系统 |
 | [八一中文网](https://www.zwdu.com/) | zwdu.js | [PTCMS](https://www.ptcms.com/)系统 |
 | [八八读书网](http://www.88dus.com/) | 88dus.js | 88读书网(88dushu)，PTCMS? |
-| [顶点小说](https://www.x23us.com/) | 23us.js<br />~~archive/23us.com.js~~ | PTCMS? 有許多無內容/空章節 |
+| [顶点小说](https://www.x23us.com/) | ~~archive/23us.js~~<br />~~archive/23us.com.js~~ | PTCMS? 有許多無內容/空章節。2020/2/29 最後一次連接 |
 | [顶点小说](https://www.booktxt.net/) | booktxt.js | PTCMS |
 | [顶点小说](https://www.23us.cc/) | ~~archive/23us.2018.js~~ | [WMCMS](http://www.weimengcms.com/index.html) (未梦开源小说程序) [仿电脑顶点小说模板](http://www.weimengcms.com/html/temple/article/141.html) or PTCMS? 自 2018/12/9 23:56 最後一次連接 |
 | [恋上你看书网](http://www.630book.la/) | 630book.js | PTCMS |
+| [比奇中文网](https://www.biqizw.com/) | biqizw.js | PTCMS |
+| [烟草小说网](https://www.ecxs.net/) | ecxs.js | PTCMS? 每個章節分頁，可能錯漏。 |
 | [看书神站](https://www.kanshushenzhan.com/) | kanshushenzhan.js | 部分章節被腰斬。[杰奇小说连载系统](https://www.jieqi.com/files/page/html/product/article.html) |
 | [花香居](https://www.huaxiangju.com/) | huaxiangju.js | 杰奇小说连载系统 |
 | [追书帮](http://www.zhuishubang.com/) | zhuishubang.js | 杰奇小说连载系统 |
@@ -90,7 +92,7 @@
 | [丫丫电子书](http://www.xshuyaya.net/) | xshuyaya.js | 有一些舊書。 |
 | [飞翔鸟中文](https://www.fxnzw.com/) | fxnzw.js | 少了一些新書。資訊來源與飘天文学不同。 |
 | [69书吧](https://www.69shu.com/) | 69shu.js | 部分書目資訊來源與飘天文学不同。 |
-| [翠微居](https://www.cwjjj.com//) | cwjjj.js | 有些反和諧加料版。 |
+| [翠微居](https://www.cwjx8.com/) | cwjjj.js | 有些反和諧加料版。 |
 | ~~[卡提諾論壇 小說頻道](https://ck101.com/forum.php?gid=1180)~~ | ~~archive/ck101.js~~ | Discuz! X3 可能因[版權問題](https://ck101.com/thread-5106627-1-1.html)，自2019-10-01關小說版。 |
 
 * 中國大陸之小說文字常常會被[審查](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A8%80%E8%AE%BA%E5%AE%A1%E6%9F%A5)而消失、變造。例如黑名單關鍵字轉為拉丁字母或是[打星號](https://ck101.com/thread-3500214-1-1.html)，以及數字 0 改成 o、9 改成 q 等等。有時需要多下載幾個網站的文件再做比較。

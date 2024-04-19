@@ -182,12 +182,14 @@ download_sites_set = {
 		qidian : '起点中文网',
 
 		// PTCMS
-		'23us' : '顶点小说',
+		// '23us' : '顶点小说',
 		booktxt : '顶点小说 booktxt',
 		zwdu : '八一中文网',
 		x81zw : '新八一中文网',
 		'88dus' : '八八读书网',
 		'630book' : '恋上你看书网',
+		biqizw : '比奇中文网',
+		ecxs : '烟草小说网',
 
 		// biquge : '笔趣阁',
 		biqugse : '笔趣阁',
