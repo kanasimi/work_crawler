@@ -31,7 +31,8 @@ var crawler = new CeL.work_crawler({
 	// 2023/8/18前改: https://www.69shuba.com/
 	// 2024/1/29前改: https://www.69xinshu.com/
 	// 2024/3/13前改: https://www.69shu.pro/
-	base_URL : 'https://www.69shu.pro/',
+	// 2024/5/5前改: https://www.69shu.top/
+	base_URL : 'https://www.69shu.top/',
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
