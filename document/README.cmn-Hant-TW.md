@@ -223,14 +223,14 @@
 2. 下載並儲存本工具安裝檔 <code>[work_crawler.updater.js](https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js)</code>（按右鍵另存新檔）。本工具安裝檔 **預設會將所有組件放在 `work_crawler-master` 目錄下**。
 3. 若在中國大陸使用本工具，您可能需要更改預設 npm registry 至[淘宝 npm 镜像](https://developer.aliyun.com/mirror/NPM)，以加快下載速度：<details><summary>（點擊本處可獲得更詳細的說明）</summary>
    * 請在命令列介面下執行下列指令，將會修改 [.npmrc](https://docs.npmjs.com/misc/config) 設定檔：可參考 [npm 淘宝镜像配置](https://gist.github.com/52cik/c1de8926e20971f415dd)
-      ```bash
+      ```sh
       npm config set registry https://registry.npm.taobao.org
 	  npm config set disturl https://npm.taobao.org/dist
       npm config set electron_mirror https://npm.taobao.org/mirrors/electron/
       ```
 
       附注：恢復預設設定請執行
-      ```bash
+      ```sh
       npm config delete registry
 	  npm config delete disturl
       npm config delete electron_mirror
@@ -250,7 +250,7 @@
       * 若是您視窗的 **背景為黑色**，表示您使用的可能是 [Command Prompt 命令提示字元](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E6%8F%90%E7%A4%BA%E5%AD%97%E5%85%83)，您應該使用這種形式的指令來切換目錄：`cd/d "本工具安裝檔所在的目錄"`（**cd/d** 表示「同時變更工作磁碟機及其工作目錄」的意思）。
 
    3. **執行命令以下載最新版本組件**（本安裝檔必須以 `node` 執行， **不能直接點擊兩下執行**。）：
-      ```bash
+      ```sh
       node work_crawler.updater.js
       ```
 
@@ -263,7 +263,7 @@
    ![下載 CeJS 程式庫後本工具安裝的目錄看起來的樣子](https://lh3.googleusercontent.com/rVTuL3GHoWjXcJBW3O0KutvRTlf-HjQa5dzm_PJwizhMDN38JG8RIdJ7nuZyWA6m2G9d2McEP_XdyNmGwn0kVdSjwDzJaS6w9D9SOtETBCnO9fAue82-J3qMtEm8yxgkjOLr5EBnjg=w150-h330-no)
 
    以下是在linux下直接操作上述作業時的指令，Windows用戶可以跳過，直接[開始試用](#execution-執行)。
-   ```bash
+   ```sh
    # sample commands to extract work_crawler + cejs
    curl -O https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js
    # wget https://raw.githubusercontent.com/kanasimi/work_crawler/master/work_crawler.updater.js
@@ -281,14 +281,14 @@
       **請記得在引號中，目錄分隔號必須輸入兩次！** 這不會影響到您之前曾手動改變過的標的目錄。
 
 8. 每次要更新到最新版本時，只要進到工具安裝檔所在目錄，重新執行一次本工具安裝檔即可。
-   ```bash
+   ```sh
    node work_crawler.updater.js
    ```
    由於本工具會 cache 作品資訊，更新幅度較大的時候，新程式可能無法讀取這些舊格式的 cache，會產生錯誤；此時您需要刪除下載目錄中所有的 cache，重新下載作品。這些 cache 包括 search.json, servers.json 以及作品目錄下面，以作品名稱為名的 .json 檔案。
 
 <!-- use npm:
 3. 在命令列介面下，進到解壓縮後工具檔所在的目錄，執行命令以下載 CeJS 程式庫：（`npm install` 可能將 cejs 安裝在此目錄下之 node_modules/cejs 目錄內 ）
-   ```bash
+   ```sh
    npm install cejs
    ```
 4. 然後就能[開始試用](#execution-執行)囉。
@@ -303,7 +303,7 @@
 #### Setup GUI 設定視窗型態介面
 若是您在作研究開發時，希望使用[圖形使用者介面](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)，那麼您還需要安裝 [Electron](https://electronjs.org/)。若是您採用懶人安裝法，應該已經安裝過 Electron，可以直接採用圖形使用者介面。
 1. 請在[命令列介面](https://zh.wikipedia.org/wiki/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2)下，進到本工具安裝的目錄，執行命令以安裝 Electron 程式庫：
-   ```bash
+   ```sh
    npm i -D electron@latest
    ```
 2. 在本工具安裝的目錄下，執行 `start_gui_electron.bat` 或 `start_gui_electron.sh`。
@@ -329,13 +329,13 @@
 所有操作都必須進到工具檔所在的目錄，在命令列介面下執行。
 1. 確認要下載的網站名與作品名。之後在命令列介面下，執行：（請在作品的名稱外面加上引號）
 
-   ```bash
+   ```sh
    node 工具檔名.js "作品名" [option=true] [option=value]
    node 工具檔名.js "l=作品列表檔案名" [option=true] [option=value]
    ```
 
    e.g.,
-   ```bash
+   ```sh
    cd comic.cmn-Hans-CN && node qq.js "狐妖小红娘" skip_error=true
    cd novel.cmn-Hans-CN && node qidian free && echo "下载 起点中文网限免作品"
    cd novel.cmn-Hans-CN && node 23us "斗罗大陆Ⅲ龙王传说" proxy=localhost:8080

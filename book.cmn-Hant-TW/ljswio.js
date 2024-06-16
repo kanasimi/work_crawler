@@ -116,7 +116,7 @@ var crawler = new CeL.work_crawler({
 				error_retry : _this.MAX_ERROR_RETRY
 			}, this.get_URL_options, {
 				// 有些檔案比較大，必須花費比較多時間。
-				timeout : 60 * 1000
+				timeout : 1 * 60 * 1000
 			})
 		});
 	},
@@ -128,7 +128,7 @@ var crawler = new CeL.work_crawler({
 		count = 0, matched, PATTERN_media = /<audio [^<>]*?src="([^<>"]+)"/g;
 		while (matched = PATTERN_media.exec(html)) {
 			CeL.create_directory(directory);
-			var url = matched[1], extension = url.match(/\.[^.]+$/)[0];
+			var url = matched[1], extension = url.match(/(\.[^.?]+)(?:\?.*)?$/)[1];
 			this.media_list.push({
 				file : directory
 						+ chapter_NO.pad(work_data.chapter_NO_pad_digits || 4)

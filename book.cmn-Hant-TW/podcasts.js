@@ -181,9 +181,7 @@ var crawler = new CeL.work_crawler({
 		//
 		extension = url.match(/(\.[^.?]+)(?:\?.*)?$/)[1];
 
-		var old_file_name = directory
-		//
-		+ CeL.to_file_name(title) + extension;
+		var old_file_name = directory + CeL.to_file_name(title) + extension;
 
 		var file_name = directory
 		//

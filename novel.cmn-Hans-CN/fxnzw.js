@@ -130,7 +130,9 @@ var crawler = new CeL.work_crawler({
 		html.each_between('<div id="NclassTitle">', null, function(text) {
 			var part_title = text.between(null, '</div>');
 			// console.trace(part_title);
-			// if (part_title && !part_title.includes('正文'))
+			if (part_title.includes('正文')) {
+				part_title = '';
+			}
 			crawler.set_part(work_data, part_title);
 
 			text = text.between('<ul>', '</ul>');

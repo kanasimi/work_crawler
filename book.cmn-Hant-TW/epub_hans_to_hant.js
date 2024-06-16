@@ -56,7 +56,7 @@ function guess_work_title(epub_directory) {
 		CeL.info('guess_work_title: 《' + work_title + '》');
 	}
 
-	// console.trace([work_title,matched]);
+	// console.trace([ work_title, matched ]);
 	return work_title;
 }
 
@@ -94,6 +94,7 @@ function handle_files() {
 	archive_file.ebook_file_list = [];
 
 	work_title = guess_work_title(epub_directory);
+	// console.trace(work_title);
 
 	// --------------------------------
 
