@@ -173,10 +173,31 @@ var crawler = new CeL.work_crawler({
 		this.check_next_chapter(work_data, chapter_NO, html);
 
 		var chapter_data = work_data.chapter_list[chapter_NO - 1],
-		//
-		text = html.between('<div id="content">', '</div>');
+		/**
+		 * 2024/7/7 e.g.,<code>
+
+		<div id="content">
+		<div id="container-1889c51b2f8f6f13650dadd3e7345667"></div>
+		<p>...</p><p>...</p><!--PAGE 3-->
+		</div>
+		<div class="nlist_page">
+		...
+		</div>
+
+		</code>
+		 */
+		text = html.between('<div id="content">').replace(
+				/<div[^<>]*><\/div>/g, '').between(null, '</div>');
+
+		// 去除註解。 Remove comments.
+		text = text.replace(/<\!--[\s\S]*?-->/g, '');
+
+		// 有些章節會先以章節標題起頭。
+		text = CeL.work_crawler.trim_start_title(text, chapter_data);
 
 		text = CeL.work_crawler.fix_general_censorship(text);
+
+		text = text.trim();
 
 		this.add_ebook_chapter(work_data, chapter_NO, {
 			title : chapter_data.part_title,
