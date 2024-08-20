@@ -82,17 +82,34 @@ var crawler = new CeL.work_crawler({
 		// 選擇性屬性：須配合網站平台更改。
 		};
 
+		// 由 meta data 取得作品資訊。
+		extract_work_data(work_data, html);
+
 		// console.trace(text);
-		Object.assign(work_data, JSON.parse(html.between(
+		work_data['podcast-show'] = JSON.parse(html.between(
 		//
 		'<script name="schema:podcast-show" type="application/ld+json">',
-				'</script>')));
-		// e.g.,
-		// https://podcasts.apple.com/tw/podcast/%E4%B8%8B%E4%B8%80%E6%9C%AC%E8%AE%80%E4%BB%80%E9%BA%BC/id1532820533
-		work_data.title = work_data.title.replace(/[‪‬]/g, '');
+				'</script>'));
 
-		// 由 meta data 取得作品資訊。
-		// extract_work_data(work_data, html);
+		var data = JSON.parse(html.between('<script type="fastboot/shoebox"'
+		// 這裡的資料，如 description 比較完整。
+		+ ' id="shoebox-media-api-cache-amp-podcasts">', '</script>'));
+		for ( var key in data) {
+			try {
+				data[key] = JSON.parse(data[key]);
+			} catch (e) {
+				// TODO: handle exception
+			}
+		}
+		// console.log(data);
+		work_data['shoebox-media-api-cache-amp-podcasts'] = data;
+
+		Object.assign(work_data, {
+			// e.g.,
+			// https://podcasts.apple.com/tw/podcast/%E4%B8%8B%E4%B8%80%E6%9C%AC%E8%AE%80%E4%BB%80%E9%BA%BC/id1532820533
+			title : work_data.title.replace(/[‪‬]/g, ''),
+			author : work_data['podcast-show'].author
+		});
 
 		// console.log(html);
 		// console.log(work_data);
