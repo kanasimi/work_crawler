@@ -179,16 +179,17 @@ function handle_files() {
 		// gettext_config:{"id":"start-building-e-books"}
 		CeL.log_temporary(gettext('開始建構電子書……', converted_epub_file));
 		// 打包 epub。結果會存放到與 epub_file_path 相同的目錄。
-		(new CeL.EPUB(epub_directory)).archive(converted_epub_file, true,
-				archive_file.ebook_file_list);
+		var error = (new CeL.EPUB(epub_directory)).archive(converted_epub_file,
+		// if error occurred, do not remove directory.
+		function(error) {
+			return !error;
+		}, archive_file.ebook_file_list);
 
-		// TODO: if error occurred, do not remove directory.
-		CeL.debug({
-			// gettext_config:{"id":"removing-directory-$1"}
-			T : [ 'Removing directory: %1', epub_directory ]
-		});
-		CeL.remove_directory(epub_directory, true);
+		// CeL.remove_directory(epub_directory, true);
 		CeL.info('Convert epub: 繁簡轉換完畢: ' + converted_epub_file);
+		if (error) {
+			CeL.error(error);
+		}
 
 		var cecc = CeL.CN_to_TW && CeL.CN_to_TW.cecc;
 		if (cecc && cecc.report_text_to_check) {
@@ -222,7 +223,7 @@ function handle_files() {
 			// "zh-TW"
 			'"zh-cmn-Hant-TW"');
 			if (false) {
-				CeL.info('for_text_file: ' + '轉換為繁體中文: ' + path + ', '
+				CeL.info('for_text_file: ' + '轉換 [' + path + '] 為繁體中文：'
 				//
 				+ contents.slice(0, 40) + '...');
 			}
