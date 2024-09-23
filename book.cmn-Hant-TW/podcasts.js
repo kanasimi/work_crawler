@@ -1,5 +1,7 @@
 ﻿/**
  * 批量下載 podcasts 小说 的工具。 Download Apple Podcast.
+ * 
+ * 2024/8/19-20 網頁改版。
  */
 
 'use strict';
@@ -13,6 +15,9 @@ CeL.run([ 'application.storage.EPUB'
 , 'application.locale' ]);
 
 // ----------------------------------------------------------------------------
+
+// https://podcasts.apple.com/assets/index-2e6c9084.js
+var MEDIA_API_token = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkM0SjdHQlA3NEgifQ.eyJpc3MiOiJVTTdOOVJUVDdHIiwiaWF0IjoxNzI0NzY3NDUyLCJleHAiOjE3MzIwMjUwNTIsInJvb3RfaHR0cHNfb3JpZ2luIjpbImFwcGxlLmNvbSJdfQ.SDp_NpVdyYk_nqJ0mtdPL5apTR-os71x6inoQh4oaXqjoJ62Grk7JGTTHDQ5pUScznBwmz56Ibf9kisVHWGI2g";
 
 var crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
@@ -30,36 +35,30 @@ var crawler = new CeL.work_crawler({
 	base_URL : 'https://podcasts.apple.com/',
 
 	// 解析 作品名稱 → 作品id get_work()
-	search_URL : function(key) {
-		return 'https://www.apple.com/tw/search/' + key + '?src=globalnav';
-	},
+	search_URL : 'tw/search?term=',
 	parse_search_result : function(html, get_label) {
-		html = html.between(' id="explore"');
+		html = html.between(
+				'<script type="application/json" id="serialized-server-data">',
+				'</script>');
 		// console.log(html);
-		var id_data = [],
-		// {Array}id_list = [id,id,...]
-		id_list = [];
-
-		html.each_between('<div class="rf-serp-product-description">', null,
-		//
-		function(text) {
-			var matched = text.match(/\/podcast\/([^\/"]+)\/id(\d+)"/);
-			if (!matched)
-				return;
-			var title_id = decodeURIComponent(matched[1]);
-			id_list.push(title_id + '-' + matched[2]);
-			var title = get_label(text.between(
-					'<h2 class="rf-serp-productname">', '</h2>'));
-			id_data.push(title);
-			if (false && title_id !== title) {
-				CeL.error('parse_search_result: Different title! '
-						+ JSON.stringify(title) + ', '
-						+ JSON.stringify(title_id));
+		html = JSON.parse(html);
+		// console.log(html);
+		var items;
+		html = html[0].data.shelves.some(function(shelf) {
+			if (shelf.title === '節目') {
+				items = shelf.items;
+				return true;
 			}
 		});
-		// console.log([ id_list, id_data ]);
-		return [ id_list, id_data ];
+
+		var id_list = items.map(function(item) {
+			return item.title + '-' + item.id;
+		});
+
+		// console.log(items);
+		return [ id_list, items ];
 	},
+	title_of_search_result : 'title',
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
@@ -68,47 +67,26 @@ var crawler = new CeL.work_crawler({
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
 		// console.trace(html);
-		var work_data = {
-			// 必要屬性：須配合網站平台更改。
-			/**
-			 * <code>
-			<h2>最仙遊<span>文 / <a href="/fxnlist/虾写.html">虾写</a></span></h2>
-			</code>
-			 */
-			title : get_label(html.between(
-					'<span class="product-header__title"', '</span>').between(
-					'>'))
-
-		// 選擇性屬性：須配合網站平台更改。
-		};
-
-		// 由 meta data 取得作品資訊。
-		extract_work_data(work_data, html);
-
-		// console.trace(text);
-		work_data['podcast-show'] = JSON.parse(html.between(
-		//
-		'<script name="schema:podcast-show" type="application/ld+json">',
+		var work_data = JSON.parse(html.between(
+				'<script id=schema:show type="application/ld+json">',
 				'</script>'));
 
-		var data = JSON.parse(html.between('<script type="fastboot/shoebox"'
-		// 這裡的資料，如 description 比較完整。
-		+ ' id="shoebox-media-api-cache-amp-podcasts">', '</script>'));
-		for ( var key in data) {
-			try {
-				data[key] = JSON.parse(data[key]);
-			} catch (e) {
-				// TODO: handle exception
-			}
-		}
+		// 由 meta data 取得作品資訊。
+		// extract_work_data(work_data, html);
+
+		// console.trace(work_data);
+
+		var data = JSON.parse(html.between(
+				'<script type="application/json" id="serialized-server-data">',
+				'</script>'));
 		// console.log(data);
-		work_data['shoebox-media-api-cache-amp-podcasts'] = data;
+		work_data['serialized-server-data'] = data;
 
 		Object.assign(work_data, {
 			// e.g.,
 			// https://podcasts.apple.com/tw/podcast/%E4%B8%8B%E4%B8%80%E6%9C%AC%E8%AE%80%E4%BB%80%E9%BA%BC/id1532820533
-			title : work_data.title.replace(/[‪‬]/g, ''),
-			author : work_data['podcast-show'].author
+			title : work_data.name.replace(/[‪‬]/g, ''),
+			author : data[0].data.headerButtonItems[0].model.author
 		});
 
 		// console.log(html);
@@ -117,37 +95,18 @@ var crawler = new CeL.work_crawler({
 	},
 
 	pre_get_chapter_list : function(callback, work_data, html, get_label) {
-		// <div class="catalog" id="catalog">
-		// <h3>目录</h3>
-
-		var episodes_data = html.between(
-				' id="shoebox-media-api-cache-amp-podcasts">', '</script>');
-		episodes_data = JSON.parse(episodes_data);
-		episodes_data = episodes_data[Object.keys(episodes_data)[0]];
-		episodes_data = JSON.parse(episodes_data);
-		episodes_data = episodes_data.d;
-		episodes_data = episodes_data[0];
-		episodes_data = episodes_data.relationships.episodes;
-		// console.trace(episodes_data);
 
 		// reset work_data.chapter_list
-		work_data.chapter_list = episodes_data.data;
-		// console.log(work_data.chapter_list);
+		work_data.chapter_list = [];
 
 		// console.trace(work_data);
-		var environment = html.between(
-				'<meta name="web-experience-app/config/environment" content="',
-				'"');
-		environment = decodeURIComponent(environment);
-		environment = JSON.parse(environment);
-		// console.trace(environment);
 
 		var originaal_headers = crawler.get_URL_options.headers;
 		// console.trace(crawler.get_URL_options.headers);
 		crawler.get_URL_options.headers = Object.assign(Object
 				.clone(crawler.get_URL_options.headers), {
 			Origin : 'https://podcasts.apple.com',
-			Authorization : 'Bearer ' + environment.MEDIA_API.token,
+			Authorization : 'Bearer ' + MEDIA_API_token,
 			'Sec-Fetch-Site' : 'same-site'
 		});
 		// console.trace(crawler.get_URL_options.headers);
@@ -160,8 +119,10 @@ var crawler = new CeL.work_crawler({
 				return;
 			}
 
-			crawler.get_URL('https://amp-api.podcasts.apple.com'
-					+ episodes_data.next, function(XMLHttp, error) {
+			var matched = episodes_data.next.match(/offset=(\d+)/);
+			CeL.log_temporary(work_data.title + ' ' + matched[0] + '...');
+			episodes_url.search_params.offset = matched[1];
+			crawler.get_URL(episodes_url, function(XMLHttp, error) {
 				// console.trace(XMLHttp, error);
 				var episodes_data = JSON.parse(XMLHttp.responseText);
 				// console.trace(episodes_data);
@@ -170,9 +131,22 @@ var crawler = new CeL.work_crawler({
 			});
 		}
 
-		get_next_chapter_list_slice(episodes_data);
+		var matched = work_data.id.match(/^(.+)-(\d+)$/);
+		var episodes_url = CeL.URI(
+		//
+		'https://amp-api.podcasts.apple.com/v1/catalog/tw/podcasts/'
+		//
+		+ matched[2] +
+		//
+		'/episodes?l=zh-Hant-TW&offset=0&include=podcast&limit=25&with=entitlements'
+		//
+		);
+		get_next_chapter_list_slice({
+			next : "offset=0"
+		});
+
 		// free
-		episodes_data = environment = null;
+		matched = null;
 	},
 	get_chapter_list : function(work_data, html, get_label) {
 		work_data.chapter_list.reverse();
