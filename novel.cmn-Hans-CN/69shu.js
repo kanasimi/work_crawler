@@ -32,7 +32,8 @@ var crawler = new CeL.work_crawler({
 	// 2024/1/29前改: https://www.69xinshu.com/
 	// 2024/3/13前改: https://www.69shu.pro/
 	// 2024/5/5前改: https://www.69shu.top/
-	base_URL : 'https://www.69shu.top/',
+	// 2024/8/1前改: https://69shuba.cx/
+	base_URL : 'https://69shuba.cx/',
 	charset : 'gbk',
 
 	// 解析 作品名稱 → 作品id get_work()
@@ -137,11 +138,17 @@ var crawler = new CeL.work_crawler({
 		eval('text = ' + text);
 		// console.trace(text);
 		Object.assign(work_data, text);
-		if (!work_data.site_name)
+		if (!work_data.site_name && work_data.siteName)
 			work_data.site_name = work_data.siteName;
 
 		// 由 meta data 取得作品資訊。
 		extract_work_data(work_data, html);
+
+		if (work_data.tags && work_data.tags.includes('|')) {
+			work_data.tags = work_data.tags.split('|').filter(function(tag) {
+				return !!tag;
+			});
+		}
 
 		work_data.last_update = work_data.update_time;
 
@@ -168,8 +175,14 @@ var crawler = new CeL.work_crawler({
 				url : matched[1],
 				title : get_label(matched[2])
 			};
+
 			crawler.add_chapter(work_data, chapter_data);
 		});
+
+		crawler.reverse_chapter_list_order(work_data);
+
+		this.trim_chapter_NO_prefix(work_data);
+
 		// console.log(work_data.chapter_list);
 	},
 
@@ -185,6 +198,7 @@ var crawler = new CeL.work_crawler({
 		chapter_data.title = get_label(html.between('<h1', '</h1>')
 		// <h1 class="hide720">第733章 一个人的比赛有什么意思，人多才热闹</h1>
 		.between('>')) || chapter_data.title;
+		this.trim_chapter_NO_prefix(chapter_data, chapter_NO);
 
 		/**
 		 * <code>
@@ -225,8 +239,18 @@ var crawler = new CeL.work_crawler({
 		</code>
 		 */
 		text = text.replace(/<script[^<>]*>[\s\S]*?<\/script>/g, '');
-		text = text.replace(/&emsp;&emsp;<div class="contentadv"><\/div>/g,
+		/**
+		 * <code>
+
+		// https://69shuba.cx/txt/47093/31443846	我为长生仙 > 第1章 山下少年
+		你觉得如何。”<div class="contentadv"><script>loadAdv(7,3);</script></div>那女子白了丈夫一眼，
+
+		</code>
+		 */
+		text = text.replace(/(?:&emsp;)*<div class="contentadv"><\/div>/g,
 				'<br /><br />');
+
+		text = text.replace(/(?:<br[^<>]*>)+<\/p>/ig, '</p>');
 
 		// console.trace([ html, text ]);
 		this.add_ebook_chapter(work_data, chapter_NO, text);
