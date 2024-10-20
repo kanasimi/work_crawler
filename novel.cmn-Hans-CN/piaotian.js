@@ -201,6 +201,18 @@ crawler = new CeL.work_crawler({
 		// 去除掉 <script> 功能碼。
 		.replace(/<script[^<>]*>[^<>]*<\/script>/g, '');
 
+		/**
+		 * <code>
+
+		// https://www.piaotia.com/html/14/14466/9767526.html	女主从书里跑出来了怎么办 第三十三章 有什么不好
+		&nbsp;&nbsp;&nbsp;&nbsp;<!--go-->&nbsp;&nbsp;&nbsp;&nbsp;那边
+		你了解我多少？”<!--over--><br /><br />
+
+		</code>
+		 */
+		// text = text.replace(/(?:&nbsp;)*<!--go-->/g, '');
+		text = text.replace(/<!--[\w\s]*-->/g, '');
+
 		// ----------------------------
 
 		// 有些章節會先以章節標題起頭。
@@ -333,6 +345,16 @@ crawler = new CeL.work_crawler({
 		</code>
 		 */
 		.replace(/谷\/span>/g, '')
+
+		/**
+		 * <code>
+
+		// https://www.piaotia.com/html/11/11613/8651816.html	剑仙三千万 第三百九十章 玄黄星至强
+		说完 	，他又想到了什么，
+
+		</code>
+		 */
+		.replace(/完 	(\S)/g, '完$1')
 
 		/**
 		 * <code>
