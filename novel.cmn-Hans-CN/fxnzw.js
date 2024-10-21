@@ -27,6 +27,8 @@ var crawler = new CeL.work_crawler({
 	// 2022/11/20前: https://www.fxnzw.com/
 	base_URL : 'https://www.fxnzw.com/',
 
+	chapter_time_interval : 500,
+
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : function(key) {
 		return 'fxnlist/' + key + '.html';
@@ -175,8 +177,22 @@ var crawler = new CeL.work_crawler({
 		/**
 		 * <code>
 		请记住:飞翔鸟中文小说网 <a href="http://www.fxnzw.com">www.fxnzw.com</a> 没有弹窗,更新及时 !
+
+		https://www.fxnzw.com/fxnread/50082_11724751.html	剑道第一仙 第一章 灵堂
+		顶点小说地址：dingdian6<p/>
+		移动端：m.dingdian6感谢您的收藏！  请记住:飞翔鸟中文小说网 <a href="http://www.fxnzw.com">www.fxnzw.com</a> 没有弹窗,更新及时 !
+
+		https://www.fxnzw.com/fxnread/50082_11724769.html	剑道第一仙 第十九章 时来天地皆同力
+		《》情节跌宕起伏、扣人心弦，是一本情节与文笔俱佳的玄幻小说，八一转载收集。  请记住:飞翔鸟中文小说网 <a href="http://www.fxnzw.com">www.fxnzw.com</a> 没有弹窗,更新及时 !
+
+		https://www.fxnzw.com/fxnread/50082_11748573.html	剑道第一仙 第2568章 不跪者死
+		(:→)如果您认为不错,请,以方便以后跟进剑道第一仙的连载更新  请记住:飞翔鸟中文小说网 <a href="http://www.fxnzw.com">www.fxnzw.com</a> 没有弹窗,更新及时 !
 		</code>
 		 */
+		text = text.replace(/《》情节跌宕起伏、扣人心弦，是一本情节与文笔俱佳的玄幻小说，八一转载收集。/g, '');
+		text = text.replace(/顶点小说地址：(?:[\s\w.]|<[^<>]+>)*移动端：[\s\w.]*感谢您的收藏！/g,
+				'');
+		text = text.replace(/[(:→)]*如果您认为不错,请.*以方便以后跟进.+的连载更新/g, '');
 		text = text.replace(/请记住:飞翔鸟中文小说网([\s\S]+)(?:$|<p\/>)/, '');
 
 		text = text.replace(
