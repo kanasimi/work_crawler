@@ -31,9 +31,7 @@ var crawler = CeL.dm5({
 	// <a id="btnSearch">搜索</a>
 	search_URL : 'search?keyword=',
 
-	work_URL : function(id) {
-		return 'book/' + id;
-	},
+	work_URL : 'book/',
 
 	inverted_order : false,
 

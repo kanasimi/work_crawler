@@ -31,6 +31,7 @@ var crawler = new CeL.work_crawler({
 	// 2022/6/1: http://www.shuyy.cc/
 	// 2022/6/21: http://www.shuyyw.com/
 	// 2022/11/4前: http://www.shuyyw.cc/ → http://www.shuyy8.com/
+	// 2024/8/8前: 備用網址 http://www.shuyy8.cc/
 	base_URL : 'http://www.shuyy8.com/',
 
 	// 解析 作品名稱 → 作品id get_work()

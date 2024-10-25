@@ -17,14 +17,12 @@ var crawler = CeL.PTCMS({
 	base_URL : 'https://www.biqizw.com/',
 	charset : 'gbk',
 
-	// chapter_time_interval : '6s',
+	search_work_interval : '30s',
+	chapter_time_interval : '1s',
 
 	// 解析 作品名稱 → 作品id get_work()
 	search_URL : 'modules/article/search.php?searchkey=',
 	parse_search_result : 'biquge',
-	search_work_interval : '30s',
-
-	chapter_time_interval : '1s',
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
