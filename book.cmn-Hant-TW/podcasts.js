@@ -1,7 +1,7 @@
 ﻿/**
  * 批量下載 podcasts 小说 的工具。 Download Apple Podcast.
  * 
- * 2024/8/19-20 網頁改版。
+ * 2024/8/19-20 網頁改版。 https://www.solidot.org/story?sid=79024
  */
 
 'use strict';
