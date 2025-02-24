@@ -107,7 +107,9 @@ var crawler = new CeL.work_crawler({
 
 	// 取得作品的章節資料。 get_work_data()
 	work_URL : function(work_id) {
-		return 'txt/' + work_id + '.htm';
+		// 2024/8: 'txt/'
+		// 2024/11/29: 'book/'
+		return 'book/' + work_id + '.htm';
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
 		// console.trace(html);
@@ -229,6 +231,37 @@ var crawler = new CeL.work_crawler({
 		text = CeL.work_crawler.fix_general_censorship(text);
 
 		text = CeL.work_crawler.fix_general_ADs(text);
+
+		/**
+		 * <code>
+
+		// https://69shuba.cx/txt/52895/34444656	第1章 我绑定了修仙模拟器
+		<p>原文在六#9@书/吧看！</p>
+
+		</code>
+		 */
+		text = text.replace(/(?:<p>)?原文在[^<>]{1,10}看！(?:<\/p>)?/g, '');
+
+		/**
+		 * <code>
+
+		// https://69shuba.cx/txt/52895/39004157	别人练级我修仙，苟到大乘再出山 > 新书《我在高武时代掀起修仙狂潮》
+		<p>请...您....收藏_6Ⅰ9Ⅰ书Ⅰ吧（六\\\九\\\书\\\吧!）</p>
+
+		</code>
+		 */
+		text = text.replace(/<p>请[._\\|]*您[._\\|]*收藏[^<>]*?书Ⅰ吧[^<>]*?<\/p>/g,
+				'');
+
+		/**
+		 * <code>
+
+		// https://69shuba.cx/txt/52895/39004157	别人练级我修仙，苟到大乘再出山 > 新书《我在高武时代掀起修仙狂潮》
+		<p>无一错一首一发一内一容一在一6一9一书一吧一看！</p>
+
+		</code>
+		 */
+		text = text.replace(/<p>无一错一首一发一内一容[^<>]*?<\/p>/g, '');
 
 		/**
 		 * <code>
