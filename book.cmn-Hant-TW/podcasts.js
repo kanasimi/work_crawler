@@ -17,7 +17,7 @@ CeL.run([ 'application.storage.EPUB'
 // ----------------------------------------------------------------------------
 
 // https://podcasts.apple.com/assets/index-2e6c9084.js
-var MEDIA_API_token = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkM0SjdHQlA3NEgifQ.eyJpc3MiOiJVTTdOOVJUVDdHIiwiaWF0IjoxNzI0NzY3NDUyLCJleHAiOjE3MzIwMjUwNTIsInJvb3RfaHR0cHNfb3JpZ2luIjpbImFwcGxlLmNvbSJdfQ.SDp_NpVdyYk_nqJ0mtdPL5apTR-os71x6inoQh4oaXqjoJ62Grk7JGTTHDQ5pUScznBwmz56Ibf9kisVHWGI2g";
+var MEDIA_API_token = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkM0SjdHQlA3NEgifQ.eyJpc3MiOiJVTTdOOVJUVDdHIiwiaWF0IjoxNzMxMDg5ODU4LCJleHAiOjE3MzgzNDc0NTgsInJvb3RfaHR0cHNfb3JpZ2luIjpbImFwcGxlLmNvbSJdfQ.5wbDbe3qPzdEQYEcLd8-PtrD5mHWcpFHeWDguUNZLMBkl9oFOLWmlt66JGgFOE_UnOiCeZyv-4dpTx2vMvWAhA";
 
 var crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
@@ -136,11 +136,13 @@ var crawler = new CeL.work_crawler({
 		//
 		'https://amp-api.podcasts.apple.com/v1/catalog/tw/podcasts/'
 		//
-		+ matched[2] +
+		+ matched[2] + '/episodes?l=zh-Hant-TW&offset=0'
 		//
-		'/episodes?l=zh-Hant-TW&offset=0&include=podcast&limit=25&with=entitlements'
+		+ '&extend%5Bpodcast-channels%5D'
 		//
-		);
+		+ '=editorialArtwork%2CsubscriptionArtwork%2CsubscriptionOffers'
+		//
+		+ '&include=channel%2Cpodcast&limit=25&with=entitlements');
 		get_next_chapter_list_slice({
 			next : "offset=0"
 		});
