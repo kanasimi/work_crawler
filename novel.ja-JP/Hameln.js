@@ -56,7 +56,7 @@ var crawler = new CeL.work_crawler({
 		return '?mode=ss_detail&nid=' + work_id;
 	},
 	parse_work_data : function(html, get_label) {
-		var matched = html.match(/<!-- ヘッダ終了 -->([^<>]*)$/);
+		var matched = html.match(/<\!-- ヘッダ終了 -->([^<>]*)$/);
 		if (matched) {
 			// e.g., この小説は非公開設定になっています。
 			throw matched[1].trim();

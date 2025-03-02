@@ -160,7 +160,7 @@ if (html.includes('<iframe id="')) {
 		if (xhtml_href) {
 			var prefix = xhtml_href.replace(/[^\/]+$/, '').replace(/^\.\//, '')
 					.replace(/[^\/]+\//g, '../');
-			code = code.replace(/<!-- saved from url=[\s\S]+?-->[\r\n]*/, '')
+			code = code.replace(/<\!-- saved from url=.+?-->[\r\n]*/, '')
 			// 調整媒體與圖片的路徑。
 			.replace(/\s(src|href)="([^<>"]+)"/g, function(all, tag, src) {
 				// console.log(src);

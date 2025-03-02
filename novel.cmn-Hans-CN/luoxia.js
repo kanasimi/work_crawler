@@ -131,7 +131,7 @@ crawler = new CeL.work_crawler({
 		text = text.between(null, ' class="ggad clearfix">').replace(/<[^<]+$/,
 				'')
 		// 去除掉中間插入的廣告。
-		.replace(/<!-- Luoxia-middle-random --><div[\s\S]*?<\/div>/, '')
+		.replace(/<\!-- Luoxia-middle-random --><div[\s\S]*?<\/div>/, '')
 		// 去除掉中間插入的廣告連結。
 		.replace(PATTERN_AD_link, '')
 		// 修正這個網站的語法錯誤。

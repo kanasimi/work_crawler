@@ -210,8 +210,8 @@ crawler = new CeL.work_crawler({
 
 		</code>
 		 */
-		// text = text.replace(/(?:&nbsp;)*<!--go-->/g, '');
-		text = text.replace(/<!--[\w\s]*-->/g, '');
+		// text = text.replace(/(?:&nbsp;)*<\!--go-->/g, '');
+		text = text.replace(/<\!--[\w\s]*-->/g, '');
 
 		// ----------------------------
 
