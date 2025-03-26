@@ -16,9 +16,6 @@ CeL.run([ 'application.storage.EPUB'
 
 // ----------------------------------------------------------------------------
 
-// https://podcasts.apple.com/assets/index-2e6c9084.js
-var MEDIA_API_token = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkM0SjdHQlA3NEgifQ.eyJpc3MiOiJVTTdOOVJUVDdHIiwiaWF0IjoxNzMxMDg5ODU4LCJleHAiOjE3MzgzNDc0NTgsInJvb3RfaHR0cHNfb3JpZ2luIjpbImFwcGxlLmNvbSJdfQ.5wbDbe3qPzdEQYEcLd8-PtrD5mHWcpFHeWDguUNZLMBkl9oFOLWmlt66JGgFOE_UnOiCeZyv-4dpTx2vMvWAhA";
-
 var crawler = new CeL.work_crawler({
 	// auto_create_ebook, automatic create ebook
 	// MUST includes CeL.application.locale!
@@ -67,6 +64,42 @@ var crawler = new CeL.work_crawler({
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
 		// console.trace(html);
+
+		if (this.MEDIA_API_token) {
+			return this._parse_work_data(html, get_label, extract_work_data);
+		}
+
+		var matched = html.match(
+		//
+		/<script [^<>]*?src="(\/assets\/index-[\da-f]+\.js)">/);
+		// console.trace(matched);
+
+		var _this = this;
+		return new Promise(function(resolve, reject) {
+			_this.get_URL(matched[1], function(XMLHttp, error) {
+				// console.trace(XMLHttp, error);
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				try {
+					var matched = XMLHttp.responseText
+					// {268}
+					.match(/\"([\d\w\-\.]{260,300})\"/);
+					_this.MEDIA_API_token = matched[1];
+					CeL.info('MEDIA_API_token: ' + _this.MEDIA_API_token);
+				} catch (e) {
+					reject(e);
+					return;
+				}
+
+				resolve(_this._parse_work_data(html, get_label,
+						extract_work_data));
+			});
+		});
+	},
+	_parse_work_data : function(html, get_label, extract_work_data) {
 		var work_data = JSON.parse(html.between(
 				'<script id=schema:show type="application/ld+json">',
 				'</script>'));
@@ -106,7 +139,7 @@ var crawler = new CeL.work_crawler({
 		crawler.get_URL_options.headers = Object.assign(Object
 				.clone(crawler.get_URL_options.headers), {
 			Origin : 'https://podcasts.apple.com',
-			Authorization : 'Bearer ' + MEDIA_API_token,
+			Authorization : 'Bearer ' + this.MEDIA_API_token,
 			'Sec-Fetch-Site' : 'same-site'
 		});
 		// console.trace(crawler.get_URL_options.headers);
