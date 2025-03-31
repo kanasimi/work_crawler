@@ -33,6 +33,7 @@ var crawler = new CeL.work_crawler({
 	// 2024/3/13前改: https://www.69shu.pro/
 	// 2024/5/5前改: https://www.69shu.top/
 	// 2024/8/1前改: https://69shuba.cx/
+	// 2025/3/29前改: https://www.69shuba.com/
 	base_URL : 'https://69shuba.cx/',
 	charset : 'gbk',
 
@@ -109,6 +110,7 @@ var crawler = new CeL.work_crawler({
 	work_URL : function(work_id) {
 		// 2024/8: 'txt/'
 		// 2024/11/29: 'book/'
+		// 2025/3/29前改: 'book/' + work_id + '.htm'
 		return 'book/' + work_id + '.htm';
 	},
 	parse_work_data : function(html, get_label, extract_work_data) {
@@ -167,12 +169,18 @@ var crawler = new CeL.work_crawler({
 		// <h3>目录</h3>
 
 		html = html.between(' id="catalog"').between('<ul>', '</ul>');
+		// console.trace(html);
 
 		// reset work_data.chapter_list
 		work_data.chapter_list = [];
 		html.each_between('<li', '</li>', function(text) {
+			/**
+			 * 2025/3/29前改: <code>
+			data-num="567"><a target="_blank" href="https://69shuba.cx/txt/51883/38165340">完本汇报</a>
+			</code>
+			 */
 			var matched = text
-					.match(/<a href="([^<>"]+)"[^<>]*>([\s\S]+?)<\/a>/);
+					.match(/<a [^<>]*?href="([^<>"]+)"[^<>]*>([\s\S]+?)<\/a>/);
 			var chapter_data = {
 				url : matched[1],
 				title : get_label(matched[2])
