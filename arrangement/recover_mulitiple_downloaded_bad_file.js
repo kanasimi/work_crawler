@@ -84,6 +84,7 @@ Usage:
 
 CeL.info(`合併損壞的檔案成 →	${target_file_path}：\n\t${from_fso_list.join('\n\t')}`);
 
+const { Certificate } = require('crypto');
 const node_fs = require('fs');
 // 1 MiB
 const BUFFER_SIZE = 1 * 1024 * 1024;
@@ -91,6 +92,17 @@ const BUFFER_SIZE = 1 * 1024 * 1024;
 const BUFFER_INDEX_TO_WRITE = 0;
 
 let different_byte_count = 0, doubtful_byte_count = 0;
+
+
+try {
+	const fstat = node_fs.statSync(target_file_path);
+	CeL.warn(`Target file exists: ${target_file_path} (${CeL.to_KiB(fstat.size)})`);
+	//console.trace(fstat);
+	process.exit();
+} catch (e) {
+	//console.error(e);	//	ENOENT: no such file or directory
+}
+
 
 const target_fd = node_fs.openSync(target_file_path, 'w');
 const bad_block_list = [];
@@ -135,7 +147,7 @@ function most_frequently_byte(selector_configuration) {
 		}
 	}
 	// assert: max_count > 0
-	if (muttiple_max_byte)
+	if (muttiple_max_byte || max_count <= 1)
 		doubtful_byte_count++;
 
 	return selected_byte;
