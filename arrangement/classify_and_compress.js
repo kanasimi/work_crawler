@@ -557,10 +557,10 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 
 	if (/[(\[](?:同人CG集)[)\]]/.test(fso_name)) {
 		// TODO: (BanG Dream!) [DL版].zip
-		matched = fso_name.match(/ \(([^()]+)\)\.[a-z]+$/);
+		matched = fso_name.match(/ \(([^()]+)\)(?: \[(?:無修正|AI生成)\])?\.[a-z]+$/);
 		move_to(matched
 		// 頁順修正 更新版
-		&& !/頁順|更新/.test(matched[1]) ? 'doujinshi' : 'doujin');
+		&& !/頁順|更新|オリジナル/.test(matched[1]) ? 'doujinshi' : 'doujin');
 		return;
 	}
 
