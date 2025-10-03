@@ -70,8 +70,8 @@ var crawler = new CeL.work_crawler({
 		}
 
 		var matched = html.match(
-		//
-		/<script [^<>]*?src="(\/assets\/index-[\da-f]+\.js)">/);
+		// 2025/10/4 6:37:20 src="/assets/index~893bbd507a.js"
+		/<script [^<>]*?src="(\/assets\/index[-~][\da-f]+\.js)">/);
 		// console.trace(matched);
 
 		var _this = this;
