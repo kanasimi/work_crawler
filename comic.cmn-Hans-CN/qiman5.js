@@ -28,6 +28,7 @@ var crawler = new CeL.work_crawler({
 	// one_by_one : true,
 
 	// 2018/6/4 6:34 最後一次成功存取 http://www.733mh.com/
+	// 2025/10/25 8:14:54 lost. → https://qimanwu.org/ ?
 	// 之後更改域名
 	base_URL : 'http://www.qiman6.com/',
 

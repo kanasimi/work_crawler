@@ -29,6 +29,7 @@ var crawler = CeL.SinMH({
 	// 2021/12/27–2022/7/12 網址: https://www.gufengmh9.com/
 	// 2022/7/16– : → https://www.123gf.com/
 	// 2023/10/14 → https://www.gufengmh.com/
+	// 2025/10/25 8:19:58 lost. → https://www.softbag.net/ ?
 	base_URL : 'https://www.gufengmh.com/',
 
 	search_URL : 'API',
