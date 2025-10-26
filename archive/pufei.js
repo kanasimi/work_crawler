@@ -23,6 +23,8 @@ var crawler = CeL.qTcms2014({
 	// 2020/2/17 http://www.pufei8.com/
 	// 2022/6/25前 http://www.pufei.cc/
 	// 2022/11/6前 https://www.ythuiju.com/
+	// 2025/10/25 9:4:13 http://www.pufcomic.com/
+	// https://www.pafipangkajene.org/ ?
 	base_URL : 'https://www.ythuiju.com/',
 
 	postfix_image_url : function(url) {

@@ -31,7 +31,9 @@ var crawler = CeL.SinMH({
 	// Created by Shen.L on 2016/1/28.
 	// SinMH.initChapter, SinTheme.initChapter, SinConf.resHost
 	// 2023/6/25 前自 https://www.mh1234.com/ 改成 https://www.ymh1234.com/
-	base_URL : 'https://www.ymh1234.com/',
+	// 2025/10/25 8:57:14 → https://www.ymh1234.top/ lost.
+	// → https://www.amh1234.com/
+	base_URL : 'https://www.amh1234.com/',
 
 	work_URL : function(work_id) {
 		return 'comic/' + work_id + '.html';
