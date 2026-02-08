@@ -119,7 +119,8 @@ var crawler = new CeL.work_crawler({
 			// e.g.,
 			// https://podcasts.apple.com/tw/podcast/%E4%B8%8B%E4%B8%80%E6%9C%AC%E8%AE%80%E4%BB%80%E9%BA%BC/id1532820533
 			title : work_data.name.replace(/[‪‬]/g, ''),
-			author : data[0].data.headerButtonItems[0].model.author
+			// 2026/2/8 9:16:20 改版
+			author : data.data[0].data.headerButtonItems[0].model.author
 		});
 
 		// console.log(html);
