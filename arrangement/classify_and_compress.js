@@ -557,7 +557,8 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 
 	if (/[(\[](?:同人CG集)[)\]]/.test(fso_name)) {
 		// TODO: (BanG Dream!) [DL版].zip
-		matched = fso_name.match(/ \(([^()]+)\)(?: \[(?:無修正|AI生成)\])?\.[a-z]+$/);
+		matched = fso_name
+				.match(/ \(([^()]+)\)(?: \[(?:無修正|AI生成)\])?\.[a-z]+$/);
 		move_to(matched
 		// 頁順修正 更新版
 		&& !/頁順|更新|オリジナル/.test(matched[1]) ? 'doujinshi' : 'doujin');
@@ -576,10 +577,60 @@ function classify(fso_name, fso_path, fso_status, sub_fso_list) {
 		return;
 	}
 
-	// [2021.11.17] TVアニメ「大正オトメ御伽話」EDテーマ「真心に奏」／土岐隼一 [FLAC 96kHz／24bit]
-	// [2021.11.17] 走れ！「バトルアスリーテス大運動会 ReSTART!」究極のキャラソンアルバム [FLAC]
-	if (/TVアニメ/.test(fso_name) && /\[FLAC/.test(fso_name)) {
+	/**
+	 * <code>
+
+	[2021.11.17] TVアニメ「大正オトメ御伽話」EDテーマ「真心に奏」／土岐隼一 [FLAC 96kHz／24bit]
+	[2025.07.23] アニメ「うたごえはミルフィーユ」主題歌「思い出話」 [CD][FLAC+CUE+LOG+BK][PCCG-70550]
+	[2026.02.16] OVA「まじかるすいーとプリズム・ナナ メダルの国のハロウィン ～ノリコと妖精～」挿入歌「いっせーのでジャンプ！」／鷲岡至、浅木飛鳥、織部琴音 [FLAC]
+	[2021.11.17] 走れ！「バトルアスリーテス大運動会 ReSTART!」究極のキャラソンアルバム [FLAC]
+	[2026.02.18]TVアニメ「Fate／strange Fake」OPテーマ「PROVANT」 (期間生産限定盤) ／SawanoHiroyuki[nZk][CDRip FLAC + BDRip]
+	[2024.06.19]テレビアニメ ポケットモンスター～リコとロイの冒険～ オリジナル・サウンドトラック／コーニッシュ[FLAC]
+	[2025.11.05] 東山奈央 - とおりゃんせ [アニメ限定盤] [CD][FLAC+CUE+LOG+BK+ISO][VTZL-258]
+
+	 * </code>
+	 */
+	if ((/TVアニメ|アニメ限定盤/.test(fso_name) || /^\[[\d\.]+\]\s*(?:(?:テレビ)?アニメ|OVA)/
+			.test(fso_name))
+			&& /[\[\s]FLAC/.test(fso_name)) {
 		move_to('anime_music');
+		return;
+	}
+
+	/**
+	 * <code>
+
+	TVアニメ「攻略うぉんてっど！～異世界救います！？～」オープニング&エンディングテーマ
+
+	 * </code>
+	 */
+	if ((/TVアニメ/.test(fso_name)) && /テーマ/.test(fso_name)) {
+		move_to('anime_music');
+		return;
+	}
+
+	/**
+	 * <code>
+
+	[260325] スマホゲーム『ウマ娘 プリティーダービー』WINNING LIVE 31 (FLAC 96kHz_24bit)
+
+	 * </code>
+	 */
+	if ((/^\[[\d\.]+\]\s*スマホゲーム/.test(fso_name))
+			&& /[\[(\s]FLAC/.test(fso_name)) {
+		move_to('game_music');
+		return;
+	}
+
+	/**
+	 * <code>
+
+	[Nemuri] AIMI 愛美 (Terakawa Aimi 寺川愛美) (2010-2025) [FLAC]
+
+	 * </code>
+	 */
+	if ((/^\[Nemuri\]/.test(fso_name))) {
+		move_to('singer');
 		return;
 	}
 
