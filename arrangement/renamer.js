@@ -88,7 +88,7 @@ cache_file = base_directory + 'data.json',
 //
 cache_data = CeL.get_JSON(cache_file),
 // file / folder name
-PATTERN_latin_fso_name = /^([\u0020-\u007Fūûưōôō@]+?)(\.[a-z\d]{2,9})?$/i,
+PATTERN_latin_fso_name = /^([\u0020-\u007Fūûưōôō@’×]+?)(\.[a-z\d]{2,9})?$/i,
 // [[en:Numerals_in_Unicode#Roman_numerals]]
 // /^[a-z\d,:;.?!()<>{}\[\]\-+$%&'"’“”\s\n—–ūûưōôō@’★☆♥♡Ⅰ-ↈ①-⑳⑴-⑽㈠-㈩]$/
 PATTERN_full_latin_or_sign = /^[\u0020-\u00FF’★☆♥♡Ⅰↈ①⑳⑴⑽㈠㈩／“”\n—–]+$/;
@@ -431,10 +431,10 @@ function parse_file_list(html, error, XMLHttp, had_try_to_got_torrent) {
 		if (PATTERN_full_latin_or_sign.test(full_title) || !fso_name
 		// matched: [ all, main file name, '.' + extension ]
 		|| !(matched = fso_name.match(PATTERN_latin_fso_name))) {
-			// CeL.log('NG: ' + fso_name);
+			//CeL.log('NG: ' + fso_name);
 			return;
 		}
-		// console.log(matched);
+		//console.log(matched);
 		if (false && matched[0].includes('ō')) {
 			console.log(matched);
 			console.log(target_files);
